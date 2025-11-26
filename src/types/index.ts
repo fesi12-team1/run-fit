@@ -50,9 +50,10 @@ export interface Session {
 }
 
 export interface Review {
-  // - 작성자
-  // - 작성일
-  // - 대상 세션
-  // - 내용
-  // - 평점
+  id: string;
+  userId: string; // author
+  sessionId: string;
+  description: string;
+  rating: 0 | 1 | 2 | 3 | 4 | 5;
+  createdAt: string; // ISO 8601
 }
