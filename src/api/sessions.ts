@@ -84,3 +84,8 @@ export function registerForSession(sessionId: string) {
   // POST /sessions/:sessionId/register
   // 권한: 크루에 가입한 사용자
 }
+
+export function unregisterFromSession(sessionId: string) {
+  // DELETE /sessions/:sessionId/register
+  // 권한: 크루에 가입한 사용자
+}
