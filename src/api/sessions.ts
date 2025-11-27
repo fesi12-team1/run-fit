@@ -1,4 +1,15 @@
-export function getSessions(queryParams?: any) {
+import { PaginationQueryParams, Session } from '@/types';
+
+type GetSessionsQueryParams = {
+  city?: string;
+  district?: string;
+  dateRange?: { from: string; to: string };
+  timeRange?: { from: string; to: string };
+  level?: 'beginner' | 'intermediate' | 'advanced';
+  status?: string; // TODO: 이 부분은 잘 정의해야 할 듯
+} & PaginationQueryParams;
+export function getSessions(queryParams?: GetSessionsQueryParams) {
+  // 전체 세션 목록 페이지에서 필터링 및 페이징 처리된 세션 목록을 위한 API
   // GET /sessions?queryParams
   // queryParams: {
   //   page?: number,
@@ -15,7 +26,51 @@ export function getSessions(queryParams?: any) {
   // body: Session[]
 }
 
-export function createSession(body: any) {
+export function getSessionsByCrewId(
+  crewId: string,
+  queryParams?: PaginationQueryParams
+) {
+  // 크루 상세 페이지에서
+  // GET /sessions/:crewId/
+  // queryParams: {
+  //   page?: number,
+  //   limit?: number
+  // }
+  // 성공시
+  // response: 200 OK
+  // body: Omit<Session, "participants" | "likedUsers" | "reviews">[]
+  // // participants, likedUsers, reviews 제외 해도 되지 않을까?
+  // 실패시
+  // response: 404 Not Found
+  // body: { error.message: "<에러 메시지>" }
+}
+
+export function getSessionsByUserId(userId: string) {
+  // (마이페이지) 사용자가 생성한 세션 목록을 위한 API
+  // GET /sessions/user/:userId
+  // 성공시
+  // response: 200 OK
+  // body: Session[]
+  // 실패시
+  // response: 404 Not Found
+  // body: { error.message: "<에러 메시지>" }
+}
+
+type CreateSessionBody = Pick<
+  Session,
+  | 'crewId'
+  | 'userId'
+  | 'name'
+  | 'description'
+  | 'image'
+  | 'city'
+  | 'district'
+  | 'sessionAt'
+  | 'registerBy'
+  | 'level'
+  | 'maxParticipantCount'
+>;
+export function createSession(body: CreateSessionBody) {
   // POST /sessions
   // body: {
   //   crewId: number;
@@ -23,7 +78,8 @@ export function createSession(body: any) {
   //   name: string;
   //   description: string;
   //   image?: string;
-  //   location: string;
+  //   city: string; // 지역(시)
+  //   district: string; // 지역(구)
   //   sessionAt: string; // ISO 8601 - 세션 시간
   //   registerBy: string; // ISO 8601 - 신청 마감
   //   level: '초급' | '중급' | '고급';
@@ -42,13 +98,27 @@ export function getSessionDetail(sessionId: string) {
   // GET /sessions/:sessionId
   // 성공시
   // response: 200 OK
-  // body: Session
+  // body: Omit<Session, 'reviews'>;
   // 실패시
   // response: 404 Not Found
   // body: { error.message: "<에러 메시지>" }
 }
 
-export function updateSessionDetail(sessionId: string, body: any) {
+type UpdateSessionDetailBody = Pick<
+  Session,
+  | 'name'
+  | 'description'
+  | 'image'
+  | 'city'
+  | 'district'
+  | 'sessionAt'
+  | 'registerBy'
+  | 'level'
+>;
+export function updateSessionDetail(
+  sessionId: string,
+  body: UpdateSessionDetailBody
+) {
   // PATCH /sessions/:sessionId
   // body: {
   //  name?: string;

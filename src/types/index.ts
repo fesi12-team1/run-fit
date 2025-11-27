@@ -1,8 +1,8 @@
 export interface User {
-  id: number; // 또는 string UUID (백앤드에서 주는 대로)
+  id: number;
   name: string;
   profileImage?: string;
-  createdAt: string; // ISO 8601
+  createdAt: string;
 }
 
 export interface Profile extends User {
@@ -10,6 +10,8 @@ export interface Profile extends User {
   city: string;
   district: string;
   level: '초급' | '중급' | '상급';
+  pace: number;
+  styles?: string[];
 }
 
 type Role = 'leader' | 'staff' | 'member';
@@ -22,31 +24,34 @@ export interface Crew {
   id: number;
   name: string;
   description: string;
-  city: string; // 지역(시)
-  district: string; // 지역(구)
+  city: string;
+  district: string;
   image: string;
   members: Member[];
   sessions: Session[];
-  createdAt: string; // 생성일
+  createdAt: string;
 }
 
 export interface Session {
   id: string;
   crewId: string;
   userId: string;
+  status: 'upcoming' | 'completed' | 'cancelled';
+  // 취소, 마감, 예정 / 모집 중, 마감
 
   name: string;
   description: string;
   image?: string;
-  city: string; // 지역(시)
-  district: string; // 지역(구)
-  createdAt: string; // ISO 8601
-  sessionAt: string; // ISO 8601 - 세션 시간
-  registerBy: string; // ISO 8601 - 신청 마감
+  city: string;
+  district: string;
+  createdAt: string;
+  sessionAt: string;
+  registerBy: string;
 
-  level: '초급' | '중급' | '고급';
-  minParticipantCount: number;
+  level: 'beginner' | 'intermediate' | 'advanced'; // 초급, 중급, 고급
+  // minParticipantCount: number;
   maxParticipantCount: number;
+
   participants: Member[];
   likedUsers: User[];
   reviews: Review[];
@@ -54,10 +59,15 @@ export interface Session {
 
 export interface Review {
   id: string;
-  userId: string; // author
+  userId: string;
   sessionId: string;
   description: string;
-  rating: 0 | 1 | 2 | 3 | 4 | 5;
-  createdAt: string; // ISO 8601
+  rating: 1 | 2 | 3 | 4 | 5;
+  createdAt: string;
   image?: string;
 }
+
+export type PaginationQueryParams = {
+  page?: number;
+  limit?: number;
+};

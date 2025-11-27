@@ -1,6 +1,11 @@
-import { PostCrewsBody } from '@/types/api-request.types';
+import { Crew, PaginationQueryParams } from '@/types';
 
-export function getCrews(queryParams?: any) {
+type GetCrewsQueryParams = {
+  sort?: string;
+  city?: string;
+  district?: string;
+} & PaginationQueryParams;
+export function getCrews(queryParams?: GetCrewsQueryParams) {
   // GET /crews?queryParams
   // queryParams: {
   //   sort?: string,
@@ -14,7 +19,11 @@ export function getCrews(queryParams?: any) {
   // body: Member[]
 }
 
-export function createCrew(body: any) {
+type CreateCrewBody = Pick<
+  Crew,
+  'name' | 'description' | 'city' | 'district' | 'image'
+>;
+export function createCrew(body: CreateCrewBody) {
   // POST /crews
   // body: { name, description, city, district, image }
   // 성공시
@@ -35,22 +44,14 @@ export function getCrewById(crewId: string) {
   // body: { error.message: "<에러 메시지>" }
 }
 
-export function getCrewSessionsById(crewId: string, queryParams?: any) {
-  // GET /crews/:crewId/sessions
-  // queryParams: {
-  //   page?: number,
-  //   limit?: number
-  // }
-  // 성공시
-  // response: 200 OK
-  // body: Omit<Session, "participants" | "likedUsers" | "reviews">[]
-  // // participants, likedUsers, reviews 제외 해도 되지 않을까?
-  // 실패시
-  // response: 404 Not Found
-  // body: { error.message: "<에러 메시지>" }
-}
 
-export function getCrewMembersById(crewId: string, queryParams?: any) {
+type GetCrewMembersQueryParams = {
+  role?: 'leader' | 'staff' | 'general';
+} & PaginationQueryParams;
+export function getCrewMembersById(
+  crewId: string,
+  queryParams?: GetCrewMembersQueryParams
+) {
   // GET /crews/:crewId/members?queryParams
   // queryParams: {
   //   role?: 'leader' | 'staff' | 'member',
@@ -78,6 +79,10 @@ export function getCrewMembersById(crewId: string) {
 }
 */
 
+type PostCrewsBody = Pick<
+  Crew,
+  'name' | 'description' | 'city' | 'district' | 'image'
+>;
 export function updateCrewDetail(crewId: string, body: PostCrewsBody) {
   // PATCH /crews/:crewId
   // 권한: 크루장 또는 관리자 권한 필요

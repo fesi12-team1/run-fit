@@ -14,7 +14,7 @@ export function updateUserProfileById(userId: string, body: any) {
   // body: { name, email, image, introduction, city, district, level }
   // 권한 필요: 본인만 가능
   // 성공시
-  // response: 200 O요
+  // response: 200 OK
   // body: Profile
   // 실패시
   // response: 400 Bad Request | 404 Not Found
@@ -22,8 +22,7 @@ export function updateUserProfileById(userId: string, body: any) {
 }
 
 export function leaveCrew(crewId: string) {
-  // PUT /user/leave/
-  // body: { crewId }
+  // PUT /user/leave/:crewId
   // 권한: 본인만 가능
   // 성공시
   // response: 200 OK
@@ -33,7 +32,7 @@ export function leaveCrew(crewId: string) {
   // body: { error.message: "<에러 메시지>" }
 }
 
-export function expelMember(crewId: string, userId: string) {
+export function expelMember(body: { crewId: string; userId: string }) {
   // PUT /user/expel/
   // body: { crewId, userId }
   // 권한: user가 crew의 leader일 때만 가능
@@ -45,7 +44,11 @@ export function expelMember(crewId: string, userId: string) {
   // body: { error.message: "<에러 메시지>" }
 }
 
-export function updateMemberRole(crewId: string, userId: string, role: string) {
+export function updateMemberRole(body: {
+  crewId: string;
+  userId: string;
+  role: string;
+}) {
   // PATCH /user/update/
   // body: { crewId, userId, role }
   // user가 crew의 leader일 때만 가능
