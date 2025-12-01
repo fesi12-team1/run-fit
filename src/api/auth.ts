@@ -1,36 +1,101 @@
-type UserRequestBody = {
+import { Flatten } from '@/lib/type';
+import { Response, ResponseError, User } from '@/types';
+
+type UserCredentials = {
   email: string;
   password: string;
 };
 
-// TODO: 실패 시나리오 별 다른 에러 메시지 필요
-export function postSignup(body: UserRequestBody & { name: string }) {
+export async function postSignup(body: UserCredentials & { name: string }) {
   // POST /auth/signup
-  // body: { email, password, name }
-  // 성공시
-  // response: 201 Created
-  // body: { id, email, name }
-  // 실패시
-  // response: 400 Bad Request
-  // body: { error.message: "<에러 메시지>" }
+  const response = await fetch('/api/auth/signup', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  });
+
+  const data: Response<User, SignupError> = await response.json();
+  return data;
 }
 
-export function postSignin(body: UserRequestBody) {
+type SignupError = ResponseError &
+  (
+    | {
+        code: 'DUPLICATE_EMAIL';
+        message: '이미 사용 중인 이메일입니다.';
+      }
+    | {
+        code: 'VALIDATION_ERROR';
+        message: '요청 데이터가 유효하지 않습니다.';
+      }
+  );
+
+export async function postSignin(body: UserCredentials) {
   // POST /auth/signin
-  // body: { email, password }
-  // 성공시
-  // response: 200 OK
-  // 실패시
-  // response: 401 Unauthorized
-  // body: { error.message: "<에러 메시지>" }
+  const response = await fetch('/api/auth/signin', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  });
+
+  const data: Response<
+    {
+      accessToken: string;
+      tokenType: 'Bearer';
+      expiresIn: number;
+    },
+    SigninError
+  > = await response.json();
+
+  return data;
 }
 
-export function postSignout() {
+type SigninError = ResponseError & {
+  code: 'INVALID_CREDENTIALS';
+  message: '올바르지 않은 요청입니다.';
+};
+
+export async function postRefresh() {
+  // POST /api/auth/refresh
+  const response = await fetch('/api/auth/refresh', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  const data: Response<
+    {
+      token: string;
+    },
+    RefreshError
+  > = await response.json();
+  return data;
+}
+
+type RefreshError = ResponseError & {
+  code: 'REFRESH_TOKEN_INVALID';
+  message: '유효하지 않은 리프레시 토큰입니다.';
+};
+
+export async function postSignout() {
   // POST /auth/signout
-  // 성공시
-  // response: 200 OK
-  // body: { message: "Signed out successfully" }
-  // 실패시
-  // response: 400 Bad Request
-  // body: { error.message: "<에러 메시지>" }
+  const response = await fetch('/api/auth/signout', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  const data: Response<
+    {
+      message: '로그아웃 되었습니다.';
+    },
+    ResponseError
+  > = await response.json();
+  return data;
 }

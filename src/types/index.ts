@@ -1,3 +1,20 @@
+export type Response<T, E extends ResponseError> =
+  | {
+      success: true;
+      data: T;
+      error: null;
+    }
+  | {
+      success: false;
+      data: null;
+      error: E;
+    };
+
+export interface ResponseError {
+  code: string;
+  message: string;
+}
+
 export interface User {
   id: number;
   name: string;
