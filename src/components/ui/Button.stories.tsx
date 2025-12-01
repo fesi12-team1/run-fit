@@ -142,13 +142,9 @@ export const IconButtons: Story = {
 };
 
 export const WithIcons: Story = {
-  args: {
-    disabled: true,
-  },
-
-  render: () => (
+  render: (args) => (
     <div className="flex flex-wrap gap-4">
-      <Button>
+      <Button {...args}>
         <svg
           className="size-4"
           fill="none"
@@ -164,7 +160,7 @@ export const WithIcons: Story = {
         </svg>
         Add Item
       </Button>
-      <Button variant="outline">
+      <Button {...args} variant="outline">
         Download
         <svg
           className="size-4"
