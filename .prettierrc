@@ -7,11 +7,8 @@
   "quoteProps": "consistent",
   "importOrder": [
     "<THIRD_PARTY_MODULES>",
-    "",
     "<BUILTIN_MODULES>",
-    "",
     "^@\/",
-    "",
     "^[./]"
   ],
   "plugins": [
