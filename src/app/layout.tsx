@@ -1,8 +1,5 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { initMocks } from '@/mocks';
-
-initMocks();
 
 export const metadata: Metadata = {
   title: 'Create Next App',
