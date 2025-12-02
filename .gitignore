@@ -58,3 +58,5 @@ node_modules/
 
 # eslint
 .eslintcache
+*storybook.log
+storybook-static
