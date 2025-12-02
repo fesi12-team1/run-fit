@@ -1,3 +1,5 @@
+'use client';
+
 import { Label } from '@/components/ui/label';
 import {
   Select,
@@ -18,7 +20,7 @@ type TimePickerProps = {
   onChange: (value: TimeValue) => void;
 };
 
-export function TimePicker({ value, onChange }: TimePickerProps) {
+export default function TimePicker({ value, onChange }: TimePickerProps) {
   return (
     <div className="flex flex-col gap-3">
       <Label htmlFor="time-picker" className="px-1">
@@ -74,7 +76,7 @@ export function TimePicker({ value, onChange }: TimePickerProps) {
             onChange({ ...value, ampm: nextAmpm as TimeValue['ampm'] })
           }
         >
-          <SelectTrigger className="w-[90px]">
+          <SelectTrigger className="w-20">
             <SelectValue placeholder="AM/PM" />
           </SelectTrigger>
           <SelectContent>
