@@ -1,13 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Button } from './Button';
 
+/**
+ * 버튼은 사용자가 클릭하여 작업을 수행하거나 다른 페이지로 이동할 수 있는 클릭 가능한 요소입니다.
+ */
+
 const meta: Meta<typeof Button> = {
   title: 'UI/Button',
   component: Button,
   parameters: {
     layout: 'centered',
   },
-  tags: [],
+  tags: ['autodocs'],
   argTypes: {
     variant: {
       control: { type: 'select' },
