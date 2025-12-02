@@ -50,10 +50,12 @@ export async function postSignin(body: UserCredentials) {
 }
 
 export async function postRefresh() {
+  const refreshToken = '';
   const response = await fetch('/api/auth/refresh', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Cookie': `refreshToken=${refreshToken}`,
     },
   });
 
@@ -68,10 +70,12 @@ export async function postRefresh() {
 }
 
 export async function postSignout() {
+  const accessToken = '';
   const response = await fetch('/api/auth/signout', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${accessToken}`,
     },
   });
 
