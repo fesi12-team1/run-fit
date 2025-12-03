@@ -31,7 +31,7 @@ export const Default: Story = {
           <Tabs.TabsTrigger value="3">후기</Tabs.TabsTrigger>
         </Tabs.TabsList>
       </Tabs>
-      <Tabs>
+      <Tabs defaultValue="1">
         <Tabs.TabsList className="w-[600px]">
           <Tabs.TabsTrigger value="1">My 홈</Tabs.TabsTrigger>
           <Tabs.TabsTrigger value="2">참여 세션</Tabs.TabsTrigger>
