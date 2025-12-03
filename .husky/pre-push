@@ -1,0 +1,16 @@
+echo "🚀 Push 전 안전 점검을 시작합니다..."
+
+echo "📦 TypeScript 타입 체크 중..."
+pnpm exec tsc --noEmit || {
+    echo "⚠️  타입 에러가 있습니다. push가 중단됩니다."
+    exit 1
+}
+
+# 테스트 셋업이 완료된 후 사용
+# echo "🧪 테스트 수행 중..."
+# pnpm run test || {
+#     echo "⚠️  테스트에 실패했습니다. push가 중단됩니다."
+#     exit 1
+# }
+
+echo "✅ 모든 검사를 통과했습니다. 안전하게 Push 합니다."
