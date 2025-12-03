@@ -62,6 +62,6 @@ function TabsContent({
   );
 }
 
-Tabs.TabsList = TabsList;
-Tabs.TabsTrigger = TabsTrigger;
-Tabs.TabsContent = TabsContent;
+Tabs.List = TabsList;
+Tabs.Trigger = TabsTrigger;
+Tabs.Content = TabsContent;

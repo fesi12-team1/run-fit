@@ -19,9 +19,9 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   render: () => (
     <Tabs defaultValue="1" className="w-full">
-      <Tabs.TabsList>
-        <Tabs.TabsTrigger value="1">탭</Tabs.TabsTrigger>
-      </Tabs.TabsList>
+      <Tabs.List>
+        <Tabs.Trigger value="1">탭</Tabs.Trigger>
+      </Tabs.List>
     </Tabs>
   ),
 };
@@ -29,13 +29,13 @@ export const Default: Story = {
 export const MultipleTabs: Story = {
   render: () => (
     <Tabs defaultValue="1" className="w-full">
-      <Tabs.TabsList>
-        <Tabs.TabsTrigger value="1">My 홈</Tabs.TabsTrigger>
-        <Tabs.TabsTrigger value="2">참여 세션</Tabs.TabsTrigger>
-        <Tabs.TabsTrigger value="3">나의 리뷰</Tabs.TabsTrigger>
-        <Tabs.TabsTrigger value="4">소속 크루</Tabs.TabsTrigger>
-        <Tabs.TabsTrigger value="5">세션 관리</Tabs.TabsTrigger>
-      </Tabs.TabsList>
+      <Tabs.List>
+        <Tabs.Trigger value="1">My 홈</Tabs.Trigger>
+        <Tabs.Trigger value="2">참여 세션</Tabs.Trigger>
+        <Tabs.Trigger value="3">나의 리뷰</Tabs.Trigger>
+        <Tabs.Trigger value="4">소속 크루</Tabs.Trigger>
+        <Tabs.Trigger value="5">세션 관리</Tabs.Trigger>
+      </Tabs.List>
     </Tabs>
   ),
 };
@@ -43,12 +43,12 @@ export const MultipleTabs: Story = {
 export const WithContents: Story = {
   render: () => (
     <Tabs defaultValue="1" className="w-full">
-      <Tabs.TabsList>
-        <Tabs.TabsTrigger value="1">상세정보</Tabs.TabsTrigger>
-        <Tabs.TabsTrigger value="2">모집중인 세션</Tabs.TabsTrigger>
-        <Tabs.TabsTrigger value="3">후기</Tabs.TabsTrigger>
-      </Tabs.TabsList>
-      <Tabs.TabsContent value="1" className="text-white">
+      <Tabs.List>
+        <Tabs.Trigger value="1">상세정보</Tabs.Trigger>
+        <Tabs.Trigger value="2">모집중인 세션</Tabs.Trigger>
+        <Tabs.Trigger value="3">후기</Tabs.Trigger>
+      </Tabs.List>
+      <Tabs.Content value="1" className="text-white">
         <h2>크루 소개</h2>
         <p>
           모임에 대한 상세 설명입니다. 1000자 이내로 작성해주세요. 모임에 대한
@@ -57,15 +57,15 @@ export const WithContents: Story = {
           1000자 이내로 작성해주세요. 모임에 대한 상세 설명입니다. 1000자 이내로
           작성해주세요. 모임에 대한 상세 설명입니다. 1000자 이내로 작성해주세요.
         </p>
-      </Tabs.TabsContent>
-      <Tabs.TabsContent value="2" className="text-white">
+      </Tabs.Content>
+      <Tabs.Content value="2" className="text-white">
         <h2>모집중인 세션</h2>
         <p>모집중인 세션</p>
-      </Tabs.TabsContent>
-      <Tabs.TabsContent value="3" className="text-white">
+      </Tabs.Content>
+      <Tabs.Content value="3" className="text-white">
         <h2>후기</h2>
         <p>후기</p>
-      </Tabs.TabsContent>
+      </Tabs.Content>
     </Tabs>
   ),
 };
