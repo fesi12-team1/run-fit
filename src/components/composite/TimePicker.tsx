@@ -1,7 +1,7 @@
 'use client';
 
-import { Label } from '@/components/ui/label';
-import Select from '@/components/ui/select';
+import { Label } from '@/components/ui/Label';
+import Select from '@/components/ui/Select';
 
 export type TimeValue = {
   hour: string;

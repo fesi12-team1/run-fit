@@ -1,4 +1,4 @@
-import { TimeValue } from '@/components/ui/TimePicker';
+import { TimeValue } from '@/components/composite/TimePicker';
 
 export function formatSessionAt(
   date: Date,
