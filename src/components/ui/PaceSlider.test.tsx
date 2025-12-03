@@ -24,21 +24,21 @@ describe('PaceSlider', () => {
   test('ArrowRight/ArrowLeft 입력 시 step(10초) 간격으로 onValueChange 호출된다', () => {
     const handleChange = jest.fn();
 
-    render(<PaceSlider defaultValue={[420]} onValueChange={handleChange} />);
+    render(<PaceSlider defaultValue={420} onValueChange={handleChange} />);
 
     const sliderThumb = screen.getByRole('slider');
 
     fireEvent.keyDown(sliderThumb, { key: 'ArrowRight' });
-    expect(handleChange).toHaveBeenNthCalledWith(1, [430]);
+    expect(handleChange).toHaveBeenNthCalledWith(1, 430);
 
     fireEvent.keyDown(sliderThumb, { key: 'ArrowLeft' });
-    expect(handleChange).toHaveBeenNthCalledWith(2, [420]);
+    expect(handleChange).toHaveBeenNthCalledWith(2, 420);
   });
 
   test('min(240초) 아래로 내려가지 않고 max(600초) 위로 올라가지 않는다', () => {
     const handleChange = jest.fn();
 
-    render(<PaceSlider defaultValue={[240]} onValueChange={handleChange} />);
+    render(<PaceSlider defaultValue={240} onValueChange={handleChange} />);
     const thumbMin = screen.getByRole('slider');
 
     fireEvent.keyDown(thumbMin, { key: 'ArrowLeft' });
@@ -46,7 +46,7 @@ describe('PaceSlider', () => {
 
     cleanup();
 
-    render(<PaceSlider defaultValue={[600]} onValueChange={handleChange} />);
+    render(<PaceSlider defaultValue={600} onValueChange={handleChange} />);
     const thumbMax = screen.getByRole('slider');
 
     fireEvent.keyDown(thumbMax, { key: 'ArrowRight' });

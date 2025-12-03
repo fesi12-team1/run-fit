@@ -15,16 +15,16 @@ const meta: Meta<typeof PaceSlider> = {
   argTypes: {
     value: {
       control: 'object',
-      description: '현재 페이스 값 (초 단위 배열)',
+      description: '현재 페이스 값 (초 단위)',
       table: {
         category: 'State',
-        type: { summary: 'number[]' }, // 타입 명시
+        type: { summary: 'number' }, // 타입 명시
       },
     },
     min: {
       control: 'number',
       type: { name: 'number', required: false },
-      description: '최소값 (기본: 240)',
+      description: '최소값',
       table: {
         type: { summary: 'number' },
         defaultValue: { summary: '240' },
@@ -33,7 +33,7 @@ const meta: Meta<typeof PaceSlider> = {
     max: {
       control: 'number',
       type: { name: 'number', required: false },
-      description: '최대값 (기본: 600)',
+      description: '최대값',
       table: {
         type: { summary: 'number' },
         defaultValue: { summary: '600' },
@@ -42,7 +42,7 @@ const meta: Meta<typeof PaceSlider> = {
     step: {
       control: 'number',
       type: { name: 'number', required: false },
-      description: '증감 단위 (기본: 10)',
+      description: '증감 단위',
       table: {
         type: { summary: 'number' },
         defaultValue: { summary: '10' },
@@ -58,10 +58,10 @@ const meta: Meta<typeof PaceSlider> = {
     },
     defaultValue: {
       control: 'object',
-      description: '초기값 (기본: [420])',
+      description: '초기값',
       table: {
-        type: { summary: 'number[]' },
-        defaultValue: { summary: '[420]' },
+        type: { summary: 'number' },
+        defaultValue: { summary: '420' },
       },
     },
   },
@@ -79,17 +79,17 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    value: [420],
+    value: 420,
     min: 240,
     max: 600,
     step: 10,
     disabled: false,
-    defaultValue: [420],
+    defaultValue: 420,
   },
   render: function Render(args) {
     const [{ value }, updateArgs] = useArgs();
 
-    const onValueChange = (newValue: number[]) => {
+    const onValueChange = (newValue: number) => {
       updateArgs({ value: newValue });
       args.onValueChange?.(newValue);
     };

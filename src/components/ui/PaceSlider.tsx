@@ -5,21 +5,36 @@ import * as React from 'react';
 import { formatSecondsToMinutes } from '@/lib/pace';
 import { cn } from '@/lib/utils';
 
+interface PaceSliderProps
+  extends Omit<
+    React.ComponentProps<typeof SliderPrimitive.Root>,
+    'value' | 'defaultValue' | 'onValueChange'
+  > {
+  // Radix의 배열 타입을 number로 재정의
+  value?: number;
+  defaultValue?: number;
+  onValueChange?: (value: number) => void;
+}
+
 export default function PaceSlider({
   className,
-  defaultValue = [420],
+  defaultValue = 420,
   value,
   min = 240,
   max = 600,
   step = 10,
   onValueChange,
   ...props
-}: React.ComponentProps<typeof SliderPrimitive.Root>) {
-  const currentValue = Array.isArray(value)
-    ? value[0]
-    : Array.isArray(defaultValue)
-      ? defaultValue[0]
-      : min;
+}: PaceSliderProps) {
+  const currentValue = value !== undefined ? value : defaultValue;
+  // Radix에 전달할 배열 타입으로 변환
+  const radixValue = value !== undefined ? [value] : undefined;
+  const radixDefaultValue = [defaultValue];
+  const handleRadixValueChange = onValueChange
+    ? (newValue: number[]) => {
+        onValueChange(newValue[0]);
+      }
+    : undefined;
   return (
     <div className="w-full">
       <div className="pt-3 pb-3.5 text-center text-[16px]/[24px] font-semibold text-white">
@@ -31,11 +46,11 @@ export default function PaceSlider({
         </div>
         <SliderPrimitive.Root
           data-slot="slider"
-          defaultValue={defaultValue}
-          value={value}
+          defaultValue={radixDefaultValue}
+          value={radixValue}
           min={min}
           max={max}
-          onValueChange={onValueChange}
+          onValueChange={handleRadixValueChange}
           className={cn(
             'relative flex w-full touch-none items-center select-none data-disabled:opacity-50',
             className
