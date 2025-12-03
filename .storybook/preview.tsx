@@ -32,7 +32,7 @@ const preview: Preview = {
 
   initialGlobals: {
     backgrounds: { value: 'default' },
-    viewport: { value: 'Small mobile', isRotated: false },
+    viewport: { value: 'mobile1', isRotated: false },
   },
 };
 
