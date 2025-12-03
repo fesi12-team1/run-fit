@@ -1,3 +1,5 @@
+import { PaginationQueryParams } from './api';
+
 export interface Session {
   id: string;
   crewId: string;
@@ -23,3 +25,10 @@ export interface Session {
   maxParticipantCount: number;
   currentParticipantCount: number;
 }
+
+export type SessionListFilters = PaginationQueryParams & {
+  city?: string;
+  level?: string;
+  date?: string;
+  sort?: string;
+};

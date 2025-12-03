@@ -1,3 +1,5 @@
+import { PaginationQueryParams } from './api';
+
 export interface Crew {
   id: number;
   name: string;
@@ -6,3 +8,8 @@ export interface Crew {
   image: string;
   createdAt: string;
 }
+
+export type CrewListFilters = PaginationQueryParams & {
+  region?: string;
+  sort?: string;
+};
