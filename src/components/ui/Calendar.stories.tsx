@@ -4,11 +4,14 @@ import { DateRange } from 'react-day-picker';
 import Calendar, { type CalendarProps } from './Calendar';
 
 /**
- * 사용자가 날짜를 선택할 수 있는 캘린더 컴포넌트
+ * Calendar 컴포넌트는 사용자가 날짜를 선택할 수 있는 캘린더 UI 요소입니다.
+ *
+ * 단일 날짜 선택과 날짜 범위 선택 모드를 지원하며, 월/연도 선택 방식을 라벨 또는 드롭다운으로 설정할 수 있습니다.
+ * 또한 이전/다음 달의 날짜를 표시할지 여부와 캘린더 내 버튼 스타일을 커스터마이징할 수 있습니다.
  */
 
 const meta: Meta<typeof Calendar> = {
-  title: 'Composite/Calendar',
+  title: 'ui/Calendar',
   component: Calendar,
   tags: ['autodocs'],
   parameters: {
