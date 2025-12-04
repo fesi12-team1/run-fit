@@ -4,67 +4,104 @@ import Button from '@components/ui/Button';
 import Label from '@components/ui/Label';
 import Popover from '@components/ui/Popover';
 import { CalendarIcon } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import DatePicker from './DatePicker';
 import TimePicker, { type TimeValue } from './TimePicker';
 
-interface DateTimePickerProps {
-  value?: { date?: Date; time: TimeValue };
-  onChange?: (next: { date?: Date; time: TimeValue }) => void;
-  label?: string;
+export interface DateTimeValue {
+  date?: Date;
+  time: TimeValue;
 }
+
+export interface DateTimePickerProps {
+  value?: DateTimeValue | undefined;
+  placeholder?: string;
+  onChange: (next: DateTimeValue) => void;
+  label?: string;
+  disabled?: boolean;
+}
+
+const DEFAULT_TIME: TimeValue = {
+  hour: '',
+  minute: '',
+  ampm: 'AM',
+};
 
 export default function DateTimePicker({
   value,
   onChange,
-  label,
+  label = '날짜/시간',
+  placeholder = '날짜와 시간을 선택하세요',
+  disabled = false,
 }: DateTimePickerProps) {
   const [open, setOpen] = useState(false);
-  const [date, setDate] = useState<Date | undefined>(value?.date);
-  const [time, setTime] = useState<TimeValue>(
-    value?.time ?? { hour: '10', minute: '30', ampm: 'AM' }
-  );
-  const isControlled = value !== undefined;
-  const currentDate = isControlled ? value?.date : date;
-  const currentTime = isControlled ? (value?.time ?? time) : time;
 
-  const today = useMemo(() => new Date(), []);
-  const displayDate = currentDate ?? today;
+  const currentValue: DateTimeValue = {
+    date: value?.date ?? undefined,
+    time: value?.time ?? DEFAULT_TIME,
+  };
 
   const handleDate = (next?: Date) => {
-    if (!isControlled) setDate(next);
-    onChange?.({ date: next, time: currentTime });
+    onChange({
+      date: next,
+      time: currentValue.time,
+    });
   };
+
   const handleTime = (next: TimeValue) => {
-    if (!isControlled) setTime(next);
-    onChange?.({ date: currentDate, time: next });
+    onChange({
+      date: currentValue.date,
+      time: next,
+    });
   };
 
   return (
     <div className="flex flex-col gap-3">
-      <Label>{label ?? '날짜/시간'}</Label>
-      <Popover open={open} onOpenChange={setOpen}>
+      <Label>{label}</Label>
+
+      <Popover
+        open={!disabled && open}
+        onOpenChange={disabled ? undefined : setOpen}
+      >
         <Popover.Trigger asChild>
-          <Button variant="outline" className="w-56 justify-between">
-            <span>{displayDate.toLocaleDateString()}</span>
-            <span>
-              {currentTime.hour}:{currentTime.minute} {currentTime.ampm}
+          <Button
+            variant="outline"
+            className="w-56 justify-between"
+            disabled={disabled}
+          >
+            <span className="flex items-center gap-2">
+              {currentValue.date ? (
+                <>
+                  {currentValue.date.toLocaleDateString()}{' '}
+                  {currentValue.time.hour}:{currentValue.time.minute}{' '}
+                  {currentValue.time.ampm}
+                </>
+              ) : (
+                <span className="text-muted-foreground">{placeholder}</span>
+              )}
             </span>
             <CalendarIcon className="h-4 w-4" />
           </Button>
         </Popover.Trigger>
+
         <Popover.Content className="p-4">
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center gap-4">
             <DatePicker
               inline
-              value={currentDate}
-              onChange={handleDate}
               label="날짜"
+              value={currentValue.date}
+              onChange={handleDate}
             />
-            <TimePicker value={currentTime} onChange={handleTime} />
+
+            <TimePicker value={currentValue.time} onChange={handleTime} />
           </div>
-          <div className="flex justify-end mt-4">
-            <Button size="sm" disabled={!date} onClick={() => setOpen(false)}>
+
+          <div className="mt-4 flex justify-end">
+            <Button
+              size="sm"
+              disabled={!currentValue.date}
+              onClick={() => setOpen(false)}
+            >
               완료
             </Button>
           </div>
