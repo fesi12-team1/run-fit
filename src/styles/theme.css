@@ -1,15 +1,12 @@
 @theme {
   /* Colors */
-  --color-mono-white: oklch(1 0 0);
-  --color-mono-black: oklch(0 0 0);
-
   --color-brand-50: oklch(91.2% 0.035266 285.7);
   --color-brand-100: oklch(83.2% 0.068228 286.7);
   --color-brand-200: oklch(76.2% 0.095595 283.2);
   --color-brand-300: oklch(66.1% 0.149225 281.1);
   --color-brand-400: oklch(59% 0.176124 279.9);
-  --color-brand-500: oklch(83.2% 0.068228 286.7);
-  --color-brand-600: oklch(55.7% 0.250499 280.3);
+  --color-brand-500: oklch(55.7% 0.250499 280.3);
+  --color-brand-600: oklch(47.3% 0.197796 277.1);
   --color-brand-700: oklch(39.5% 0.123308 278.1);
   --color-brand-800: oklch(35.3% 0.094275 279.4);
   --color-brand-900: oklch(31.5% 0.073943 280.2);
@@ -25,26 +22,12 @@
   --color-gray-800: oklch(21.3% 0.015673 285);
   --color-gray-900: oklch(17.4% 0.008432 274.4);
 
-  /* Semantic Colors */
-  --color-primary: var(--color-brand-500);
-  --color-secondary: var(--color-brand-400);
-
-  --bg-primary: var(--color-gray-900);
-  --bg-secondary: var(--color-gray-800);
-  --bg-tertiary: var(--color-gray-700);
-
-  --text-primary: var(--color-mono-white);
-  --text-secondary: var(--color-gray-200);
-
-  --border-primary: var(--color-gray-800);
-  --border-secondary: var(--color-gray-700);
-
   /* Typography */
-  --display-lg: 32px/40px var(--font-pretendard);
-  --display-md: 24px/32px var(--font-pretendard);
-  --display-sm: 20px/28px var(--font-pretendard);
-  --body-lg: 18px/28px var(--font-pretendard);
-  --body-md: 16px/24px var(--font-pretendard);
-  --body-sm: 14px/20px var(--font-pretendard);
-  --caption-lg: 12px/16px var(--font-pretendard);
+  --display-lg: 32px/40px var(--pretendard);
+  --display-md: 24px/32px var(--pretendard);
+  --display-sm: 20px/28px var(--pretendard);
+  --body-lg: 18px/28px var(--pretendard);
+  --body-md: 16px/24px var(--pretendard);
+  --body-sm: 14px/20px var(--pretendard);
+  --caption: 12px/16px var(--pretendard);
 }

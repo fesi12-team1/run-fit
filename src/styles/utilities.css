@@ -65,19 +65,46 @@
   font-weight: 700;
 }
 /* Typography - Caption */
-@utility text-caption-xs-regular {
-  font: var(--caption-lg);
+@utility text-caption-regular {
+  font: var(--caption);
   font-weight: 400;
 }
-@utility text-caption-xs-medium {
-  font: var(--caption-lg);
+@utility text-caption-medium {
+  font: var(--caption);
   font-weight: 500;
 }
-@utility text-caption-xs-semibold {
-  font: var(--caption-lg);
+@utility text-caption-semibold {
+  font: var(--caption);
   font-weight: 600;
 }
-@utility text-caption-xs-bold {
-  font: var(--caption-lg);
+@utility text-caption-bold {
+  font: var(--caption);
   font-weight: 700;
+}
+
+/* Text Colors */
+@utility text-primary {
+  color: var(--text-color-white);
+}
+@utility text-secondary {
+  color: var(--color-gray-200);
+}
+
+/* Background Colors */
+@utility bg-primary {
+  background-color: var(--color-gray-900);
+}
+@utility bg-secondary {
+  background-color: var(--color-gray-800);
+}
+@utility bg-tertiary {
+  background-color: var(--color-gray-700);
+}
+
+/* Border Colors */
+@utility border-primary {
+  border-color: var(--color-gray-800);
+}
+@utility border-secondary {
+  border-color: var(--color-gray-700);
 }
