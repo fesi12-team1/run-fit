@@ -2,8 +2,6 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { useState } from 'react';
 import DatePicker, { type DatePickerProps } from './DatePicker';
 
-const today = new Date('2025-12-25');
-
 /**
  * DatePicker 컴포넌트는 사용자가 날짜를 선택할 수 있는 UI 요소입니다.
  *
@@ -19,7 +17,7 @@ const meta: Meta<typeof DatePicker> = {
     layout: 'centered',
   },
   args: {
-    value: today,
+    value: undefined,
     label: '날짜',
     inline: false,
   },
@@ -31,6 +29,10 @@ const meta: Meta<typeof DatePicker> = {
     label: {
       control: 'text',
       description: '입력 필드 라벨',
+    },
+    placeholder: {
+      control: 'text',
+      description: '입력 필드 플레이스홀더',
     },
     inline: {
       control: 'boolean',
@@ -51,18 +53,32 @@ type Story = StoryObj<DatePickerProps>;
  */
 export const Default: Story = {
   render: (args) => {
+    const [value, setValue] = useState<Date | undefined>(undefined);
+    return <DatePicker {...args} value={value} onChange={setValue} />;
+  },
+};
+
+/**
+ * 초기값 있는 경우
+ */
+export const DefaultValue: Story = {
+  args: {
+    value: new Date(2025, 12, 25),
+  },
+  render: (args) => {
     const [value, setValue] = useState<Date | undefined>(args.value);
     return <DatePicker {...args} value={value} onChange={setValue} />;
   },
 };
 
 /**
- * 초기값 없는 경우
+ * 비활성(disabled) 상태
  */
-export const EmptyState: Story = {
+export const Disabled: Story = {
   render: (args) => {
-    const [value, setValue] = useState<Date | undefined>(undefined);
-    return <DatePicker {...args} value={value} onChange={setValue} />;
+    const [value] = useState<Date | undefined>(undefined);
+
+    return <DatePicker {...args} value={value} onChange={() => {}} disabled />;
   },
 };
 
@@ -89,6 +105,25 @@ export const InlineLabel: Story = {
         inline
         onChange={setValue}
         captionLayout="label"
+      />
+    );
+  },
+};
+
+/**
+ * Inline Label Disabled 모드
+ */
+export const InlineLabelDisabled: Story = {
+  render: (args) => {
+    const [value, setValue] = useState<Date | undefined>(args.value);
+    return (
+      <DatePicker
+        {...args}
+        value={value}
+        inline
+        onChange={setValue}
+        captionLayout="label"
+        disabled
       />
     );
   },

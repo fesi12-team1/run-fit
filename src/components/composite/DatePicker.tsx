@@ -13,6 +13,8 @@ export interface DatePickerProps {
   label?: string;
   inline?: boolean;
   captionLayout?: 'dropdown' | 'label';
+  placeholder?: string;
+  disabled?: boolean;
 }
 
 export default function DatePicker({
@@ -21,31 +23,38 @@ export default function DatePicker({
   label = '날짜',
   inline = false,
   captionLayout = 'dropdown',
+  placeholder = '날짜를 선택하세요',
+  disabled = false,
 }: DatePickerProps) {
   const [open, setOpen] = useState(false);
 
   const handleSelect = (next?: Date) => {
+    if (disabled) return;
     onChange?.(next);
   };
 
   if (inline) {
     return (
-      <div className="flex flex-col gap-2">
+      <div className={`flex flex-col gap-2 ${disabled ? 'opacity-50' : ''}`}>
         <Label>{label}</Label>
         <Calendar
           mode="single"
           selected={value}
           captionLayout={captionLayout}
           onSelect={handleSelect}
+          disabled={disabled}
         />
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className={`flex flex-col gap-2 ${disabled ? 'opacity-50' : ''}`}>
       <Label>{label}</Label>
-      <Popover open={open} onOpenChange={setOpen}>
+      <Popover
+        open={!disabled && open}
+        onOpenChange={disabled ? undefined : setOpen}
+      >
         <Popover.Trigger asChild>
           <Button
             variant="outline"
@@ -56,7 +65,7 @@ export default function DatePicker({
               {value ? (
                 value.toLocaleDateString()
               ) : (
-                <span className="text-muted-foreground">날짜를 선택하세요</span>
+                <span className="text-muted-foreground">{placeholder}</span>
               )}
             </span>
           </Button>
@@ -70,6 +79,7 @@ export default function DatePicker({
               handleSelect(next);
               setOpen(false);
             }}
+            disabled={disabled}
           />
         </Popover.Content>
       </Popover>

@@ -44,16 +44,6 @@ type Story = StoryObj<TimePickerProps>;
  * 기본(TimePicker)
  */
 export const Default: Story = {
-  render: (args) => {
-    const [value, setValue] = useState<TimeValue>(args.value);
-    return <TimePicker {...args} value={value} onChange={setValue} />;
-  },
-};
-
-/**
- * 초기값 없는 경우
- */
-export const EmptyState: Story = {
   render: () => {
     const [value, setValue] = useState<TimeValue>({
       hour: '',
@@ -62,6 +52,16 @@ export const EmptyState: Story = {
     });
 
     return <TimePicker value={value} onChange={setValue} />;
+  },
+};
+
+/**
+ * 초기값 있는 경우
+ */
+export const EmptyState: Story = {
+  render: (args) => {
+    const [value, setValue] = useState<TimeValue>(args.value);
+    return <TimePicker {...args} value={value} onChange={setValue} />;
   },
 };
 
