@@ -27,6 +27,10 @@ const DEFAULT_TIME: TimeValue = {
   ampm: 'AM',
 };
 
+function isIncompleteTime(time: TimeValue) {
+  return !time.hour || !time.minute;
+}
+
 export default function DateTimePicker({
   value,
   onChange,
@@ -70,7 +74,7 @@ export default function DateTimePicker({
             disabled={disabled}
           >
             <span className="flex items-center gap-2">
-              {currentValue.date ? (
+              {currentValue.date && !isIncompleteTime(currentValue.time) ? (
                 <>
                   {currentValue.date.toLocaleDateString()}{' '}
                   {currentValue.time.hour}:{currentValue.time.minute}{' '}
@@ -99,7 +103,9 @@ export default function DateTimePicker({
           <div className="mt-4 flex justify-end">
             <Button
               size="sm"
-              disabled={!currentValue.date}
+              disabled={
+                !currentValue.date || isIncompleteTime(currentValue.time)
+              }
               onClick={() => setOpen(false)}
             >
               완료
