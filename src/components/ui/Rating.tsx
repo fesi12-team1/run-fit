@@ -4,16 +4,16 @@ import { useState } from 'react';
 import Star from '@/assets/icons/star.svg';
 import { cn } from '@/lib/utils';
 
-type RatingProps = {
-  value: number; // Controlled
+interface RatingProps {
+  value: number;
   onChange: (value: number) => void;
   max?: number;
   className?: string;
   size?: number;
   disabled?: boolean;
-};
+}
 
-export function Rating({
+export default function Rating({
   value,
   onChange,
   max = 5,
