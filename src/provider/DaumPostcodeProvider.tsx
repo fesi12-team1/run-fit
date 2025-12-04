@@ -5,6 +5,10 @@ import React, { createContext, useContext, useState } from 'react';
 
 type DaumPostcodeContextValue = {
   loaded: boolean;
+  error: Error | null;
+  searchPostcode: (options: {
+    onSelectComplete: (address: string) => void;
+  }) => void;
 };
 
 const DaumPostcodeContext = createContext<DaumPostcodeContextValue | null>(
@@ -17,6 +21,26 @@ export function DaumPostcodeProvider({
   children: React.ReactNode;
 }) {
   const [loaded, setLoaded] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  const searchPostcode = ({
+    onSelectComplete,
+  }: {
+    onSelectComplete: (address: string) => void;
+  }) => {
+    if (!loaded || !window.daum?.Postcode) {
+      return;
+    }
+
+    return new window.daum.Postcode({
+      oncomplete: (data) => {
+        onSelectComplete(data.address);
+      },
+    }).open({
+      popupTitle: '도로명 주소 검색',
+      popupKey: 'postcodePopup',
+    });
+  };
 
   return (
     <>
@@ -27,13 +51,15 @@ export function DaumPostcodeProvider({
           if (window.daum?.Postcode) {
             setLoaded(true);
           } else {
-            console.error(
-              'Daum Postcode script loaded, but window.daum.Postcode is not available.'
+            setError(
+              new Error(
+                'Daum Postcode script loaded, but window.daum.Postcode is not available.'
+              )
             );
           }
         }}
       />
-      <DaumPostcodeContext.Provider value={{ loaded }}>
+      <DaumPostcodeContext.Provider value={{ loaded, error, searchPostcode }}>
         {children}
       </DaumPostcodeContext.Provider>
     </>
