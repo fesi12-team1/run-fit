@@ -6,6 +6,12 @@ pnpm exec tsc --noEmit || {
     exit 1
 }
 
+echo "📡 원격 브랜치 정보 업데이트 중..."
+git fetch origin main || {
+    echo "⚠️  원격 브랜치를 가져올 수 없습니다."
+    exit 1
+}
+
 echo "🧪 변경된 파일 기준 테스트 실행 중..."
 pnpm jest --changedSince=origin/main || {
     echo "⚠️  테스트에 실패했습니다. push가 중단됩니다."
