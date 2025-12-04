@@ -1,0 +1,83 @@
+/* Typography - Display */
+@utility text-display-lg-semibold {
+  font: var(--display-lg);
+  font-weight: 600;
+}
+@utility text-display-lg-bold {
+  font: var(--display-lg);
+  font-weight: 700;
+}
+@utility text-display-md-semibold {
+  font: var(--display-md);
+  font-weight: 600;
+}
+@utility text-display-md-bold {
+  font: var(--display-md);
+  font-weight: 700;
+}
+@utility text-display-sm-semibold {
+  font: var(--display-sm);
+  font-weight: 600;
+}
+@utility text-display-sm-bold {
+  font: var(--display-sm);
+  font-weight: 700;
+}
+/* Typography - Body */
+@utility text-body-lg-semibold {
+  font: var(--body-lg);
+  font-weight: 600;
+}
+@utility text-body-lg-bold {
+  font: var(--body-lg);
+  font-weight: 700;
+}
+@utility text-body-md-regular {
+  font: var(--body-md);
+  font-weight: 400;
+}
+@utility text-body-md-medium {
+  font: var(--body-md);
+  font-weight: 500;
+}
+@utility text-body-md-semibold {
+  font: var(--body-md);
+  font-weight: 600;
+}
+@utility text-body-md-bold {
+  font: var(--body-md);
+  font-weight: 700;
+}
+@utility text-body-sm-regular {
+  font: var(--body-sm);
+  font-weight: 400;
+}
+@utility text-body-sm-medium {
+  font: var(--body-sm);
+  font-weight: 500;
+}
+@utility text-body-sm-semibold {
+  font: var(--body-sm);
+  font-weight: 600;
+}
+@utility text-body-sm-bold {
+  font: var(--body-sm);
+  font-weight: 700;
+}
+/* Typography - Caption */
+@utility text-caption-xs-regular {
+  font: var(--caption-lg);
+  font-weight: 400;
+}
+@utility text-caption-xs-medium {
+  font: var(--caption-lg);
+  font-weight: 500;
+}
+@utility text-caption-xs-semibold {
+  font: var(--caption-lg);
+  font-weight: 600;
+}
+@utility text-caption-xs-bold {
+  font: var(--caption-lg);
+  font-weight: 700;
+}
