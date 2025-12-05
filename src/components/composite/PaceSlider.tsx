@@ -69,7 +69,7 @@ export default function PaceSlider({
                   key={index}
                   className="absolute top-1/2 size-1.5 -translate-y-1/2 rounded-full bg-[#2B2D3A]"
                   style={{
-                    left: `calc(${(index + 1) * PERCENT_PER_STEP}% + ${(index + 1) * (CIRCLE_SIZE - OFFSET_PX)}px - ${CIRCLE_SIZE}px)`,
+                    left: `calc(${(index + 1) * PERCENT_PER_STEP}% + ${(index + 1) * OFFSET_PX}px - ${CIRCLE_SIZE}px)`,
                   }}
                 />
               );
