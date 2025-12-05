@@ -17,7 +17,12 @@ const meta: Meta<InputProps> = {
   argTypes: {
     label: { control: 'text', description: '입력 필드 라벨' },
     placeholder: { control: 'text', description: 'placeholder 텍스트' },
-    type: { control: 'text' },
+    type: {
+      control: { type: 'select' },
+      options: ['text', 'password', 'email', 'number'],
+      description: '입력 필드 타입',
+      defaultValue: 'text',
+    },
     disabled: { control: 'boolean' },
     value: { control: 'text' },
     onChange: { action: 'onChange' },

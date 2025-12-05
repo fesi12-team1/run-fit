@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
 const inputVariants = cva(
-  'text-white file:text-foreground placeholder:text-muted-foreground selection:text-brand-400-foreground h-9 w-full min-w-0 rounded-md border border-gray-800 bg-gray-800 px-3 py-1 text-base shadow-xs transition-all outline-none selection:bg-brand-400 md:text-sm',
+  'text-white file:text-foreground placeholder:text-muted-foreground selection:text-purple-400-foreground h-9 w-full min-w-0 rounded-md border border-gray-800 bg-gray-800 px-3 py-1 text-base shadow-xs transition-all outline-none selection:bg-purple-400 md:text-sm',
   {
     variants: {
       variant: {
@@ -18,7 +18,7 @@ const inputVariants = cva(
       },
       tone: {
         default:
-          'focus:border-brand-400 focus-visible:border-brand-400 focus-visible:placeholder:text-white',
+          'focus:border-purple-400 focus-visible:border-purple-400 focus-visible:placeholder:text-white',
         error:
           'border-destructive focus:border-destructive focus-visible:border-destructive',
       },
@@ -57,9 +57,7 @@ export default function Input({
   const inputVariant = disabled ? 'disabled' : 'default';
   const labelSizeClass = size === 'sm' ? 'text-xs' : 'text-sm';
   const hasError =
-    !!errorMessage ||
-    props['aria-invalid'] === true ||
-    props['aria-invalid'] === 'true';
+    props['aria-invalid'] === true || props['aria-invalid'] === 'true';
   const tone = hasError ? 'error' : 'default';
 
   return (
@@ -102,7 +100,7 @@ export default function Input({
         )}
       </div>
 
-      {errorMessage && (
+      {hasError && errorMessage && (
         <p className="text-destructive mt-0.5 text-xs">{errorMessage}</p>
       )}
     </div>
