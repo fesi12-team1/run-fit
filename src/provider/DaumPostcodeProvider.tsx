@@ -5,11 +5,11 @@ import React, { createContext, useContext, useState } from 'react';
 
 const DAUM_POSTCODE_SCRIPT_SRC = `${process.env.NEXT_PUBLIC_DAUM_POSTCODE_URL || '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js'}`;
 
+type AddressData = Pick<daum.PostcodeData, 'address' | 'sido' | 'sigungu'>;
+
 interface DaumPostcodeContextValue {
   loaded: boolean;
-  openAddressSearch: (options: {
-    onSelectComplete: (address: string) => void;
-  }) => void;
+  openAddressSearch: (onSelectComplete: (data: AddressData) => void) => void;
 }
 
 const DaumPostcodeContext = createContext<DaumPostcodeContextValue | null>(
@@ -24,11 +24,7 @@ export function DaumPostcodeProvider({
   const [loaded, setLoaded] = useState(false);
   const [, setError] = useState<Error | null>(null);
 
-  const openAddressSearch = ({
-    onSelectComplete,
-  }: {
-    onSelectComplete: (address: string) => void;
-  }) => {
+  const openAddressSearch = (onSelectComplete: (data: AddressData) => void) => {
     if (!loaded || !window.daum?.Postcode) {
       console.warn('Daum Postcode script가 로드되지 않았습니다.');
       return;
@@ -36,7 +32,11 @@ export function DaumPostcodeProvider({
 
     return new window.daum.Postcode({
       oncomplete: (data) => {
-        onSelectComplete(data.address);
+        onSelectComplete({
+          address: data.address,
+          sido: data.sido,
+          sigungu: data.sigungu,
+        });
       },
     }).open({
       popupTitle: '도로명 주소 검색',
