@@ -17,16 +17,29 @@ export default function KakaoMap({
   className,
 }: KakaoMapProps) {
   const { loaded, createMap, createMarker } = useKakaoMap();
-  const mapRef = useRef<HTMLDivElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const mapRef = useRef<kakao.maps.Map | null>(null);
+  const markerRef = useRef<kakao.maps.Marker | null>(null);
 
   useEffect(() => {
-    if (!loaded || !mapRef.current) return;
-    const map = createMap(mapRef.current, {
+    if (!loaded || !containerRef.current) return;
+
+    const container = containerRef.current;
+
+    const map = createMap(container, {
       center: coords,
     });
 
     if (!map) return;
-    createMarker(map, coords);
+    mapRef.current = map;
+
+    const marker = createMarker(map, coords);
+    markerRef.current = marker || null;
+
+    return () => {
+      markerRef.current?.setMap(null);
+      container.innerHTML = '';
+    };
   }, [loaded, createMap, createMarker, coords]);
 
   const handleMapClick = () => {
@@ -40,7 +53,7 @@ export default function KakaoMap({
   return (
     <div
       id="map"
-      ref={mapRef}
+      ref={containerRef}
       onClick={handleMapClick}
       className={cx('h-100 w-125 cursor-pointer rounded-xl', className)}
       aria-label="지도 보기"
