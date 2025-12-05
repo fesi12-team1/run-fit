@@ -31,7 +31,7 @@ export default function PaceSlider({
   ...props
 }: PaceSliderProps) {
   // Radix에 전달할 배열 타입으로 변환
-  const radixValue = value !== undefined ? [value] : undefined;
+  const radixValue = [value];
   const handleRadixValueChange = (newValue: number[]) => {
     onValueChange(newValue[0]);
   };
@@ -59,6 +59,7 @@ export default function PaceSlider({
         >
           <SliderPrimitive.Track
             data-slot="slider-track"
+            aria-label="러닝 페이스 선택"
             className={cn(
               'relative grow overflow-hidden rounded-full bg-[#181820] data-[orientation=horizontal]:h-2 data-[orientation=horizontal]:w-full'
             )}
