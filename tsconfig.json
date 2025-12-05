@@ -32,10 +32,6 @@
       "@types/*": ["types/*"]
     }
   },
-  "include": [
-    "next-env.d.ts", // Next.js types
-    "svgr.d.ts",
-    "src/**/*.{ts,tsx}"
-  ],
+  "include": ["svgr.d.ts", "next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules", ".next", "dist", "coverage", "build", ".turbo"]
 }
