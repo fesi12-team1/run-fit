@@ -14,17 +14,15 @@ const OFFSET_PX = CIRCLE_SIZE - (CIRCLE_COUNT * CIRCLE_SIZE) / GAP_COUNT;
 interface PaceSliderProps
   extends Omit<
     React.ComponentProps<typeof SliderPrimitive.Root>,
-    'value' | 'defaultValue' | 'onValueChange'
+    'value' | 'onValueChange'
   > {
   // Radix의 배열 타입을 number로 재정의
-  value?: number;
-  defaultValue?: number;
-  onValueChange?: (value: number) => void;
+  value: number;
+  onValueChange: (value: number) => void;
 }
 
 export default function PaceSlider({
   className,
-  defaultValue = 420,
   value,
   min = 240,
   max = 600,
@@ -32,19 +30,15 @@ export default function PaceSlider({
   onValueChange,
   ...props
 }: PaceSliderProps) {
-  const currentValue = value !== undefined ? value : defaultValue;
   // Radix에 전달할 배열 타입으로 변환
   const radixValue = value !== undefined ? [value] : undefined;
-  const radixDefaultValue = [defaultValue];
-  const handleRadixValueChange = onValueChange
-    ? (newValue: number[]) => {
-        onValueChange(newValue[0]);
-      }
-    : undefined;
+  const handleRadixValueChange = (newValue: number[]) => {
+    onValueChange(newValue[0]);
+  };
   return (
     <div className="w-full">
       <div className="pt-3 pb-3.5 text-center text-[16px]/[24px] font-semibold text-white">
-        {`${formatTimeText(...secondsToMinutes(currentValue))}/km`}
+        {`${formatTimeText(...secondsToMinutes(value))}/km`}
       </div>
       <div className="flex items-center justify-between gap-2">
         <div className="shrink-0 text-[14px]/[20px] text-[#5D616F]">
@@ -52,7 +46,6 @@ export default function PaceSlider({
         </div>
         <SliderPrimitive.Root
           data-slot="slider"
-          defaultValue={radixDefaultValue}
           value={radixValue}
           min={min}
           max={max}

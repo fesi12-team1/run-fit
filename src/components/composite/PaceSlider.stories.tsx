@@ -56,14 +56,6 @@ const meta: Meta<typeof PaceSlider> = {
         defaultValue: { summary: 'false' },
       },
     },
-    defaultValue: {
-      control: 'number',
-      description: '초기값',
-      table: {
-        type: { summary: 'number' },
-        defaultValue: { summary: '420' },
-      },
-    },
   },
   decorators: [
     (Story) => (
@@ -84,7 +76,6 @@ export const Default: Story = {
     max: 600,
     step: 10,
     disabled: false,
-    defaultValue: 420,
   },
   render: function Render(args) {
     const [{ value }, updateArgs] = useArgs();
