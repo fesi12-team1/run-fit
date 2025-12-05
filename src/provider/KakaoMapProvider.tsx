@@ -7,6 +7,12 @@ import { Coords } from '@/types/kakaoMap';
 const KAKAO_JS_KEY = process.env.NEXT_PUBLIC_KAKAO_JS_KEY;
 const KAKAO_MAP_SCRIPT_SRC = `${process.env.NEXT_PUBLIC_KAKAO_MAP_URL}?appkey=${KAKAO_JS_KEY}&autoload=false`;
 
+// https://developers.kakao.com/docs/latest/ko/local/dev-guide#address-coord-response-body-document
+type Document = {
+  x: string; // 경도, longitude
+  y: string; // 위도, latitude
+};
+
 type CreateMapFn = (
   container: HTMLElement,
   options: Omit<kakao.maps.MapOptions, 'center'> & {
@@ -19,10 +25,16 @@ type CreateMarkerFn = (
   position: Coords
 ) => kakao.maps.Marker | undefined;
 
+type GeocodeAddressFn = (
+  address: string,
+  onComplete: (coords: Coords | null) => void
+) => void;
+
 interface KakaoMapContextValue {
   loaded: boolean;
   createMap: CreateMapFn;
   createMarker: CreateMarkerFn;
+  geocodeAddress: GeocodeAddressFn;
 }
 
 const KakaoMapContext = createContext<KakaoMapContextValue | null>(null);
@@ -34,6 +46,7 @@ export function KakaoMapProvider({ children }: { children: React.ReactNode }) {
   const createMap: CreateMapFn = useCallback(
     (container, options) => {
       if (!loaded || !window.kakao?.maps) {
+        console.warn('Kakao Map is not loaded yet.');
         return;
       }
 
@@ -57,15 +70,41 @@ export function KakaoMapProvider({ children }: { children: React.ReactNode }) {
   const createMarker: CreateMarkerFn = useCallback(
     (map, position) => {
       if (!loaded || !window.kakao?.maps) {
+        console.warn('Kakao Map is not loaded yet.');
         return;
       }
-
       const marker = new window.kakao.maps.Marker({
         position: new window.kakao.maps.LatLng(position.lat, position.lng),
       });
 
       marker.setMap(map);
       return marker;
+    },
+    [loaded]
+  );
+
+  const geocodeAddress: GeocodeAddressFn = useCallback(
+    (address, onComplete) => {
+      if (!loaded || !window.kakao?.maps) {
+        onComplete(null);
+        return;
+      }
+
+      const geocoder = new kakao.maps.services.Geocoder();
+
+      geocoder.addressSearch(
+        address,
+        (result: Document[], status: kakao.maps.services.Status) => {
+          if (status === kakao.maps.services.Status.OK && result[0]) {
+            onComplete({
+              lat: parseFloat(result[0].y),
+              lng: parseFloat(result[0].x),
+            });
+          } else {
+            onComplete(null);
+          }
+        }
+      );
     },
     [loaded]
   );
@@ -104,7 +143,9 @@ export function KakaoMapProvider({ children }: { children: React.ReactNode }) {
         onLoad={() => handleLoad()}
         onError={() => handleError()}
       />
-      <KakaoMapContext.Provider value={{ loaded, createMap, createMarker }}>
+      <KakaoMapContext.Provider
+        value={{ loaded, createMap, createMarker, geocodeAddress }}
+      >
         {children}
       </KakaoMapContext.Provider>
     </>
