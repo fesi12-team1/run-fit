@@ -50,23 +50,32 @@ export default function Input({
   id,
   ...props
 }: InputProps) {
+  const {
+    'aria-invalid': ariaInvalid,
+    'aria-describedby': ariaDescribedByProp,
+    ...restProps
+  } = props;
   const [showPassword, setShowPassword] = useState(false);
   const inputId = useId();
+  const resolvedId = id ?? inputId;
 
   const isPassword = type === 'password';
   const currentType = isPassword && showPassword ? 'text' : type;
 
   const inputVariant = disabled ? 'disabled' : 'default';
   const labelSizeClass = size === 'sm' ? 'text-xs' : 'text-sm';
-  const hasError =
-    props['aria-invalid'] === true || props['aria-invalid'] === 'true';
+  const hasError = ariaInvalid === true || ariaInvalid === 'true';
   const tone = hasError ? 'error' : 'default';
+  const errorId =
+    hasError && errorMessage ? `${resolvedId.toString()}-error` : undefined;
+  const ariaDescribedBy =
+    [ariaDescribedByProp, errorId].filter(Boolean).join(' ') || undefined;
 
   return (
     <div className="grid w-full max-w-sm gap-2">
       {label && (
         <Label
-          htmlFor={id || inputId}
+          htmlFor={resolvedId}
           className={cn(labelSizeClass, 'text-white')}
         >
           {label}
@@ -75,7 +84,7 @@ export default function Input({
 
       <div className="relative">
         <input
-          id={id || inputId}
+          id={resolvedId}
           type={currentType}
           data-slot="input"
           disabled={disabled}
@@ -89,7 +98,9 @@ export default function Input({
               className,
             })
           )}
-          {...props}
+          aria-invalid={ariaInvalid}
+          aria-describedby={ariaDescribedBy}
+          {...restProps}
         />
 
         {isPassword && !disabled && (
@@ -109,11 +120,7 @@ export default function Input({
       </div>
 
       {hasError && errorMessage && (
-        <p
-          id={id || inputId}
-          aria-describedby="에러 메시지"
-          className="text-destructive mt-0.5 text-xs"
-        >
+        <p id={errorId} className="text-destructive mt-0.5 text-xs">
           {errorMessage}
         </p>
       )}
