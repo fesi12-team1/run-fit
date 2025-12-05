@@ -24,11 +24,19 @@ export default function TimeSlider({
   onValueChange,
   ...props
 }: TimeSliderProps) {
+  const isAllDay = value[0] === min && value[1] === max;
   return (
     <div className="w-full">
       <div className="mb-7 flex justify-center gap-3 text-[16px]/[24px] font-semibold text-white">
-        <p>{`${formatMinutesToKoreanTime(value[0])}`}</p> <p>~</p>
-        <p>{`${formatMinutesToKoreanTime(value[1])}`}</p>
+        {isAllDay ? (
+          <p>하루 종일</p>
+        ) : (
+          <>
+            <p>{`${formatMinutesToKoreanTime(value[0])}`}</p>
+            <p>~</p>
+            <p>{`${formatMinutesToKoreanTime(value[1])}`}</p>
+          </>
+        )}
       </div>
       <SliderPrimitive.Root
         data-slot="slider"
