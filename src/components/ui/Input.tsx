@@ -1,7 +1,7 @@
 import { Label } from '@radix-ui/react-label';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { Eye, EyeOff } from 'lucide-react';
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { cn } from '@/lib/utils';
 
 const inputVariants = cva(
@@ -47,9 +47,11 @@ export default function Input({
   value,
   placeholder,
   errorMessage,
+  id,
   ...props
 }: InputProps) {
   const [showPassword, setShowPassword] = useState(false);
+  const inputId = useId();
 
   const isPassword = type === 'password';
   const currentType = isPassword && showPassword ? 'text' : type;
@@ -63,11 +65,17 @@ export default function Input({
   return (
     <div className="grid w-full max-w-sm gap-2">
       {label && (
-        <Label className={cn(labelSizeClass, 'text-white')}>{label}</Label>
+        <Label
+          htmlFor={id || inputId}
+          className={cn(labelSizeClass, 'text-white')}
+        >
+          {label}
+        </Label>
       )}
 
       <div className="relative">
         <input
+          id={id || inputId}
           type={currentType}
           data-slot="input"
           disabled={disabled}
@@ -101,7 +109,13 @@ export default function Input({
       </div>
 
       {hasError && errorMessage && (
-        <p className="text-destructive mt-0.5 text-xs">{errorMessage}</p>
+        <p
+          id={id || inputId}
+          aria-describedby="에러 메시지"
+          className="text-destructive mt-0.5 text-xs"
+        >
+          {errorMessage}
+        </p>
       )}
     </div>
   );
