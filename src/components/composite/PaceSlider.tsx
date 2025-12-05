@@ -2,7 +2,7 @@
 
 import * as SliderPrimitive from '@radix-ui/react-slider';
 import * as React from 'react';
-import { formatSecondsToMinutes } from '@/lib/pace';
+import { formatTimeText, secondsToMinutes } from '@/lib/pace';
 import { cn } from '@/lib/utils';
 
 const CIRCLE_COUNT = 9;
@@ -44,11 +44,11 @@ export default function PaceSlider({
   return (
     <div className="w-full">
       <div className="pt-3 pb-3.5 text-center text-[16px]/[24px] font-semibold text-white">
-        {`${formatSecondsToMinutes(currentValue)}/km`}
+        {`${formatTimeText(...secondsToMinutes(currentValue))}/km`}
       </div>
       <div className="flex items-center justify-between gap-2">
         <div className="shrink-0 text-[14px]/[20px] text-[#5D616F]">
-          {formatSecondsToMinutes(min)}
+          {formatTimeText(...secondsToMinutes(min))}
         </div>
         <SliderPrimitive.Root
           data-slot="slider"
@@ -88,7 +88,7 @@ export default function PaceSlider({
           />
         </SliderPrimitive.Root>
         <div className="shrink-0 text-[14px]/[20px] text-[#5D616F]">
-          {formatSecondsToMinutes(max)}
+          {formatTimeText(...secondsToMinutes(max))}
         </div>
       </div>
     </div>
