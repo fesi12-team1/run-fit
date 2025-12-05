@@ -1,0 +1,74 @@
+'use client';
+
+import * as SliderPrimitive from '@radix-ui/react-slider';
+import * as React from 'react';
+import { formatMinutesToKoreanTime } from '@/lib/time';
+import { cn } from '@/lib/utils';
+
+interface TimeSliderProps
+  extends Omit<
+    React.ComponentProps<typeof SliderPrimitive.Root>,
+    'value' | 'onValueChange' | 'defalutValue'
+  > {
+  // Radix의 배열 타입을 number로 재정의
+  value: number;
+  onValueChange: (value: number) => void;
+}
+
+export default function TimeSlider({
+  className,
+  value,
+  min = 0,
+  max = 1440,
+  step = 10,
+  onValueChange,
+  ...props
+}: TimeSliderProps) {
+  return (
+    <div className="w-full">
+      <div className="mb-7 flex justify-center gap-3 text-[16px]/[24px] font-semibold text-white">
+        <p>{`${formatMinutesToKoreanTime(value[0])}`}</p> <p>~</p>
+        <p>{`${formatMinutesToKoreanTime(value[1])}`}</p>
+      </div>
+      <SliderPrimitive.Root
+        data-slot="slider"
+        aria-label="러닝 시간 선택"
+        value={value}
+        min={min}
+        max={max}
+        onValueChange={onValueChange}
+        step={step}
+        className={cn(
+          'relative flex w-full touch-none items-center select-none data-disabled:opacity-50',
+          className
+        )}
+        {...props}
+      >
+        <SliderPrimitive.Track
+          data-slot="slider-track"
+          className={cn(
+            'relative grow overflow-hidden rounded-full bg-[#181820] data-[orientation=horizontal]:h-2 data-[orientation=horizontal]:w-full'
+          )}
+        >
+          <SliderPrimitive.Range
+            data-slot="slider-range"
+            className={cn(
+              'absolute bg-[#6C6BE2] data-[orientation=horizontal]:h-full'
+            )}
+          />
+        </SliderPrimitive.Track>
+        {Array.from({ length: value.length }, (_, index) => (
+          <SliderPrimitive.Thumb
+            data-slot="slider-thumb"
+            key={index}
+            className="block size-6 shrink-0 rounded-full border-2 border-[#6C6BE2] bg-white shadow-sm ring-[#6C6BE2]/50 transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50"
+          />
+        ))}
+      </SliderPrimitive.Root>
+      <div className="mt-3 flex justify-between text-[14px]/[20px] text-[#5D616F]">
+        <div>{min / 60}시</div>
+        <div>{max / 60}시</div>
+      </div>
+    </div>
+  );
+}
