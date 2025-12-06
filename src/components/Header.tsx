@@ -53,7 +53,7 @@ export default function Header() {
           {isLoggedIn ? (
             <Link
               href={ROUTES.signIn}
-              className="text-body3-semibold tablet:text-body2-semibold"
+              className="text-body3-semibold tablet:text-body2-semibold mx-2"
             >
               로그인
             </Link>
