@@ -90,10 +90,3 @@
     min-height: calc(100vh - 60px); /* tablet:min-h-[calc(100vh-60px)] */
   }
 }
-
-/* Flex Center 유틸리티 */
-@utility flex-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
