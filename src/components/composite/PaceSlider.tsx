@@ -60,9 +60,9 @@ export default function PaceSlider({
         >
           <SliderPrimitive.Track
             data-slot="slider-track"
-            className={cn(
+            className={
               'relative grow overflow-hidden rounded-full bg-gray-800 data-[orientation=horizontal]:h-2 data-[orientation=horizontal]:w-full'
-            )}
+            }
           >
             {Array.from({ length: CIRCLE_COUNT }, (_, index) => {
               return (
@@ -81,7 +81,7 @@ export default function PaceSlider({
             className="block size-6 shrink-0 rounded-full border-2 border-blue-400 bg-white shadow-sm ring-blue-400/50 transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50"
           />
         </SliderPrimitive.Root>
-        <div className="text-bodt3-regular shrink-0 text-gray-300">
+        <div className="text-body3-regular shrink-0 text-gray-300">
           {formatTimeText(...secondsToMinutes(max))}
         </div>
       </div>
