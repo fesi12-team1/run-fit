@@ -17,7 +17,7 @@ export default function TimeSlider({
   const isAllDay = value[0] === min && value[1] === max;
   return (
     <div className="w-full">
-      <div className="mb-7 flex justify-center gap-3 text-[16px]/[24px] font-semibold text-white">
+      <div className="text-body2-semibold mb-7 flex justify-center gap-3 text-white">
         {isAllDay ? (
           <p>하루 종일</p>
         ) : (
@@ -45,13 +45,13 @@ export default function TimeSlider({
         <SliderPrimitive.Track
           data-slot="slider-track"
           className={cn(
-            'relative grow overflow-hidden rounded-full bg-[#181820] data-[orientation=horizontal]:h-2 data-[orientation=horizontal]:w-full'
+            'relative grow overflow-hidden rounded-full bg-gray-800 data-[orientation=horizontal]:h-2 data-[orientation=horizontal]:w-full'
           )}
         >
           <SliderPrimitive.Range
             data-slot="slider-range"
             className={cn(
-              'absolute bg-[#6C6BE2] data-[orientation=horizontal]:h-full'
+              'absolute bg-blue-400 data-[orientation=horizontal]:h-full'
             )}
           />
         </SliderPrimitive.Track>
@@ -59,11 +59,11 @@ export default function TimeSlider({
           <SliderPrimitive.Thumb
             data-slot="slider-thumb"
             key={index}
-            className="block size-6 shrink-0 rounded-full border-2 border-[#6C6BE2] bg-white shadow-sm ring-[#6C6BE2]/50 transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50"
+            className="block size-6 shrink-0 rounded-full border-2 border-blue-400 bg-white shadow-sm ring-[#6C6BE2]/50 transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50"
           />
         ))}
       </SliderPrimitive.Root>
-      <div className="mt-3 flex justify-between text-[14px]/[20px] text-[#5D616F]">
+      <div className="text-body3-regular mt-3 flex justify-between text-gray-300">
         <div>{min / 60}시</div>
         <div>{max / 60}시</div>
       </div>
