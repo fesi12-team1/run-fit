@@ -126,3 +126,25 @@ export const QUERY_KEYS = {
     },
   },
 };
+
+/**
+ * 앱 내 라우팅 경로 상수
+ */
+export const ROUTES = {
+  home: '/',
+  signIn: '/signin',
+  signUp: '/signup',
+
+  sessions: {
+    list: '/sessions',
+    detail: (sessionId: number | string) => `/sessions/${sessionId}`,
+    likes: '/sessions/likes',
+  },
+
+  crews: {
+    list: '/crews',
+    detail: (crewId: number | string) => `/crews/${crewId}`,
+  },
+
+  my: '/my',
+} as const;
