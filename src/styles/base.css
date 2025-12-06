@@ -1,0 +1,13 @@
+@layer base {
+  button,
+  input,
+  textarea,
+  select {
+    cursor: pointer;
+    border-radius: 0;
+  }
+
+  input[type='submit'] {
+    cursor: pointer;
+  }
+}
