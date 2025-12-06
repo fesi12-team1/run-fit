@@ -1,22 +1,128 @@
-import * as React from 'react';
+import { Label } from '@radix-ui/react-label';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { Eye, EyeOff } from 'lucide-react';
+import { useId, useState } from 'react';
 import { cn } from '@/lib/utils';
+
+const inputVariants = cva(
+  'h-10 w-[460px] min-w-0 rounded-xl bg-gray-800 px-4 py-2 text-base text-white outline-none file:text-white placeholder:text-gray-300',
+  {
+    variants: {
+      variant: {
+        default: '',
+        disabled: 'placeholder:text-gray-500 cursor-not-allowed',
+      },
+      size: {
+        md: 'h-9',
+        sm: 'h-8',
+      },
+      tone: {
+        default:
+          'focus:ring-1 focus:ring-brand-400 focus-visible:ring-brand-400',
+        error: 'border-warning border-2',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+      size: 'md',
+    },
+  }
+);
+
+export interface InputProps
+  extends Omit<React.ComponentProps<'input'>, 'size'>,
+    VariantProps<typeof inputVariants> {
+  label?: string;
+  errorMessage?: string;
+  size?: 'md' | 'sm';
+}
 
 export default function Input({
   className,
-  type,
+  label,
+  type = 'text',
+  size = 'md',
+  disabled = false,
+  value,
+  placeholder,
+  errorMessage,
+  id,
   ...props
-}: React.ComponentProps<'input'>) {
+}: InputProps) {
+  const {
+    'aria-invalid': ariaInvalid,
+    'aria-describedby': ariaDescribedByProp,
+    ...restProps
+  } = props;
+  const [showPassword, setShowPassword] = useState(false);
+  const inputId = useId();
+  const resolvedId = id ?? inputId;
+
+  const isPassword = type === 'password';
+  const currentType = isPassword && showPassword ? 'text' : type;
+
+  const inputVariant = disabled ? 'disabled' : 'default';
+  const labelSizeClass = size === 'sm' ? 'text-xs' : 'text-sm';
+  const hasError = ariaInvalid === true || ariaInvalid === 'true';
+  const tone = hasError ? 'error' : 'default';
+  const errorId =
+    hasError && errorMessage ? `${resolvedId.toString()}-error` : undefined;
+  const ariaDescribedBy =
+    [ariaDescribedByProp, errorId].filter(Boolean).join(' ') || undefined;
+
   return (
-    <input
-      type={type}
-      data-slot="input"
-      className={cn(
-        'file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
-        'focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]',
-        'aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive',
-        className
+    <div className="grid w-full max-w-sm gap-2">
+      {label && (
+        <Label
+          htmlFor={resolvedId}
+          className={cn(labelSizeClass, 'text-white')}
+        >
+          {label}
+        </Label>
       )}
-      {...props}
-    />
+
+      <div className="relative">
+        <input
+          id={resolvedId}
+          type={currentType}
+          data-slot="input"
+          disabled={disabled}
+          value={value}
+          placeholder={placeholder}
+          className={cn(
+            inputVariants({
+              variant: inputVariant,
+              size,
+              tone,
+              className,
+            })
+          )}
+          aria-invalid={ariaInvalid}
+          aria-describedby={ariaDescribedBy}
+          {...restProps}
+        />
+
+        {isPassword && !disabled && (
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="text-muted-foreground absolute top-1/2 right-3 -translate-y-1/2 transition-colors hover:text-white"
+            aria-label={showPassword ? '비밀번호 숨기기' : '비밀번호 보기'}
+          >
+            {showPassword ? (
+              <EyeOff className="size-4 text-gray-300" />
+            ) : (
+              <Eye className="size-4 text-gray-300" />
+            )}
+          </button>
+        )}
+      </div>
+
+      {hasError && errorMessage && (
+        <p id={errorId} className="text-warning mt-0.5 text-xs">
+          {errorMessage}
+        </p>
+      )}
+    </div>
   );
 }
