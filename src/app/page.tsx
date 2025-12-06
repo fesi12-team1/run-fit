@@ -2,8 +2,8 @@
 
 export default function HomePage() {
   return (
-    <main className="tablet:min-h-[calc(100vh-60px)] flex min-h-[calc(100vh-56px)] items-center justify-center">
-      <p className="text-title1-semibold bg-brand-500 tablet:bg-brand-600 laptop:bg-brand-700 desktop:bg-gray-200 p-5">
+    <main className="h-main flex-center">
+      <p className="text-title1-semibold bg-brand-500 tablet:bg-brand-600 laptop:bg-brand-700 desktop:bg-gray-200 h-1000 p-5">
         Hello, world!
       </p>
     </main>
