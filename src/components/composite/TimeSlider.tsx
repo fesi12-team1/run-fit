@@ -5,16 +5,6 @@ import * as React from 'react';
 import { formatMinutesToKoreanTime } from '@/lib/time';
 import { cn } from '@/lib/utils';
 
-interface TimeSliderProps
-  extends Omit<
-    React.ComponentProps<typeof SliderPrimitive.Root>,
-    'value' | 'onValueChange' | 'defalutValue'
-  > {
-  // Radix의 배열 타입을 number로 재정의
-  value: number;
-  onValueChange: (value: number) => void;
-}
-
 export default function TimeSlider({
   className,
   value,
@@ -23,7 +13,7 @@ export default function TimeSlider({
   step = 10,
   onValueChange,
   ...props
-}: TimeSliderProps) {
+}: Omit<React.ComponentProps<typeof SliderPrimitive.Root>, 'defaultValue'>) {
   const isAllDay = value[0] === min && value[1] === max;
   return (
     <div className="w-full">
