@@ -37,11 +37,11 @@ export default function PaceSlider({
   };
   return (
     <div className="w-full">
-      <div className="pt-3 pb-3.5 text-center text-[16px]/[24px] font-semibold text-white">
+      <div className="text-body2-semibold pt-3 pb-3.5 text-center text-white">
         {`${formatTimeText(...secondsToMinutes(value))}/km`}
       </div>
       <div className="flex items-center justify-between gap-2">
-        <div className="shrink-0 text-[14px]/[20px] text-[#5D616F]">
+        <div className="text-body3-regular shrink-0 text-gray-300">
           {formatTimeText(...secondsToMinutes(min))}
         </div>
         <SliderPrimitive.Root
@@ -61,14 +61,14 @@ export default function PaceSlider({
           <SliderPrimitive.Track
             data-slot="slider-track"
             className={cn(
-              'relative grow overflow-hidden rounded-full bg-[#181820] data-[orientation=horizontal]:h-2 data-[orientation=horizontal]:w-full'
+              'relative grow overflow-hidden rounded-full bg-gray-800 data-[orientation=horizontal]:h-2 data-[orientation=horizontal]:w-full'
             )}
           >
             {Array.from({ length: CIRCLE_COUNT }, (_, index) => {
               return (
                 <div
                   key={index}
-                  className="absolute top-1/2 size-1.5 -translate-y-1/2 rounded-full bg-[#2B2D3A]"
+                  className="absolute top-1/2 size-1.5 -translate-y-1/2 rounded-full bg-gray-600"
                   style={{
                     left: `calc(${(index + 1) * PERCENT_PER_STEP}% + ${(index + 1) * OFFSET_PX}px - ${CIRCLE_SIZE}px)`,
                   }}
@@ -78,10 +78,10 @@ export default function PaceSlider({
           </SliderPrimitive.Track>
           <SliderPrimitive.Thumb
             data-slot="slider-thumb"
-            className="block size-6 shrink-0 rounded-full border-2 border-[#6C6BE2] bg-white shadow-sm ring-[#6C6BE2]/50 transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50"
+            className="block size-6 shrink-0 rounded-full border-2 border-blue-400 bg-white shadow-sm ring-blue-400/50 transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50"
           />
         </SliderPrimitive.Root>
-        <div className="shrink-0 text-[14px]/[20px] text-[#5D616F]">
+        <div className="text-bodt3-regular shrink-0 text-gray-300">
           {formatTimeText(...secondsToMinutes(max))}
         </div>
       </div>
