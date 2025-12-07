@@ -2,15 +2,16 @@
 
 import { Label } from '@radix-ui/react-label';
 import { cva } from 'class-variance-authority';
+import Checkbox from '@/components/ui/Checkbox';
 import { cn } from '@/lib/utils';
 
 interface SessionLevelCardProps {
-  size?: 'sm' | 'md';
   label: string;
   description: string;
-  checked?: boolean;
+  size?: 'md' | 'sm';
+  checked: boolean;
   disabled?: boolean;
-  onClick?: () => void;
+  onClick: () => void;
 }
 
 const sessionLevelCardVariants = cva(
@@ -42,22 +43,29 @@ const sessionLevelCardVariants = cva(
 );
 
 export default function SessionLevelCard({
-  size = 'md',
   label,
   description,
+  size = 'md',
   checked = false,
   disabled = false,
   onClick,
   ...rest
 }: SessionLevelCardProps) {
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
+    if (!disabled && onClick) {
+      onClick();
+    }
+  };
+
   return (
     <div
       role="checkbox"
       aria-checked={checked}
       aria-disabled={disabled}
       tabIndex={disabled ? -1 : 0}
-      onClick={onClick}
-      onKeyDown={onClick}
+      onClick={handleClick}
       className={cn(sessionLevelCardVariants({ size, checked, disabled }))}
       {...rest}
     >
@@ -80,6 +88,13 @@ export default function SessionLevelCard({
             {description}
           </p>
         </div>
+        <Checkbox
+          aria-hidden="true"
+          checked={checked}
+          rounded
+          tabIndex={-1}
+          className="pointer-events-none absolute top-3 right-3"
+        />
       </Label>
     </div>
   );
