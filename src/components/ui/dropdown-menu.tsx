@@ -82,7 +82,7 @@ export function DropdownMenuItem({
       className={cn(
         size === 'lg' ? 'text-body2-regular' : 'text-body3-regular',
         'cursor-pointer bg-gray-600 px-4 py-3 text-gray-100 outline-none',
-        'transition-colors duration-150 hover:bg-gray-700',
+        'transition-colors duration-150 focus:bg-gray-700',
         selected && 'bg-gray-800 text-white',
         className
       )}
