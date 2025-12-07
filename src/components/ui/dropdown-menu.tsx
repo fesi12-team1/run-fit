@@ -26,7 +26,7 @@ export function DropdownMenuTrigger({
         size === 'lg'
           ? 'text-body3-medium h-10 gap-2'
           : 'text-caption-medium h-8 gap-1',
-        'group index-full flex items-center justify-between rounded-lg px-3 py-2',
+        'group flex items-center justify-between rounded-lg px-3 py-2',
         'bg-gray-800 text-gray-200',
         'border border-transparent',
         'data-[state=open]:border-brand-500 data-[state=open]:bg-brand-950 data-[state=open]:text-brand-200',
@@ -41,5 +41,27 @@ export function DropdownMenuTrigger({
         className="group-data-[state=open]:text-brand-200 text-gray-200 group-data-[state=open]:rotate-180"
       />
     </DropdownMenuPrimitive.Trigger>
+  );
+}
+
+export function DropdownMenuContent({
+  className,
+  sideOffset = 4,
+  align = 'end',
+  ...props
+}: React.ComponentProps<typeof DropdownMenuPrimitive.Content>) {
+  return (
+    <DropdownMenuPrimitive.Portal>
+      <DropdownMenuPrimitive.Content
+        data-slot="dropdown-menu-content"
+        align={align}
+        sideOffset={sideOffset}
+        className={cn(
+          'overflow-hidden rounded-xl border border-gray-500',
+          className
+        )}
+        {...props}
+      />
+    </DropdownMenuPrimitive.Portal>
   );
 }
