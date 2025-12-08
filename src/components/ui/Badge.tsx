@@ -1,7 +1,8 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
 import Level from '@/assets/icons/level.svg';
-import { cn, formatTextPace, secondsToMinutes } from '@/lib/utils';
+import { formatPaceText, secondsToMinutes } from '@/lib/pace';
+import { cn } from '@/lib/utils';
 
 export const badgeVariants = cva(
   'inline-flex items-center justify-center whitespace-nowrap shrink-0 [&>svg]:size-3 [&>svg]:pointer-events-none overflow-hidden font-semibold',
@@ -74,7 +75,7 @@ export function PaceBadge({
 }: Omit<PaceBadgeProps, 'variant'>) {
   return (
     <Badge variant="pace" pace={pace} size={size} className={className}>
-      {formatTextPace(...secondsToMinutes(pace || 0))}
+      {formatPaceText(...secondsToMinutes(pace || 0))}
     </Badge>
   );
 }
