@@ -11,11 +11,11 @@ import ProfileList from './ProfileList';
 // export default function SessionCard({ data }: SessionCardProps) {
 export default function SessionCard() {
   return (
-    <div className="flex w-full flex-col">
+    <li className="flex w-full flex-col">
       <div className="tablet:mb-6 tablet:aspect-video relative mb-3 aspect-165/185 self-stretch overflow-hidden rounded-lg bg-blue-300">
         <Image
-          src="/image.local.jpg"
-          alt="Session location"
+          src="/session.local.jpg"
+          alt="Session"
           fill
           className="object-cover"
         />
@@ -58,6 +58,6 @@ export default function SessionCard() {
           </div>
         </div>
       </div>
-    </div>
+    </li>
   );
 }

@@ -1,3 +1,5 @@
+'use client';
+
 import SessionInfo from '../session/SessionInfo';
 import Avatar from '../ui/Avatar';
 

@@ -12,11 +12,11 @@ export default function Page() {
         </span>
         <span className="laptop:inline-flex hidden text-white">laptop</span>
       </div>
-      <div className="tablet:grid-cols-3 tablet:gap-6 tablet:gap-x-4 tablet:gap-y-10 grid w-full grid-cols-2 gap-x-3 gap-y-8">
+      <ul className="tablet:grid-cols-3 tablet:gap-6 tablet:gap-x-4 tablet:gap-y-10 grid w-full grid-cols-2 gap-x-3 gap-y-8">
         {Array.from({ length: 6 }).map((_, index) => (
           <SessionCard key={index} /> // 실제로는 sessionId를 key로 사용
         ))}
-      </div>
+      </ul>
     </div>
   );
 }
