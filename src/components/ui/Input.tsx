@@ -1,11 +1,10 @@
 import { Label } from '@radix-ui/react-label';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { Eye, EyeOff } from 'lucide-react';
-import { useId, useState } from 'react';
+import { useId } from 'react';
 import { cn } from '@/lib/utils';
 
 const inputVariants = cva(
-  'h-10 w-[460px] min-w-0 rounded-xl bg-gray-800 px-4 py-2 text-base text-white outline-none file:text-white placeholder:text-gray-300',
+  'h-10 w-full min-w-0 rounded-xl bg-gray-800 px-4 py-2 text-base text-white outline-none file:text-white placeholder:text-gray-300',
   {
     variants: {
       variant: {
@@ -34,18 +33,20 @@ export interface InputProps
   label?: string;
   errorMessage?: string;
   size?: VariantProps<typeof inputVariants>['size'];
+  Icon?: React.ReactNode;
 }
 
 export default function Input({
   className,
   label,
-  type = 'text',
   size = 'md',
   disabled = false,
   value,
   placeholder,
   errorMessage,
   id,
+  type,
+  Icon,
   ...props
 }: InputProps) {
   const {
@@ -53,67 +54,62 @@ export default function Input({
     'aria-describedby': ariaDescribedByProp,
     ...restProps
   } = props;
-  const [showPassword, setShowPassword] = useState(false);
+
   const inputId = useId();
   const resolvedId = id ?? inputId;
 
-  const isPassword = type === 'password';
-  const currentType = isPassword && showPassword ? 'text' : type;
-
-  const inputVariant = disabled ? 'disabled' : 'default';
-  const labelSizeClass = size === 'sm' ? 'text-xs' : 'text-sm';
   const hasError = ariaInvalid === true || ariaInvalid === 'true';
   const tone = hasError ? 'error' : 'default';
-  const errorId =
-    hasError && errorMessage ? `${resolvedId.toString()}-error` : undefined;
+
+  const errorId = hasError && errorMessage ? `${resolvedId}-error` : undefined;
+
   const ariaDescribedBy =
     [ariaDescribedByProp, errorId].filter(Boolean).join(' ') || undefined;
+
+  const isPassword = type === 'password';
+
+  const isIcon = Icon || isPassword ? 'pr-10' : '';
 
   return (
     <div className="grid w-full gap-2">
       {label && (
         <Label
           htmlFor={resolvedId}
-          className={cn(labelSizeClass, 'text-white')}
+          className={cn(
+            'text-white',
+            size === 'md' ? 'text-body3-semibold' : 'text-caption-semibold'
+          )}
         >
           {label}
         </Label>
       )}
 
-      <div className="relative">
+      <div className="relative flex items-center">
         <input
           id={resolvedId}
-          type={currentType}
           data-slot="input"
           disabled={disabled}
+          type={type ?? 'text'}
           value={value}
           placeholder={placeholder}
-          className={cn(
-            inputVariants({
-              variant: inputVariant,
-              size,
-              tone,
-              className,
-            })
-          )}
           aria-invalid={ariaInvalid}
           aria-describedby={ariaDescribedBy}
+          className={cn(
+            inputVariants({
+              variant: disabled ? 'disabled' : 'default',
+              size,
+              tone,
+            }),
+            isIcon,
+            className
+          )}
           {...restProps}
         />
 
-        {isPassword && !disabled && (
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="text-muted-foreground focus-visible:ring-brand-400 absolute top-1/2 right-3 -translate-y-1/2 transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-800 focus-visible:outline-none"
-            aria-label={showPassword ? '비밀번호 숨기기' : '비밀번호 보기'}
-          >
-            {showPassword ? (
-              <EyeOff className="size-4 text-gray-300" />
-            ) : (
-              <Eye className="size-4 text-gray-300" />
-            )}
-          </button>
+        {Icon && (
+          <span className="absolute right-3 flex w-5 items-center text-gray-300">
+            {Icon}
+          </span>
         )}
       </div>
 
