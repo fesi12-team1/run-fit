@@ -13,7 +13,7 @@ function useDropdownSize() {
   return React.useContext(DropdownSizeContext);
 }
 
-export function Dropdown({
+export default function Dropdown({
   size = 'sm',
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Root> & {
@@ -26,7 +26,7 @@ export function Dropdown({
   );
 }
 
-export function DropdownTrigger({
+function DropdownTrigger({
   className,
   children,
   ...props
@@ -60,11 +60,7 @@ export function DropdownTrigger({
   );
 }
 
-export function DropdownTriggerNoArrow({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+function DropdownTriggerNoArrow({ children }: { children: React.ReactNode }) {
   return (
     <DropdownMenuPrimitive.Trigger asChild>
       <button>{children}</button>
@@ -72,7 +68,7 @@ export function DropdownTriggerNoArrow({
   );
 }
 
-export function DropdownContent({
+function DropdownContent({
   className,
   sideOffset = 4,
   align = 'end',
@@ -94,7 +90,7 @@ export function DropdownContent({
   );
 }
 
-export function DropdownItem({
+function DropdownItem({
   className,
   selected = false,
   children,
@@ -121,3 +117,8 @@ export function DropdownItem({
     </DropdownMenuPrimitive.Item>
   );
 }
+
+Dropdown.Trigger = DropdownTrigger;
+Dropdown.TriggerNoArrow = DropdownTriggerNoArrow;
+Dropdown.Content = DropdownContent;
+Dropdown.Item = DropdownItem;
