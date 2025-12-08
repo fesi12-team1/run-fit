@@ -1,22 +1,16 @@
-import {
-  Profile,
-  ResponseData,
-  ResponseErrorData,
-} from '@/types';
+import { Profile, ResponseData, ResponseErrorData } from '@/types';
 
 export async function getCurrentUserProfile() {
-  const accessToken = '';
-  const response = await fetch('/api/user', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${accessToken}`,
-    },
-  });
+  // const accessToken = '';
+  const response = await fetch('/api/user');
 
   if (!response.ok) {
-    const errorData: ResponseErrorData = await response.json();
-    return errorData.error;
+    const { error } = await response.json();
+    if (!error.success) {
+      throw new Error(error.message);
+    } else {
+      throw new Error('서버에 연결할 수 없습니다.');
+    }
   }
 
   const { data }: ResponseData<Profile> = await response.json();
@@ -31,19 +25,19 @@ export async function updateUserProfile(
     >
   >
 ) {
-  const accessToken = '';
+  // const accessToken = '';
   const response = await fetch('/api/user', {
     method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${accessToken}`,
-    },
     body: JSON.stringify(body),
   });
 
   if (!response.ok) {
-    const errorData: ResponseErrorData = await response.json();
-    return errorData.error;
+    const { error } = await response.json();
+    if (!error.success) {
+      throw new Error(error.message);
+    } else {
+      throw new Error('서버에 연결할 수 없습니다.');
+    }
   }
 
   const { data }: ResponseData<Profile> = await response.json();
@@ -52,41 +46,38 @@ export async function updateUserProfile(
 }
 
 export async function getUserProfileById(userId: string) {
-  const accessToken = '';
-  const response = await fetch(`/api/user/${userId}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${accessToken}`,
-    },
-  });
+  // const accessToken = '';
+  const response = await fetch(`/api/user/${userId}`);
 
   if (!response.ok) {
-    const errorData: ResponseErrorData = await response.json();
-    return errorData.error;
+    const { error } = await response.json();
+    if (!error.success) {
+      throw new Error(error.message);
+    } else {
+      throw new Error('서버에 연결할 수 없습니다.');
+    }
   }
 
   type UserProfileResponseData = Omit<Profile, 'updatedAt'>;
   const { data }: ResponseData<UserProfileResponseData> = await response.json();
-
   return data;
 }
 
 export async function leaveCrew(crewId: string) {
-  const accessToken = '';
+  // const accessToken = '';
   const response = await fetch(`/api/user/${crewId}/leave`, {
     method: 'DELETE',
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
   });
 
   if (!response.ok) {
-    const errorData: ResponseErrorData = await response.json();
-    return errorData.error;
+    const { error } = await response.json();
+    if (!error.success) {
+      throw new Error(error.message);
+    } else {
+      throw new Error('서버에 연결할 수 없습니다.');
+    }
   }
 
   const { data }: ResponseData<null> = await response.json();
-
   return data;
 }

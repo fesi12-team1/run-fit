@@ -10,18 +10,16 @@ export async function getLikedSessions(queryParams: PaginationQueryParams) {
   const query = new URLSearchParams(
     queryParams as Record<string, string>
   ).toString();
-  const accessToken = '';
-  const response = await fetch(`/api/user/me/likes/sessions?${query}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${accessToken}`,
-    },
-  });
+  // const accessToken = '';
+  const response = await fetch(`/api/user/me/likes/sessions?${query}`);
 
   if (!response.ok) {
-    const errorData: ResponseErrorData = await response.json();
-    return errorData.error;
+    const { error } = await response.json();
+    if (!error.success) {
+      throw new Error(error.message);
+    } else {
+      throw new Error('서버에 연결할 수 없습니다.');
+    }
   }
 
   const { data }: ResponseData<SliceData<Session>> = await response.json();
@@ -29,18 +27,18 @@ export async function getLikedSessions(queryParams: PaginationQueryParams) {
 }
 
 export async function likeSession(sessionId: string) {
-  const accessToken = '';
+  // const accessToken = '';
   const response = await fetch(`/api/sessions/${sessionId}/like`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${accessToken}`,
-    },
   });
 
   if (!response.ok) {
-    const errorData: ResponseErrorData = await response.json();
-    return errorData.error;
+    const { error } = await response.json();
+    if (!error.success) {
+      throw new Error(error.message);
+    } else {
+      throw new Error('서버에 연결할 수 없습니다.');
+    }
   }
 
   const { data }: ResponseData<null> = await response.json();
@@ -48,18 +46,18 @@ export async function likeSession(sessionId: string) {
 }
 
 export async function unlikeSession(sessionId: string) {
-  const accessToken = '';
+  // const accessToken = '';
   const response = await fetch(`/api/sessions/${sessionId}/like`, {
     method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${accessToken}`,
-    },
   });
 
   if (!response.ok) {
-    const errorData: ResponseErrorData = await response.json();
-    return errorData.error;
+    const { error } = await response.json();
+    if (!error.success) {
+      throw new Error(error.message);
+    } else {
+      throw new Error('서버에 연결할 수 없습니다.');
+    }
   }
 
   const { data }: ResponseData<null> = await response.json();

@@ -8,79 +8,80 @@ type UserCredentials = {
 export async function postSignup(body: UserCredentials & { name: string }) {
   const response = await fetch('/api/auth/signup', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
     body: JSON.stringify(body),
   });
 
   if (!response.ok) {
-    const errorData: ResponseErrorData = await response.json();
-    return errorData.error;
+    const { error } = await response.json();
+
+    if (!error.success) {
+      throw new Error(error.message);
+    } else {
+      throw new Error('서버에 연결할 수 없습니다.');
+    }
   }
 
   const { data }: ResponseData<User> = await response.json();
-
   return data;
 }
 
 export async function postSignin(body: UserCredentials) {
   const response = await fetch('/api/auth/signin', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
     body: JSON.stringify(body),
   });
 
   if (!response.ok) {
-    const errorData: ResponseErrorData = await response.json();
-    return errorData.error;
+    const { error } = await response.json();
+
+    if (!error.success) {
+      throw new Error(error.message);
+    } else {
+      throw new Error('서버에 연결할 수 없습니다.');
+    }
   }
 
   type SigninData = { token: string };
   const { data }: ResponseData<SigninData> = await response.json();
-
   return data;
 }
 
 export async function postRefresh() {
-  const refreshToken = '';
+  // const refreshToken = '';
   const response = await fetch('/api/auth/refresh', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Cookie': `refreshToken=${refreshToken}`,
-    },
   });
 
   if (!response.ok) {
-    const errorData: ResponseErrorData = await response.json();
-    return errorData.error;
+    const { error } = await response.json();
+
+    if (!error.success) {
+      throw new Error(error.message);
+    } else {
+      throw new Error('서버에 연결할 수 없습니다.');
+    }
   }
 
   type RefreshData = { token: string };
   const { data }: ResponseData<RefreshData> = await response.json();
-
   return data;
 }
 
 export async function postSignout() {
-  const accessToken = '';
+  // const accessToken = '';
   const response = await fetch('/api/auth/signout', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${accessToken}`,
-    },
   });
 
   if (!response.ok) {
-    const errorData: ResponseErrorData = await response.json();
-    return errorData.error;
+    const { error } = await response.json();
+    if (!error.success) {
+      throw new Error(error.message);
+    } else {
+      throw new Error('서버에 연결할 수 없습니다.');
+    }
   }
 
   const { data }: ResponseData<null> = await response.json();
-
   return data;
 }

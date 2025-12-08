@@ -19,21 +19,19 @@ export async function getSessions(
     // status?: string;
   } & PaginationQueryParams
 ) {
-  const accessToken = '';
+  // const accessToken = '';
   const query = new URLSearchParams(
     queryParams as Record<string, string>
   ).toString();
-  const response = await fetch(`/api/sessions?${query}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${accessToken}`,
-    },
-  });
+  const response = await fetch(`/api/sessions?${query}`);
 
   if (!response.ok) {
-    const errorData: ResponseErrorData = await response.json();
-    return errorData.error;
+    const { error } = await response.json();
+    if (!error.success) {
+      throw new Error(error.message);
+    } else {
+      throw new Error('서버에 연결할 수 없습니다.');
+    }
   }
 
   const { data }: ResponseData<SliceData<Session>> = await response.json();
@@ -55,19 +53,19 @@ export async function createSession(
     | 'pace'
   >
 ) {
-  const accessToken = '';
+  // const accessToken = '';
   const response = await fetch('/api/sessions', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${accessToken}`,
-    },
     body: JSON.stringify(body),
   });
 
   if (!response.ok) {
-    const errorData: ResponseErrorData = await response.json();
-    return errorData.error;
+    const { error } = await response.json();
+    if (!error.success) {
+      throw new Error(error.message);
+    } else {
+      throw new Error('서버에 연결할 수 없습니다.');
+    }
   }
 
   const { data }: ResponseData<Session> = await response.json();
@@ -75,18 +73,18 @@ export async function createSession(
 }
 
 export async function deleteSession(sessionId: string) {
-  const accessToken = '';
+  // const accessToken = '';
   const response = await fetch(`/api/sessions/${sessionId}`, {
     method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${accessToken}`,
-    },
   });
 
   if (!response.ok) {
-    const errorData: ResponseErrorData = await response.json();
-    return errorData.error;
+    const { error } = await response.json();
+    if (!error.success) {
+      throw new Error(error.message);
+    } else {
+      throw new Error('서버에 연결할 수 없습니다.');
+    }
   }
 
   const { data }: ResponseData<null> = await response.json();
@@ -118,16 +116,15 @@ export async function getSessionsByUserId(userId: string) {
 }
 
 export async function getSessionDetail(sessionId: string) {
-  const response = await fetch(`/api/sessions/${sessionId}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  const response = await fetch(`/api/sessions/${sessionId}`);
 
   if (!response.ok) {
-    const errorData: ResponseErrorData = await response.json();
-    return errorData.error;
+    const { error } = await response.json();
+    if (!error.success) {
+      throw new Error(error.message);
+    } else {
+      throw new Error('서버에 연결할 수 없습니다.');
+    }
   }
 
   const { data }: ResponseData<Session> = await response.json();
@@ -135,62 +132,57 @@ export async function getSessionDetail(sessionId: string) {
 }
 
 export async function registerForSession(sessionId: string) {
-  const accessToken = '';
+  // const accessToken = '';
   const response = await fetch(`/api/sessions/${sessionId}/join`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${accessToken}`,
-    },
   });
 
   if (!response.ok) {
-    const errorData: ResponseErrorData = await response.json();
-    return errorData.error;
+    const { error } = await response.json();
+    if (!error.success) {
+      throw new Error(error.message);
+    } else {
+      throw new Error('서버에 연결할 수 없습니다.');
+    }
   }
 
   const { data }: ResponseData<null> = await response.json();
-
   return data;
 }
 
 export async function unregisterFromSession(sessionId: string) {
-  const accessToken = '';
+  // const accessToken = '';
   const response = await fetch(`/api/sessions/${sessionId}/join`, {
     method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${accessToken}`,
-    },
   });
 
   if (!response.ok) {
-    const errorData: ResponseErrorData = await response.json();
-    return errorData.error;
+    const { error } = await response.json();
+    if (!error.success) {
+      throw new Error(error.message);
+    } else {
+      throw new Error('서버에 연결할 수 없습니다.');
+    }
   }
 
   const { data }: ResponseData<null> = await response.json();
-
   return data;
 }
 
 export async function getSessionParticipants(sessionId: string) {
-  const accessToken = '';
-  const response = await fetch(`/api/sessions/${sessionId}/participants`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${accessToken}`,
-    },
-  });
+  // const accessToken = '';
+  const response = await fetch(`/api/sessions/${sessionId}/participants`);
 
   if (!response.ok) {
-    const errorData: ResponseErrorData = await response.json();
-    return errorData.error;
+    const { error } = await response.json();
+    if (!error.success) {
+      throw new Error(error.message);
+    } else {
+      throw new Error('서버에 연결할 수 없습니다.');
+    }
   }
 
   const { data }: ResponseData<User[]> = await response.json();
-
   return data;
 }
 
@@ -199,19 +191,19 @@ export async function updateSessionDetail(
   sessionId: string,
   body: Pick<Session, 'name' | 'description' | 'image'>
 ) {
-  const accessToken = '';
+  // const accessToken = '';
   const response = await fetch(`/api/sessions/${sessionId}`, {
     method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${accessToken}`,
-    },
     body: JSON.stringify(body),
   });
 
   if (!response.ok) {
-    const errorData: ResponseErrorData = await response.json();
-    return errorData.error;
+    const { error } = await response.json();
+    if (!error.success) {
+      throw new Error(error.message);
+    } else {
+      throw new Error('서버에 연결할 수 없습니다.');
+    }
   }
 
   const { data }: ResponseData<null> = await response.json();

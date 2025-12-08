@@ -10,43 +10,42 @@ export async function createSessionReview(
   sessionId: string,
   body: Pick<Review, 'description' | 'ranks' | 'image'>
 ) {
-  const accessToken = '';
+  // const accessToken = '';
   const response = await fetch(`/api/sessions/${sessionId}/reviews`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${accessToken}`,
-    },
     body: JSON.stringify(body),
   });
 
   if (!response.ok) {
-    const errorData: ResponseErrorData = await response.json();
-    return errorData.error;
+    const { error } = await response.json();
+    if (!error.success) {
+      throw new Error(error.message);
+    } else {
+      throw new Error('서버에 연결할 수 없습니다.');
+    }
   }
 
   const { data }: ResponseData<Review> = await response.json();
-
   return data;
 }
 
 export async function deleteSessionReview(reviewId: string) {
-  const accessToken = '';
+  // const accessToken = '';
   const response = await fetch(`/api/reviews/${reviewId}`, {
     method: 'DELETE',
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
   });
 
   if (!response.ok) {
-    const errorData: ResponseErrorData = await response.json();
-    return errorData.error;
+    const { error } = await response.json();
+    if (!error.success) {
+      throw new Error(error.message);
+    } else {
+      throw new Error('서버에 연결할 수 없습니다.');
+    }
   }
 
   type DeleteData = { message: '리뷰가 삭제되었습니다.' };
   const { data }: ResponseData<DeleteData> = await response.json();
-
   return data;
 }
 
@@ -57,16 +56,15 @@ export async function getReviewsBySessionId(
   const query = new URLSearchParams(
     queryParams as Record<string, string>
   ).toString();
-  const response = await fetch(`/api/sessions/${sessionId}/reviews?${query}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  const response = await fetch(`/api/sessions/${sessionId}/reviews?${query}`);
 
   if (!response.ok) {
-    const errorData: ResponseErrorData = await response.json();
-    return errorData.error;
+    const { error } = await response.json();
+    if (!error.success) {
+      throw new Error(error.message);
+    } else {
+      throw new Error('서버에 연결할 수 없습니다.');
+    }
   }
 
   const { data }: ResponseData<PageData<Review>> = await response.json();
@@ -80,16 +78,15 @@ export async function getReviewsByCrewId(
   const query = new URLSearchParams(
     queryParams as Record<string, string>
   ).toString();
-  const response = await fetch(`/api/crews/${crewId}/reviews?${query}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  const response = await fetch(`/api/crews/${crewId}/reviews?${query}`);
 
   if (!response.ok) {
-    const errorData: ResponseErrorData = await response.json();
-    return errorData.error;
+    const { error } = await response.json();
+    if (!error.success) {
+      throw new Error(error.message);
+    } else {
+      throw new Error('서버에 연결할 수 없습니다.');
+    }
   }
 
   const { data }: ResponseData<PageData<Review>> = await response.json();
@@ -97,21 +94,19 @@ export async function getReviewsByCrewId(
 }
 
 export async function getMyReviews(queryParams: PaginationQueryParams) {
-  const accessToken = '';
+  // const accessToken = '';
   const query = new URLSearchParams(
     queryParams as Record<string, string>
   ).toString();
-  const response = await fetch(`/api/user/me/reviews?${query}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${accessToken}`,
-    },
-  });
+  const response = await fetch(`/api/user/me/reviews?${query}`);
 
   if (!response.ok) {
-    const errorData: ResponseErrorData = await response.json();
-    return errorData.error;
+    const { error } = await response.json();
+    if (!error.success) {
+      throw new Error(error.message);
+    } else {
+      throw new Error('서버에 연결할 수 없습니다.');
+    }
   }
 
   const { data }: ResponseData<PageData<Review>> = await response.json();
