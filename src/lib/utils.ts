@@ -1,5 +1,5 @@
 import { clsx, type ClassValue } from 'clsx';
-import { extendTailwindMerge, twMerge } from 'tailwind-merge';
+import { extendTailwindMerge } from 'tailwind-merge';
 import { API_SIDO_TO_SIDO_MAP, Sido } from '@/types/region';
 
 // 커스텀 twMerge 함수 생성
