@@ -60,10 +60,16 @@ function DropdownTrigger({
   );
 }
 
-function DropdownTriggerNoArrow({ children }: { children: React.ReactNode }) {
+function DropdownTriggerNoArrow({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<typeof DropdownMenuPrimitive.Trigger>) {
   return (
-    <DropdownMenuPrimitive.Trigger asChild>
-      <button>{children}</button>
+    <DropdownMenuPrimitive.Trigger asChild {...props}>
+      <button type="button" className={cn('outline-none', className)}>
+        {children}
+      </button>
     </DropdownMenuPrimitive.Trigger>
   );
 }
