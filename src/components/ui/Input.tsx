@@ -71,7 +71,7 @@ export default function Input({
     [ariaDescribedByProp, errorId].filter(Boolean).join(' ') || undefined;
 
   return (
-    <div className="grid w-full max-w-sm gap-2">
+    <div className="grid w-full gap-2">
       {label && (
         <Label
           htmlFor={resolvedId}
