@@ -5,25 +5,41 @@ import * as React from 'react';
 import ArrowDown from '@/assets/icons/arrow-down.svg';
 import { cn } from '@/lib/utils';
 
+type DropdownSize = 'sm' | 'lg';
+
+const DropdownMenuSizeContext = React.createContext<DropdownSize>('sm');
+
+function useDropdownSize() {
+  return React.useContext(DropdownMenuSizeContext);
+}
+
 export function DropdownMenu({
+  size = 'sm',
   ...props
-}: React.ComponentProps<typeof DropdownMenuPrimitive.Root>) {
-  return <DropdownMenuPrimitive.Root data-slot="dropdown-menu" {...props} />;
+}: React.ComponentProps<typeof DropdownMenuPrimitive.Root> & {
+  size?: DropdownSize;
+}) {
+  return (
+    <DropdownMenuSizeContext.Provider value={size}>
+      <DropdownMenuPrimitive.Root data-slot="dropdown-menu" {...props} />
+    </DropdownMenuSizeContext.Provider>
+  );
 }
 
 export function DropdownMenuTrigger({
   className,
   children,
-  size,
   ...props
-}: React.ComponentProps<typeof DropdownMenuPrimitive.Trigger> & {
-  size?: 'sm' | 'lg';
-}) {
+}: React.ComponentProps<typeof DropdownMenuPrimitive.Trigger>) {
+  const size = useDropdownSize();
+
+  const isLarge = size === 'lg';
+
   return (
     <DropdownMenuPrimitive.Trigger
       data-slot="dropdown-menu-trigger"
       className={cn(
-        size === 'lg'
+        isLarge
           ? 'text-body3-medium h-10 gap-2'
           : 'text-caption-medium h-8 gap-1',
         'group flex items-center justify-between rounded-lg px-3 py-2',
@@ -36,8 +52,8 @@ export function DropdownMenuTrigger({
     >
       {children}
       <ArrowDown
-        width={size === 'lg' ? 24 : 16}
-        height={size === 'lg' ? 24 : 16}
+        width={isLarge ? 24 : 16}
+        height={isLarge ? 24 : 16}
         className="group-data-[state=open]:text-brand-200 text-gray-200 group-data-[state=open]:rotate-180"
       />
     </DropdownMenuPrimitive.Trigger>
@@ -68,19 +84,20 @@ export function DropdownMenuContent({
 
 export function DropdownMenuItem({
   className,
-  size,
   selected = false,
   children,
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Item> & {
-  size?: 'sm' | 'lg';
   selected?: boolean;
 }) {
+  const size = useDropdownSize();
+  const isLarge = size === 'lg';
+
   return (
     <DropdownMenuPrimitive.Item
       data-slot="dropdown-menu-item"
       className={cn(
-        size === 'lg' ? 'text-body2-regular' : 'text-body3-regular',
+        isLarge ? 'text-body2-regular' : 'text-body3-regular',
         'cursor-pointer bg-gray-600 px-4 py-3 text-gray-100 outline-none',
         'transition-colors duration-150 focus:bg-gray-700',
         selected && 'bg-gray-800 text-white',
