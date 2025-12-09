@@ -82,7 +82,7 @@ export default function SessionCard({ data }: SessionCardProps) {
           <LevelBadge level={level} size="lg" className="hidden laptop:inline-flex" />
         </div>
       <div className="flex gap-1">
-        <ProfileList participants={participantList} />
+        <ProfileList data={participantList} />
         <div className="text-caption-regular laptop:text-body3-regular flex items-center text-gray-300">
           {`${data.currentParticipantCount}/${data.maxParticipantCount}명`}
           <Dot />

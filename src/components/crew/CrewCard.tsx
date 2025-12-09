@@ -8,9 +8,9 @@ interface CrewCardProps {
   data: Crew;
 }
 
-export default function CrewCard({ data }: CrewCardProps) {
-  // const { data: crewMemberCount } = useGetCrewMemberCount();
-  // const { data: crewSessions } = useGetSessionsByCrewId();
+export default function CrewCard({ data: crew }: CrewCardProps) {
+  // const { data: crewMemberCount } = useGetCrewMemberCount(crew.id);
+  // const { data: crewSessions } = useGetSessionsByCrewId(crew.id);
   const crewMemberCount = 64;
 
   return (
@@ -26,16 +26,16 @@ export default function CrewCard({ data }: CrewCardProps) {
         </div>
         <div className="w-full grow p-3">
           <div className="tablet:text-title3-semibold text-body2-semibold line-clamp-1 text-gray-50">
-            {data.name}
+            {crew.name}
           </div>
           <div className="tablet:text-body2-regular text-caption-regular line-clamp-2 text-gray-300">
-            {data.description}
+            {crew.description}
           </div>
           <div className="flex items-center">
-            <span className="text-caption-medium tablet:text-body3-medium rounded-lg bg-gray-500 px-2 py-1 text-gray-100">{`${data.city}`}</span>
+            <span className="text-caption-medium tablet:text-body3-medium rounded-lg bg-gray-500 px-2 py-1 text-gray-100">{`${crew.city}`}</span>
             <Dot color="var(--color-gray-300)" />
             <span className="text-caption-regular tablet:text-body3-regular mr-1 text-gray-300">{`멤버 ${crewMemberCount}명`}</span>
-            <ProfileList profiles={mockProfiles} />
+            <ProfileList data={mockProfiles} />
           </div>
         </div>
       </div>

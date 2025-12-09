@@ -1,30 +1,28 @@
 'use client';
 
-import { mockSessions } from '@/mocks/data';
+import { mockProfiles, mockSessions } from '@/mocks/data';
+import { Review } from '@/types';
 import SessionInfo from '../session/SessionInfo';
-import Avatar from '../ui/Avatar';
 import Rating from '../ui/Rating';
+import UserAvatar from '../ui/UserAvatar';
 
 interface ReviewCardProps {
-  // eslint-disable-next-line
-  data: any; // Review;
+  data: Review;
 }
 
-export default function ReviewCard({ data }: ReviewCardProps) {
-  // const { status, data: sessions, error } = useSessionList(); // tanstack-query hook
+export default function ReviewCard({ data: review }: ReviewCardProps) {
+  // const { data: userProfile } = useGetUserProfile(review.id); // tanstack-query hook
+  const userProfile = mockProfiles[0];
 
-  const createdAt = new Date(data.createdAt);
+  const createdAt = new Date(review.createdAt);
   const createdAtText = `${createdAt.getFullYear()}.${createdAt.getMonth()}.${createdAt.getDay()}`;
   return (
     <li className="flex flex-col gap-2">
-      <Rating value={data.ranks} disabled onChange={() => {}} />
-      <div className="text-body3-regular">{data.description}</div>
+      <Rating value={review.ranks} disabled onChange={() => {}} />
+      <div className="text-body3-regular">{review.description}</div>
       <div className="*:text-caption-regular flex items-center gap-2 *:text-gray-300">
-        <Avatar>
-          <Avatar.Image src="https://github.com/shadcn.png" alt="@shadcn" />
-          <Avatar.Fallback>CN</Avatar.Fallback>
-        </Avatar>
-        <div>럽윈즈올</div>
+        <UserAvatar src={userProfile.image} alt={userProfile.name} />
+        <div>{userProfile.name}</div>
         <div>|</div>
         <div>{createdAtText}</div>
       </div>

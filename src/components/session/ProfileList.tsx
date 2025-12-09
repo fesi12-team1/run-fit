@@ -1,24 +1,36 @@
+import { cn } from '@/lib/utils';
+import { Profile } from '@/types';
 import UserAvatar from '../ui/UserAvatar';
 
 interface ProfileListProps {
-  participants: Array<{
-    userId: string;
-    name: string;
-    image: string | null;
-    role: string;
-    joinedAt: string;
-  }>;
+  data:
+    | Profile[]
+    | Array<{
+        userId: string;
+        name: string;
+        image: string | null;
+        role: string;
+        joinedAt: string;
+      }>;
+  className?: React.ComponentProps<'div'>;
 }
 
-export default function ProfileList({ participants }: ProfileListProps) {
+export default function ProfileList({
+  data: profiles,
+  className,
+}: ProfileListProps) {
   return (
-    <div className="tablet:*:size-6 flex -space-x-1 *:size-4 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-gray-900">
-      {/* TODO: 이후에는 images 대신 prop으로 내려온 값 사용 */}
-      {participants.slice(0.3).map((participant) => (
+    <div
+      className={cn(
+        'tablet:*:size-6 flex -space-x-1 *:size-4 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-gray-900',
+        className
+      )}
+    >
+      {profiles.slice(0, 3).map((profile) => (
         <UserAvatar
-          key={participant.userId}
-          src={participant.image}
-          alt={participant.name}
+          key={'id' in profile ? profile.id : profile.userId}
+          src={profile.image}
+          alt={profile.name}
         />
       ))}
     </div>
