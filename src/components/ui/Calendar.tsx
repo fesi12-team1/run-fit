@@ -9,7 +9,6 @@ import {
 import * as React from 'react';
 import { DayButton, DayPicker, getDefaultClassNames } from 'react-day-picker';
 import { cn } from '@/lib/utils';
-import Button from './Button';
 
 function CalendarRoot({
   className,
@@ -148,28 +147,59 @@ function CalendarDayButton({
     if (modifiers.focused) ref.current?.focus();
   }, [modifiers.focused]);
 
+  const isStart = modifiers.range_start;
+  const isMiddle = modifiers.range_middle;
+  const isEnd = modifiers.range_end;
+  const isRange = isStart || isMiddle || isEnd;
+  const isToday = modifiers.today;
+
   return (
-    <Button
-      ref={ref}
-      variant="ghost"
-      size="icon"
-      data-day={day.date.toLocaleDateString()}
-      data-selected-single={
-        modifiers.selected &&
-        !modifiers.range_start &&
-        !modifiers.range_end &&
-        !modifiers.range_middle
-      }
-      data-range-start={modifiers.range_start}
-      data-range-end={modifiers.range_end}
-      data-range-middle={modifiers.range_middle}
+    <div
       className={cn(
-        'data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&>span]:text-xs [&>span]:opacity-70',
-        defaultClassNames.day,
-        className
+        'relative h-full w-full overflow-hidden',
+
+        // 날짜 범위(range)는 wrapper가 bg 담당
+        isRange && 'bg-brand-800',
+
+        // radius도 wrapper에서 하면 빈틈 없음
+        isStart && 'rounded-l-lg',
+        isEnd && 'rounded-r-lg',
+        isMiddle && 'rounded-none'
       )}
-      {...props}
-    />
+    >
+      <button
+        ref={ref}
+        data-day={day.date.toLocaleDateString()}
+        data-selected-single={
+          modifiers.selected &&
+          !modifiers.range_start &&
+          !modifiers.range_end &&
+          !modifiers.range_middle
+        }
+        data-range-start={modifiers.range_start}
+        data-range-end={modifiers.range_end}
+        data-range-middle={modifiers.range_middle}
+        data-outside={modifiers.outside}
+        className={cn(
+          defaultClassNames.day,
+          'text-body2-regular size-(--cell-size) rounded-lg',
+
+          // 날짜 범위(range)
+          modifiers.range_start && 'bg-brand-300 text-brand-900 rounded-l-lg',
+          modifiers.range_end && 'bg-brand-300 text-brand-900 rounded-r-lg',
+          modifiers.range_middle && 'text-brand-200 rounded-none',
+
+          // 오늘 날짜 (range가 아닐 때만)
+          isToday && !isRange && 'text-brand-300 bg-transparent font-medium',
+
+          // 단일 선택(single)
+          modifiers.selected && !isRange && 'bg-brand-300 text-brand-900',
+
+          className
+        )}
+        {...props}
+      />
+    </div>
   );
 }
 
