@@ -11,7 +11,6 @@ const config: Config = {
   testPathIgnorePatterns: ['/node_modules/', '/e2e/'],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   extensionsToTreatAsEsm: ['.ts', '.tsx'],
-  transform: {},
 };
 
 export default createJestConfig(config);
