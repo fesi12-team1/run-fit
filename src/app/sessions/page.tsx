@@ -6,7 +6,7 @@ import { mockSessions } from '@/mocks/data';
 export default function Page() {
   // const { status, data: sessions, error } = useSessionList(); // tanstack-query hook
   return (
-    <div className="tablet:mx-8 laptop:mx-100 mx-4 flex h-screen flex-col items-center gap-12">
+    <div className="tablet:mx-8 laptop:mx-100 h-main mx-4 flex flex-col items-center gap-12">
       {process.env.NODE_ENV === 'development' && (
         <div>
           <span className="tablet:hidden text-white">mobile</span>
