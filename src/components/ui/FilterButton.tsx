@@ -12,6 +12,7 @@ interface FilterButtonProps {
 export default function FilterButton({
   count = 0,
   onClick,
+  className,
 }: FilterButtonProps) {
   const isActive = count > 0;
 
@@ -22,7 +23,8 @@ export default function FilterButton({
         'relative flex items-center justify-center rounded-lg p-2 transition-colors',
         isActive
           ? 'bg-brand-950 border-brand-700 border'
-          : 'border border-transparent bg-transparent'
+          : 'border border-transparent bg-transparent',
+        className
       )}
     >
       <FilterIcon
