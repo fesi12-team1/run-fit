@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import React, { useState } from 'react';
-import { DateRange } from 'react-day-picker';
+import { DateRange, DayPicker } from 'react-day-picker';
 import Calendar from './Calendar';
 
 /**
@@ -42,28 +42,33 @@ const meta: Meta<typeof Calendar> = {
       action: 'selected',
       description: '날짜 선택 시 호출되는 콜백 함수',
     },
+    disablePastDates: {
+      control: { type: 'boolean' },
+      description: '오늘 이전 날짜 선택 비활성화 여부',
+      defaultValue: false,
+    },
   },
   args: {
     mode: 'single',
     captionLayout: 'label',
     showOutsideDays: true,
-    selected: undefined,
+    disablePastDates: true,
   },
 };
 
 export default meta;
 
-type Story = StoryObj<typeof Calendar>;
+type Story = StoryObj<typeof DayPicker>;
 
 /**
  * 하나의 날짜만 클릭 가능하고 이전/다음 달 날짜를 표시합니다.
  */
 export const SingleSelection: Story = {
-  render: () => {
+  render: (args) => {
     const [date, setDate] = useState<Date | undefined>(new Date());
     return (
       <div className="flex flex-col items-center gap-4">
-        <Calendar mode="single" selected={date} onSelect={setDate} />
+        <Calendar {...args} mode="single" selected={date} onSelect={setDate} />
         <span>{date?.toLocaleDateString()}</span>
       </div>
     );
@@ -74,17 +79,59 @@ export const SingleSelection: Story = {
  * 날짜 범위를 클릭하여 선택할 수 있습니다.
  */
 export const RangeSelection: Story = {
-  render: () => {
+  render: (args) => {
     const [date, setDate] = useState<DateRange | undefined>({
       from: new Date(),
       to: new Date(),
     });
     return (
       <div className="flex flex-col items-center gap-4">
-        <Calendar mode="range" selected={date} onSelect={setDate} />
+        <Calendar {...args} mode="range" selected={date} onSelect={setDate} />
         <span>
           {date?.from?.toLocaleDateString()} - {date?.to?.toLocaleDateString()}
         </span>
+      </div>
+    );
+  },
+};
+
+/**
+ * 오늘 이전 날짜 클릭 가능하도록 설정합니다.
+ */
+export const AllowPastDates: Story = {
+  render: (args) => {
+    const [date, setDate] = useState<Date | undefined>(new Date());
+    return (
+      <div className="flex flex-col items-center gap-4">
+        <Calendar
+          {...args}
+          mode="single"
+          selected={date}
+          onSelect={setDate}
+          disablePastDates={false}
+        />
+        <span>{date?.toLocaleDateString()}</span>
+      </div>
+    );
+  },
+};
+
+/**
+ * 이전/다음 달 날짜를 표시하지 않습니다.
+ */
+export const HideOutsideDays: Story = {
+  render: (args) => {
+    const [date, setDate] = useState<Date | undefined>(new Date());
+    return (
+      <div className="flex flex-col items-center gap-4">
+        <Calendar
+          {...args}
+          mode="single"
+          selected={date}
+          onSelect={setDate}
+          showOutsideDays={false}
+        />
+        <span>{date?.toLocaleDateString()}</span>
       </div>
     );
   },

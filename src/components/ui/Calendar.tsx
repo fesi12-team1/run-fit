@@ -14,13 +14,20 @@ function CalendarRoot({
   className,
   classNames,
   components,
+  disablePastDates,
   ...props
-}: React.ComponentProps<typeof DayPicker>) {
+}: React.ComponentProps<typeof DayPicker> & { disablePastDates?: boolean }) {
   const defaultClassNames = getDefaultClassNames();
+
+  const today = new Date();
+  const disabledInterval = disablePastDates ? { before: today } : undefined;
 
   return (
     <DayPicker
       locale={ko}
+      fromYear={today.getFullYear() - 1}
+      toYear={today.getFullYear() + 1}
+      disabled={disabledInterval}
       className={cn(
         // 최소 너비 설정 및 그리드 레이아웃
         'group/calendar min-w-[calc(7_*_var(--cell-size)_+_34px)] grid-cols-7 bg-gray-700 px-[17.5px] [--cell-size:--spacing(9)] [[data-slot=card-content]_&]:bg-transparent [[data-slot=popover-content]_&]:bg-transparent',
@@ -79,7 +86,7 @@ function CalendarRoot({
           defaultClassNames.today
         ),
         outside: cn(
-          'text-warning aria-selected:text-muted-foreground',
+          'text-gray-300 aria-selected:text-gray-300',
           defaultClassNames.outside
         ),
         disabled: cn('text-gray-400', defaultClassNames.disabled),
