@@ -31,31 +31,20 @@ export default meta;
 type Story = StoryObj<typeof SessionLevelCard>;
 
 /**
- * 모든 스토리에서 클릭 가능하도록 하는 공통 Template
- */
-function ControlledTemplate(args: {
-  size?: 'sm' | 'md';
-  label: string;
-  description: string;
-  checked?: boolean;
-  disabled?: boolean;
-}) {
-  const [checked, setChecked] = useState(args.checked ?? false);
-
-  return (
-    <SessionLevelCard
-      {...args}
-      checked={checked}
-      onClick={() => setChecked(!checked)}
-    />
-  );
-}
-
-/**
  * 기본
  */
 export const Default: Story = {
-  render: (args) => <ControlledTemplate {...args} />,
+  render: (args) => {
+    const [checked, setChecked] = useState(args.checked ?? false);
+
+    return (
+      <SessionLevelCard
+        {...args}
+        checked={checked}
+        onClick={() => setChecked(!checked)}
+      />
+    );
+  },
 };
 
 /**
@@ -63,7 +52,7 @@ export const Default: Story = {
  */
 export const Checked: Story = {
   args: { checked: true },
-  render: (args) => <ControlledTemplate {...args} />,
+  render: (args) => <SessionLevelCard {...args} />,
 };
 
 /**
@@ -71,7 +60,7 @@ export const Checked: Story = {
  */
 export const Disabled: Story = {
   args: { disabled: true },
-  render: (args) => <ControlledTemplate {...args} />,
+  render: (args) => <SessionLevelCard {...args} />,
 };
 
 /**
