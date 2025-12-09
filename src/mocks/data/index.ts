@@ -10,6 +10,7 @@ export const mockProfiles: Profile[] = [
     city: '서울',
     pace: 360,
     styles: ['NIGHT_RUN', 'TRAIL_RUN'],
+    image: null,
   },
   {
     id: 2,
