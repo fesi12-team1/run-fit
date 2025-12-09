@@ -1,4 +1,79 @@
-export const mockCrews = [
+import { Crew, Member, Profile, Review, Session } from '@/types';
+
+export const mockProfiles: Profile[] = [
+  {
+    id: 1,
+    name: '김철수',
+    createdAt: new Date('2025-10-01T10:00:00').toISOString(),
+    updatedAt: new Date('2025-11-01T10:00:00').toISOString(),
+    introduction: '안녕하세요, 함께 달리는 것을 좋아하는 김철수입니다.',
+    city: '서울',
+    pace: 360,
+    styles: ['NIGHT_RUN', 'TRAIL_RUN'],
+  },
+  {
+    id: 2,
+    name: '이영희',
+    createdAt: new Date('2025-10-02T11:00:00').toISOString(),
+    updatedAt: new Date('2025-11-02T11:00:00').toISOString(),
+    introduction: '부산에서 활동하는 러너 이영희입니다.',
+    city: '부산',
+    pace: 420,
+    styles: ['COASTAL_RUN'],
+  },
+  {
+    id: 3,
+    name: '박지성',
+    createdAt: new Date('2025-10-03T12:00:00').toISOString(),
+    updatedAt: new Date('2025-11-03T12:00:00').toISOString(),
+    introduction: '새로운 러닝 친구를 만들고 싶어요!',
+    city: '서울',
+    pace: 390,
+    styles: ['BEGINNER_FRIENDLY', 'GROUP_RUN'],
+  },
+  {
+    id: 4,
+    name: '최유리',
+    createdAt: new Date('2025-10-04T13:00:00').toISOString(),
+    updatedAt: new Date('2025-11-04T13:00:00').toISOString(),
+    introduction: '아침 조깅을 즐기는 최유리입니다.',
+    city: '인천',
+    pace: 450,
+    styles: ['MORNING_RUN'],
+  },
+];
+export const mockMembers: Member[] = [
+  {
+    id: 1,
+    name: '김철수',
+    createdAt: new Date('2025-10-01T10:00:00').toISOString(),
+    role: 'LEADER',
+    joinedAt: new Date('2025-10-05T10:00:00').toISOString(),
+  },
+  {
+    id: 2,
+    name: '이영희',
+    createdAt: new Date('2025-10-02T11:00:00').toISOString(),
+    role: 'STAFF',
+    joinedAt: new Date('2025-10-06T11:00:00').toISOString(),
+  },
+  {
+    id: 3,
+    name: '박지성',
+    createdAt: new Date('2025-10-03T12:00:00').toISOString(),
+    role: 'MEMBER',
+    joinedAt: new Date('2025-10-07T12:00:00').toISOString(),
+  },
+  {
+    id: 4,
+    name: '최유리',
+    createdAt: new Date('2025-10-04T13:00:00').toISOString(),
+    role: 'MEMBER',
+    joinedAt: new Date('2025-10-08T13:00:00').toISOString(),
+  },
+];
+
+export const mockCrews: Crew[] = [
   {
     id: 1,
     name: 'Seoul Runners',
@@ -23,7 +98,7 @@ export const mockCrews = [
   },
 ];
 
-export const mockReviewData = {
+export const mockReviewData: Review = {
   id: 'review1',
   sessionId: 'session1',
   crewId: 'crew1',
@@ -34,7 +109,7 @@ export const mockReviewData = {
   createdAt: new Date('2025-12-16T10:00:00').toISOString(),
 };
 
-export const mockSessions = [
+export const mockSessions: Session[] = [
   {
     id: 'session1',
     crewId: 'crew1',
