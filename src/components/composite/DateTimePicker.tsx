@@ -1,8 +1,12 @@
 'use client';
 
 import Button from '@components/ui/Button';
-import Label from '@components/ui/Label';
-import Popover from '@components/ui/Popover';
+import { Label } from '@radix-ui/react-label';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@radix-ui/react-popover';
 import { CalendarIcon } from 'lucide-react';
 import { useState } from 'react';
 import DatePicker from './DatePicker';
@@ -67,7 +71,7 @@ export default function DateTimePicker({
         open={!disabled && open}
         onOpenChange={disabled ? undefined : setOpen}
       >
-        <Popover.Trigger asChild>
+        <PopoverTrigger asChild>
           <Button
             variant="outline"
             className="w-56 justify-between"
@@ -86,9 +90,9 @@ export default function DateTimePicker({
             </span>
             <CalendarIcon className="h-4 w-4" />
           </Button>
-        </Popover.Trigger>
+        </PopoverTrigger>
 
-        <Popover.Content className="p-4">
+        <PopoverContent className="p-4">
           <div className="flex flex-col items-center gap-4">
             <DatePicker
               inline
@@ -111,7 +115,7 @@ export default function DateTimePicker({
               완료
             </Button>
           </div>
-        </Popover.Content>
+        </PopoverContent>
       </Popover>
     </div>
   );
