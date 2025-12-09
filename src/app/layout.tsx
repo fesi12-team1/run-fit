@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { QueryProvider } from '@/provider/QueryProvider';
 import './globals.css';
+import Header from '@/components/composite/Header';
 
 export const metadata: Metadata = {
   title: 'RunFit - 러너를 위한 지역 기반 러닝 모임 플랫폼',
@@ -15,8 +16,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className="antialiased">
-        <QueryProvider>{children}</QueryProvider>
+      <body className="bg-gray-900 text-white antialiased">
+        <QueryProvider>
+          <Header />
+          {children}
+        </QueryProvider>
       </body>
     </html>
   );

@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from 'clsx';
 import { extendTailwindMerge } from 'tailwind-merge';
+import { Coords } from '@/types/kakaoMap';
 import { API_SIDO_TO_SIDO_MAP, Sido } from '@/types/region';
 
 // 커스텀 twMerge 함수 생성
@@ -39,15 +40,14 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /**
- * API로 반환한 시군구 문자열에서 Sigungu 타입에 맞는 부분을 추출합니다.
- * @example
- * extractSigungu('창원시 성산구') // '창원시'
- * extractSigungu('제주시') // '제주시'
+ * 카카오맵 링크 생성
+ * @param address - 주소 (한글)
+ * @param coords - 좌표 { lat, lng }
+ * @returns 카카오맵 링크 URL
  */
-export const extractSigungu = (fullAddress: string): string => {
-  const parts = fullAddress.split(' ');
-  return parts[0];
-};
+export function createKakaoMapLink(address: string, coords: Coords): string {
+  return `https://map.kakao.com/link/map/${encodeURIComponent(address)},${coords.lat},${coords.lng}`;
+}
 
 /**
  * API로 반환한 시도 문자열을 Sido 타입에 맞게 변환합니다.
@@ -58,4 +58,15 @@ export const extractSigungu = (fullAddress: string): string => {
  */
 export const normalizeSido = (apiSido: string): Sido | null => {
   return API_SIDO_TO_SIDO_MAP[apiSido] ?? null;
+};
+
+/**
+ * API로 반환한 시군구 문자열에서 Sigungu 타입에 맞는 부분을 추출합니다.
+ * @example
+ * extractSigungu('창원시 성산구') // '창원시'
+ * extractSigungu('제주시') // '제주시'
+ */
+export const extractSigungu = (fullAddress: string): string => {
+  const parts = fullAddress.split(' ');
+  return parts[0];
 };
