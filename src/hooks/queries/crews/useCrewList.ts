@@ -11,8 +11,8 @@ import { CrewListFilters } from '@/types';
 export default function useCrewList(filters: CrewListFilters) {
   return useQuery({
     queryKey: QUERY_KEYS.crews.list(filters),
-    queryFn: () => getCrews(filters), // 필터가 변경되어 데이터를 새로 불러올 때 화면이 깜빡이는 현상 방지
-    placeholderData: (previousData) => previousData, // 1분동안 fresh 상태
-    staleTime: 1000 * 60,
+    queryFn: () => getCrews(filters),
+    placeholderData: (previousData) => previousData, // 필터가 변경되어 데이터를 새로 불러올 때 화면이 깜빡이는 현상 방지
+    staleTime: 1000 * 60, // 1분동안 fresh 상태
   });
 }
