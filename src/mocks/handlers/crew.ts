@@ -8,7 +8,7 @@ interface CreateCrewRequest {
   city: string;
 }
 
-export const crewsHandlers = [
+export const crewHandlers = [
   // 크루 생성
   http.post(path('/api/crews'), async ({ request }) => {
     const body = (await request.json()) as CreateCrewRequest;
