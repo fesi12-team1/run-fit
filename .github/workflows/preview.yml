@@ -28,7 +28,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Vercel CLI 설치
-        run: pnpm add -g vercel
+        run: pnpm add -g vercel@latest
 
       - name: Vercel 환경 변수 불러오기
         run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
@@ -36,5 +36,23 @@ jobs:
       - name: 프로젝트 빌드
         run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
 
-      - name: Preview에 배포
-        run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Vercel 배포 (Preview)
+        id: deploy-vercel
+        run: |
+          DEPLOY_URL=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
+          echo "preview_url=$DEPLOY_URL" >> $GITHUB_OUTPUT
+
+      - name: 현재 시간 가져오기
+        uses: josStorer/get-current-time@v2
+        id: current-time
+        with:
+          format: 'YYYY년 MM월 DD일 HH시 mm분'
+          utcOffset: '+09:00'
+
+      - name: PR에 Preview 링크 코멘트 추가
+        uses: thollander/actions-comment-pull-request@v3
+        with:
+          comment-tag: preview-link
+          message: |
+            🧷 **배포 미리보기:** ${{ steps.deploy-vercel.outputs.preview_url }}
+            ⏰ **최종 업데이트:** ${{ steps.current-time.outputs.formattedTime }}
