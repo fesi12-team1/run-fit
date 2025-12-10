@@ -11,7 +11,7 @@ const baseSchema = {
 };
 
 const userSchema = z.object({
-  userId: z.number(),
+  id: z.number(),
   name: z.string(),
   email: z.email(),
   password: z.string(),
@@ -146,7 +146,7 @@ reviews.defineRelations(({ one }) => ({
 export async function seedMockDb() {
   // Users
   const alice = await users.create({
-    userId: 1,
+    id: 1,
     name: 'Alice Kim',
     email: 'alice@example.com',
     password: 'password1!',
@@ -160,7 +160,7 @@ export async function seedMockDb() {
   });
 
   const bob = await users.create({
-    userId: 2,
+    id: 2,
     name: 'Bob Lee',
     email: 'bob@example.com',
     password: 'password2!',
@@ -174,7 +174,7 @@ export async function seedMockDb() {
   });
 
   const charlie = await users.create({
-    userId: 3,
+    id: 3,
     name: 'Charlie Park',
     email: 'charlie@example.com',
     password: 'password3!',
