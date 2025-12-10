@@ -14,8 +14,8 @@ export default function CrewCard({ data: crew }: CrewCardProps) {
   const crewMemberCount = 64;
 
   return (
-    <li className="laptop:justify-between tablet:pt-5 flex w-full pb-5">
-      <div className="@laptop:w-min-[240px] tablet:flex-row flex w-full flex-col">
+    <li className="tablet:pt-5 laptop:gap-20 laptop:flex pb-5">
+      <div className="tablet:flex-row flex w-full flex-col">
         <div className="tablet:w-60 tablet:aspect-video relative aspect-327/75 shrink-0 self-stretch overflow-hidden rounded-lg bg-blue-300">
           <Image
             src="/crew.local.jpg"
@@ -24,7 +24,7 @@ export default function CrewCard({ data: crew }: CrewCardProps) {
             className="object-cover"
           />
         </div>
-        <div className="w-full grow p-3">
+        <div className="laptop:w-[500px] laptop:max-w-[500px] w-full grow p-3">
           <div className="tablet:text-title3-semibold text-body2-semibold line-clamp-1 text-gray-50">
             {crew.name}
           </div>
@@ -39,11 +39,11 @@ export default function CrewCard({ data: crew }: CrewCardProps) {
           </div>
         </div>
       </div>
-      <div className="@min-[1040px]:laptop:flex ml-20 hidden w-[300px] flex-col gap-2 p-3">
+      <div className="laptop:flex hidden w-[300px] shrink-0 flex-col gap-2 p-3">
         <div className="text-body3-semibold text-gray-300">진행된 세션</div>
-        <ul className="">
+        <ul>
           {/* 이후에는 hook으로 받아온 3개 이하의 crewSessions 사용 */}
-          {mockSessions.map((session) => {
+          {mockSessions.slice(0, 3).map((session) => {
             const sessionAt = new Date(session.sessionAt);
             const sessionDate = `${sessionAt.getMonth() + 1}월 ${sessionAt.getDate()}일`;
 
@@ -52,8 +52,8 @@ export default function CrewCard({ data: crew }: CrewCardProps) {
                 key={session.id}
                 className="text-body2-regular flex justify-between text-gray-100"
               >
-                <span>{session.name}</span>
-                <div className="text-body3-regular text-gray-200">
+                <span className="truncate">{session.name}</span>
+                <div className="text-body3-regular text-nowrap text-gray-200">
                   {sessionDate}
                 </div>
               </li>

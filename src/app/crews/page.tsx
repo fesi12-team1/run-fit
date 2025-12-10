@@ -3,7 +3,7 @@ import { mockCrews } from '@/mocks/data';
 
 export default function Page() {
   return (
-    <div className="tablet:mx-8 desktop:mx-100 h-main @container mx-4 flex flex-col items-center gap-12">
+    <div className="tablet:mx-8 h-main @container mx-4 flex flex-col items-center gap-12">
       {process.env.NODE_ENV === 'development' && (
         <div>
           <span className="tablet:hidden text-white">mobile</span>
@@ -16,7 +16,7 @@ export default function Page() {
           <span className="desktop:inline-flex hidden text-white">desktop</span>
         </div>
       )}
-      <ul className="tablet:gap-x-4 tablet:divide-y flex w-full flex-col gap-x-3">
+      <ul className="tablet:divide-y laptop:w-auto flex w-full flex-col">
         {mockCrews.map((crew) => (
           <CrewCard key={crew.id} data={crew} />
         ))}
