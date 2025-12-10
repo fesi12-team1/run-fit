@@ -39,12 +39,8 @@ const crewSchema = z.object({
 
 const membershipSchema = z.object({
   id: z.number(),
-  get user() {
-    return userSchema;
-  },
-  get crew() {
-    return crewSchema;
-  },
+  userId: z.number(),
+  crewId: z.number(),
   role: z.enum(['LEADER', 'STAFF', 'MEMBER']),
   joinedAt: z.iso.datetime(),
   ...baseSchema,
@@ -52,13 +48,8 @@ const membershipSchema = z.object({
 
 const sessionSchema = z.object({
   id: z.number(),
-  get crew() {
-    return crewSchema;
-  },
-  get hostUser() {
-    return userSchema;
-  },
-
+  crewId: z.number(),
+  hostUserId: z.number(),
   name: z.string(),
   description: z.string().nullable().optional(),
   image: z.string().nullable().optional(),
@@ -74,29 +65,31 @@ const sessionSchema = z.object({
 
 const sessionLikeSchema = z.object({
   id: z.number(),
-  session: z.unknown(),
-  user: z.unknown(),
+  sessionId: z.number(),
+  userId: z.number(),
   likedAt: z.iso.datetime(),
   ...baseSchema,
 });
 
 const sessionParticipantSchema = z.object({
   id: z.number(),
-  session: z.unknown(),
-  user: z.unknown(),
+  sessionId: z.number(),
+  userId: z.number(),
   joinedAt: z.iso.datetime(),
   ...baseSchema,
 });
 
 const reviewSchema = z.object({
   id: z.number(),
-  session: z.unknown(),
-  user: z.unknown(),
+  sessionId: z.number(),
+  userId: z.number(),
   description: z.string(),
   ranks: z.number().int(),
   image: z.string().nullable().optional(),
   ...baseSchema,
 });
+
+export type Session = z.infer<typeof sessionSchema>;
 
 /* ------------------------------------------------------------------ */
 /* Collections                                                        */
@@ -111,38 +104,6 @@ export const sessionParticipants = new Collection({
   schema: sessionParticipantSchema,
 });
 export const reviews = new Collection({ schema: reviewSchema });
-
-/* ------------------------------------------------------------------ */
-/* Relations                                                          */
-/* ------------------------------------------------------------------ */
-
-memberships.defineRelations(({ one }) => ({
-  user: one(users),
-  crew: one(crews),
-}));
-
-sessions.defineRelations(({ one, many }) => ({
-  crew: one(crews),
-  hostUser: one(users, { role: 'host' }),
-  likes: many(sessionLikes),
-  participants: many(sessionParticipants),
-  reviews: many(reviews),
-}));
-
-sessionLikes.defineRelations(({ one }) => ({
-  session: one(sessions),
-  user: one(users),
-}));
-
-sessionParticipants.defineRelations(({ one }) => ({
-  session: one(sessions),
-  user: one(users),
-}));
-
-reviews.defineRelations(({ one }) => ({
-  session: one(sessions),
-  user: one(users),
-}));
 
 /* ------------------------------------------------------------------ */
 /* Seed function                                                      */
@@ -199,8 +160,8 @@ export async function seedMockDb() {
     for (let i = 0; i < selectedUsers.length; i++) {
       await memberships.create({
         id: membershipId++,
-        user: selectedUsers[i],
-        crew: crew,
+        userId: selectedUsers[i].id,
+        crewId: crew.id,
         role:
           i === 0 ? 'LEADER' : faker.helpers.arrayElement(['STAFF', 'MEMBER']),
         joinedAt: faker.date.past().toISOString(),
@@ -218,8 +179,8 @@ export async function seedMockDb() {
 
     const session = await sessions.create({
       id: i,
-      crew: crew,
-      hostUser: hostUser,
+      crewId: crew.id,
+      hostUserId: hostUser.id,
       name: faker.lorem.words(3),
       description: faker.lorem.sentence(),
       image: faker.image.urlPicsumPhotos(),
@@ -252,8 +213,8 @@ export async function seedMockDb() {
     for (const user of participants) {
       await sessionParticipants.create({
         id: participantId++,
-        session: session,
-        user: user,
+        sessionId: session.id,
+        userId: user.id,
         joinedAt: faker.date.recent().toISOString(),
         createdAt: faker.date.past().toISOString(),
         updatedAt: new Date().toISOString(),
@@ -271,8 +232,8 @@ export async function seedMockDb() {
     for (const user of likedUsers) {
       await sessionLikes.create({
         id: likeId++,
-        session: session,
-        user: user,
+        sessionId: session.id,
+        userId: user.id,
         likedAt: faker.date.recent().toISOString(),
         createdAt: faker.date.past().toISOString(),
         updatedAt: new Date().toISOString(),
@@ -290,8 +251,8 @@ export async function seedMockDb() {
     for (const user of reviewers) {
       await reviews.create({
         id: reviewId++,
-        session: session,
-        user: user,
+        sessionId: session.id,
+        userId: user.id,
         description: faker.lorem.paragraph(),
         ranks: faker.number.int({ min: 1, max: 5 }),
         image: faker.helpers.maybe(() => faker.image.urlPicsumPhotos(), {

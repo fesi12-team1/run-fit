@@ -10,7 +10,8 @@ export default function HomePage() {
     async function fetchData() {
       const response = await fetch('/api/crews');
       const data = await response.json();
-      setCrews(data);
+      setCrews(data.data);
+      console.log(data);
     }
     fetchData();
   }, []);
