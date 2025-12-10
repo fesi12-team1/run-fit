@@ -1,5 +1,10 @@
+import { base, en, Faker, ko } from '@faker-js/faker';
 import { Collection } from '@msw/data';
 import z from 'zod';
+
+export const faker = new Faker({
+  locale: [ko, en, base],
+});
 
 /* ------------------------------------------------------------------ */
 /* Schemas                                                            */
@@ -145,235 +150,156 @@ reviews.defineRelations(({ one }) => ({
 
 export async function seedMockDb() {
   // Users
-  const alice = await users.create({
-    id: 1,
-    name: 'Alice Kim',
-    email: 'alice@example.com',
-    password: 'password1!',
-    image: null,
-    introduction: '초보지만 러닝을 꾸준히 해보고 싶어요.',
-    city: 'Seoul',
-    pace: 420, // 7'00"
-    styles: ['조깅', '러닝크루'],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  });
-
-  const bob = await users.create({
-    id: 2,
-    name: 'Bob Lee',
-    email: 'bob@example.com',
-    password: 'password2!',
-    image: null,
-    introduction: '10km 대회 준비 중입니다.',
-    city: 'Seoul',
-    pace: 330, // 5'30"
-    styles: ['인터벌', '장거리'],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  });
-
-  const charlie = await users.create({
-    id: 3,
-    name: 'Charlie Park',
-    email: 'charlie@example.com',
-    password: 'password3!',
-    image: null,
-    introduction: '마라톤 서브4 목표!',
-    city: 'Busan',
-    pace: 360, // 6'00"
-    styles: ['마라톤', '조깅'],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  });
+  const createdUsers = [];
+  for (let i = 1; i <= 30; i++) {
+    const user = await users.create({
+      id: i,
+      name: faker.person.firstName(),
+      email: faker.internet.email(),
+      password: faker.internet.password(),
+      image: faker.image.avatar(),
+      introduction: faker.lorem.sentence(),
+      city: faker.helpers.arrayElement(['Seoul', 'Busan', 'Incheon', 'Daegu']),
+      pace: faker.number.int({ min: 300, max: 480 }),
+      styles: faker.helpers.arrayElements(
+        ['조깅', '러닝크루', '인터벌', '장거리', '마라톤'],
+        { min: 0, max: 3 }
+      ),
+      createdAt: faker.date.past().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
+    createdUsers.push(user);
+  }
 
   // Crews
-  const seoulCrew = await crews.create({
-    id: 1,
-    name: 'Seoul Night Runners',
-    description: '서울 도심 야간 러닝을 즐기는 크루입니다.',
-    city: 'Seoul',
-    image: null,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  });
-
-  const busanCrew = await crews.create({
-    id: 2,
-    name: 'Busan Beach Runners',
-    description: '광안리·해운대 해변 러닝 크루.',
-    city: 'Busan',
-    image: null,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  });
+  const createdCrews = [];
+  for (let i = 1; i <= 30; i++) {
+    const crew = await crews.create({
+      id: i,
+      name: `${faker.company.name()}`,
+      description: faker.lorem.paragraph(),
+      city: faker.helpers.arrayElement(['Seoul', 'Busan', 'Incheon', 'Daegu']),
+      image: faker.image.urlPicsumPhotos({ width: 640, height: 480 }),
+      createdAt: faker.date.past().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
+    createdCrews.push(crew);
+  }
 
   // Memberships
-  await memberships.create({
-    id: 1,
-    user: alice,
-    crew: seoulCrew,
-    role: 'LEADER',
-    joinedAt: new Date().toISOString(),
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  });
+  let membershipId = 1;
+  for (const crew of createdCrews) {
+    // 각 크루마다 5~15명의 멤버 추가
+    const memberCount = faker.number.int({ min: 5, max: 15 });
+    const selectedUsers = faker.helpers.arrayElements(
+      createdUsers,
+      memberCount
+    );
 
-  await memberships.create({
-    id: 2,
-    user: bob,
-    crew: seoulCrew,
-    role: 'MEMBER',
-    joinedAt: new Date().toISOString(),
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  });
-
-  await memberships.create({
-    id: 3,
-    user: charlie,
-    crew: busanCrew,
-    role: 'LEADER',
-    joinedAt: new Date().toISOString(),
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  });
+    for (let i = 0; i < selectedUsers.length; i++) {
+      await memberships.create({
+        id: membershipId++,
+        user: selectedUsers[i],
+        crew: crew,
+        role:
+          i === 0 ? 'LEADER' : faker.helpers.arrayElement(['STAFF', 'MEMBER']),
+        joinedAt: faker.date.past().toISOString(),
+        createdAt: faker.date.past().toISOString(),
+        updatedAt: new Date().toISOString(),
+      });
+    }
+  }
 
   // Sessions
-  const now = new Date();
-  const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-  const inThreeDays = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);
+  const createdSessions = [];
+  for (let i = 1; i <= 101; i++) {
+    const crew = faker.helpers.arrayElement(createdCrews);
+    const hostUser = faker.helpers.arrayElement(createdUsers);
 
-  const seoulEasyRun = await sessions.create({
-    id: 1,
-    crew: seoulCrew,
-    hostUser: alice,
-    name: '한강 이지 러닝 5K',
-    description: '처음 오시는 분 환영! 천천히 5km 러닝합니다.',
-    image: null,
-    location: '서울 여의도 한강공원',
-    sessionAt: new Date().toISOString(),
-    registerBy: new Date().toISOString(),
-    level: 'BEGINNER',
-    status: 'OPEN',
-    pace: 420,
-    maxParticipantCount: 15,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  });
-
-  const seoulTempoRun = await sessions.create({
-    id: 2,
-    crew: seoulCrew,
-    hostUser: bob,
-    name: '10K 템포런',
-    description: '10km 템포 주간입니다. 평소 10K 가능하신 분 추천.',
-    image: null,
-    location: '서울 잠실종합운동장',
-    sessionAt: new Date().toISOString(),
-    registerBy: new Date().toISOString(),
-    level: 'INTERMEDIATE',
-    status: 'OPEN',
-    pace: 330,
-    maxParticipantCount: 10,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  });
-
-  const busanLongRun = await sessions.create({
-    id: 3,
-    crew: busanCrew,
-    hostUser: charlie,
-    name: '해운대–광안리 롱런 15K',
-    description: '마라톤 준비를 위한 장거리 러닝입니다.',
-    image: null,
-    location: '부산 해운대 해수욕장',
-    sessionAt: new Date().toISOString(),
-    registerBy: new Date().toISOString(),
-    level: 'ADVANCED',
-    status: 'OPEN',
-    pace: 360,
-    maxParticipantCount: 20,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  });
+    const session = await sessions.create({
+      id: i,
+      crew: crew,
+      hostUser: hostUser,
+      name: faker.lorem.words(3),
+      description: faker.lorem.sentence(),
+      image: faker.image.urlPicsumPhotos(),
+      location: faker.location.streetAddress(),
+      sessionAt: faker.date.future().toISOString(),
+      registerBy: faker.date.soon().toISOString(),
+      level: faker.helpers.arrayElement([
+        'BEGINNER',
+        'INTERMEDIATE',
+        'ADVANCED',
+      ]),
+      status: faker.helpers.arrayElement(['OPEN', 'CLOSED']),
+      pace: faker.number.int({ min: 300, max: 480 }),
+      maxParticipantCount: faker.number.int({ min: 10, max: 30 }),
+      createdAt: faker.date.past().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
+    createdSessions.push(session);
+  }
 
   // Participants
-  await sessionParticipants.create({
-    id: 1,
-    session: seoulEasyRun,
-    user: alice,
-    joinedAt: new Date().toISOString(),
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  });
+  let participantId = 1;
+  for (const session of createdSessions) {
+    const participantCount = faker.number.int({ min: 3, max: 10 });
+    const participants = faker.helpers.arrayElements(
+      createdUsers,
+      participantCount
+    );
 
-  await sessionParticipants.create({
-    id: 2,
-    session: seoulEasyRun,
-    user: bob,
-    joinedAt: new Date().toISOString(),
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  });
-
-  await sessionParticipants.create({
-    id: 3,
-    session: seoulTempoRun,
-    user: bob,
-    joinedAt: new Date().toISOString(),
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  });
-
-  await sessionParticipants.create({
-    id: 4,
-    session: busanLongRun,
-    user: charlie,
-    joinedAt: new Date().toISOString(),
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  });
+    for (const user of participants) {
+      await sessionParticipants.create({
+        id: participantId++,
+        session: session,
+        user: user,
+        joinedAt: faker.date.recent().toISOString(),
+        createdAt: faker.date.past().toISOString(),
+        updatedAt: new Date().toISOString(),
+      });
+    }
+  }
 
   // Likes
-  await sessionLikes.create({
-    id: 1,
-    session: seoulEasyRun,
-    user: bob,
-    likedAt: new Date().toISOString(),
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  });
+  let likeId = 1;
+  for (const session of createdSessions) {
+    // 각 세션마다 0~20명이 좋아요
+    const likeCount = faker.number.int({ min: 0, max: 20 });
+    const likedUsers = faker.helpers.arrayElements(createdUsers, likeCount);
 
-  await sessionLikes.create({
-    id: 2,
-    session: seoulTempoRun,
-    user: alice,
-    likedAt: new Date().toISOString(),
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  });
+    for (const user of likedUsers) {
+      await sessionLikes.create({
+        id: likeId++,
+        session: session,
+        user: user,
+        likedAt: faker.date.recent().toISOString(),
+        createdAt: faker.date.past().toISOString(),
+        updatedAt: new Date().toISOString(),
+      });
+    }
+  }
 
   // Reviews
-  await reviews.create({
-    id: 1,
-    session: seoulEasyRun,
-    user: bob,
-    description: '분위기 좋고 페이스 완전 편안했어요!',
-    ranks: 5,
-    image: null,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  });
+  let reviewId = 1;
+  for (const session of createdSessions) {
+    // 각 세션마다 0~5개의 리뷰 (모든 세션에 리뷰가 있지는 않음)
+    const reviewCount = faker.number.int({ min: 0, max: 5 });
+    const reviewers = faker.helpers.arrayElements(createdUsers, reviewCount);
 
-  await reviews.create({
-    id: 2,
-    session: busanLongRun,
-    user: charlie,
-    description: '코스가 예쁘고 힘들지만 뿌듯했습니다.',
-    ranks: 4,
-    image: null,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  });
+    for (const user of reviewers) {
+      await reviews.create({
+        id: reviewId++,
+        session: session,
+        user: user,
+        description: faker.lorem.paragraph(),
+        ranks: faker.number.int({ min: 1, max: 5 }),
+        image: faker.helpers.maybe(() => faker.image.urlPicsumPhotos(), {
+          probability: 0.3,
+        }),
+        createdAt: faker.date.past().toISOString(),
+        updatedAt: new Date().toISOString(),
+      });
+    }
+  }
 }
