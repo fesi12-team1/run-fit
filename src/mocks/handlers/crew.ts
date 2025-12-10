@@ -27,8 +27,8 @@ export const crewHandlers = [
       description,
       city,
       image: null,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     });
 
     return HttpResponse.json(newCrew, { status: 201 });
@@ -355,7 +355,7 @@ export const crewHandlers = [
         if (body.name !== undefined) crew.name = body.name;
         if (body.description !== undefined) crew.description = body.description;
         if (body.city !== undefined) crew.city = body.city;
-        crew.updatedAt = new Date();
+        crew.updatedAt = new Date().toISOString();
       },
     });
 
