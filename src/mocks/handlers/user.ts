@@ -71,7 +71,7 @@ export const userHandlers = [
         if (body.city !== undefined) user.city = body.city;
         if (body.pace !== undefined) user.pace = body.pace;
         if (body.styles !== undefined) user.styles = [];
-        user.updatedAt = new Date();
+        user.updatedAt = new Date().toISOString();
       },
     });
 

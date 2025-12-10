@@ -6,8 +6,8 @@ import z from 'zod';
 /* ------------------------------------------------------------------ */
 
 const baseSchema = {
-  createdAt: z.date(),
-  updatedAt: z.date(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 };
 
 const userSchema = z.object({
@@ -41,7 +41,7 @@ const membershipSchema = z.object({
     return crewSchema;
   },
   role: z.enum(['LEADER', 'STAFF', 'MEMBER']),
-  joinedAt: z.date(),
+  joinedAt: z.iso.datetime(),
   ...baseSchema,
 });
 
@@ -58,8 +58,8 @@ const sessionSchema = z.object({
   description: z.string().nullable().optional(),
   image: z.string().nullable().optional(),
   location: z.string().nullable().optional(),
-  sessionAt: z.date(),
-  registerBy: z.date(),
+  sessionAt: z.iso.datetime(),
+  registerBy: z.iso.datetime(),
   level: z.enum(['BEGINNER', 'INTERMEDIATE', 'ADVANCED']),
   status: z.enum(['OPEN', 'CLOSED']),
   pace: z.number().int().nullable().optional(),
@@ -71,7 +71,7 @@ const sessionLikeSchema = z.object({
   id: z.number(),
   session: z.unknown(),
   user: z.unknown(),
-  likedAt: z.date(),
+  likedAt: z.iso.datetime(),
   ...baseSchema,
 });
 
@@ -79,7 +79,7 @@ const sessionParticipantSchema = z.object({
   id: z.number(),
   session: z.unknown(),
   user: z.unknown(),
-  joinedAt: z.date(),
+  joinedAt: z.iso.datetime(),
   ...baseSchema,
 });
 
@@ -155,8 +155,8 @@ export async function seedMockDb() {
     city: 'Seoul',
     pace: 420, // 7'00"
     styles: ['조깅', '러닝크루'],
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   });
 
   const bob = await users.create({
@@ -169,8 +169,8 @@ export async function seedMockDb() {
     city: 'Seoul',
     pace: 330, // 5'30"
     styles: ['인터벌', '장거리'],
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   });
 
   const charlie = await users.create({
@@ -183,8 +183,8 @@ export async function seedMockDb() {
     city: 'Busan',
     pace: 360, // 6'00"
     styles: ['마라톤', '조깅'],
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   });
 
   // Crews
@@ -194,8 +194,8 @@ export async function seedMockDb() {
     description: '서울 도심 야간 러닝을 즐기는 크루입니다.',
     city: 'Seoul',
     image: null,
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   });
 
   const busanCrew = await crews.create({
@@ -204,8 +204,8 @@ export async function seedMockDb() {
     description: '광안리·해운대 해변 러닝 크루.',
     city: 'Busan',
     image: null,
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   });
 
   // Memberships
@@ -214,9 +214,9 @@ export async function seedMockDb() {
     user: alice,
     crew: seoulCrew,
     role: 'LEADER',
-    joinedAt: new Date('2024-01-10T20:00:00'),
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    joinedAt: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   });
 
   await memberships.create({
@@ -224,9 +224,9 @@ export async function seedMockDb() {
     user: bob,
     crew: seoulCrew,
     role: 'MEMBER',
-    joinedAt: new Date('2024-02-01T20:00:00'),
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    joinedAt: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   });
 
   await memberships.create({
@@ -234,9 +234,9 @@ export async function seedMockDb() {
     user: charlie,
     crew: busanCrew,
     role: 'LEADER',
-    joinedAt: new Date('2024-03-05T19:00:00'),
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    joinedAt: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   });
 
   // Sessions
@@ -252,28 +252,14 @@ export async function seedMockDb() {
     description: '처음 오시는 분 환영! 천천히 5km 러닝합니다.',
     image: null,
     location: '서울 여의도 한강공원',
-    sessionAt: new Date(
-      tomorrow.getFullYear(),
-      tomorrow.getMonth(),
-      tomorrow.getDate(),
-      20,
-      0,
-      0
-    ),
-    registerBy: new Date(
-      tomorrow.getFullYear(),
-      tomorrow.getMonth(),
-      tomorrow.getDate(),
-      18,
-      0,
-      0
-    ),
+    sessionAt: new Date().toISOString(),
+    registerBy: new Date().toISOString(),
     level: 'BEGINNER',
     status: 'OPEN',
     pace: 420,
     maxParticipantCount: 15,
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   });
 
   const seoulTempoRun = await sessions.create({
@@ -284,28 +270,14 @@ export async function seedMockDb() {
     description: '10km 템포 주간입니다. 평소 10K 가능하신 분 추천.',
     image: null,
     location: '서울 잠실종합운동장',
-    sessionAt: new Date(
-      inThreeDays.getFullYear(),
-      inThreeDays.getMonth(),
-      inThreeDays.getDate(),
-      7,
-      0,
-      0
-    ),
-    registerBy: new Date(
-      inThreeDays.getFullYear(),
-      inThreeDays.getMonth(),
-      inThreeDays.getDate(),
-      6,
-      0,
-      0
-    ),
+    sessionAt: new Date().toISOString(),
+    registerBy: new Date().toISOString(),
     level: 'INTERMEDIATE',
     status: 'OPEN',
     pace: 330,
     maxParticipantCount: 10,
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   });
 
   const busanLongRun = await sessions.create({
@@ -316,14 +288,14 @@ export async function seedMockDb() {
     description: '마라톤 준비를 위한 장거리 러닝입니다.',
     image: null,
     location: '부산 해운대 해수욕장',
-    sessionAt: new Date('2024-09-01T06:00:00'),
-    registerBy: new Date('2024-08-31T22:00:00'),
+    sessionAt: new Date().toISOString(),
+    registerBy: new Date().toISOString(),
     level: 'ADVANCED',
     status: 'OPEN',
     pace: 360,
     maxParticipantCount: 20,
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   });
 
   // Participants
@@ -331,36 +303,36 @@ export async function seedMockDb() {
     id: 1,
     session: seoulEasyRun,
     user: alice,
-    joinedAt: new Date(),
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    joinedAt: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   });
 
   await sessionParticipants.create({
     id: 2,
     session: seoulEasyRun,
     user: bob,
-    joinedAt: new Date(),
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    joinedAt: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   });
 
   await sessionParticipants.create({
     id: 3,
     session: seoulTempoRun,
     user: bob,
-    joinedAt: new Date(),
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    joinedAt: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   });
 
   await sessionParticipants.create({
     id: 4,
     session: busanLongRun,
     user: charlie,
-    joinedAt: new Date(),
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    joinedAt: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   });
 
   // Likes
@@ -368,18 +340,18 @@ export async function seedMockDb() {
     id: 1,
     session: seoulEasyRun,
     user: bob,
-    likedAt: new Date(),
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    likedAt: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   });
 
   await sessionLikes.create({
     id: 2,
     session: seoulTempoRun,
     user: alice,
-    likedAt: new Date(),
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    likedAt: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   });
 
   // Reviews
@@ -390,8 +362,8 @@ export async function seedMockDb() {
     description: '분위기 좋고 페이스 완전 편안했어요!',
     ranks: 5,
     image: null,
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   });
 
   await reviews.create({
@@ -401,7 +373,7 @@ export async function seedMockDb() {
     description: '코스가 예쁘고 힘들지만 뿌듯했습니다.',
     ranks: 4,
     image: null,
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   });
 }
