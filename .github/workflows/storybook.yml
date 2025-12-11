@@ -1,28 +1,70 @@
-name: Storybook
+name: Storybook & Chromatic
 
 on:
   pull_request:
-    branches: [main]
+    branches:
+      - main
+
+env:
+  CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
 
 jobs:
-  chromatic:
+  storybook-build:
+    name: Storybook Build
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Github 레포지토리 불러오기
+        uses: actions/checkout@v6
 
-      - uses: pnpm/action-setup@v4
+      - name: UI 변경 파일 탐지
+        id: changes
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            ui:
+              - 'src/components/**'
+              - 'src/ui/**'
+              - 'src/hooks/**'
+              - '.storybook/**'
+              - 'stories/**'
+
+      - name: 변경 없으면 skip
+        if: steps.changes.outputs.ui == 'false'
+        run: echo "UI 변경 없음 → Storybook 빌드 생략"
+
+      - name: pnpm 설치
+        if: steps.changes.outputs.ui == 'true'
+        uses: pnpm/action-setup@v4
         with:
           version: 10
 
-      - uses: actions/setup-node@v3
+      - name: Node.js 설치
+        if: steps.changes.outputs.ui == 'true'
+        uses: actions/setup-node@v6
         with:
           node-version: 24
           cache: pnpm
 
-      - run: pnpm install --frozen-lockfile
+      - name: 의존성 설치
+        if: steps.changes.outputs.ui == 'true'
+        run: pnpm install --frozen-lockfile
 
-      - name: Publish to Chromatic
-        run: npx chromatic --project-token=${{ secrets.CHROMATIC_PROJECT_TOKEN }} --exit-zero-on-changes
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Storybook 빌드
+        if: steps.changes.outputs.ui == 'true'
+        run: pnpm build-storybook
+
+      - name: Storybook 빌드 결과 업로드 (디버깅용)
+        if: steps.changes.outputs.ui == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: storybook-static
+          path: storybook-static
+
+      - name: Chromatic 배포
+        if: steps.changes.outputs.ui == 'true'
+        uses: chromaui/action@latest
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          exitOnceUploaded: true
