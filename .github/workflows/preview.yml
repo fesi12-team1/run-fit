@@ -32,15 +32,15 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Vercel 환경 변수 불러오기
-        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+        run: pnpm vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Vercel 빌드 (CI용)
-        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
+        run: pnpm vercel build --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Preview 배포
         id: deploy-vercel
         run: |
-          DEPLOY_URL=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} | tail -1)
+          DEPLOY_URL=$(pnpm vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} | tail -1)
           echo "preview_url=$DEPLOY_URL" >> $GITHUB_OUTPUT
 
       - name: 현재 시간 가져오기
