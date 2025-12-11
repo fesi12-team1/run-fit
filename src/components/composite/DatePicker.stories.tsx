@@ -1,154 +1,57 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { useState } from 'react';
-import { useArgs } from 'storybook/preview-api';
-import DatePicker, { type DatePickerProps } from './DatePicker';
+import { Meta } from '@storybook/nextjs-vite';
+import DatePicker from './DatePicker';
 
-const exampleDate = new Date('2025-12-25');
-
-/**
- * DatePicker 컴포넌트는 사용자가 날짜를 선택할 수 있는 UI 요소입니다.
- *
- * 기본적으로 버튼을 클릭하면 팝오버 형태로 캘린더가 표시되며, 사용자는 원하는 날짜를 선택할 수 있습니다.
- * inline 모드를 활성화하면 캘린더가 항상 표시되어 폼 화면에서 바로 날짜를 선택할 수 있습니다.
- */
-
-const meta: Meta<typeof DatePicker> = {
-  title: 'composite/DatePicker',
+const meta: Meta = {
+  title: 'Composite/DatePicker',
   component: DatePicker,
   tags: ['autodocs'],
-  parameters: {
-    layout: 'centered',
-  },
-  args: {
-    value: undefined,
-    label: '날짜',
-    inline: false,
-  },
   argTypes: {
-    value: {
-      control: 'date',
-      description: '선택된 날짜 값',
-    },
     label: {
       control: 'text',
-      description: '입력 필드 라벨',
     },
     placeholder: {
       control: 'text',
-      description: '입력 필드 플레이스홀더',
+      description: '날짜를 선택하는 입력 필드입니다.',
     },
-    inline: {
-      control: 'boolean',
-      description: '캘린더 inline 모드 여부',
-    },
-    onChange: {
-      action: 'onChange',
-      description: '선택된 날짜가 변경될 때 실행되는 콜백',
-    },
+  },
+  args: {
+    label: '모임 날짜',
+    placeholder: '날짜를 입력하세요',
   },
 };
 
 export default meta;
-type Story = StoryObj<DatePickerProps>;
+type Story = Meta<typeof DatePicker>;
 
-/**
- * 기본(DatePicker + Popover)
- */
 export const Default: Story = {
-  render: (args) => {
-    const [{ value }, updateArgs] = useArgs();
-
-    return (
-      <DatePicker
-        {...args}
-        value={value}
-        onChange={(next) => updateArgs({ value: next })}
-      />
-    );
-  },
-};
-
-/**
- * 비활성(disabled) 상태
- */
-export const Disabled: Story = {
   args: {
-    disabled: true,
+    label: '모임 날짜',
+    placeholder: '모임 날짜를 선택하세요',
   },
-  render: (args) => {
-    const [{ value }, updateArgs] = useArgs();
-
-    return (
-      <DatePicker
-        {...args}
-        value={value}
-        onChange={(next) => updateArgs({ value: next })}
-      />
-    );
-  },
+  render: (args) => <DatePicker {...args} />,
 };
 
 /**
- * 초기값 있는 경우
+ * 여러 DatePicker 컴포넌트를 세로로 배치한 스토리입니다.
  */
-export const InitialValue: Story = {
-  args: {
-    value: exampleDate,
-  },
-  render: (args) => {
-    const [{ value }, updateArgs] = useArgs();
-
-    return (
+export const States: Story = {
+  render: () => (
+    <div className="flex flex-col gap-4">
       <DatePicker
-        {...args}
-        value={value}
-        onChange={(next) => updateArgs({ value: next })}
+        //   mode="single"
+        /**
+         * TO-DO:
+         * - 컴파운드 패턴 Calendar 컴포넌트 merge 후, 해당 스토리 업데이트 필요
+         * - Popover -> Input 이벤트 전파 문제 해결 필요
+         */
+        label="모임 날짜"
+        placeholder="모임 날짜를 선택하세요"
       />
-    );
-  },
-};
-
-/**
- * Inline 모드
- */
-export const Inline: Story = {
-  render: () => {
-    const [value, setValue] = useState<Date | undefined>(undefined);
-    return <DatePicker value={value} inline onChange={setValue} />;
-  },
-};
-
-/**
- * Inline Label 모드
- */
-export const InlineLabel: Story = {
-  render: () => {
-    const [value, setValue] = useState<Date | undefined>(undefined);
-    return (
       <DatePicker
-        value={value}
-        inline
-        onChange={setValue}
-        captionLayout="label"
+        //   mode="range"
+        label="마감 날짜"
+        placeholder="마감 날짜를 선택하세요"
       />
-    );
-  },
-};
-
-/**
- * Inline Label Disabled 모드
- */
-export const InlineLabelDisabled: Story = {
-  render: () => {
-    const [value, setValue] = useState<Date | undefined>(undefined);
-    return (
-      <DatePicker
-        value={value}
-        inline
-        onChange={setValue}
-        captionLayout="label"
-        disabled
-      />
-    );
-  },
+    </div>
+  ),
 };
