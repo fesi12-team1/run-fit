@@ -33,8 +33,12 @@ export async function getCrews(
   queryParams?: {
     city?: string;
     keyword?: string;
-    sort?: string;
-    // district?: string;
+    sort?:
+      | 'memberCountDesc'
+      | 'lastSessionDesc'
+      | 'createdAtDesc'
+      | 'nameAsc'
+      | 'nameDesc';
   } & PaginationQueryParams
 ) {
   const query = new URLSearchParams(
