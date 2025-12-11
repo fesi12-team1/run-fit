@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import Star from '@/assets/icons/star.svg?react';
 import Button from './Button';
 
 /**
@@ -15,18 +16,11 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     variant: {
       control: { type: 'select' },
-      options: [
-        'default',
-        'destructive',
-        'outline',
-        'secondary',
-        'ghost',
-        'link',
-      ],
+      options: ['default', 'outlined', 'neutral'],
     },
     size: {
       control: { type: 'select' },
-      options: ['default', 'sm', 'lg', 'icon', 'icon-sm', 'icon-lg'],
+      options: ['default', 'sm'],
     },
     asChild: {
       control: { type: 'boolean' },
@@ -55,20 +49,11 @@ export const Variants: Story = {
       <Button {...args} variant="default">
         Default
       </Button>
-      <Button {...args} variant="destructive">
-        Destructive
+      <Button {...args} variant="outlined">
+        Outlined
       </Button>
-      <Button {...args} variant="outline">
-        Outline
-      </Button>
-      <Button {...args} variant="secondary">
-        Secondary
-      </Button>
-      <Button {...args} variant="ghost">
-        Ghost
-      </Button>
-      <Button {...args} variant="link">
-        Link
+      <Button {...args} variant="neutral">
+        Neutral
       </Button>
     </div>
   ),
@@ -86,100 +71,6 @@ export const Sizes: Story = {
       <Button {...args} size="default">
         Default
       </Button>
-      <Button {...args} size="lg">
-        Large
-      </Button>
-    </div>
-  ),
-};
-
-export const IconButtons: Story = {
-  render: () => (
-    <div className="flex items-center gap-4">
-      <Button size="icon-sm">
-        <svg
-          className="size-4"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 4v16m8-8H4"
-          />
-        </svg>
-      </Button>
-      <Button size="icon">
-        <svg
-          className="size-4"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 4v16m8-8H4"
-          />
-        </svg>
-      </Button>
-      <Button size="icon-lg">
-        <svg
-          className="size-4"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 4v16m8-8H4"
-          />
-        </svg>
-      </Button>
-    </div>
-  ),
-};
-
-export const WithIcons: Story = {
-  render: (args) => (
-    <div className="flex flex-wrap gap-4">
-      <Button {...args}>
-        <svg
-          className="size-4"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 4v16m8-8H4"
-          />
-        </svg>
-        Add Item
-      </Button>
-      <Button {...args} variant="outline">
-        Download
-        <svg
-          className="size-4"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-          />
-        </svg>
-      </Button>
     </div>
   ),
 };
@@ -189,7 +80,6 @@ export const States: Story = {
     <div className="flex flex-wrap gap-4">
       <Button>Normal</Button>
       <Button disabled>Disabled</Button>
-      <Button aria-invalid>Invalid</Button>
     </div>
   ),
 };
