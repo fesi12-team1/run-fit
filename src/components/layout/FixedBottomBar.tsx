@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useEffectEvent, useRef, useState } from 'react';
 
 interface FixedBottomBarProps {
   children: React.ReactNode;
@@ -21,10 +21,15 @@ export default function FixedBottomBar({ children, ref }: FixedBottomBarProps) {
 }
 
 export function useFixedBottomBar() {
-  const ref = useRef<HTMLDivElement>(null);
-  const [height, setHeight] = useState(0);
-  const blockSize = useRef(0);
   const extraPadding = 30;
+  const [height, setHeight] = useState(extraPadding);
+
+  const ref = useRef<HTMLDivElement>(null);
+  const blockHeight = useRef(0);
+
+  const onHeightChange = useEffectEvent(() => {
+    console.log('height', height);
+  });
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
@@ -32,20 +37,23 @@ export function useFixedBottomBar() {
     const observer = new ResizeObserver(([entry]) => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
-        const newBlockSize = entry.borderBoxSize[0].blockSize;
-        if (blockSize.current !== newBlockSize) {
-          blockSize.current = newBlockSize;
-          setHeight(newBlockSize + extraPadding);
+        const newBlockHeight = entry.target.getBoundingClientRect().height;
+        if (blockHeight.current !== newBlockHeight) {
+          blockHeight.current = newBlockHeight;
+          setHeight(newBlockHeight + extraPadding);
+          onHeightChange();
         }
       }, 1000);
     });
 
     const currentRef = ref.current;
     if (currentRef) {
-      blockSize.current = currentRef.offsetHeight;
-      setHeight(blockSize.current + extraPadding);
+      blockHeight.current = currentRef.offsetHeight;
+      setHeight(blockHeight.current + extraPadding);
+
       observer.observe(currentRef);
-      return () => observer.disconnect();
+
+      return () => observer.unobserve(currentRef);
     }
   }, []);
 

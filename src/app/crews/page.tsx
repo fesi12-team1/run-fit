@@ -3,7 +3,7 @@
 import Share from '@/assets/icons/share.svg';
 import FixedBottomBar, {
   useFixedBottomBar,
-} from '@/components/hoc/FixedBottomBar';
+} from '@/components/layout/FixedBottomBar';
 import Button from '@/components/ui/Button';
 
 export default function Page() {
