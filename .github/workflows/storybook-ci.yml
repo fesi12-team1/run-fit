@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+permissions:
+  pull-requests: write
+  contents: read
+
 env:
   CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
 
