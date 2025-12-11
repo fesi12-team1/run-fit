@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createCrew } from '@/api/crews';
-import { QUERY_KEYS } from '@/lib/constants';
+import { crewQueries } from '@/queries/crewQueries';
 
 // 크루 생성
 export default function useCreateCrew() {
@@ -9,7 +9,7 @@ export default function useCreateCrew() {
   return useMutation({
     mutationFn: createCrew,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.crews.all }); // 크루 목록 캐시 무효화 (새 크루 목록에 반영)
+      queryClient.invalidateQueries({ queryKey: crewQueries.all() }); // 크루 목록 캐시 무효화 (새 크루 목록에 반영)
     },
   });
 }

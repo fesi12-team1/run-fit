@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deleteCrew } from '@/api/crews';
-import { QUERY_KEYS } from '@/lib/constants';
+import { crewQueries } from '@/queries/crewQueries';
 
 // 크루 삭제
 export default function useDeleteCrew() {
@@ -10,7 +10,7 @@ export default function useDeleteCrew() {
     mutationFn: (crewId: number) => deleteCrew(crewId),
 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.crews.all }); // 크루 목록 캐시 무효화
+      queryClient.invalidateQueries({ queryKey: crewQueries.all() }); // 크루 목록 캐시 무효화
     },
   });
 }

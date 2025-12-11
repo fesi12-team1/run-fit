@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { delegateCrewLeader } from '@/api/crews';
-import { QUERY_KEY, QUERY_KEYS } from '@/lib/constants';
+import { crewQueries } from '@/queries/crewQueries';
 
 // 크루 리더 위임
 export default function useDelegateCrewLeader(crewId: number) {
@@ -12,10 +12,7 @@ export default function useDelegateCrewLeader(crewId: number) {
 
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.crews.byId(crewId), // 크루 상세 정보 캐시 무효화
-      });
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEY.crews, crewId, QUERY_KEY.members], // 크루 멤버 목록 캐시 무효화
+        queryKey: crewQueries.detail(crewId).queryKey, // 크루 상세 정보 캐시 무효화
       });
     },
   });

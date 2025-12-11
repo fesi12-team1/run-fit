@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { updateMemberRole } from '@/api/crews';
-import { QUERY_KEY, QUERY_KEYS } from '@/lib/constants';
+import { crewQueries } from '@/queries/crewQueries';
 
 // 멤버 역할 변경 (운영진 <-> 멤버)
 export default function useUpdateMemberRole(crewId: number, userId: number) {
@@ -12,13 +12,7 @@ export default function useUpdateMemberRole(crewId: number, userId: number) {
 
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEY.crews, crewId, QUERY_KEY.members], // 크루 멤버 목록 캐시 무효화
-      });
-      queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.crews.members.count(crewId), // 멤버 카운트 캐시 무효화
-      });
-      queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.crews.members.role(crewId, userId), // 멤버 역할 캐시 무효화
+        queryKey: crewQueries.members(crewId).all(), // 크루 멤버 관련 캐시 초기화
       });
     },
   });
