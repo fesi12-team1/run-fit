@@ -17,14 +17,11 @@ export async function getCurrentUserProfile() {
   return data;
 }
 
-export async function updateUserProfile(
-  body: Partial<
-    Pick<
-      Profile,
-      'name' | 'image' | 'introduction' | 'city' | 'pace' | 'styles'
-    >
-  >
-) {
+export type UpdateUserProfileRequestBody = Partial<
+  Pick<Profile, 'name' | 'image' | 'introduction' | 'city' | 'pace' | 'styles'>
+>;
+
+export async function updateUserProfile(body: UpdateUserProfileRequestBody) {
   // const accessToken = '';
   const response = await fetch('/api/user', {
     method: 'PATCH',

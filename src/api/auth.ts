@@ -1,11 +1,13 @@
-import { ResponseData, ResponseErrorData, User } from '@/types';
+import {
+  ResponseData,
+  ResponseErrorData,
+  User,
+  UserCredentials,
+} from '@/types';
 
-type UserCredentials = {
-  email: string;
-  password: string;
-};
+export type SignupRequestBody = UserCredentials & { name: string };
 
-export async function postSignup(body: UserCredentials & { name: string }) {
+export async function postSignup(body: SignupRequestBody) {
   const response = await fetch('/api/auth/signup', {
     method: 'POST',
     body: JSON.stringify(body),
@@ -25,7 +27,9 @@ export async function postSignup(body: UserCredentials & { name: string }) {
   return data;
 }
 
-export async function postSignin(body: UserCredentials) {
+export type SigninRequestBody = UserCredentials;
+
+export async function postSignin(body: SigninRequestBody) {
   const response = await fetch('/api/auth/signin', {
     method: 'POST',
     body: JSON.stringify(body),

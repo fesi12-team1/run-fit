@@ -1,5 +1,3 @@
-'use client';
-
 export default function HomePage() {
   return (
     <main className="h-main flex items-center justify-center">

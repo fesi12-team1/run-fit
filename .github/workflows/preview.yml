@@ -1,0 +1,59 @@
+name: Preview 배포
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Github 레포지토리 불러오기
+        uses: actions/checkout@v6
+
+      - name: pnpm 10 설치
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Node.js 설치
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: 프로젝트 의존성 설치
+        run: pnpm install --frozen-lockfile
+
+      - name: Vercel 환경 변수 불러오기
+        run: pnpm vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Vercel 빌드 (CI용)
+        run: pnpm vercel build --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Preview 배포
+        id: deploy-vercel
+        run: |
+          DEPLOY_URL=$(pnpm vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} | tail -1)
+          echo "preview_url=$DEPLOY_URL" >> $GITHUB_OUTPUT
+
+      - name: 현재 시간 가져오기
+        uses: josStorer/get-current-time@v2
+        id: current-time
+        with:
+          format: 'YYYY년 MM월 DD일 HH시 mm분'
+          utcOffset: '+09:00'
+
+      - name: PR에 Preview 링크 자동 코멘트
+        uses: thollander/actions-comment-pull-request@v3
+        with:
+          comment-tag: preview-link
+          message: |
+            🧷 **배포 미리보기:** ${{ steps.deploy-vercel.outputs.preview_url }}
+            ⏰ **최종 업데이트:** ${{ steps.current-time.outputs.formattedTime }}
