@@ -1,36 +1,52 @@
+import { NextRequest } from 'next/server';
 import { handleRequest } from '@/api/util';
 
 export async function GET(
-  request: Request,
+  request: NextRequest,
   { params }: { params: Promise<{ slug: string[] }> }
 ) {
-  return handleRequest(request, params);
+  const { slug } = await params;
+  const pathname = slug.join('/');
+
+  return handleRequest(request, pathname);
 }
 
 export async function POST(
-  request: Request,
+  request: NextRequest,
   { params }: { params: Promise<{ slug: string[] }> }
 ) {
-  return handleRequest(request, params);
+  const { slug } = await params;
+  const pathname = slug.join('/');
+
+  return handleRequest(request, pathname);
 }
 
 export async function PUT(
-  request: Request,
+  request: NextRequest,
   { params }: { params: Promise<{ slug: string[] }> }
 ) {
-  return handleRequest(request, params);
+  const { slug } = await params;
+  const pathname = slug.join('/');
+
+  return handleRequest(request, pathname);
 }
 
 export async function DELETE(
-  request: Request,
+  request: NextRequest,
   { params }: { params: Promise<{ slug: string[] }> }
 ) {
-  return handleRequest(request, params);
+  const { slug } = await params;
+  const pathname = slug.join('/');
+
+  return handleRequest(request, pathname);
 }
 
 export async function PATCH(
-  request: Request,
+  request: NextRequest,
   { params }: { params: Promise<{ slug: string[] }> }
 ) {
-  return handleRequest(request, params);
+  const { slug } = await params;
+  const pathname = slug.join('/');
+
+  return handleRequest(request, pathname);
 }

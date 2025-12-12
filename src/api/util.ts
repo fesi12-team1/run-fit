@@ -1,9 +1,20 @@
+import { cookies } from 'next/headers';
+import { NextRequest } from 'next/server';
+
+export async function getAccessToken() {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get('accessToken')?.value;
+
+  return accessToken;
+}
+
 export async function handleRequest(
-  request: Request,
-  params: Promise<{ slug: string[] }>
+  request: NextRequest,
+  pathname: string,
+  requiresAuth: boolean = true
 ) {
-  const { slug } = await params;
-  const pathname = slug.join('/');
+  const searchParams = request.nextUrl.searchParams.toString();
+  const accessToken = requiresAuth ? getAccessToken() : undefined;
 
   if (!process.env.NEXT_PUBLIC_API_URL) {
     return new Response(
@@ -13,11 +24,14 @@ export async function handleRequest(
   }
 
   const baseURL = process.env.NEXT_PUBLIC_API_URL;
-  const proxyURL = new URL(`api/${pathname}`, baseURL);
+  const proxyURL = new URL(`api/${pathname}?${searchParams}`, baseURL);
 
   const proxyRequest = new Request(proxyURL, {
     method: request.method,
-    headers: request.headers,
+    headers: {
+      ...request.headers,
+      ...(requiresAuth && { Authorization: `Bearer ${accessToken}` }),
+    },
     body:
       request.method !== 'GET' && request.method !== 'HEAD'
         ? request.body
