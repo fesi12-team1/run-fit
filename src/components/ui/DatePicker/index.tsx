@@ -61,7 +61,7 @@ export default function DatePicker({
       >
         <PopoverTrigger asChild>
           <Button
-            variant="outline"
+            variant="outlined"
             className="w-56 justify-between font-normal"
           >
             <span className="flex items-center gap-2">

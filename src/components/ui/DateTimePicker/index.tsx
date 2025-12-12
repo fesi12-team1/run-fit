@@ -73,7 +73,7 @@ export default function DateTimePicker({
       >
         <PopoverTrigger asChild>
           <Button
-            variant="outline"
+            variant="outlined"
             className="w-56 justify-between"
             disabled={disabled}
           >
