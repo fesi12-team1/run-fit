@@ -1,24 +1,12 @@
 import {
-  PaginationQueryParams,
+  CrewMember,
   ResponseData,
-  ResponseErrorData,
   Session,
+  SessionListFilters,
   SliceData,
-  User,
 } from '@/types';
 
-export async function getSessions(
-  queryParams?: {
-    // TODO: 이 부분은 세션 조회 시 필요한 필터링 옵션에 따라 수정 필요
-    // 결정 후 백앤드와 협의 필요
-    // city?: string;
-    // district?: string;
-    // dateRange?: { from: string; to: string };
-    // timeRange?: { from: string; to: string };
-    // level?: 'beginner' | 'intermediate' | 'advanced';
-    // status?: string;
-  } & PaginationQueryParams
-) {
+export async function getSessions(queryParams?: SessionListFilters) {
   // const accessToken = '';
   const query = new URLSearchParams(
     queryParams as Record<string, string>
@@ -34,7 +22,8 @@ export async function getSessions(
     }
   }
 
-  const { data }: ResponseData<SliceData<Session>> = await response.json();
+  const { data }: ResponseData<SliceData<Omit<Session, 'description'>>> =
+    await response.json();
   return data;
 }
 
@@ -44,7 +33,9 @@ export type CreateSessionRequestBody = Pick<
   | 'name'
   | 'description'
   | 'image'
-  | 'location'
+  | 'city'
+  | 'district'
+  | 'coords'
   | 'sessionAt'
   | 'registerBy'
   | 'level'
@@ -68,51 +59,8 @@ export async function createSession(body: CreateSessionRequestBody) {
     }
   }
 
-  const { data }: ResponseData<Session> = await response.json();
+  const { data }: ResponseData<Omit<Session, 'liked'>> = await response.json();
   return data;
-}
-
-export async function deleteSession(sessionId: number) {
-  // const accessToken = '';
-  const response = await fetch(`/api/sessions/${sessionId}`, {
-    method: 'DELETE',
-  });
-
-  if (!response.ok) {
-    const { error } = await response.json();
-    if (!error.success) {
-      throw new Error(error.message);
-    } else {
-      throw new Error('서버에 연결할 수 없습니다.');
-    }
-  }
-
-  const { data }: ResponseData<null> = await response.json();
-  return data;
-}
-
-// TODO: getSessionsByCrewId는 백엔드 문서화 후 구현 필요
-export async function getSessionsByCrewId(
-  crewId: number,
-  queryParams?: {} & PaginationQueryParams
-) {
-  // 크루 상세 페이지에서
-  // GET /sessions/:crewId/
-  // queryParams: {
-  //   page?: number,
-  //   limit?: number
-  // }
-  // 성공시
-  // body: Omit<Session, "participants" | "likedUsers" | "reviews">[]
-  // // participants, likedUsers, reviews 제외 해도 되지 않을까?
-}
-
-// TODO: getSessionsByUserId는 백엔드 문서화 후 구현 필요
-export async function getSessionsByUserId(userId: number) {
-  // (마이페이지) 사용자가 생성한 세션 목록을 위한 API
-  // GET /sessions/user/:userId
-  // 성공시
-  // body: Omit<Session, "participants" | "likedUsers" | "reviews">[]
 }
 
 export async function getSessionDetail(sessionId: number) {
@@ -146,7 +94,13 @@ export async function registerForSession(sessionId: number) {
     }
   }
 
-  const { data }: ResponseData<null> = await response.json();
+  type RegisterResponseData = {
+    message: string;
+    currentParticipantCount: number;
+    maxParticipantCount: number;
+  };
+
+  const { data }: ResponseData<RegisterResponseData> = await response.json();
   return data;
 }
 
@@ -165,7 +119,12 @@ export async function unregisterFromSession(sessionId: number) {
     }
   }
 
-  const { data }: ResponseData<null> = await response.json();
+  type UnregisterResponseData = {
+    message: string;
+    currentParticipantCount: number;
+  };
+
+  const { data }: ResponseData<UnregisterResponseData> = await response.json();
   return data;
 }
 
@@ -182,7 +141,13 @@ export async function getSessionParticipants(sessionId: number) {
     }
   }
 
-  const { data }: ResponseData<User[]> = await response.json();
+  type ParticipantsResponseData = {
+    participants: CrewMember[];
+    totalCount: number;
+  };
+
+  const { data }: ResponseData<ParticipantsResponseData> =
+    await response.json();
   return data;
 }
 
@@ -191,7 +156,6 @@ export type UpdateSessionDetailRequestBody = Pick<
   'name' | 'description' | 'image'
 >;
 
-// TODO: updateSessionDetail는 백엔드 문서화 후 수정 필요
 export async function updateSessionDetail(
   sessionId: number,
   body: UpdateSessionDetailRequestBody
@@ -211,6 +175,36 @@ export async function updateSessionDetail(
     }
   }
 
-  const { data }: ResponseData<null> = await response.json();
+  const { data }: ResponseData<Omit<Session, 'like'>> = await response.json();
   return data;
+}
+
+// TODO: getSessionsByCrewId는 백엔드 문서화 후 구현 필요
+export async function getSessionsByCrewId(
+  crewId: number,
+  queryParams?: {} & PaginationQueryParams
+) {
+  // 크루 상세 페이지에서
+  // GET /sessions/:crewId/
+  // queryParams: {
+  //   page?: number,
+  //   limit?: number
+  // }
+  // 성공시
+  // body: Omit<Session, "participants" | "likedUsers" | "reviews">[]
+  // // participants, likedUsers, reviews 제외 해도 되지 않을까?
+}
+
+// TODO: getSessionsByUserId는 백엔드 문서화 후 구현 필요
+export async function getSessionsByUserId(userId: number) {
+  // (마이페이지) 사용자가 생성한 세션 목록을 위한 API
+  // GET /sessions/user/:userId
+  // 성공시
+  // body: Omit<Session, "participants" | "likedUsers" | "reviews">[]
+}
+
+// TODO: deleteSession은 백엔드 문서화 후 구현 필요
+export async function deleteSession(sessionId: number) {
+  // const accessToken = '';
+  // 세션 삭제 API
 }
