@@ -6,6 +6,7 @@ import {
   getCrewMembers,
   getCrews,
 } from '@/api/fetch/crews';
+import { normalizeParams } from '@/lib/utils';
 import { PaginationQueryParams } from '@/types';
 
 type CrewListFilters = {
@@ -28,13 +29,15 @@ export const crewQueries = {
 
   // 크루 목록 조회
   lists: () => [...crewQueries.all(), 'list'],
-  list: (filters: CrewListFilters) =>
-    queryOptions({
-      queryKey: [...crewQueries.lists(), filters],
+  list: (filters: CrewListFilters) => {
+    const cleanFilters = normalizeParams(filters);
+    return queryOptions({
+      queryKey: [...crewQueries.lists(), cleanFilters],
       queryFn: () => getCrews(filters),
       placeholderData: (previousData) => previousData, // 필터가 변경되어 데이터를 새로 불러올 때 화면이 깜빡이는 현상 방지
       staleTime: 1000 * 60, // 1분동안 fresh 상태
-    }),
+    });
+  },
 
   // 크루 상세 정보 조회
   details: () => [...crewQueries.all(), 'detail'],
@@ -49,12 +52,14 @@ export const crewQueries = {
     all: () => [...crewQueries.detail(crewId).queryKey, 'members'],
 
     // 크루 특정 역할 멤버 목록 조회
-    list: (filters?: MemberRoleFilters) =>
-      queryOptions({
-        queryKey: [...crewQueries.members(crewId).all(), 'list', filters],
-        queryFn: () => getCrewMembers(crewId, filters),
+    list: (filters?: MemberRoleFilters) => {
+      const cleanFilters = normalizeParams(filters);
+      return queryOptions({
+        queryKey: [...crewQueries.members(crewId).all(), 'list', cleanFilters],
+        queryFn: () => getCrewMembers(crewId, cleanFilters),
         enabled: !!crewId,
-      }),
+      });
+    },
 
     // 크루 멤버 수 조회
     count: () =>
