@@ -1,34 +1,38 @@
 import { PaginationQueryParams } from './api';
+import { Sido, Sigungu } from './region';
 
-export interface Session {
+export interface Session<City extends Sido = Sido> {
   id: number;
   crewId: number;
-  userId: number; // host user id
-
+  hostUserId: number;
   name: string;
   description: string;
-  image?: string;
-
-  // 위치 관련한 필드 - location은 실제 세션 장소, city 와 district는 필터링
-  location: string; // 실제 세션 장소
-  city: string; // 시
-  district: string; // 군구
-
-  createdAt: string;
+  image: string;
+  city: City;
+  district: Sigungu<City>;
+  coords: {
+    lat: number;
+    lng: number;
+  };
   sessionAt: string;
   registerBy: string;
   level: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED';
-
   status: 'OPEN' | 'CLOSED';
-  pace: number; // 분/km
-
+  pace: number;
   maxParticipantCount: number;
   currentParticipantCount: number;
+  createdAt: string;
+  liked: boolean;
 }
 
 export type SessionListFilters = PaginationQueryParams & {
-  city?: string;
-  level?: string;
-  date?: string;
-  sort?: string;
+  city?: string[];
+  district?: string[];
+  crewId?: number;
+  level?: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED';
+  dateFrom?: string;
+  dateTo?: string;
+  timeFrom?: string;
+  timeTo?: string;
+  sort: 'createdAtDesc' | 'sessionAtAsc' | 'registerByAsc';
 };
