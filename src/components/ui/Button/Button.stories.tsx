@@ -48,7 +48,6 @@ export const Variants: Story = {
           <Button variant="default">Default</Button>
           <Button variant="outlined">Outlined</Button>
           <Button variant="neutral">Neutral</Button>
-          <Button variant="ghost">Ghost</Button>
         </div>
       </div>
       <div className="flex flex-col gap-4">
@@ -62,9 +61,6 @@ export const Variants: Story = {
           </Button>
           <Button variant="neutral" size="sm">
             Neutral
-          </Button>
-          <Button variant="ghost" size="sm">
-            Ghost
           </Button>
         </div>
       </div>
@@ -91,7 +87,7 @@ export const Sizes: Story = {
 export const States: Story = {
   render: () => (
     <div className="flex flex-col gap-8">
-      {(['default', 'outlined', 'neutral', 'ghost'] as const).map((variant) => (
+      {(['default', 'outlined', 'neutral'] as const).map((variant) => (
         <div key={variant} className="flex flex-col gap-4">
           <h3 className="text-body2-semibold capitalize">{variant}</h3>
           <div className="flex flex-wrap gap-4">
