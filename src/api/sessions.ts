@@ -1,10 +1,10 @@
 import {
+  Member,
   PaginationQueryParams,
   ResponseData,
   ResponseErrorData,
   Session,
   SliceData,
-  User,
 } from '@/types';
 
 export async function getSessions(
@@ -182,7 +182,12 @@ export async function getSessionParticipants(sessionId: string) {
     }
   }
 
-  const { data }: ResponseData<User[]> = await response.json();
+  const {
+    data,
+  }: ResponseData<{
+    participants: (Member & { image?: string })[];
+    totalCount: number;
+  }> = await response.json();
   return data;
 }
 
