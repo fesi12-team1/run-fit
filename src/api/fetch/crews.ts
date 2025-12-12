@@ -1,12 +1,12 @@
 import {
   Crew,
-  PaginationQueryParams,
-  Profile,
+  CrewListFilters,
+  CrewMember,
+  CrewMemberRoleData,
+  MemberRoleFilters,
   ResponseData,
-  ResponseErrorData,
   Role,
   SliceData,
-  User,
 } from '@/types';
 
 export type CrewRequestBody = Pick<
@@ -34,14 +34,7 @@ export async function createCrew(body: CrewRequestBody) {
   return data;
 }
 
-export async function getCrews(
-  queryParams?: {
-    city?: string;
-    keyword?: string;
-    sort?: 'createdAtDesc' | 'memberCountDesc';
-    // district?: string;
-  } & PaginationQueryParams
-) {
+export async function getCrews(queryParams?: CrewListFilters) {
   const query = new URLSearchParams(
     queryParams as Record<string, string>
   ).toString();
@@ -60,7 +53,7 @@ export async function getCrews(
   return data;
 }
 
-export async function getCrewDetail(crewId: string) {
+export async function getCrewDetail(crewId: number) {
   const response = await fetch(`/api/crews/${crewId}`);
 
   if (!response.ok) {
@@ -77,8 +70,8 @@ export async function getCrewDetail(crewId: string) {
 }
 
 export async function getCrewMembers(
-  crewId: string,
-  queryParams?: { role?: 'leader' | 'staff' | 'member' }
+  crewId: number,
+  queryParams?: MemberRoleFilters
 ) {
   const query = new URLSearchParams(
     queryParams as Record<string, string>
@@ -95,15 +88,15 @@ export async function getCrewMembers(
   }
 
   type CrewMembersResponseData = {
-    leader: Profile;
-    staff: Profile[];
-    member: Profile[];
+    leader: CrewMember;
+    staff: CrewMember[];
+    members: CrewMember[];
   };
   const { data }: ResponseData<CrewMembersResponseData> = await response.json();
   return data;
 }
 
-export async function getCrewMembersCount(crewId: string) {
+export async function getCrewMemberCount(crewId: number) {
   const response = await fetch(`/api/crews/${crewId}/members/count`);
 
   if (!response.ok) {
@@ -126,7 +119,7 @@ export async function getCrewMembersCount(crewId: string) {
   return data;
 }
 
-export async function getCrewMemberDetailById(crewId: string, userId: string) {
+export async function getCrewMemberDetailById(crewId: number, userId: number) {
   const response = await fetch(`/api/crews/${crewId}/members/${userId}/role`);
 
   if (!response.ok) {
@@ -138,16 +131,16 @@ export async function getCrewMemberDetailById(crewId: string, userId: string) {
     }
   }
 
-  const { data }: ResponseData<Profile> = await response.json();
+  const { data }: ResponseData<CrewMemberRoleData> = await response.json();
   return data;
 }
 
 type DelegateCrewLeaderRequestBody = {
-  newLeaderId: User['id'];
+  newLeaderId: CrewMember['userId'];
 };
 
 export async function delegateCrewLeader(
-  crewId: string,
+  crewId: number,
   body: DelegateCrewLeaderRequestBody
 ) {
   // const accessToken = '';
@@ -179,8 +172,8 @@ export type UpdateMemberRoleRequestBody = {
 };
 
 export async function updateMemberRole(
-  crewId: string,
-  userId: string,
+  crewId: number,
+  userId: number,
   body: UpdateMemberRoleRequestBody
 ) {
   // const accessToken = '';
@@ -200,13 +193,13 @@ export async function updateMemberRole(
 
   type RoleUpdateResponseData =
     | {
-        userId: string;
+        userId: number;
         previousRole: 'MEMBER';
         newRole: 'STAFF';
         message: '운영진으로 등록되었습니다.';
       }
     | {
-        userId: string;
+        userId: number;
         previousRole: 'STAFF';
         newRole: 'MEMBER';
         message: '운영진에서 해제되었습니다.';
@@ -215,7 +208,7 @@ export async function updateMemberRole(
   return data;
 }
 
-export async function expelMember(crewId: string, userId: string) {
+export async function expelMember(crewId: number, userId: number) {
   // const accessToken = '';
   const response = await fetch(`/api/crews/${crewId}/members/${userId}`, {
     method: 'DELETE',
@@ -230,7 +223,12 @@ export async function expelMember(crewId: string, userId: string) {
     }
   }
 
-  const { data }: ResponseData<null> = await response.json();
+  type ExpelResponseData = {
+    message: string;
+    userId: number;
+  };
+
+  const { data }: ResponseData<ExpelResponseData> = await response.json();
   return data;
 }
 
@@ -240,7 +238,7 @@ export type UpdateCrewDetailRequestBody = Pick<
 >;
 
 export async function updateCrewDetail(
-  crewId: string,
+  crewId: number,
   body: UpdateCrewDetailRequestBody
 ) {
   // const accessToken = '';
@@ -262,7 +260,7 @@ export async function updateCrewDetail(
   return data;
 }
 
-export async function deleteCrew(crewId: string) {
+export async function deleteCrew(crewId: number) {
   // const accessToken = '';
   const response = await fetch(`/api/crews/${crewId}`, {
     method: 'DELETE',
@@ -277,6 +275,10 @@ export async function deleteCrew(crewId: string) {
     }
   }
 
-  const { data }: ResponseData<null> = await response.json();
+  type DeleteCrewResponseData = {
+    message: string;
+  };
+
+  const { data }: ResponseData<DeleteCrewResponseData> = await response.json();
   return data;
 }

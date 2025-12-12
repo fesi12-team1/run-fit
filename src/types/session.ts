@@ -1,9 +1,9 @@
 import { PaginationQueryParams } from './api';
 
 export interface Session {
-  id: string;
-  crewId: string;
-  userId: string; // host user id
+  id: number;
+  crewId: number;
+  userId: number; // host user id
 
   name: string;
   description: string;

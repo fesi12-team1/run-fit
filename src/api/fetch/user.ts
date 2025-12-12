@@ -42,7 +42,7 @@ export async function updateUserProfile(body: UpdateUserProfileRequestBody) {
   return data;
 }
 
-export async function getUserProfileById(userId: string) {
+export async function getUserProfileById(userId: number) {
   // const accessToken = '';
   const response = await fetch(`/api/user/${userId}`);
 
@@ -60,7 +60,7 @@ export async function getUserProfileById(userId: string) {
   return data;
 }
 
-export async function leaveCrew(crewId: string) {
+export async function leaveCrew(crewId: number) {
   // const accessToken = '';
   const response = await fetch(`/api/user/${crewId}/leave`, {
     method: 'DELETE',
