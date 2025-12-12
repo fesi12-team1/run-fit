@@ -34,7 +34,7 @@ interface DatePickerRangeProps {
   onChange: (value: DateRange) => void;
 }
 
-type DatePickerProps = DatePickerSingleProps | DatePickerRangeProps;
+export type DatePickerProps = DatePickerSingleProps | DatePickerRangeProps;
 
 export default function DatePicker({
   mode,

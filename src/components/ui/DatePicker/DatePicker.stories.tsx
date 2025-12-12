@@ -1,9 +1,9 @@
-import { Meta } from '@storybook/nextjs-vite';
+import { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { useState } from 'react';
 import { DateRange } from 'react-day-picker';
-import DatePicker from '.';
+import DatePicker, { DatePickerProps } from '.';
 
-const meta: Meta = {
+const meta: Meta<DatePickerProps> = {
   title: 'ui/DatePicker',
   component: DatePicker,
   tags: ['autodocs'],
@@ -19,21 +19,22 @@ const meta: Meta = {
 };
 
 export default meta;
-type Story = Meta<typeof DatePicker>;
+type Story = StoryObj<DatePickerProps>;
 
 /**
  * 단일 선택 모드 DatePicker 컴포넌트 상태 예시
  */
 export const Single: Story = {
-  args: {
-    mode: 'single',
-    label: '모임 날짜',
-    placeholder: '날짜를 선택하세요',
-  },
-  render: (args) => {
+  render: () => {
     const [date, setDate] = useState<Date | undefined>(undefined);
     return (
-      <DatePicker {...args} mode="single" value={date} onChange={setDate} />
+      <DatePicker
+        mode="single"
+        label="모임 날짜"
+        placeholder="날짜를 선택하세요"
+        value={date}
+        onChange={setDate}
+      />
     );
   },
 };
@@ -42,15 +43,16 @@ export const Single: Story = {
  * 범위 선택 모드 DatePicker 컴포넌트 상태 예시
  */
 export const Range: Story = {
-  args: {
-    mode: 'range',
-    label: '기간',
-    placeholder: '기간을 선택하세요',
-  },
-  render: (args) => {
+  render: () => {
     const [range, setRange] = useState<DateRange | undefined>(undefined);
     return (
-      <DatePicker {...args} mode="range" value={range} onChange={setRange} />
+      <DatePicker
+        mode="range"
+        label="기간"
+        placeholder="기간을 선택하세요"
+        value={range}
+        onChange={setRange}
+      />
     );
   },
 };
