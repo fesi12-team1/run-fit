@@ -1,92 +1,111 @@
 'use client';
 
-import { Label } from '@radix-ui/react-label';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@radix-ui/react-popover';
+import Calendar from '@components/ui/Calendar';
+import Input from '@components/ui/Input';
+import Label from '@components/ui/Label';
+import * as Popover from '@radix-ui/react-popover';
 import { CalendarIcon } from 'lucide-react';
-import { useState } from 'react';
-import Button from '@/components/ui/Button';
-import Calendar from '@/components/ui/Calendar';
+import * as React from 'react';
+import { DateRange } from 'react-day-picker';
 
-export interface DatePickerProps {
-  value?: Date;
-  onChange: (next?: Date) => void;
-  label?: string;
-  inline?: boolean;
-  captionLayout?: 'dropdown' | 'label';
-  placeholder?: string;
-  disabled?: boolean;
+function formatSingle(date?: Date) {
+  if (!date) return '';
+  return date.toLocaleDateString('ko-KR');
 }
 
+function formatRange(range?: DateRange) {
+  if (!range?.from) return '';
+  if (!range.to) return formatSingle(range.from);
+  return `${formatSingle(range.from)} ~ ${formatSingle(range.to)}`;
+}
+interface DatePickerSingleProps {
+  mode: 'single';
+  label: string;
+  placeholder: string;
+  id?: string;
+  value?: Date;
+  onChange: (value: Date) => void;
+}
+
+interface DatePickerRangeProps {
+  mode: 'range';
+  label: string;
+  placeholder: string;
+  id?: string;
+  value?: DateRange;
+  onChange: (value: DateRange) => void;
+}
+
+export type DatePickerProps = DatePickerSingleProps | DatePickerRangeProps;
+
 export default function DatePicker({
+  mode,
+  label,
+  placeholder,
+  id,
   value,
   onChange,
-  label = '날짜',
-  inline = false,
-  captionLayout = 'dropdown',
-  placeholder = '날짜를 선택하세요',
-  disabled = false,
 }: DatePickerProps) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = React.useState(false);
+  const autoId = React.useId();
+  const inputId = id ?? autoId;
 
-  const handleSelect = (next?: Date) => {
-    if (disabled) return;
-    onChange?.(next);
-  };
-
-  if (inline) {
-    return (
-      <div className={`flex flex-col gap-2 ${disabled ? 'opacity-50' : ''}`}>
-        <Label>{label}</Label>
-        <Calendar
-          mode="single"
-          selected={value}
-          captionLayout={captionLayout}
-          onSelect={handleSelect}
-          disabled={disabled}
-        />
-      </div>
-    );
-  }
+  const displayValue =
+    mode === 'single' ? formatSingle(value) : formatRange(value);
 
   return (
-    <div className={`flex flex-col gap-2 ${disabled ? 'opacity-50' : ''}`}>
-      <Label>{label}</Label>
-      <Popover
-        open={!disabled && open}
-        onOpenChange={disabled ? undefined : setOpen}
-      >
-        <PopoverTrigger asChild>
-          <Button
-            variant="outline"
-            className="w-56 justify-between font-normal"
-          >
-            <span className="flex items-center gap-2">
-              <CalendarIcon className="h-4 w-4" />
-              {value ? (
-                value.toLocaleDateString()
+    <div className="flex flex-col gap-1">
+      <Label htmlFor={inputId}>{label}</Label>
+      <Input
+        id={inputId}
+        value={displayValue}
+        placeholder={placeholder}
+        readOnly
+        onFocus={() => setOpen(true)}
+        onMouseDown={() => setOpen(true)}
+        onKeyDown={(e) => {
+          if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            setOpen(true);
+          }
+        }}
+        RightElement={
+          <Popover.Root open={open} onOpenChange={setOpen}>
+            <Popover.Trigger asChild>
+              <button
+                type="button"
+                onMouseDown={(e) => e.preventDefault()}
+                className="flex size-5 items-center justify-center"
+              >
+                <CalendarIcon />
+              </button>
+            </Popover.Trigger>
+            <Popover.Content>
+              {mode === 'single' ? (
+                <Calendar.Single
+                  selected={value}
+                  onSelect={(nextDate) => {
+                    if (!nextDate) return;
+                    onChange(nextDate);
+                    setOpen(false);
+                  }}
+                />
               ) : (
-                <span className="text-muted-foreground">{placeholder}</span>
+                <Calendar.Range
+                  selected={value}
+                  onSelect={(nextRange) => {
+                    if (!nextRange) return;
+                    onChange(nextRange);
+                    if (nextRange.from && nextRange.to) {
+                      setOpen(false);
+                    }
+                  }}
+                />
               )}
-            </span>
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent>
-          <Calendar
-            mode="single"
-            selected={value}
-            captionLayout={captionLayout}
-            onSelect={(next?: Date): void => {
-              handleSelect(next);
-              setOpen(false);
-            }}
-            disabled={disabled}
-          />
-        </PopoverContent>
-      </Popover>
+            </Popover.Content>
+          </Popover.Root>
+        }
+      />
     </div>
   );
 }
