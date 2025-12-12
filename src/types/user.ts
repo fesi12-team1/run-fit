@@ -4,6 +4,11 @@ export interface User {
   createdAt: string;
 }
 
+export type UserCredentials = {
+  email: string;
+  password: string;
+};
+
 export interface Profile extends User {
   image?: string;
   introduction: string;
@@ -13,7 +18,8 @@ export interface Profile extends User {
   updatedAt: string;
 }
 
-type Role = 'LEADER' | 'STAFF' | 'MEMBER';
+export type Role = 'LEADER' | 'STAFF' | 'MEMBER';
+
 export interface Member extends User {
   role: Role;
   joinedAt: string;

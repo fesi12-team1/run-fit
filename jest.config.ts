@@ -10,6 +10,7 @@ const config: Config = {
   testEnvironment: 'jest-fixed-jsdom',
   testPathIgnorePatterns: ['/node_modules/', '/e2e/'],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
+  extensionsToTreatAsEsm: ['.ts', '.tsx'],
 };
 
 export default createJestConfig(config);
