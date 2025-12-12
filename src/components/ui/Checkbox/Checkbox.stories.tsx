@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import Checkbox from './Checkbox';
+import Checkbox from '.';
 
 /**
  * Checkbox 컴포넌트는 사용자가 선택하거나 선택 해제할 수 있는 UI 요소입니다.

@@ -1,5 +1,5 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
-import TimeSlider from './TimeSlider';
+import TimeSlider from '.';
 
 afterEach(() => cleanup());
 

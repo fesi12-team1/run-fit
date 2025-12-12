@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Github 레포지토리 불러오기
+        uses: actions/checkout@v6
+
+      - name: pnpm 10 설치
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Node.js 설치
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: 의존성 라이브러리 설치
+        run: pnpm install --frozen-lockfile
+
+      - name: ESLint 검사 실행
+        run: pnpm lint
+
+      - name: 테스트 실행
+        run: pnpm test
+
+      - name: 프로젝트 빌드
+        run: pnpm build

@@ -49,15 +49,8 @@ node_modules/
 /playwright/.cache/
 /playwright/.auth/
 
-# Playwright
-node_modules/
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/
-/playwright/.auth/
-
 # eslint
 .eslintcache
 *storybook.log
 storybook-static
+.env*.local

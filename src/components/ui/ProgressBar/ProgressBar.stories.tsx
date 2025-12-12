@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { useArgs } from 'storybook/internal/preview-api';
-import ProgressBar from './ProgressBar';
+import ProgressBar from '.';
 
 /**
  * ProgressBar 컴포넌트는 진행 상태를 시각적으로 표시하는 UI 요소입니다.

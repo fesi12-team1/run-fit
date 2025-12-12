@@ -9,8 +9,8 @@ import {
 import { CalendarIcon } from 'lucide-react';
 import { useState } from 'react';
 import Button from '@/components/ui/Button';
-import DatePicker from './DatePicker';
-import TimePicker, { type TimeValue } from './TimePicker';
+import DatePicker from '../DatePicker';
+import TimePicker, { TimeValue } from '../TimePicker';
 
 export interface DateTimeValue {
   date?: Date;

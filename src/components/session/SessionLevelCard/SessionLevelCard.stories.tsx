@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { useState } from 'react';
-import SessionLevelCard from './SessionLevelCard';
+import SessionLevelCard from '.';
 
 /**
  * 러닝 세션의 난이도(레벨)를 선택하는 카드 컴포넌트
