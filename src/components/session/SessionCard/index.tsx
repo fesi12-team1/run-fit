@@ -1,4 +1,3 @@
-import { Dot } from 'lucide-react';
 import Image from 'next/image';
 import Liked from '@/assets/icons/liked.svg';
 import Location from '@/assets/icons/location.svg';
@@ -41,7 +40,7 @@ export default function SessionCard({ data }: SessionCardProps) {
 
   return (
     <li className="flex w-full flex-col">
-      <div className="laptop:mb-6 tablet:aspect-video relative mb-3 aspect-165/185 self-stretch overflow-hidden rounded-lg bg-blue-300">
+      <div className="laptop:mb-6 tablet:aspect-video relative mb-3 aspect-165/185 self-stretch overflow-hidden rounded-lg">
         <Image
           src="/session.local.jpg"
           alt="Session"
@@ -64,29 +63,25 @@ export default function SessionCard({ data }: SessionCardProps) {
           </div>
         </div>
       </div>
-      <div className="text-body3-semibold tablet:text-body2-semibold laptop:text-title3-semibold text-gray-50">
+      <div className="text-body3-semibold tablet:text-body2-semibold laptop:text-title3-semibold line-clamp-1 text-gray-50">
         {data.name}
       </div>
-      <div className="text-caption-regular tablet:text-body3-regular tablet:mb-2 flex items-center text-gray-300">
-        {`${sessionDate}`}
-        <Dot />
-        {`${sessionTime}`}
+      <div className="text-caption-regular tablet:text-body3-regular tablet:mb-2 mb-1 text-gray-300">
+        {`${sessionDate} • ${sessionTime}`}
       </div>
       {/* prettier-ignore */}
-      <div className="flex gap-0.5 mb-2 tablet:mb-3">
+      <div className="flex gap-0.5 laptop:gap-1 mb-2 tablet:mb-3">
           <PaceBadge pace={data.pace} size="sm" className="tablet:hidden" />
           <PaceBadge pace={data.pace} size="md" className="hidden tablet:inline-flex laptop:hidden" />
           <PaceBadge pace={data.pace} size="lg" className="hidden laptop:inline-flex" />
           <LevelBadge level={level} size="sm" className="tablet:hidden" />
           <LevelBadge level={level} size="md" className="hidden tablet:inline-flex laptop:hidden" />
           <LevelBadge level={level} size="lg" className="hidden laptop:inline-flex" />
-        </div>
+      </div>
       <div className="flex gap-1">
         <ProfileList data={participantList} />
-        <div className="text-caption-regular laptop:text-body3-regular flex items-center text-gray-300">
-          {`${data.currentParticipantCount}/${data.maxParticipantCount}명`}
-          <Dot />
-          {`${crewData.name}`}
+        <div className="text-caption-regular laptop:text-body3-regular text-gray-300">
+          {`${data.currentParticipantCount}/${data.maxParticipantCount}명 • ${crewData.name}`}
         </div>
       </div>
     </li>
