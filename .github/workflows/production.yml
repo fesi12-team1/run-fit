@@ -1,0 +1,42 @@
+name: Production 배포
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  Deploy-Production:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Github 레포지토리 불러오기
+        uses: actions/checkout@v6
+
+      - name: pnpm 10 설치
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Node.js 설치
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: 의존성 라이브러리 설치
+        run: pnpm install --frozen-lockfile
+
+      - name: 테스트 실행
+        run: pnpm test
+
+      - name: Vercel CLI 설치
+        run: pnpm add -g vercel
+
+      - name: Vercel 환경 정보 가져오기
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: 프로젝트 빌드
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Vercel에 프로젝트 배포
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
