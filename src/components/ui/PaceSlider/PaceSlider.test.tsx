@@ -1,5 +1,5 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
-import PaceSlider from './PaceSlider';
+import PaceSlider from '.';
 
 afterEach(() => cleanup());
 

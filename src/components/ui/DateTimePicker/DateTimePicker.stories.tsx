@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { useState } from 'react';
-import DateTimePicker from './DateTimePicker';
-import type { DateTimeValue } from './DateTimePicker';
-import type { TimeValue } from './TimePicker';
+import DateTimePicker from '.';
+import type { DateTimeValue } from '.';
+import { TimeValue } from '../TimePicker';
 
 /**
  * 날짜(Date)와 시간(Time)을 함께 선택할 수 있는 DateTimePicker 컴포넌트입니다.

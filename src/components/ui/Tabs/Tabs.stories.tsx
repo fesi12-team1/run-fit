@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import Tabs from './Tabs';
+import Tabs from '.';
 
 /**
  * 탭은 관련 콘텐츠를 그룹화하고 사용자가 한 번에 하나의 콘텐츠 섹션을 표시할 수 있도록 하는 UI 구성 요소입니다.

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import Textarea from './Textarea';
+import Textarea from '.';
 
 /**
  * Textarea 컴포넌트는 사용자가 여러 줄의 텍스트를 입력할 수 있는 입력 필드입니다.

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { useState } from 'react';
 import { useArgs } from 'storybook/preview-api';
-import DatePicker, { type DatePickerProps } from './DatePicker';
+import DatePicker, { type DatePickerProps } from '.';
 
 const exampleDate = new Date('2025-12-25');
 
