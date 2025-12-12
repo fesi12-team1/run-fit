@@ -116,7 +116,7 @@ function ModalTitle({
   return (
     <DialogPrimitive.Title
       data-slot="dialog-title"
-      className={cn('text-lg leading-none font-semibold', className)}
+      className={cn('text-title3-semibold leading-none', className)}
       {...props}
     />
   );
@@ -129,7 +129,7 @@ function ModalDescription({
   return (
     <DialogPrimitive.Description
       data-slot="dialog-description"
-      className={cn('text-muted-foreground text-sm', className)}
+      className={cn('text-body2-medium', className)}
       {...props}
     />
   );
