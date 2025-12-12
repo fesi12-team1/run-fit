@@ -8,9 +8,22 @@ import {
 
 export async function getSessions(queryParams?: SessionListFilters) {
   // const accessToken = '';
-  const query = new URLSearchParams(
-    queryParams as Record<string, string>
-  ).toString();
+  const searchParams = new URLSearchParams();
+
+  if (queryParams) {
+    Object.entries(queryParams).forEach(([key, value]) => {
+      if (value === undefined || value === null) return;
+
+      if (Array.isArray(value)) {
+        value.forEach((item) => searchParams.append(key, item));
+      } else {
+        searchParams.append(key, String(value));
+      }
+    });
+  }
+
+  const query = searchParams.toString();
+
   const response = await fetch(`/api/sessions?${query}`);
 
   if (!response.ok) {
@@ -179,32 +192,31 @@ export async function updateSessionDetail(
   return data;
 }
 
-// TODO: getSessionsByCrewId는 백엔드 문서화 후 구현 필요
-export async function getSessionsByCrewId(
-  crewId: number,
-  queryParams?: {} & PaginationQueryParams
-) {
-  // 크루 상세 페이지에서
-  // GET /sessions/:crewId/
-  // queryParams: {
-  //   page?: number,
-  //   limit?: number
-  // }
-  // 성공시
-  // body: Omit<Session, "participants" | "likedUsers" | "reviews">[]
-  // // participants, likedUsers, reviews 제외 해도 되지 않을까?
+/* 
+TODO: getSessionsByCrewId는 백엔드 문서화 후 구현 필요
+export async function getSessionsByCrewId(crewId: number, queryParams?: {}) {
+   크루 상세 페이지에서
+   GET /sessions/:crewId/
+   queryParams: {
+     page?: number,
+     limit?: number
+   }
+   성공시
+   body: Omit<Session, "participants" | "likedUsers" | "reviews">[]
+   participants, likedUsers, reviews 제외 해도 되지 않을까?
 }
 
-// TODO: getSessionsByUserId는 백엔드 문서화 후 구현 필요
+ TODO: getSessionsByUserId는 백엔드 문서화 후 구현 필요
 export async function getSessionsByUserId(userId: number) {
-  // (마이페이지) 사용자가 생성한 세션 목록을 위한 API
-  // GET /sessions/user/:userId
-  // 성공시
-  // body: Omit<Session, "participants" | "likedUsers" | "reviews">[]
+   (마이페이지) 사용자가 생성한 세션 목록을 위한 API
+   GET /sessions/user/:userId
+   성공시
+   body: Omit<Session, "participants" | "likedUsers" | "reviews">[]
 }
 
-// TODO: deleteSession은 백엔드 문서화 후 구현 필요
+ TODO: deleteSession은 백엔드 문서화 후 구현 필요
 export async function deleteSession(sessionId: number) {
-  // const accessToken = '';
-  // 세션 삭제 API
-}
+   const accessToken = '';
+   세션 삭제 API
+} 
+*/
