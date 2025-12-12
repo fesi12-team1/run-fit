@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createCrew } from '@/api/crews';
-import { crewQueries } from '@/queries/crewQueries';
+import { createCrew } from '@/api/fetch/crews';
+import { crewQueries } from '@/api/queries/crewQueries';
 
 // 크루 생성
 export default function useCreateCrew() {

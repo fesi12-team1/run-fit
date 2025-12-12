@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { deleteCrew } from '@/api/crews';
-import { crewQueries } from '@/queries/crewQueries';
+import { deleteCrew } from '@/api/fetch/crews';
+import { crewQueries } from '@/api/queries/crewQueries';
 
 // 크루 삭제
 export default function useDeleteCrew() {

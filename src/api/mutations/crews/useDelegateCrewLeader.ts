@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { delegateCrewLeader } from '@/api/crews';
-import { crewQueries } from '@/queries/crewQueries';
+import { delegateCrewLeader } from '@/api/fetch/crews';
+import { crewQueries } from '@/api/queries/crewQueries';
 
 // 크루 리더 위임
 export default function useDelegateCrewLeader(crewId: number) {

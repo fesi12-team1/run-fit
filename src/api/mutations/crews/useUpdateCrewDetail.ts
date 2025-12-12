@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { updateCrewDetail } from '@/api/crews';
-import { crewQueries } from '@/queries/crewQueries';
+import { updateCrewDetail } from '@/api/fetch/crews';
+import { crewQueries } from '@/api/queries/crewQueries';
 import { Crew } from '@/types';
 
 // 크루 상세 정보 수정

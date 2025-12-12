@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { updateMemberRole } from '@/api/crews';
-import { crewQueries } from '@/queries/crewQueries';
+import { updateMemberRole } from '@/api/fetch/crews';
+import { crewQueries } from '@/api/queries/crewQueries';
 
 // 멤버 역할 변경 (운영진 <-> 멤버)
 export default function useUpdateMemberRole(crewId: number, userId: number) {
