@@ -5,7 +5,7 @@ export interface Crew {
   name: string;
   description: string;
   city: string;
-  image: string;
+  image?: string | null;
   createdAt: string;
 }
 
