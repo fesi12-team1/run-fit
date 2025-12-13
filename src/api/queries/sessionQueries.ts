@@ -1,11 +1,12 @@
 import { queryOptions } from '@tanstack/react-query';
 import {
+  getMySessions,
   getSessionDetail,
   getSessionParticipants,
   getSessions,
 } from '@/api/fetch/sessions';
 import { normalizeParams } from '@/lib/utils';
-import { SessionListFilters } from '@/types';
+import { PaginationQueryParams, SessionListFilters } from '@/types';
 
 export const sessionQueries = {
   all: () => ['sessions'],
@@ -21,6 +22,16 @@ export const sessionQueries = {
       staleTime: 1000 * 60, // 1분동안 fresh 상태
     });
   },
+
+  // 내가 만든 세션 조회
+  mine: () => ({
+    all: () => [...sessionQueries.all(), 'mine'],
+    list: (params: PaginationQueryParams) =>
+      queryOptions({
+        queryKey: [...sessionQueries.mine().all(), params],
+        queryFn: () => getMySessions(params),
+      }),
+  }),
 
   // 세션 상세 정보 조회
   details: () => [...sessionQueries.all(), 'detail'],
