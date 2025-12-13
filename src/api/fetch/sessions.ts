@@ -189,7 +189,7 @@ export async function updateSessionDetail(
     }
   }
 
-  const { data }: ResponseData<Omit<Session, 'like'>> = await response.json();
+  const { data }: ResponseData<Omit<Session, 'liked'>> = await response.json();
   return data;
 }
 

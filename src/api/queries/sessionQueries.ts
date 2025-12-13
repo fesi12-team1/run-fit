@@ -27,7 +27,7 @@ export const sessionQueries = {
   mineLists: () => [...sessionQueries.lists(), 'mine'],
   mineList: (params: PaginationQueryParams) =>
     queryOptions({
-      queryKey: [...sessionQueries.mineAll(), params],
+      queryKey: [...sessionQueries.mineLists(), params],
       queryFn: () => getMySessions(params),
     }),
 
