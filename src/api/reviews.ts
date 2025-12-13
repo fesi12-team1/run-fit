@@ -6,9 +6,14 @@ import {
   Review,
 } from '@/types';
 
+export type CreateSessionReviewResponseData = Pick<
+  Review,
+  'description' | 'ranks' | 'image'
+>;
+
 export async function createSessionReview(
   sessionId: string,
-  body: Pick<Review, 'description' | 'ranks' | 'image'>
+  body: CreateSessionReviewResponseData
 ) {
   // const accessToken = '';
   const response = await fetch(`/api/sessions/${sessionId}/reviews`, {

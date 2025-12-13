@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { useState } from 'react';
-import TimePicker, { type TimePickerProps, type TimeValue } from './TimePicker';
+import TimePicker, { type TimePickerProps, type TimeValue } from '.';
 
 const defaultValue: TimeValue = {
   hour: '09',

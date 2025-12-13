@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Calendar, Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
-import Input, { InputProps } from './Input';
+import Input, { InputProps } from '.';
 
 /**
  * Input 컴포넌트 Storybook 문서

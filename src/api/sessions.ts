@@ -38,21 +38,21 @@ export async function getSessions(
   return data;
 }
 
-export async function createSession(
-  body: Pick<
-    Session,
-    | 'crewId'
-    | 'name'
-    | 'description'
-    | 'image'
-    | 'location'
-    | 'sessionAt'
-    | 'registerBy'
-    | 'level'
-    | 'maxParticipantCount'
-    | 'pace'
-  >
-) {
+export type CreateSessionRequestBody = Pick<
+  Session,
+  | 'crewId'
+  | 'name'
+  | 'description'
+  | 'image'
+  | 'location'
+  | 'sessionAt'
+  | 'registerBy'
+  | 'level'
+  | 'maxParticipantCount'
+  | 'pace'
+>;
+
+export async function createSession(body: CreateSessionRequestBody) {
   // const accessToken = '';
   const response = await fetch('/api/sessions', {
     method: 'POST',
@@ -186,10 +186,15 @@ export async function getSessionParticipants(sessionId: string) {
   return data;
 }
 
+export type UpdateSessionDetailRequestBody = Pick<
+  Session,
+  'name' | 'description' | 'image'
+>;
+
 // TODO: updateSessionDetail는 백엔드 문서화 후 수정 필요
 export async function updateSessionDetail(
   sessionId: string,
-  body: Pick<Session, 'name' | 'description' | 'image'>
+  body: UpdateSessionDetailRequestBody
 ) {
   // const accessToken = '';
   const response = await fetch(`/api/sessions/${sessionId}`, {
