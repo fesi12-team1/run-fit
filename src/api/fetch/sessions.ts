@@ -194,9 +194,16 @@ export async function updateSessionDetail(
 }
 
 export async function getMySessions(queryParams?: PaginationQueryParams) {
-  const query = new URLSearchParams(
-    (queryParams || {}) as Record<string, string>
-  ).toString();
+  const searchParams = new URLSearchParams();
+
+  if (queryParams) {
+    Object.entries(queryParams).forEach(([key, value]) => {
+      if (value === undefined || value === null) return;
+      searchParams.append(key, String(value));
+    });
+  }
+
+  const query = searchParams.toString();
 
   const response = await fetch(`/api/user/me/sessions?${query}`);
 
