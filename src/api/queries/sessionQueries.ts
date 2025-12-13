@@ -25,11 +25,13 @@ export const sessionQueries = {
 
   // 내가 만든 세션 조회
   mineLists: () => [...sessionQueries.lists(), 'mine'],
-  mineList: (params: PaginationQueryParams) =>
+  mineList: (params: PaginationQueryParams) => {
+    const cleanParams = normalizeParams(params);
     queryOptions({
-      queryKey: [...sessionQueries.mineLists(), params],
-      queryFn: () => getMySessions(params),
-    }),
+      queryKey: [...sessionQueries.mineLists(), cleanParams],
+      queryFn: () => getMySessions(cleanParams),
+    });
+  },
 
   // 세션 상세 정보 조회
   details: () => [...sessionQueries.all(), 'detail'],
