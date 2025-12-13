@@ -24,7 +24,7 @@ export const sessionQueries = {
   },
 
   // 내가 만든 세션 조회
-  mineAll: () => [...sessionQueries.all(), 'mine'],
+  mineLists: () => [...sessionQueries.lists(), 'mine'],
   mineList: (params: PaginationQueryParams) =>
     queryOptions({
       queryKey: [...sessionQueries.mineAll(), params],

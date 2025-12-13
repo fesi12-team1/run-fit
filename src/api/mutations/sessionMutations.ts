@@ -37,9 +37,6 @@ export const useUpdateSession = (sessionId: number) => {
       queryClient.invalidateQueries({
         queryKey: sessionQueries.lists(), // 세션 목록 캐시 무효화
       });
-      queryClient.invalidateQueries({
-        queryKey: sessionQueries.mineAll(), // 내가 참여한 크루 목록 캐시 무효화
-      });
     },
   });
 };
@@ -56,9 +53,6 @@ export const useRegisterSession = (sessionId: number) => {
       });
       queryClient.invalidateQueries({
         queryKey: sessionQueries.detail(sessionId).queryKey, // 세션 상세 캐시 무효화
-      });
-      queryClient.invalidateQueries({
-        queryKey: sessionQueries.mineAll(), // 내가 참여한 크루 목록 캐시 무효화
       });
     },
   });
@@ -77,9 +71,6 @@ export const useUnregisterSession = (sessionId: number) => {
       queryClient.invalidateQueries({
         queryKey: sessionQueries.detail(sessionId).queryKey, // 세션 상세 캐시 무효화
       });
-      queryClient.invalidateQueries({
-        queryKey: sessionQueries.mineAll(), // 내가 참여한 크루 목록 캐시 무효화
-      });
     },
   });
 };
@@ -92,9 +83,6 @@ export function useDeleteSession() {
     mutationFn: deleteSession,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: sessionQueries.lists() });
-      queryClient.invalidateQueries({
-        queryKey: sessionQueries.mineAll(), // 내가 참여한 크루 목록 캐시 무효화
-      });
     },
   });
 }
