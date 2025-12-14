@@ -10,7 +10,7 @@ import {
 import { sessionQueries } from '@/api/queries/sessionQueries';
 
 // 세션 생성
-export const useCreateSession = () => {
+export function useCreateSession() {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -21,10 +21,10 @@ export const useCreateSession = () => {
       });
     },
   });
-};
+}
 
 // 세션 정보 수정
-export const useUpdateSession = (sessionId: number) => {
+export function useUpdateSession(sessionId: number) {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -39,10 +39,10 @@ export const useUpdateSession = (sessionId: number) => {
       });
     },
   });
-};
+}
 
 // 세션 참여
-export const useRegisterSession = (sessionId: number) => {
+export function useRegisterSession(sessionId: number) {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -56,10 +56,10 @@ export const useRegisterSession = (sessionId: number) => {
       });
     },
   });
-};
+}
 
 // 세션 참여 취소
-export const useUnregisterSession = (sessionId: number) => {
+export function useUnregisterSession(sessionId: number) {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -73,7 +73,7 @@ export const useUnregisterSession = (sessionId: number) => {
       });
     },
   });
-};
+}
 
 // 세션 삭제
 export function useDeleteSession() {
