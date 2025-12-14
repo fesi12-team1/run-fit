@@ -72,7 +72,7 @@ export async function createSession(body: CreateSessionRequestBody) {
   return data;
 }
 
-export async function deleteSession(sessionId: string) {
+export async function deleteSession(sessionId: number) {
   // const accessToken = '';
   const response = await fetch(`/api/sessions/${sessionId}`, {
     method: 'DELETE',
@@ -93,7 +93,7 @@ export async function deleteSession(sessionId: string) {
 
 // TODO: getSessionsByCrewId는 백엔드 문서화 후 구현 필요
 export async function getSessionsByCrewId(
-  crewId: string,
+  crewId: number,
   queryParams?: {} & PaginationQueryParams
 ) {
   // 크루 상세 페이지에서
@@ -108,14 +108,14 @@ export async function getSessionsByCrewId(
 }
 
 // TODO: getSessionsByUserId는 백엔드 문서화 후 구현 필요
-export async function getSessionsByUserId(userId: string) {
+export async function getSessionsByUserId(userId: number) {
   // (마이페이지) 사용자가 생성한 세션 목록을 위한 API
   // GET /sessions/user/:userId
   // 성공시
   // body: Omit<Session, "participants" | "likedUsers" | "reviews">[]
 }
 
-export async function getSessionDetail(sessionId: string) {
+export async function getSessionDetail(sessionId: number) {
   const response = await fetch(`/api/sessions/${sessionId}`);
 
   if (!response.ok) {
@@ -131,7 +131,7 @@ export async function getSessionDetail(sessionId: string) {
   return data;
 }
 
-export async function registerForSession(sessionId: string) {
+export async function registerForSession(sessionId: number) {
   // const accessToken = '';
   const response = await fetch(`/api/sessions/${sessionId}/join`, {
     method: 'POST',
@@ -150,7 +150,7 @@ export async function registerForSession(sessionId: string) {
   return data;
 }
 
-export async function unregisterFromSession(sessionId: string) {
+export async function unregisterFromSession(sessionId: number) {
   // const accessToken = '';
   const response = await fetch(`/api/sessions/${sessionId}/join`, {
     method: 'DELETE',
@@ -169,7 +169,7 @@ export async function unregisterFromSession(sessionId: string) {
   return data;
 }
 
-export async function getSessionParticipants(sessionId: string) {
+export async function getSessionParticipants(sessionId: number) {
   // const accessToken = '';
   const response = await fetch(`/api/sessions/${sessionId}/participants`);
 
@@ -193,7 +193,7 @@ export type UpdateSessionDetailRequestBody = Pick<
 
 // TODO: updateSessionDetail는 백엔드 문서화 후 수정 필요
 export async function updateSessionDetail(
-  sessionId: string,
+  sessionId: number,
   body: UpdateSessionDetailRequestBody
 ) {
   // const accessToken = '';

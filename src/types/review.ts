@@ -1,8 +1,8 @@
 export interface Review {
-  id: string;
-  sessionId: string;
-  crewId: string;
-  userId: string;
+  id: number;
+  sessionId: number;
+  crewId: number;
+  userId: number;
   description: string;
   ranks: 1 | 2 | 3 | 4 | 5;
   createdAt: string;

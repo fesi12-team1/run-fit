@@ -26,7 +26,7 @@ export async function getLikedSessions(queryParams: PaginationQueryParams) {
   return data;
 }
 
-export async function likeSession(sessionId: string) {
+export async function likeSession(sessionId: number) {
   // const accessToken = '';
   const response = await fetch(`/api/sessions/${sessionId}/like`, {
     method: 'POST',
@@ -45,7 +45,7 @@ export async function likeSession(sessionId: string) {
   return data;
 }
 
-export async function unlikeSession(sessionId: string) {
+export async function unlikeSession(sessionId: number) {
   // const accessToken = '';
   const response = await fetch(`/api/sessions/${sessionId}/like`, {
     method: 'DELETE',
