@@ -57,11 +57,25 @@ export const authHandlers = [
     const body = await request.json();
     const { email, password } = body as SigninRequestBody;
 
-    if (typeof email !== 'string' || typeof password !== 'string') {
+    const user = users.findFirst((q) => q.where({ email }));
+
+    if (!user) {
       return HttpResponse.json(
         errorResponse({
           code: 'INVALID_CREDENTIALS',
-          message: 'Invalid credentials payload',
+          message:
+            '존재하지 않은 유저입니다. 이메일과 비밀번호를 확인해주세요.',
+        }),
+        { status: 400 }
+      );
+    }
+
+    if (user.password !== password) {
+      return HttpResponse.json(
+        errorResponse({
+          code: 'INVALID_CREDENTIALS',
+          message:
+            '올바르지 않은 정보로 로그인을 시도했습니다. 이메일과 비밀번호를 확인해주세요.',
         }),
         { status: 400 }
       );
