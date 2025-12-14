@@ -10,21 +10,23 @@ export type SignupRequestBody = UserCredentials & { name: string };
 export async function postSignup(body: SignupRequestBody) {
   const response = await fetch('/api/auth/signup', {
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify(body),
   });
 
-  if (!response.ok) {
-    const { error } = await response.json();
+  const result: ResponseData<User> | ResponseErrorData = await response.json();
 
-    if (!error.success) {
-      throw new Error(error.message);
-    } else {
-      throw new Error('서버에 연결할 수 없습니다.');
+  if (!response.ok) {
+    if ('error' in result) {
+      throw result;
     }
+
+    throw new Error('서버에 연결할 수 없습니다.');
   }
 
-  const { data }: ResponseData<User> = await response.json();
-  return data;
+  return (result as ResponseData<User>).data;
 }
 
 export type SigninRequestBody = UserCredentials;
