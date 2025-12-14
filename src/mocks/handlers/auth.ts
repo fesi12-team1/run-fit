@@ -85,7 +85,11 @@ export const authHandlers = [
       token: MOCK_ACCESS_TOKEN,
     };
 
-    return HttpResponse.json(successResponse(responseData));
+    return HttpResponse.json(successResponse(responseData), {
+      headers: {
+        'Set-Cookie': `refreshToken=${MOCK_REFRESH_TOKEN}; Path=/; HttpOnly`,
+      },
+    });
   }),
 
   // 토큰 갱신
