@@ -15,6 +15,16 @@ export const userQueries = {
       staleTime: 1000 * 60 * 30, // 내 정보는 자주 변하지 않으므로 30분동안 fresh 상태
     }),
 
+  // 내가 작성한 리뷰 목록
+  reviews: (params: PaginationQueryParams) => {
+    const cleanParams = normalizeParams(params);
+    return queryOptions({
+      queryKey: [...userQueries.me().queryKey, 'reviews', cleanParams],
+      queryFn: () => getMyReviews(cleanParams),
+      placeholderData: (previousData) => previousData,
+    });
+  },
+
   // 특정 유저 정보 조회
   profile: (userId: number) =>
     queryOptions({
@@ -22,14 +32,4 @@ export const userQueries = {
       queryFn: () => getUserProfile(userId),
       enabled: !!userId, // userId가 유효할때만 실행
     }),
-
-  // 내가 작성한 리뷰 목록
-  reviews: (params: PaginationQueryParams) => {
-    const cleanParams = normalizeParams(params);
-    return queryOptions({
-      queryKey: [...userQueries.all(), 'reviews', cleanParams],
-      queryFn: () => getMyReviews(cleanParams),
-      placeholderData: (previousData) => previousData,
-    });
-  },
 };
