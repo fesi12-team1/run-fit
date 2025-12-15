@@ -2,11 +2,11 @@ import Image from 'next/image';
 import { formatTimeToKorean } from '@/lib/time';
 import { Session } from '@/types';
 
-interface SessionInfPropsProps {
+interface SessionInfoProps {
   data: Session;
 }
 
-export default function SessionInfo({ data }: SessionInfPropsProps) {
+export default function SessionInfo({ data }: SessionInfoProps) {
   const sessionAt = new Date(data.sessionAt);
   const sessionDate = `${sessionAt.getFullYear()}년 ${sessionAt.getMonth() + 1}월 ${sessionAt.getDate()}일`;
   const sessionTime = formatTimeToKorean(

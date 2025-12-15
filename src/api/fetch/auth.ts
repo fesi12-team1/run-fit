@@ -1,52 +1,48 @@
-import {
-  ResponseData,
-  ResponseErrorData,
-  User,
-  UserCredentials,
-} from '@/types';
+import { ResponseData, User, UserCredentials } from '@/types';
 
 export type SignupRequestBody = UserCredentials & { name: string };
 
 export async function postSignup(body: SignupRequestBody) {
   const response = await fetch('/api/auth/signup', {
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify(body),
   });
 
   if (!response.ok) {
-    const { error } = await response.json();
-
-    if (!error.success) {
-      throw new Error(error.message);
+    const resData = await response.json();
+    if (resData.error) {
+      throw new Error(resData.error.message);
     } else {
       throw new Error('서버에 연결할 수 없습니다.');
     }
   }
-
   const { data }: ResponseData<User> = await response.json();
   return data;
 }
 
-export type SigninRequestBody = UserCredentials;
-
-export async function postSignin(body: SigninRequestBody) {
+export async function postSignin(body: UserCredentials) {
   const response = await fetch('/api/auth/signin', {
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify(body),
   });
 
   if (!response.ok) {
-    const { error } = await response.json();
-
-    if (!error.success) {
-      throw new Error(error.message);
+    const resData = await response.json();
+    if (resData.error) {
+      throw new Error(resData.error.message);
     } else {
       throw new Error('서버에 연결할 수 없습니다.');
     }
   }
 
-  type SigninData = { token: string };
-  const { data }: ResponseData<SigninData> = await response.json();
+  type SigninResponseData = { token: string };
+  const { data }: ResponseData<SigninResponseData> = await response.json();
   return data;
 }
 
@@ -57,17 +53,16 @@ export async function postRefresh() {
   });
 
   if (!response.ok) {
-    const { error } = await response.json();
-
-    if (!error.success) {
-      throw new Error(error.message);
+    const resData = await response.json();
+    if (resData.error) {
+      throw new Error(resData.error.message);
     } else {
       throw new Error('서버에 연결할 수 없습니다.');
     }
   }
 
-  type RefreshData = { token: string };
-  const { data }: ResponseData<RefreshData> = await response.json();
+  type RefreshResponseData = { token: string };
+  const { data }: ResponseData<RefreshResponseData> = await response.json();
   return data;
 }
 
@@ -78,14 +73,14 @@ export async function postSignout() {
   });
 
   if (!response.ok) {
-    const { error } = await response.json();
-    if (!error.success) {
-      throw new Error(error.message);
+    const resData = await response.json();
+    if (resData.error) {
+      throw new Error(resData.error.message);
     } else {
       throw new Error('서버에 연결할 수 없습니다.');
     }
   }
-
-  const { data }: ResponseData<null> = await response.json();
+  type SignoutResponseData = { message: string };
+  const { data }: ResponseData<SignoutResponseData> = await response.json();
   return data;
 }

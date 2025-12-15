@@ -12,7 +12,7 @@ export type CreateSessionReviewResponseData = Pick<
 >;
 
 export async function createSessionReview(
-  sessionId: string,
+  sessionId: number,
   body: CreateSessionReviewResponseData
 ) {
   // const accessToken = '';
@@ -34,7 +34,7 @@ export async function createSessionReview(
   return data;
 }
 
-export async function deleteSessionReview(reviewId: string) {
+export async function deleteSessionReview(reviewId: number) {
   // const accessToken = '';
   const response = await fetch(`/api/reviews/${reviewId}`, {
     method: 'DELETE',
@@ -55,7 +55,7 @@ export async function deleteSessionReview(reviewId: string) {
 }
 
 export async function getReviewsBySessionId(
-  sessionId: string,
+  sessionId: number,
   queryParams: PaginationQueryParams
 ) {
   const query = new URLSearchParams(
@@ -77,7 +77,7 @@ export async function getReviewsBySessionId(
 }
 
 export async function getReviewsByCrewId(
-  crewId: string,
+  crewId: number,
   queryParams: PaginationQueryParams
 ) {
   const query = new URLSearchParams(

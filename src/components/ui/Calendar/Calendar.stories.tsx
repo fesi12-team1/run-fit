@@ -1,13 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import React from 'react';
-import { DateRange } from 'react-day-picker';
-import Calendar, { type CalendarProps } from '.';
+import { useState } from 'react';
+import { DateRange, DayPicker } from 'react-day-picker';
+import Calendar from '.';
 
 /**
  * Calendar 컴포넌트는 사용자가 날짜를 선택할 수 있는 캘린더 UI 요소입니다.
  *
- * 단일 날짜 선택과 날짜 범위 선택 모드를 지원하며, 월/연도 선택 방식을 라벨 또는 드롭다운으로 설정할 수 있습니다.
- * 또한 이전/다음 달의 날짜를 표시할지 여부와 캘린더 내 버튼 스타일을 커스터마이징할 수 있습니다.
+ * Single 모드는 단일 날짜 선택을 지원하며, Range 모드는 날짜 범위 선택을 지원합니다.
+ *
+ * 사용자는 이전/다음 달 날짜 표시 여부와 오늘 이전 날짜 선택 비활성화 옵션을 설정할 수 있습니다.
+ *
  */
 
 const meta: Meta<typeof Calendar> = {
@@ -18,112 +20,95 @@ const meta: Meta<typeof Calendar> = {
     layout: 'centered',
   },
   argTypes: {
-    mode: {
-      control: {
-        type: 'radio',
-      },
-      options: ['single', 'range'],
-      description: '한 번에 선택 가능한 날짜 범위',
-    },
-    captionLayout: {
-      control: {
-        type: 'radio',
-      },
-      options: ['label', 'dropdown'],
-      description: '월/연도 선택 방식',
+    disablePastDates: {
+      control: { type: 'boolean' },
+      description: '오늘 이전 날짜 선택 비활성화 여부',
+      defaultValue: false,
     },
     showOutsideDays: {
-      control: 'boolean',
+      control: { type: 'boolean' },
       description: '이전/다음 달 날짜 표시 여부',
+      defaultValue: true,
     },
-    buttonVariant: {
-      control: 'select',
-      options: ['ghost', 'outline', 'default', 'secondary', 'destructive'],
-      description: '달력에서 사용하는 버튼 스타일',
-    },
+  },
+  args: {
+    disablePastDates: false,
+    showOutsideDays: true,
   },
 };
 
 export default meta;
 
-type Story = StoryObj<CalendarProps>;
+type Story = StoryObj<typeof DayPicker>;
 
 /**
  * 하나의 날짜만 클릭 가능하고 이전/다음 달 날짜를 표시합니다.
  */
-export const Default: Story = {
-  args: {
-    mode: 'single',
-    showOutsideDays: true,
-    captionLayout: 'label',
-  },
-  render: (args: CalendarProps) => <Calendar {...args} />,
-};
-
-/**
- * 연/월을 드롭다운으로 선택할 수 있고 이전/다음 달 날짜를 표시합니다.
- */
-export const DropdownCaption: Story = {
-  args: {
-    mode: 'single',
-    showOutsideDays: true,
-    captionLayout: 'dropdown',
-  },
-  render: (args: CalendarProps) => <Calendar {...args} />,
-};
-
-/**
- * 날짜 범위를 클릭하여 선택할 수 있습니다.
- */
-export const RangeSelection: Story = {
-  args: {
-    mode: 'range',
-    captionLayout: 'dropdown',
-  },
-  render: (args: CalendarProps) => <Calendar {...args} />,
-};
-
-/**
- * 하나의 날짜를 선택할 수 있으며, 선택된 날짜는 외부에서 제어할 수 있습니다.
- */
-export const ControlledSingle: Story = {
-  render: (args: CalendarProps) => {
-    const [selected, setSelected] = React.useState<Date>();
-
+export const Single: Story = {
+  render: (args) => {
+    const [date, setDate] = useState<Date | undefined>(new Date());
     return (
       <div className="flex flex-col items-center gap-4">
-        <Calendar
-          {...args}
-          mode="single"
-          selected={selected}
-          onSelect={setSelected}
-        />
-        <pre className="rounded-md bg-gray-100 p-3 text-sm">
-          {selected
-            ? selected.toLocaleDateString()
-            : '날짜가 선택되지 않았습니다'}
-        </pre>
+        <Calendar.Single {...args} selected={date} onSelect={setDate} />
+        <span>{date?.toLocaleDateString()}</span>
       </div>
     );
   },
 };
 
 /**
- *  날짜 범위를 선택할 수 있으며, 선택된 날짜 범위는 외부에서 제어할 수 있습니다.
+ * 날짜 범위를 클릭하여 선택할 수 있습니다.
  */
-export const ControlledRange: Story = {
-  render: (args: CalendarProps) => {
-    const [date, setDate] = React.useState<DateRange | undefined>({
-      from: new Date('2025-12-25'),
-      to: undefined,
-    });
+export const Range: Story = {
+  render: (args) => {
+    const [range, setRange] = useState<DateRange | undefined>(undefined);
+    return (
+      <div className="flex flex-col items-center gap-4">
+        <Calendar.Range {...args} selected={range} onSelect={setRange} />
+        <span>
+          {range?.from
+            ? `${range.from.toLocaleDateString()} - ${range.to?.toLocaleDateString() ?? '선택 중...'}`
+            : '날짜 범위를 선택하세요'}
+        </span>
+      </div>
+    );
+  },
+};
+
+/**
+ * 오늘 이전 날짜는 클릭할 수 없습니다.
+ */
+export const DisablePastDates: StoryObj<typeof Calendar.Single> = {
+  args: {
+    disablePastDates: true,
+  },
+  render: (args) => {
+    const [date, setDate] = useState<Date | undefined>(new Date());
 
     return (
       <div className="flex flex-col items-center gap-4">
-        <Calendar {...args} mode="range" selected={date} onSelect={setDate} />
-        <pre className="rounded-md bg-gray-100 p-3 text-sm">
-          {date?.from?.toLocaleDateString()} - {date?.to?.toLocaleDateString()}
-        </pre>
+        <Calendar.Single {...args} selected={date} onSelect={setDate} />
+        <span>{date?.toLocaleDateString()}</span>
+      </div>
+    );
+  },
+};
+
+/**
+ * 이전/다음 달 날짜를 표시하지 않습니다.
+ */
+export const HideOutsideDays: Story = {
+  render: (args) => {
+    const [date, setDate] = useState<Date | undefined>(new Date());
+    return (
+      <div className="flex flex-col items-center gap-4">
+        <Calendar.Single
+          {...args}
+          selected={date}
+          onSelect={setDate}
+          showOutsideDays={false}
+        />
+        <span>{date?.toLocaleDateString()}</span>
       </div>
     );
   },
