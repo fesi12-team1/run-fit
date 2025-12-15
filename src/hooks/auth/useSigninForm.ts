@@ -1,15 +1,13 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import { postSignin, SigninRequestBody } from '@/api/auth';
+import { useSignin } from '@/api/mutations/authMutations';
 import {
   SigninFormValues,
   signinSchema,
 } from '@/lib/validations/auth/signinSchema';
-import type { ResponseErrorData, SigninResponse } from '@/types';
 
 export function useSigninForm() {
   const router = useRouter();
@@ -19,14 +17,7 @@ export function useSigninForm() {
     mode: 'onSubmit',
   });
 
-  // const signinMutation = useSigninMutation();
-  const mutation = useMutation<
-    SigninResponse,
-    ResponseErrorData,
-    SigninRequestBody
-  >({
-    mutationFn: postSignin,
-  });
+  const mutation = useSignin();
 
   const submit = form.handleSubmit((values) => {
     mutation.mutate(
@@ -38,7 +29,7 @@ export function useSigninForm() {
         onSuccess: () => {
           router.push('/');
         },
-        onError: ({ error }: ResponseErrorData) => {
+        onError: ({ error }) => {
           switch (error.code) {
             case 'INVALID_CREDENTIALS':
               form.setError('root', {

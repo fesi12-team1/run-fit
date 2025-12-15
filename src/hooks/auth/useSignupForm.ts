@@ -1,15 +1,13 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import { postSignup, SignupRequestBody } from '@/api/auth';
+import { useSignup } from '@/api/mutations/authMutations';
 import {
   SignupFormValues,
   signupSchema,
 } from '@/lib/validations/auth/signupSchema';
-import type { ResponseErrorData, User } from '@/types';
 
 /**
  * 회원가입 훅
@@ -23,17 +21,10 @@ export function useSignupForm() {
     mode: 'onSubmit',
   });
 
-  // const signupMutation = useSignup();
-  const signupMutation = useMutation<
-    User,
-    ResponseErrorData,
-    SignupRequestBody
-  >({
-    mutationFn: postSignup,
-  });
+  const mutation = useSignup();
 
   const submit = form.handleSubmit((values) => {
-    signupMutation.mutate(
+    mutation.mutate(
       {
         email: values.email,
         password: values.password,
@@ -43,7 +34,7 @@ export function useSignupForm() {
         onSuccess: () => {
           router.push('/signin');
         },
-        onError: ({ error }: ResponseErrorData) => {
+        onError: ({ error }) => {
           switch (error.code) {
             case 'ALREADY_EXISTS_EMAIL':
               form.setError('email', {
@@ -70,6 +61,6 @@ export function useSignupForm() {
   return {
     form,
     submit,
-    isPending: signupMutation.isPending,
+    isPending: mutation.isPending,
   };
 }
