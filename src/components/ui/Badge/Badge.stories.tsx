@@ -1,6 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import LevelIcon from '@/assets/icons/level.svg?react';
-import { cn } from '@/lib/utils';
 import Badge, { DdayBadge, LevelBadge, PaceBadge } from '.';
 
 const meta: Meta<typeof Badge> = {
@@ -29,44 +27,13 @@ export const Default: StoryObj<typeof Badge> = {
   },
 };
 
-// SVG가 포함된 LevelBadge 스토리 임시로 주석처리.
 export const Level: StoryObj<typeof LevelBadge> = {
   render: (args) => {
-    const iconSize = {
-      sm: 'size-3',
-      md: 'size-3',
-      lg: 'size-4',
-    };
-    const fillColor = {
-      easy: 'fill-gray-200',
-      medium: 'fill-[#F2B48A]',
-      hard: 'fill-[#FF819E]',
-    };
-    const textColor = {
-      easy: 'text-gray-200',
-      medium: 'text-[#F2B48A]',
-      hard: 'text-[#FF819E]',
-    };
-    const text = {
-      easy: '초급',
-      medium: '중급',
-      hard: '고급',
-    };
-
     return (
       <div className="flex items-center gap-4">
-        <Badge variant="level" {...args}>
-          <LevelIcon className={cn(iconSize[args.size], fillColor.easy)} />
-          <span className={textColor.easy}>{text.easy}</span>
-        </Badge>
-        <Badge variant="level" {...args}>
-          <LevelIcon className={cn(iconSize[args.size], fillColor.medium)} />
-          <span className={textColor.medium}>{text.medium}</span>
-        </Badge>
-        <Badge variant="level" {...args}>
-          <LevelIcon className={cn(iconSize[args.size], fillColor.hard)} />
-          <span className={textColor.hard}>{text.hard}</span>
-        </Badge>
+        <LevelBadge {...args} size="sm" />
+        <LevelBadge {...args} size="md" />
+        <LevelBadge {...args} size="lg" />
       </div>
     );
   },
@@ -102,9 +69,15 @@ export const Pace: StoryObj<typeof PaceBadge> = {
 export const Dday: StoryObj<typeof DdayBadge> = {
   render: (args) => (
     <div className="flex items-center gap-4">
-      <DdayBadge {...args} size="sm" />
-      <DdayBadge {...args} size="md" />
-      <DdayBadge {...args} size="lg" />
+      <DdayBadge {...args} size="sm">
+        {args.children}
+      </DdayBadge>
+      <DdayBadge {...args} size="md">
+        {args.children}
+      </DdayBadge>
+      <DdayBadge {...args} size="lg">
+        {args.children}
+      </DdayBadge>
     </div>
   ),
   args: {

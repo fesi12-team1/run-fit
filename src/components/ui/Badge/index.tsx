@@ -1,6 +1,6 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
-import Level from '@/assets/icons/level.svg';
+import Level from '@/assets/icons/level.svg?react';
 import { formatPaceText, secondsToMinutes } from '@/lib/pace';
 import { cn } from '@/lib/utils';
 
