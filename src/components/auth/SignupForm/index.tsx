@@ -14,6 +14,12 @@ export default function SignupForm() {
   return (
     <form onSubmit={submit} className="flex flex-col gap-4">
       <Input
+        label="이름"
+        aria-invalid={!!errors.name}
+        {...register('name')}
+        errorMessage={errors.name?.message}
+      />
+      <Input
         label="이메일"
         aria-invalid={!!errors.email}
         {...register('email')}
@@ -33,12 +39,7 @@ export default function SignupForm() {
         {...register('passwordConfirm')}
         errorMessage={errors.passwordConfirm?.message}
       />
-      <Input
-        label="이름"
-        aria-invalid={!!errors.name}
-        {...register('name')}
-        errorMessage={errors.name?.message}
-      />
+
       <Button type="submit" disabled={isPending}>
         회원가입
       </Button>
