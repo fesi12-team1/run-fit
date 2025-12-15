@@ -1,7 +1,7 @@
 import { Dot } from 'lucide-react';
 import Image from 'next/image';
 import ProfileList from '@/components/user/ProfileList';
-import { Crew, Profile, Session } from '@/types';
+import { Crew, CrewMember, Session } from '@/types';
 
 interface CrewCardProps {
   data: Crew;
@@ -11,7 +11,7 @@ export default function CrewCard({ data: crew }: CrewCardProps) {
   // TODO: use tanstack query to fetch
   const crewMemberCount = 64;
   const crewSessions: Session[] = [];
-  const crewProfiles: Profile[] = [];
+  const crewProfiles: CrewMember[] = [];
 
   return (
     <li className="tablet:pt-5 laptop:gap-20 laptop:flex pb-5">

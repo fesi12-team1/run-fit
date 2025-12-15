@@ -2,6 +2,7 @@
 export interface SuccessResponse<T> {
   success: true;
   data: T;
+  error: null;
 }
 
 export interface ErrorResponse {
@@ -38,3 +39,5 @@ export interface PaginationQueryParams {
   page?: number;
   size?: number;
 }
+
+export type ResponseErrorData = ErrorResponse;
