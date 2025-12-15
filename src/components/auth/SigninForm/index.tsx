@@ -10,7 +10,7 @@ export default function SigninForm() {
   const { form, submit, isPending } = useSigninForm();
   const {
     register,
-    formState: { errors },
+    formState: { errors, isValid },
   } = form;
 
   const [show, setShow] = useState(false);
@@ -36,7 +36,7 @@ export default function SigninForm() {
       {errors.root && (
         <p className="text-sm text-red-500">{errors.root.message}</p>
       )}
-      <Button type="submit" disabled={isPending}>
+      <Button type="submit" disabled={isPending || !isValid}>
         로그인
       </Button>
     </form>

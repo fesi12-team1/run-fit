@@ -10,7 +10,7 @@ export default function SignupForm() {
   const { form, submit, isPending } = useSignupForm();
   const {
     register,
-    formState: { errors },
+    formState: { errors, isValid },
   } = form;
 
   const [show, setShow] = useState(false);
@@ -59,7 +59,7 @@ export default function SignupForm() {
         }
       />
 
-      <Button type="submit" disabled={isPending}>
+      <Button type="submit" disabled={isPending || !isValid}>
         회원가입
       </Button>
       {errors.root && (
