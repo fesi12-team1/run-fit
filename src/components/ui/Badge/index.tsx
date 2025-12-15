@@ -5,7 +5,7 @@ import { formatPaceText, secondsToMinutes } from '@/lib/pace';
 import { cn } from '@/lib/utils';
 
 export const badgeVariants = cva(
-  'inline-flex items-center justify-center whitespace-nowrap shrink-0 [&>svg]:size-3 [&>svg]:pointer-events-none overflow-hidden font-semibold',
+  'inline-flex items-center justify-center whitespace-nowrap shrink-0 [&>svg]:size-3 [&>svg]:pointer-events-none overflow-hidden font-semibold pointer-events-none',
   {
     variants: {
       variant: {
