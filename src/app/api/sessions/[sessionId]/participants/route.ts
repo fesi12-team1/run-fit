@@ -6,5 +6,9 @@ export async function GET(
   ctx: { params: Promise<{ sessionId: string }> }
 ) {
   const { sessionId } = await ctx.params;
-  return handleRequest(request, `/api/sessions/${sessionId}`, false);
+  return handleRequest(
+    request,
+    `/api/sessions/${sessionId}/participants`,
+    true
+  );
 }
