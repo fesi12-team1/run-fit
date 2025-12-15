@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom';
+import './src/mocks/nextNavigation';
 import { jest } from '@jest/globals';
 
 globalThis.jest = jest;
