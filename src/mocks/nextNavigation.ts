@@ -1,3 +1,5 @@
+import { jest } from '@jest/globals';
+
 export const pushMock = jest.fn();
 
 jest.mock('next/navigation', () => ({
