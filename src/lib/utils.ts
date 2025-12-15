@@ -70,3 +70,21 @@ export const extractSigungu = (fullAddress: string): string => {
   const parts = fullAddress.split(' ');
   return parts[0];
 };
+
+/**
+ * 객체에서 `undefined`와 `null` 값을 제거하여 반환합니다.
+ *
+ * 이 함수는 두 가지 주요 문제를 해결하기 위해 사용됩니다:
+ * 1. API 요청 오류 방지: `URLSearchParams` 변환 시 `undefined`가 문자열 "undefined"로 전송되는 것을 막습니다.
+ * 2. React Query 캐시 최적화: 객체 키 순서가 달라도 동일한 쿼리 키(Query Key)로 인식되도록 보장하여 불필요한 네트워크 요청을 줄입니다.
+ */
+export function normalizeParams<T extends object>(params?: T): T {
+  if (!params) {
+    return {} as T;
+  }
+  const entries = Object.entries(params as Record<string, unknown>).filter(
+    ([, value]) => value !== undefined && value !== null
+  );
+
+  return Object.fromEntries(entries) as T;
+}

@@ -26,7 +26,7 @@ export const badgeVariants = cva(
   }
 );
 
-type BaseBadgeProps = React.ComponentProps<'span'> & {
+type BaseBadgeProps = React.ComponentProps<'div'> & {
   children?: React.ReactNode;
   variant?: VariantProps<typeof badgeVariants>['variant'];
   size: NonNullable<VariantProps<typeof badgeVariants>['size']>;
@@ -63,6 +63,7 @@ export default function Badge({
     <div
       data-slot="badge"
       className={cn(badgeVariants({ variant, size }), className)}
+      {...rest}
     >
       {children}
     </div>
