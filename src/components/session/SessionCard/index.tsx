@@ -1,8 +1,10 @@
+'use client';
+
 import Image from 'next/image';
 import Liked from '@/assets/icons/liked.svg';
 import Location from '@/assets/icons/location.svg';
 import { formatTimeToKorean } from '@/lib/time';
-import { Session } from '@/types';
+import { Profile, Session } from '@/types';
 import { DdayBadge, LevelBadge, PaceBadge } from '../../ui/Badge';
 import ProfileList from '../../user/ProfileList';
 
@@ -13,6 +15,7 @@ interface SessionCardProps {
 export default function SessionCard({ data }: SessionCardProps) {
   // TODO: use tanstack query to fetch
   const crewData = { name: '달리는 거북이' };
+  const crewMemberProfiles: Profile[] = [];
 
   const today = new Date();
   const registerBy = new Date(data.registerBy);
@@ -76,7 +79,7 @@ export default function SessionCard({ data }: SessionCardProps) {
           <LevelBadge level={level} size="lg" className="hidden laptop:inline-flex" />
       </div>
       <div className="flex gap-1">
-        <ProfileList data={[]} />
+        <ProfileList data={crewMemberProfiles} />
         <div className="text-caption-regular laptop:text-body3-regular text-gray-300">
           {`${data.currentParticipantCount}/${data.maxParticipantCount}명 • ${crewData.name}`}
         </div>
