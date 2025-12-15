@@ -21,6 +21,7 @@ export default function SignupForm() {
       />
       <Input
         label="비밀번호"
+        aria-invalid={!!errors.password}
         type="password"
         {...register('password')}
         errorMessage={errors.password?.message}
@@ -34,6 +35,7 @@ export default function SignupForm() {
       />
       <Input
         label="이름"
+        aria-invalid={!!errors.name}
         {...register('name')}
         errorMessage={errors.name?.message}
       />

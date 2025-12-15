@@ -24,11 +24,9 @@ export default function SigninForm() {
         {...register('password')}
         errorMessage={errors.password?.message}
       />
-
       {errors.root && (
         <p className="text-sm text-red-500">{errors.root.message}</p>
       )}
-
       <Button type="submit" disabled={isPending}>
         로그인
       </Button>
