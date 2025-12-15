@@ -63,7 +63,7 @@ export const Default: Story = {
   args: {
     value: 3,
     max: 5,
-    size: 16,
+    size: 30,
     disabled: false,
   },
   render: function Render(args) {

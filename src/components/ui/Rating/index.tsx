@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import Star from '@/assets/icons/star.svg';
+import Star from '@/assets/icons/star.svg?react';
 import { cn } from '@/lib/utils';
 
 interface RatingProps {
