@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import Star from '@/assets/icons/star.svg';
+import Star from '@/assets/icons/star.svg?react';
 import { cn } from '@/lib/utils';
 
 interface RatingProps {
@@ -23,8 +23,6 @@ export default function Rating({
 }: RatingProps) {
   const [hoveredRating, setHoveredRating] = useState(0);
 
-  const displayValue = hoveredRating || value;
-
   const handleClick = (v: number) => {
     if (disabled) return;
     onChange(v);
@@ -42,7 +40,6 @@ export default function Rating({
     >
       {Array.from({ length: max }).map((_, i) => {
         const index = i + 1;
-        const active = index <= displayValue;
         return (
           <button
             key={i}
@@ -59,7 +56,13 @@ export default function Rating({
             <Star
               width={size}
               height={size}
-              fill={active ? 'var(--color-gray-100)' : 'var(--color-gray-600)'}
+              fill={
+                index <= value
+                  ? 'var(--color-gray-100)'
+                  : hoveredRating >= index
+                    ? 'var(--color-gray-300)'
+                    : 'var(--color-gray-600)'
+              }
             />
           </button>
         );
