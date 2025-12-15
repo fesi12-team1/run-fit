@@ -15,18 +15,11 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     variant: {
       control: { type: 'select' },
-      options: [
-        'default',
-        'destructive',
-        'outline',
-        'secondary',
-        'ghost',
-        'link',
-      ],
+      options: ['default', 'outlined', 'neutral'],
     },
     size: {
       control: { type: 'select' },
-      options: ['default', 'sm', 'lg', 'icon', 'icon-sm', 'icon-lg'],
+      options: ['default', 'sm'],
     },
     asChild: {
       control: { type: 'boolean' },
@@ -47,29 +40,30 @@ export const Default: Story = {
 };
 
 export const Variants: Story = {
-  args: {
-    children: 'Button',
-  },
-  render: (args) => (
-    <div className="flex flex-wrap gap-4">
-      <Button {...args} variant="default">
-        Default
-      </Button>
-      <Button {...args} variant="destructive">
-        Destructive
-      </Button>
-      <Button {...args} variant="outline">
-        Outline
-      </Button>
-      <Button {...args} variant="secondary">
-        Secondary
-      </Button>
-      <Button {...args} variant="ghost">
-        Ghost
-      </Button>
-      <Button {...args} variant="link">
-        Link
-      </Button>
+  render: () => (
+    <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-4">
+        <h3 className="text-body2-semibold">Default Size</h3>
+        <div className="flex flex-wrap gap-4">
+          <Button variant="default">Default</Button>
+          <Button variant="outlined">Outlined</Button>
+          <Button variant="neutral">Neutral</Button>
+        </div>
+      </div>
+      <div className="flex flex-col gap-4">
+        <h3 className="text-body2-semibold">Small Size</h3>
+        <div className="flex flex-wrap gap-4">
+          <Button variant="default" size="sm">
+            Default
+          </Button>
+          <Button variant="outlined" size="sm">
+            Outlined
+          </Button>
+          <Button variant="neutral" size="sm">
+            Neutral
+          </Button>
+        </div>
+      </div>
     </div>
   ),
 };
@@ -86,110 +80,100 @@ export const Sizes: Story = {
       <Button {...args} size="default">
         Default
       </Button>
-      <Button {...args} size="lg">
-        Large
-      </Button>
-    </div>
-  ),
-};
-
-export const IconButtons: Story = {
-  render: () => (
-    <div className="flex items-center gap-4">
-      <Button size="icon-sm">
-        <svg
-          className="size-4"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 4v16m8-8H4"
-          />
-        </svg>
-      </Button>
-      <Button size="icon">
-        <svg
-          className="size-4"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 4v16m8-8H4"
-          />
-        </svg>
-      </Button>
-      <Button size="icon-lg">
-        <svg
-          className="size-4"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 4v16m8-8H4"
-          />
-        </svg>
-      </Button>
-    </div>
-  ),
-};
-
-export const WithIcons: Story = {
-  render: (args) => (
-    <div className="flex flex-wrap gap-4">
-      <Button {...args}>
-        <svg
-          className="size-4"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 4v16m8-8H4"
-          />
-        </svg>
-        Add Item
-      </Button>
-      <Button {...args} variant="outline">
-        Download
-        <svg
-          className="size-4"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-          />
-        </svg>
-      </Button>
     </div>
   ),
 };
 
 export const States: Story = {
   render: () => (
-    <div className="flex flex-wrap gap-4">
-      <Button>Normal</Button>
-      <Button disabled>Disabled</Button>
-      <Button aria-invalid>Invalid</Button>
+    <div className="flex flex-col gap-8">
+      {(['default', 'outlined', 'neutral'] as const).map((variant) => (
+        <div key={variant} className="flex flex-col gap-4">
+          <h3 className="text-body2-semibold capitalize">{variant}</h3>
+          <div className="flex flex-wrap gap-4">
+            <Button variant={variant}>Normal</Button>
+            <Button variant={variant} disabled>
+              Disabled
+            </Button>
+          </div>
+          <p className="text-body3-regular text-gray-400">
+            Hover, focus-visible, active states are interactive
+          </p>
+        </div>
+      ))}
+    </div>
+  ),
+};
+
+export const WithIcons: Story = {
+  render: () => (
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-wrap gap-4">
+        <Button>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 4.5v15m7.5-7.5h-15"
+            />
+          </svg>
+          With Icon
+        </Button>
+        <Button size="sm">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 4.5v15m7.5-7.5h-15"
+            />
+          </svg>
+          Small Icon
+        </Button>
+      </div>
+      <div className="flex flex-wrap gap-4">
+        <Button>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 4.5v15m7.5-7.5h-15"
+            />
+          </svg>
+        </Button>
+        <Button size="sm">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 4.5v15m7.5-7.5h-15"
+            />
+          </svg>
+        </Button>
+      </div>
     </div>
   ),
 };

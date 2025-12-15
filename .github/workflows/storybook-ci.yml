@@ -1,0 +1,60 @@
+name: Storybook CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  pull-requests: write
+  contents: read
+
+env:
+  CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+
+jobs:
+  visual-test:
+    name: Chromatic Visual Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: pnpm 설치
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Node 설치
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: 의존성 설치
+        run: pnpm install --frozen-lockfile
+
+      - name: UI 변경 파일 탐지
+        id: changes
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            ui:
+              - 'src/components/**'
+              - 'src/**/*.stories.@(ts|tsx|mdx)'
+              - '.storybook/**'
+
+      - name: UI 변경 없음 → Chromatic 스킵
+        if: steps.changes.outputs.ui == 'false'
+        run: echo "UI 변경 없음 → Chromatic 테스트 생략"
+
+      - name: Chromatic Visual Test
+        if: steps.changes.outputs.ui == 'true'
+        uses: chromaui/action@latest
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          exitOnceUploaded: true
