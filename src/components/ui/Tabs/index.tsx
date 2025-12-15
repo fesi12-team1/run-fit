@@ -4,7 +4,7 @@ import * as TabsPrimitive from '@radix-ui/react-tabs';
 import * as React from 'react';
 import { cn } from '@/lib/utils';
 
-export default function Tabs({
+function TabsRoot({
   className,
   ...props
 }: React.ComponentProps<typeof TabsPrimitive.Root>) {
@@ -62,6 +62,10 @@ function TabsContent({
   );
 }
 
-Tabs.List = TabsList;
-Tabs.Trigger = TabsTrigger;
-Tabs.Content = TabsContent;
+const Tabs = Object.assign(TabsRoot, {
+  List: TabsList,
+  Trigger: TabsTrigger,
+  Content: TabsContent,
+});
+
+export default Tabs;
