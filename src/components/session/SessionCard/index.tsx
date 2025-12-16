@@ -47,7 +47,7 @@ export default function SessionCard({ data: session }: SessionCardProps) {
   return (
     <section className="flex w-full flex-col">
       <Link
-        href={{ pathname: '/sessions/:id', query: { id: session.id } }}
+        href={{ pathname: '/sessions/[id]', query: { id: session.id } }}
         className="tablet:aspect-video relative aspect-165/185 w-full cursor-pointer self-stretch overflow-hidden rounded-lg"
       >
         <Image
