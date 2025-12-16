@@ -3,7 +3,7 @@ import { handleRequest } from '@/api/util';
 
 export async function GET(
   request: NextRequest,
-  ctx: { params: Promise<{ sessionId: string }> }
+  ctx: RouteContext<'/api/sessions/[sessionId]'>
 ) {
   const { sessionId } = await ctx.params;
   return handleRequest(request, `/api/sessions/${sessionId}`, false);
