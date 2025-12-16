@@ -1,6 +1,10 @@
 import type { Preview } from '@storybook/nextjs-vite';
 import '@app/globals.css';
+import { initialize, mswLoader } from 'msw-storybook-addon';
 import { INITIAL_VIEWPORTS, MINIMAL_VIEWPORTS } from 'storybook/viewport';
+
+// Initialize MSW
+initialize();
 
 const preview: Preview = {
   decorators: [
@@ -33,6 +37,8 @@ const preview: Preview = {
     backgrounds: { value: 'default' },
     viewport: { value: 'desktop', isRotated: false },
   },
+
+  loaders: [mswLoader],
 };
 
 export default preview;
