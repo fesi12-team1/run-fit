@@ -1,7 +1,6 @@
 @layer base {
   button,
   input,
-  textarea,
   select {
     cursor: pointer;
     border-radius: 0;

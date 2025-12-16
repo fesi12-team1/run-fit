@@ -24,8 +24,7 @@
   --color-gray-800: oklch(21.3% 0.015673 285);
   --color-gray-900: oklch(17.4% 0.008432 274.4);
 
-  /* Color Palette */
-  --color-warning: oklch(57.7% 0.215157 27.3);
+  --color-error-100: oklch(0.6779 0.2102 23.83);
 
   /* Typography */
   --title1: 32px/40px var(--pretendard);
