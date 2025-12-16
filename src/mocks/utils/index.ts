@@ -1,5 +1,5 @@
 import type { ResponseData, ResponseErrorData } from '@/types/api';
-import { users } from '../db';
+import { users } from '../data';
 
 function getApiBaseUrl() {
   return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';

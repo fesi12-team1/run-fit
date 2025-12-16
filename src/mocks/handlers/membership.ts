@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { crews, memberships, users } from '../db';
+import { crews, memberships, users } from '../data';
 import { path, successResponse } from '../utils';
 
 export const membershipHandlers = [

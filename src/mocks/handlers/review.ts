@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { crews, memberships, reviews, sessions, users } from '../db';
+import { crews, memberships, reviews, sessions, users } from '../data';
 import {
   errorResponse,
   getAuthenticatedUser,

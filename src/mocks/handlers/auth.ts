@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
 import { UserCredentials } from '@/types';
-import { users } from '../db';
+import { users } from '../data';
 import { errorResponse, findMaxId, path, successResponse } from '../utils';
 
 const MOCK_ACCESS_TOKEN = '1';

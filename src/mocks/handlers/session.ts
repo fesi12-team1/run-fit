@@ -7,7 +7,7 @@ import {
   sessionParticipants,
   sessions,
   users,
-} from '../db';
+} from '../data';
 import {
   errorResponse,
   getAuthenticatedUser,

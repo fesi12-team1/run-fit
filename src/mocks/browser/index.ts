@@ -1,5 +1,6 @@
 import { setupWorker } from 'msw/browser';
-import { seedMockDb } from '../db';
+import { createPath } from '../core/path';
+import { seedMockDb } from '../data';
 import { authHandlers } from '../handlers/auth';
 import { bypassHandlers } from '../handlers/bypass';
 import { crewHandlers } from '../handlers/crew';
@@ -10,6 +11,11 @@ import { userHandlers } from '../handlers/user';
 
 await seedMockDb();
 
+const layer = 'proxy' as const;
+const authMode = 'bypass' as const;
+const p = createPath(layer, '');
+
+// export const worker = setupWorker(...createMembershipHandlers(p, authMode));
 export const worker = setupWorker(
   ...authHandlers,
   ...bypassHandlers,
