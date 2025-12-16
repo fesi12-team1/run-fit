@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import FilterIcon from '@/assets/icons/filter.svg';
+import FilterIcon from '@/assets/icons/filter.svg?react';
 import { cn } from '@/lib/utils';
 
 interface FilterButtonProps {

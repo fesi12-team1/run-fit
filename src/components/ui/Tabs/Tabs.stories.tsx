@@ -18,7 +18,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: () => (
-    <Tabs defaultValue="1" className="w-full">
+    <Tabs defaultValue="1" className="w-30">
       <Tabs.List>
         <Tabs.Trigger value="1">탭</Tabs.Trigger>
       </Tabs.List>
