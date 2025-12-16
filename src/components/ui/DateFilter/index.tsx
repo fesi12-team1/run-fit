@@ -1,14 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import { DateRange } from 'react-day-picker';
 import Button from '@/components/ui/Button';
 import Calendar from '@/components/ui/Calendar';
 import Popover from '@/components/ui/FilterPopover';
-
-interface DateRange {
-  from: Date;
-  to: Date;
-}
 
 interface DateFilterProps {
   value?: DateRange;
@@ -17,9 +13,8 @@ interface DateFilterProps {
 
 export default function DateFilter({ value, onChange }: DateFilterProps) {
   const [open, setOpen] = useState(false);
-  const [tempValue, setTempValue] = useState<
-    { from?: Date; to?: Date } | undefined
-  >(value);
+
+  const [tempValue, setTempValue] = useState<DateRange | undefined>(value);
 
   const handleOpenChange = (isOpen: boolean) => {
     setOpen(isOpen);
@@ -32,7 +27,6 @@ export default function DateFilter({ value, onChange }: DateFilterProps) {
     if (tempValue?.from) {
       onChange({
         from: tempValue.from,
-        // to가 없으면 from(시작일)을 그대로 사용 (즉, 하루 선택)
         to: tempValue.to || tempValue.from,
       });
       setOpen(false);
@@ -42,6 +36,17 @@ export default function DateFilter({ value, onChange }: DateFilterProps) {
   const handleReset = () => {
     setTempValue(undefined);
     onChange(undefined);
+    setOpen(false);
+  };
+
+  const getLabel = () => {
+    if (value?.from && value?.to) {
+      if (value.from.getTime() === value.to.getTime()) {
+        return value.from.toLocaleDateString();
+      }
+      return `${value.from.toLocaleDateString()} - ${value.to.toLocaleDateString()}`;
+    }
+    return '날짜';
   };
 
   return (
@@ -50,11 +55,7 @@ export default function DateFilter({ value, onChange }: DateFilterProps) {
         hasSelected={Boolean(value?.from && value?.to)}
         size="lg"
       >
-        {value?.from && value?.to
-          ? value.from === value.to
-            ? value.from.toLocaleDateString()
-            : `${value.from.toLocaleDateString()} - ${value.to.toLocaleDateString()}`
-          : '날짜'}
+        {getLabel()}
       </Popover.Trigger>
 
       <Popover.Content>
@@ -64,7 +65,11 @@ export default function DateFilter({ value, onChange }: DateFilterProps) {
             <button className="py-2 pr-3 pl-6" onClick={handleReset}>
               초기화
             </button>
-            <Button className="flex-1" onClick={handleApply}>
+            <Button
+              className="flex-1"
+              onClick={handleApply}
+              disabled={!tempValue?.from}
+            >
               적용하기
             </Button>
           </div>
