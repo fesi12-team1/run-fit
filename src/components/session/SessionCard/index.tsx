@@ -13,34 +13,24 @@ import type { Session } from '@/types';
 import { DdayBadge, LevelBadge, PaceBadge } from '../../ui/Badge';
 import ProfileList from '../../user/ProfileList';
 
-type SessionCardProps = Session;
+interface SessionCardProps {
+  data: Session;
+}
 
-export default function SessionCard({
-  crewId,
-  id: sessionId,
-  registerBy,
-  sessionAt,
-  image,
-  city,
-  name,
-  pace,
-  level,
-  currentParticipantCount,
-  maxParticipantCount,
-}: SessionCardProps) {
-  const { data: crewData } = useQuery(crewQueries.detail(crewId));
-  const { data: participantsData } = useQuery(
-    sessionQueries.participants(sessionId)
+export default function SessionCard({ data: session }: SessionCardProps) {
+  const { data: crewData } = useQuery(crewQueries.detail(session.crewId));
+  const { data: sessionParticipants } = useQuery(
+    sessionQueries.participants(session.id)
   );
 
   const today = new Date();
-  const registerByDate = new Date(registerBy);
+  const registerByDate = new Date(session.registerBy);
   const timeDiff = registerByDate.getTime() - today.getTime();
   const dayDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
   const ddayText =
-    timeDiff < 0 ? '마감됨' : dayDiff > 0 ? `마감 D-${dayDiff}` : '마감 D-Day';
+    dayDiff > 0 ? `마감 D-${dayDiff}` : dayDiff === 0 ? '마감 D-Day' : '마감됨';
 
-  const sessionAtDate = new Date(sessionAt);
+  const sessionAtDate = new Date(session.sessionAt);
   const sessionDate = `${sessionAtDate.getMonth() + 1}월 ${sessionAtDate.getDate()}일`;
   const sessionTime = formatTimeToKorean(
     sessionAtDate.getHours(),
@@ -52,21 +42,21 @@ export default function SessionCard({
     INTERMEDIATE: 'medium',
     ADVANCED: 'hard',
   };
-  const levelValue = levelMap[level] || 'easy';
+  const level = levelMap[session.level] || 'easy';
 
   return (
-    <div className="flex w-full flex-col">
+    <section className="flex w-full flex-col">
       <Link
-        href={`/sessions/${sessionId}`}
+        href={{ pathname: '/sessions/:id', query: { id: session.id } }}
         className="tablet:aspect-video relative aspect-165/185 w-full cursor-pointer self-stretch overflow-hidden rounded-lg"
       >
         <Image
-          src={image || '/assets/session-empty.png'}
+          src={session.image || '/assets/session-empty.png'}
           alt="Session"
           fill
           className={cn(
             'rounded-xl object-cover transition-opacity duration-300 hover:opacity-80',
-            image ? 'shadow-sm' : 'border border-gray-500'
+            session.image ? 'shadow-sm' : 'border border-gray-500'
           )}
         />
         {/* prettier-ignore */}
@@ -81,36 +71,36 @@ export default function SessionCard({
         <div className="absolute bottom-3 left-3 flex items-center gap-0.5 md:gap-1">
           <Location className="size-4 fill-gray-200" />
           <div className="text-caption-medium laptop:text-body3-medium text-gray-200">
-            {city}
+            {session.city}
           </div>
         </div>
       </Link>
-      <section className="mobile:mb-2 desktop:mt-[18px] pointer-events-none my-3">
+      <div className="mobile:mb-2 desktop:mt-[18px] pointer-events-none my-3">
         <span className="text-body3-semibold tablet:text-body2-semibold laptop:text-title3-semibold mb-0.5 line-clamp-1 text-gray-50">
-          {name}
+          {session.name}
         </span>
         <div className="text-caption-regular tablet:text-body3-regular mobile:mb-1 mb-2 text-gray-300">
           {`${sessionDate} • ${sessionTime}`}
         </div>
         {/* prettier-ignore */}
         <div className="flex gap-0.5 desktop:gap-1 items-center">
-          <PaceBadge pace={pace} size="sm" className="tablet:hidden" />
-          <PaceBadge pace={pace} size="md" className="hidden tablet:inline-flex laptop:hidden" />
-          <PaceBadge pace={pace} size="lg" className="hidden laptop:inline-flex" />
-          <LevelBadge level={levelValue} size="sm" className="tablet:hidden" />
-          <LevelBadge level={levelValue} size="md" className="hidden tablet:inline-flex laptop:hidden" />
-          <LevelBadge level={levelValue} size="lg" className="hidden laptop:inline-flex" />
+          <PaceBadge pace={session.pace} size="sm" className="tablet:hidden" />
+          <PaceBadge pace={session.pace} size="md" className="hidden tablet:inline-flex laptop:hidden" />
+          <PaceBadge pace={session.pace} size="lg" className="hidden laptop:inline-flex" />
+          <LevelBadge level={level} size="sm" className="tablet:hidden" />
+          <LevelBadge level={level} size="md" className="hidden tablet:inline-flex laptop:hidden" />
+          <LevelBadge level={level} size="lg" className="hidden laptop:inline-flex" />
+        </div>
       </div>
-      </section>
 
-      <section className="desktop:gap-2 flex items-center gap-1">
-        <ProfileList data={participantsData?.participants || []} />
+      <div className="desktop:gap-2 flex items-center gap-1">
+        <ProfileList data={sessionParticipants?.participants || []} />
         <div className="text-caption-regular laptop:text-body3-regular pointer-events-none text-gray-300">
           {crewData?.name
-            ? `${currentParticipantCount}/${maxParticipantCount}명 • ${crewData.name}`
-            : `${currentParticipantCount}/${maxParticipantCount}명`}
+            ? `${session.currentParticipantCount}/${session.maxParticipantCount}명 • ${crewData.name}`
+            : `${session.currentParticipantCount}/${session.maxParticipantCount}명`}
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
   );
 }

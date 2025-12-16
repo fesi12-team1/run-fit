@@ -21,7 +21,6 @@ export default function CrewCard({ data: crew }: CrewCardProps) {
 
   // useQuery(sessionQueries.list({ crewId: crew.id, sort: 'registerByAsc' }));
   const crewSessions: Session[] = [];
-
   // useQuery(crewQueries.members(crew.id).list());
   const crewMemberProfiles: CrewMember[] = [];
 
