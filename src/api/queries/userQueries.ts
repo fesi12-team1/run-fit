@@ -6,23 +6,27 @@ import { PaginationQueryParams } from '@/types';
 export const userQueries = {
   all: () => ['users'],
 
-  // 내 정보 조회
   details: () => [...userQueries.all(), 'detail'],
-  me: () =>
-    queryOptions({
-      queryKey: [...userQueries.details(), 'me'],
-      queryFn: getMyProfile,
-      staleTime: 1000 * 60 * 30, // 내 정보는 자주 변하지 않으므로 30분동안 fresh 상태
-    }),
+  me: {
+    all: () => [...userQueries.details(), 'me'],
 
-  // 내가 작성한 리뷰 목록
-  reviews: (params: PaginationQueryParams) => {
-    const cleanParams = normalizeParams(params);
-    return queryOptions({
-      queryKey: [...userQueries.me().queryKey, 'reviews', cleanParams],
-      queryFn: () => getMyReviews(cleanParams),
-      placeholderData: (previousData) => previousData,
-    });
+    // 내 정보 조회
+    info: () =>
+      queryOptions({
+        queryKey: [...userQueries.me.all(), 'info'],
+        queryFn: getMyProfile,
+        staleTime: 1000 * 60 * 30, // 내 정보는 자주 변하지 않으므로 30분동안 fresh 상태
+      }),
+
+    // 내가 작성한 리뷰 목록
+    reviews: (params: PaginationQueryParams) => {
+      const cleanParams = normalizeParams(params);
+      return queryOptions({
+        queryKey: [...userQueries.me.all(), 'reviews', cleanParams],
+        queryFn: () => getMyReviews(cleanParams),
+        placeholderData: (previousData) => previousData,
+      });
+    },
   },
 
   // 특정 유저 정보 조회
