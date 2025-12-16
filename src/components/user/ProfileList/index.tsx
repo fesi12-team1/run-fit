@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import type { CrewMember } from '@/types';
 
 interface ProfileListProps {
-  data: CrewMember[];
+  data?: CrewMember[];
   className?: React.ComponentProps<'div'>;
 }
 
@@ -15,10 +15,10 @@ export default function ProfileList({ data, className }: ProfileListProps) {
         className
       )}
     >
-      {data.slice(0, 3).map((member) => (
+      {data?.map((member) => (
         <UserAvatar
           key={member.userId}
-          src={member.profileImage}
+          src={member.profileImage || '/assets/profile-default.png'}
           alt={member.name}
         />
       ))}

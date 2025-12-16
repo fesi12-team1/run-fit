@@ -60,7 +60,7 @@ export default function CrewCard({
             <span className="text-caption-medium tablet:text-body3-medium rounded-lg bg-gray-500 px-2 py-1 text-gray-100">{`${city}`}</span>
             <Dot color="var(--color-gray-300)" />
             <span className="text-caption-regular tablet:text-body3-regular mr-1 text-gray-300">{`멤버 ${memberCount}명`}</span>
-            <ProfileList data={crewMembers?.members || []} />
+            <ProfileList data={crewMembers?.members} />
           </div>
         </div>
       </div>
