@@ -280,16 +280,34 @@ export default function Page() {
         <div className="mb-6 flex flex-col gap-1">
           <h2 className="text-body2-semibold text-gray-50">일정</h2>
           <ul>
-            <li>{` • 모임 일시: ${formatKoMonthDayTime(sessionAt)}`}</li>
-            <li>{` • 모집 일정: ~ ${formatKoMonthDayTime(registerBy)} 마감`}</li>
+            <li>&nbsp;{`• 모임 일시: ${formatKoYmd(sessionAt)}`}</li>{' '}
+            <li>
+              &nbsp;{`• 모집 일정: ~ ${formatKoMonthDayTime(registerBy)} 마감`}
+            </li>
           </ul>
         </div>
-        <div>
-          <h2>장소</h2>
-          <KakaoMap coords={coords} address="city" className="w-[200px]" />
+        <div className="mb-6 flex flex-col gap-1">
+          <h2 className="text-body2-semibold flex flex-col text-gray-50">
+            장소
+          </h2>
+          <div className="flex h-[218px] flex-col overflow-hidden rounded-xl border border-gray-600">
+            <div className="min-h-0 flex-1">
+              <KakaoMap
+                coords={coords}
+                address="city"
+                className="h-full w-full"
+              />
+            </div>
+
+            <div className="text-body3-semibold flex-none px-4 py-5">
+              반포 한강공원 (서울 서초구 신반포로11길 40)
+            </div>
+          </div>
         </div>
-        <div>
-          <h2>참여 멤버 {participants.length}</h2>
+        <div className="mb-6 flex flex-col gap-1">
+          <h2 className="text-body2-semibold text-gray-50">
+            참여 멤버 {participants.length}
+          </h2>
           {participants.map((participant) => (
             <div key={participant.userId}>
               <div>{participant.name}</div>

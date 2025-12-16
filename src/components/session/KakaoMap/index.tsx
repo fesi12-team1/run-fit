@@ -57,7 +57,7 @@ export default function KakaoMap({
       onClick={handleMapClick}
       onKeyDown={(e) => e.key === 'Enter' && handleMapClick()}
       tabIndex={0}
-      className={cx('h-100 w-125 cursor-pointer rounded-xl', className)}
+      className={cx('cursor-pointer', className)}
       aria-label="지도 보기"
       role="link"
     />
