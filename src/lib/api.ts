@@ -26,27 +26,67 @@ export async function handleRequest(
       const refreshToken = await getRefreshToken();
       if (!refreshToken) {
         return NextResponse.redirect(new URL('/signin', request.url));
-      } else {
-        await fetch(proxyUrl('/auth/refresh'));
-        accessToken = await getAccessToken();
+      }
+
+      const refreshResponse = await fetch(proxyUrl('/auth/refresh'));
+      if (!refreshResponse.ok) {
+        return NextResponse.redirect(new URL('/signin', request.url));
+      }
+
+      accessToken = await getAccessToken();
+      if (!accessToken) {
+        return NextResponse.redirect(new URL('/signin', request.url));
       }
     }
   }
-
-  const proxyRequest = new Request(proxyUrl(`${pathname}?${searchParams}`), {
-    method: request.method,
-    headers: {
-      ...request.headers,
-      ...(requiresAuth && { Authorization: `Bearer ${accessToken}` }),
-    },
-    body:
-      request.method !== 'GET' && request.method !== 'HEAD'
-        ? request.body
-        : undefined,
-  });
+  // if (proxyResponse.status === 401) {
+  //   response.cookies.set('accessToken', '', {
+  //     httpOnly: true,
+  //     secure: process.env.NODE_ENV === 'production',
+  //     sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+  //     path: '/api',
+  //     maxAge: 0,
+  //   });
+  // }
 
   try {
-    return fetch(proxyRequest);
+    const proxyResponse = await fetch(
+      proxyUrl(`/${pathname}?${searchParams}`),
+      {
+        method: request.method,
+        headers: {
+          ...Object.fromEntries(request.headers),
+          accept: 'application/json;charset=UTF-8',
+          ...(requiresAuth &&
+            accessToken && { Authorization: `Bearer ${accessToken}` }),
+        },
+        body:
+          request.method !== 'GET' && request.method !== 'HEAD'
+            ? request.body
+            : undefined,
+        cache: requiresAuth ? 'no-cache' : 'default',
+      }
+    );
+
+    if (!proxyResponse.ok) {
+      const errorData = await proxyResponse.json();
+      const response = NextResponse.json(
+        { ...errorData },
+        {
+          status: proxyResponse.status,
+        }
+      );
+
+      return response;
+    }
+
+    const data = await proxyResponse.json();
+
+    const response = NextResponse.json(
+      { ...data },
+      { status: proxyResponse.status }
+    );
+    return response;
   } catch (error) {
     const message =
       error instanceof Error ? error.message : 'Unexpected exception';
