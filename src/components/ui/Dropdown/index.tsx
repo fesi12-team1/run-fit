@@ -2,27 +2,37 @@
 
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 import * as React from 'react';
-import ArrowDown from '@/assets/icons/arrow-down.svg';
+import ArrowDown from '@/assets/icons/arrow-down.svg?react';
 import { cn } from '@/lib/utils';
 
 type DropdownSize = 'sm' | 'lg';
 
-const DropdownSizeContext = React.createContext<DropdownSize>('sm');
+type DropdownContextValue = {
+  size: DropdownSize;
+  hasSelected: boolean;
+};
 
-function useDropdownSize() {
-  return React.useContext(DropdownSizeContext);
+const DropdownContext = React.createContext<DropdownContextValue>({
+  size: 'sm',
+  hasSelected: false,
+});
+
+function useDropdownContext() {
+  return React.useContext(DropdownContext);
 }
 
 export default function Dropdown({
   size = 'sm',
+  hasSelected = false,
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Root> & {
   size?: DropdownSize;
+  hasSelected?: boolean;
 }) {
   return (
-    <DropdownSizeContext.Provider value={size}>
+    <DropdownContext.Provider value={{ size, hasSelected }}>
       <DropdownMenuPrimitive.Root data-slot="dropdown-menu" {...props} />
-    </DropdownSizeContext.Provider>
+    </DropdownContext.Provider>
   );
 }
 
@@ -31,7 +41,7 @@ function DropdownTrigger({
   children,
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Trigger>) {
-  const size = useDropdownSize();
+  const { size, hasSelected } = useDropdownContext();
 
   const isLarge = size === 'lg';
 
@@ -46,15 +56,18 @@ function DropdownTrigger({
         'bg-gray-800 text-gray-200',
         'border border-transparent',
         'data-[state=open]:border-brand-500 data-[state=open]:bg-brand-950 data-[state=open]:text-brand-200',
+        hasSelected && 'border-brand-500 bg-brand-950 text-brand-200',
         className
       )}
       {...props}
     >
       {children}
       <ArrowDown
-        width={isLarge ? 24 : 16}
-        height={isLarge ? 24 : 16}
-        className="group-data-[state=open]:text-brand-200 text-gray-200 group-data-[state=open]:rotate-180"
+        className={cn(
+          'group-data-[state=open]:text-brand-200 text-gray-200 group-data-[state=open]:rotate-180',
+          hasSelected && 'text-brand-200',
+          isLarge ? 'size-6' : 'size-4'
+        )}
       />
     </DropdownMenuPrimitive.Trigger>
   );
@@ -106,7 +119,7 @@ function DropdownItem({
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Item> & {
   selected?: boolean;
 }) {
-  const size = useDropdownSize();
+  const { size } = useDropdownContext();
   const isLarge = size === 'lg';
 
   return (
