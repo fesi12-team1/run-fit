@@ -85,7 +85,7 @@ export default function SessionCard({
           </div>
         </div>
       </Link>
-      <section className="mobile:mb-2 desktop:mt-[18px] pointer-events-none my-3">
+      <div className="mobile:mb-2 desktop:mt-[18px] pointer-events-none my-3">
         <span className="text-body3-semibold tablet:text-body2-semibold laptop:text-title3-semibold mb-0.5 line-clamp-1 text-gray-50">
           {name}
         </span>
@@ -101,16 +101,15 @@ export default function SessionCard({
           <LevelBadge level={levelValue} size="md" className="hidden tablet:inline-flex laptop:hidden" />
           <LevelBadge level={levelValue} size="lg" className="hidden laptop:inline-flex" />
       </div>
-      </section>
-
-      <section className="desktop:gap-2 flex items-center gap-1">
+      </div>
+      <div className="desktop:gap-2 flex items-center gap-1">
         <ProfileList data={participantsData?.participants || []} />
         <div className="text-caption-regular laptop:text-body3-regular pointer-events-none text-gray-300">
           {crewData?.name
             ? `${currentParticipantCount}/${maxParticipantCount}명 • ${crewData.name}`
             : `${currentParticipantCount}/${maxParticipantCount}명`}
         </div>
-      </section>
+      </div>
     </div>
   );
 }

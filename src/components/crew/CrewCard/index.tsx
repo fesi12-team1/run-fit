@@ -65,9 +65,11 @@ export default function CrewCard({
         </div>
       </div>
       {/* 진행된 세션 */}
-      <div className="desktop:flex hidden w-[300px] shrink-0 flex-col gap-2 p-3">
-        <div className="text-body3-semibold text-gray-300">진행된 세션</div>
-        <ul>
+      <div className="desktop:flex hidden w-[300px] shrink-0 flex-col p-3">
+        <div className="text-body3-semibold mb-2 text-gray-300">
+          진행된 세션
+        </div>
+        <ul className="flex flex-col gap-2">
           {crewSessionData?.content.map((session) => {
             const sessionAt = new Date(session.sessionAt);
             const sessionDate = `${sessionAt.getMonth() + 1}월 ${sessionAt.getDate()}일`;

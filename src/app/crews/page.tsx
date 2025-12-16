@@ -16,7 +16,7 @@ export default function Page() {
   );
 
   return (
-    <main className="h-main mx-auto flex max-w-[1198px] flex-col items-center justify-start">
+    <main className="h-main tablet:px-8 mx-auto flex max-w-[1198px] flex-col items-center justify-start px-6">
       <section className="flex w-full items-center justify-between">
         <div className="my-[45px]">
           <h2 className="text-title2-semibold mb-4">
