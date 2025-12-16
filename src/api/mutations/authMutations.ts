@@ -1,10 +1,17 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { postSignin, postSignout, postSignup } from '@/api/fetch/auth';
+import {
+  postSignin,
+  postSignout,
+  postSignup,
+  SignupRequestBody,
+} from '@/api/fetch/auth';
 import { userQueries } from '@/api/queries/userQueries';
+import type { SigninFormValues } from '@/lib/validations/auth/signinSchema';
+import type { ResponseErrorData, SigninResponse, User } from '@/types';
 
 // 회원가입
 export function useSignup() {
-  return useMutation({
+  return useMutation<User, ResponseErrorData, SignupRequestBody>({
     mutationFn: postSignup,
   });
 }
@@ -13,7 +20,7 @@ export function useSignup() {
 export function useSignin() {
   const queryClient = useQueryClient();
 
-  return useMutation({
+  return useMutation<SigninResponse, ResponseErrorData, SigninFormValues>({
     mutationFn: postSignin,
     onSuccess: () => {
       queryClient.invalidateQueries({
