@@ -37,7 +37,8 @@ export default function MockProvider({
       .then(() => {
         setReady(true);
       })
-      .catch(() => {
+      .catch((error) => {
+        console.error('Failed to start MSW:', error);
         setReady(true);
       });
   }, [shouldMock]);
