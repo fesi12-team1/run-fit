@@ -60,7 +60,7 @@ export default function SessionPage() {
         </div>
         <div className="grid w-full grid-cols-3 gap-6">
           {sessions?.content?.map((session: Session) => (
-            <SessionCard key={session.id} data={session} />
+            <SessionCard key={session.id} session={session} />
           ))}
         </div>
       </section>
