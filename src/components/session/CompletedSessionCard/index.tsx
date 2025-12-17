@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import Location from '@/assets/icons/location.svg';
+import Location from '@/assets/icons/location.svg?react';
 import Star from '@/assets/icons/star.svg?react';
 import { LevelBadge, PaceBadge } from '@/components/ui/Badge';
 import { formatTimeToKorean } from '@/lib/time';
@@ -31,7 +31,7 @@ export default function CompletedSessionCard({
   const levelValue = levelMap[session.level] || 'easy';
 
   return (
-    <div className="flex w-full items-center gap-3 border">
+    <div className="flex w-full items-center gap-3">
       <Link href={`/sessions/${session.id}`}>
         <div
           className={cn(
