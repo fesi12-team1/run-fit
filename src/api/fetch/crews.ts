@@ -4,7 +4,9 @@ import {
   CrewMember,
   CrewMemberRoleData,
   MemberRoleFilters,
+  PaginationQueryParams,
   ResponseData,
+  Review,
   Role,
   SliceData,
 } from '@/types';
@@ -292,5 +294,30 @@ export async function deleteCrew(crewId: number) {
   };
 
   const { data }: ResponseData<DeleteCrewResponseData> = await response.json();
+  return data;
+}
+
+export async function getCrewReviews(
+  crewId: number,
+  queryParams?: PaginationQueryParams
+) {
+  const query = new URLSearchParams(
+    queryParams as Record<string, string>
+  ).toString();
+  const response = await fetch(`/api/crews/${crewId}/reviews?${query}`);
+
+  if (!response.ok) {
+    const resData = await response.json();
+    if (resData.error) {
+      throw new Error(resData.error.message);
+    } else {
+      throw new Error('서버에 연결할 수 없습니다.');
+    }
+  }
+
+  type getCrewReviewsResponseData = Review & { sessionName: string };
+
+  const { data }: ResponseData<SliceData<getCrewReviewsResponseData>> =
+    await response.json();
   return data;
 }

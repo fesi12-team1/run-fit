@@ -24,7 +24,7 @@ export function useSignin() {
     mutationFn: postSignin,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: userQueries.me().queryKey,
+        queryKey: userQueries.me.all(), // 내 정보 조회 캐시 무효화
       });
     },
   });
@@ -37,7 +37,7 @@ export function useSignout() {
   return useMutation({
     mutationFn: postSignout,
     onSuccess: () => {
-      queryClient.removeQueries({ queryKey: userQueries.me().queryKey }); // 개인정보 삭제
+      queryClient.removeQueries({ queryKey: userQueries.me.all() }); // 개인정보 삭제
     },
   });
 }

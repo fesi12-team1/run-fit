@@ -11,7 +11,7 @@ import UserAvatar from '@/components/ui/UserAvatar';
 // import { useSignout } from './useSignout';
 
 export default function Header() {
-  const { data: user, isLoading } = useQuery(userQueries.me());
+  const { data: user, isLoading } = useQuery(userQueries.me.info());
   const isLoggedIn = !isLoading && !!user;
   // const handleSignout = useSignout();
 
