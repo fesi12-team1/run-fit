@@ -10,17 +10,13 @@ import React, {
 } from 'react';
 import { Coords } from '@/types/kakaoMap';
 
-if (
-  !process.env.NEXT_PUBLIC_KAKAO_JS_KEY ||
-  !process.env.NEXT_PUBLIC_KAKAO_MAP_URL
-) {
-  throw new Error(
-    '카카오 맵 환경 변수(NEXT_PUBLIC_KAKAO_JS_KEY, NEXT_PUBLIC_KAKAO_MAP_URL)가 설정되지 않았습니다.'
-  );
-}
-
 const KAKAO_JS_KEY = process.env.NEXT_PUBLIC_KAKAO_JS_KEY;
-const KAKAO_MAP_SCRIPT_SRC = `${process.env.NEXT_PUBLIC_KAKAO_MAP_URL}?appkey=${KAKAO_JS_KEY}&autoload=false`;
+const KAKAO_MAP_URL = process.env.NEXT_PUBLIC_KAKAO_MAP_URL;
+
+const KAKAO_MAP_SCRIPT_SRC =
+  KAKAO_JS_KEY && KAKAO_MAP_URL
+    ? `${KAKAO_MAP_URL}?appkey=${KAKAO_JS_KEY}&autoload=false`
+    : null;
 
 // https://developers.kakao.com/docs/latest/ko/local/dev-guide#address-coord-response-body-document
 type Document = {
@@ -150,12 +146,14 @@ export function KakaoMapProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <Script
-        src={KAKAO_MAP_SCRIPT_SRC}
-        strategy="afterInteractive"
-        onLoad={() => handleLoad()}
-        onError={() => handleError()}
-      />
+      {KAKAO_MAP_SCRIPT_SRC && (
+        <Script
+          src={KAKAO_MAP_SCRIPT_SRC}
+          strategy="afterInteractive"
+          onLoad={() => handleLoad()}
+          onError={() => handleError()}
+        />
+      )}
       <KakaoMapContext.Provider
         value={{ loaded, createMap, createMarker, convertAddressToCoords }}
       >

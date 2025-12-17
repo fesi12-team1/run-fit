@@ -6,8 +6,8 @@ export interface Crew {
   description: string;
   city: string;
   image?: string | null;
-  createdAt: string;
   memberCount: number;
+  createdAt: string;
 }
 
 export type CrewListFilters = PaginationQueryParams & {
@@ -23,6 +23,7 @@ export type CrewListFilters = PaginationQueryParams & {
 
 export type MemberRoleFilters = {
   role?: 'leader' | 'staff' | 'general';
+  sort?: 'joinedAtAsc' | 'roleAsc';
 };
 
 export interface CrewMember {

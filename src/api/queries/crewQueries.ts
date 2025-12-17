@@ -41,7 +41,7 @@ export const crewQueries = {
   members: (crewId: number) => ({
     all: () => [...crewQueries.detail(crewId).queryKey, 'members'],
 
-    // 크루 특정 역할 멤버 목록 조회
+    // 멤버 목록 조회
     list: (filters?: MemberRoleFilters) => {
       const cleanFilters = normalizeParams(filters);
       return queryOptions({

@@ -1,8 +1,8 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
+import Image from 'next/image';
 import { sessionQueries } from '@/api/queries/sessionQueries';
-import Banner from '@/assets/banner-pc.svg';
 import SessionCard from '@/components/session/SessionCard';
 import Dropdown from '@/components/ui/Dropdown';
 import FilterButton from '@/components/ui/FilterButton';
@@ -19,7 +19,8 @@ export default function SessionPage() {
 
   return (
     <main className="h-main mx-auto flex max-w-[1198px] flex-col items-center justify-start">
-      <section className="flex w-full items-center justify-between">
+      <div className="flex w-full items-center justify-between">
+        {/** 배너 */}
         <div>
           <h2 className="text-title1-bold mb-4 italic">
             나와 FIT한
@@ -30,9 +31,17 @@ export default function SessionPage() {
             러닝 페이스와 선호하는 스타일에 딱 맞는 세션을 찾아보세요!
           </span>
         </div>
-        <Banner className="origin-center scale-[0.8]" />
-      </section>
-      <section className="flex w-full flex-col items-center">
+        <div className="pt-[30px] pb-5">
+          <Image
+            src="/assets/session-list.png"
+            alt="Session List"
+            // className="origin-center scale-[0.8]"
+            width={417}
+            height={235}
+          />
+        </div>
+      </div>
+      <div className="flex w-full flex-col items-center">
         <div className="mb-6 flex w-full items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <Dropdown>
@@ -63,7 +72,7 @@ export default function SessionPage() {
             <SessionCard key={session.id} session={session} />
           ))}
         </div>
-      </section>
+      </div>
     </main>
   );
 }
