@@ -39,7 +39,7 @@ export default function CrewCard({
           className="tablet:w-60 tablet:aspect-video relative aspect-327/75 shrink-0 self-stretch overflow-hidden rounded-lg bg-gray-300"
         >
           <Image
-            src={image || '/assets/crew-empty.png'}
+            src={image || '/assets/crew-default.png'}
             alt="Crew"
             fill
             className="object-cover"
@@ -70,7 +70,7 @@ export default function CrewCard({
           진행된 세션
         </div>
         <ul className="flex flex-col gap-2">
-          {crewSessionData?.content.map((session) => {
+          {crewSessionData?.content?.map((session) => {
             const sessionAt = new Date(session.sessionAt);
             const sessionDate = `${sessionAt.getMonth() + 1}월 ${sessionAt.getDate()}일`;
 

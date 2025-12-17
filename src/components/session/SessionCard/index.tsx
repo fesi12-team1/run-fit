@@ -61,7 +61,7 @@ export default function SessionCard({
         className="tablet:aspect-video relative aspect-165/185 w-full cursor-pointer self-stretch overflow-hidden rounded-lg"
       >
         <Image
-          src={image || '/assets/session-empty.png'}
+          src={image || '/assets/session-default.png'}
           alt="Session"
           fill
           className={cn(
