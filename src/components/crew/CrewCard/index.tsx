@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { Dot } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { crewQueries } from '@/api/queries/crewQueries';
@@ -56,19 +55,18 @@ export default function CrewCard({
           <span className="tablet:text-body2-regular mobile:text-caption-regular mobile:min-h-[32px] line-clamp-2 min-h-[50px] text-gray-300">
             {description}
           </span>
-          <div className="flex items-center">
-            <span className="text-caption-medium tablet:text-body3-medium rounded-lg bg-gray-500 px-2 py-1 text-gray-100">{`${city}`}</span>
-            <Dot color="var(--color-gray-300)" />
-            <span className="text-caption-regular tablet:text-body3-regular mr-1 text-gray-300">{`멤버 ${memberCount}명`}</span>
+          <div className="flex items-center gap-1 text-gray-300">
+            <span className="text-caption-medium tablet:text-body3-medium rounded-lg bg-gray-500 px-2 py-1 text-gray-100">
+              {city}
+            </span>
+            <span>{`· 멤버 ${memberCount}명`}</span>
             <ProfileList members={crewMembers?.members} />
           </div>
         </div>
       </div>
-      {/* 진행된 세션 */}
+      {/* 최근 세션 */}
       <div className="desktop:flex hidden w-[300px] shrink-0 flex-col p-3">
-        <div className="text-body3-semibold mb-2 text-gray-300">
-          진행된 세션
-        </div>
+        <div className="text-body3-semibold mb-2 text-gray-300">최근 세션</div>
         <ul className="flex flex-col gap-2">
           {crewSessionData?.content?.map((session) => {
             const sessionAt = new Date(session.sessionAt);
