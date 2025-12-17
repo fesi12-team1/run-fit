@@ -1,7 +1,6 @@
 export async function register() {
   if (process.env.NEXT_RUNTIME === 'nodejs') {
-    if (process.env.USE_MSW !== 'true') return;
-    const { initMocks } = await import('@/mocks');
+    const { initMocks } = await import('@/mocks/server/init');
     await initMocks();
   }
 }

@@ -21,6 +21,7 @@ export default function UserAvatar({
 
   return (
     <div
+      data-slot="avatar"
       className={cx(
         'relative size-10 overflow-hidden rounded-full bg-gray-200',
         className

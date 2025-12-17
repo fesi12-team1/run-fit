@@ -36,8 +36,7 @@ export async function getSessions(queryParams?: SessionListFilters) {
     }
   }
 
-  const { data }: ResponseData<SliceData<Omit<Session, 'description'>>> =
-    await response.json();
+  const { data }: ResponseData<SliceData<Session>> = await response.json();
   return data;
 }
 

@@ -22,3 +22,10 @@ export async function hasAccessToken() {
 
   return cookieStore.has('accessToken');
 }
+
+export async function getRefreshToken() {
+  const cookieStore = await cookies();
+  const refreshToken = cookieStore.get('refreshToken')?.value;
+
+  return refreshToken;
+}

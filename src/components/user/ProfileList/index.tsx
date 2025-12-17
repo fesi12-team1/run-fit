@@ -1,36 +1,20 @@
 import UserAvatar from '@/components/ui/UserAvatar';
 import { cn } from '@/lib/utils';
-import { Profile } from '@/types';
+import type { CrewMember } from '@/types';
 
 interface ProfileListProps {
-  data:
-    | Profile[]
-    | Array<{
-        userId: string;
-        name: string;
-        image: string | null;
-        role: string;
-        joinedAt: string;
-      }>;
-  className?: React.ComponentProps<'div'>;
+  members?: CrewMember[];
 }
 
-export default function ProfileList({
-  data: profiles,
-  className,
-}: ProfileListProps) {
+export default function ProfileList({ members }: ProfileListProps) {
   return (
-    <div
-      className={cn(
-        'tablet:*:size-6 flex -space-x-1 *:size-4 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-gray-900',
-        className
-      )}
-    >
-      {profiles.slice(0, 3).map((profile) => (
+    <div className={cn('flex -space-x-1')}>
+      {members?.map((member: CrewMember) => (
         <UserAvatar
-          key={'id' in profile ? profile.id : profile.userId}
-          src={profile.image}
-          alt={profile.name}
+          key={member.userId}
+          src={member.profileImage || '/assets/profile-default.png'}
+          alt={member.name}
+          className="tablet:size-6 size-4 data-[slot=avatar]:ring-2 data-[slot=avatar]:ring-gray-900"
         />
       ))}
     </div>

@@ -2,14 +2,17 @@
 
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
+import { useSignout } from '@/api/mutations/authMutations';
 import { userQueries } from '@/api/queries/userQueries';
 import LogoDefault from '@/assets/icons/logo-default.svg?react';
 import LogoLarge from '@/assets/icons/logo-large.svg?react';
+import Dropdown from '@/components/ui/Dropdown';
 import UserAvatar from '@/components/ui/UserAvatar';
 
 export default function Header() {
-  const { data: user, isLoading } = useQuery(userQueries.me());
+  const { data: user, isLoading } = useQuery(userQueries.me.info());
   const isLoggedIn = !isLoading && !!user;
+  const signout = useSignout();
 
   return (
     <header className="tablet:h-15 tablet:px-6 sticky top-0 z-50 h-14 w-full border-b border-b-gray-600 bg-gray-800 px-4">
@@ -34,9 +37,19 @@ export default function Header() {
         <div>
           {isLoggedIn ? (
             <>
-              <Link href="/my">
-                <UserAvatar src={user.image} className="size-10" />
-              </Link>
+              <Dropdown>
+                <Dropdown.TriggerNoArrow>
+                  <UserAvatar src={user.image} className="size-10" />
+                </Dropdown.TriggerNoArrow>
+                <Dropdown.Content className="z-51">
+                  <Dropdown.Item>
+                    <Link href="/my">마이페이지</Link>
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={() => signout.mutate()}>
+                    로그아웃
+                  </Dropdown.Item>
+                </Dropdown.Content>
+              </Dropdown>
             </>
           ) : (
             <Link

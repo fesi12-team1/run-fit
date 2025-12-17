@@ -1,12 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { proxyUrl } from '@/api/utils';
+import { proxyUrl } from '@/lib/api';
 
 export async function POST(request: NextRequest) {
-  const apiUrl = proxyUrl('/auth/signin');
-
   try {
     const body = await request.json();
-    const proxyResponse = await fetch(apiUrl, {
+    const proxyResponse = await fetch(proxyUrl('/api/auth/signin'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
@@ -16,34 +14,33 @@ export async function POST(request: NextRequest) {
     });
 
     if (!proxyResponse.ok) {
-      if (proxyResponse.status >= 400 && proxyResponse.status < 500) {
-        const errorData = await proxyResponse.json();
-        return NextResponse.json(
-          { ...errorData },
-          {
-            status: proxyResponse.status,
-          }
-        );
-      }
-      throw new Error('서버에 연결할 수 없습니다.');
+      const errorData = await proxyResponse.json();
+      const response = NextResponse.json(
+        { ...errorData },
+        { status: proxyResponse.status }
+      );
+
+      return response;
     }
 
-    const { message, data } = await proxyResponse.json();
+    const { success, data, error } = await proxyResponse.json();
     if (!data?.token) {
       return NextResponse.json(
         { code: 'INVALID_RESPONSE', message: '서버 응답에 토큰이 없습니다.' },
         { status: 500 }
       );
     }
-    const { token } = data;
 
-    const response = NextResponse.json({ message, data });
+    const response = NextResponse.json(
+      { success, data, error },
+      { status: proxyResponse.status }
+    );
 
-    response.cookies.set('accessToken', token, {
+    response.cookies.set('accessToken', data.token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
-      path: '/api/auth',
+      path: '/api',
       maxAge: 60 * 60, // 1 hour (3600 seconds)
     });
 

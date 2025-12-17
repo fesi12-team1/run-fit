@@ -9,7 +9,7 @@ export function useUpdateMyProfile() {
   return useMutation({
     mutationFn: updateMyProfile,
     onSuccess: (updatedUserData) => {
-      queryClient.setQueryData(userQueries.me().queryKey, updatedUserData); // 업데이트된 데이터 캐시를 직접 업데이트
+      queryClient.setQueryData(userQueries.me.info().queryKey, updatedUserData); // 업데이트된 데이터 캐시를 직접 업데이트
     },
   });
 }

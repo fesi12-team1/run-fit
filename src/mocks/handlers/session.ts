@@ -92,7 +92,7 @@ export const sessionHandlers = [
   }),
 
   // 세션 목록 조회
-  http.get(path('/api/sessions'), ({ request }) => {
+  http.get('/api/sessions', ({ request }) => {
     const user = getAuthenticatedUser(request);
     const isLoggedIn = !!user;
     const url = new URL(request.url);
@@ -182,39 +182,36 @@ export const sessionHandlers = [
     const paginatedSessions = filteredSessions.slice(startIndex, endIndex);
     const hasNext = endIndex < filteredSessions.length;
 
-    const data = paginatedSessions.map((session) => ({
-      id: session.id,
-      crewId: session.crewId,
-      hostUserId: session.hostUserId,
-      name: session.name,
-      description: session.description,
-      image: session.image,
-      location: session.location,
-      sessionAt: session.sessionAt,
-      registerBy: session.registerBy,
-      level: session.level,
-      status: session.status,
-      pace: session.pace,
-      maxParticipantCount: session.maxParticipantCount,
-      currentParticipantCount: 0,
-      createdAt: session.createdAt,
-      updatedAt: session.updatedAt,
-      liked:
-        isLoggedIn &&
-        (sessionLikes.findFirst((q) =>
-          q.where({ sessionId: session.id, userId: user.id })
-        )
-          ? true
-          : false),
-    }));
+    const data = {
+      content: paginatedSessions.map((session) => ({
+        id: session.id,
+        crewId: session.crewId,
+        hostUserId: session.hostUserId,
+        name: session.name,
+        description: session.description,
+        image: session.image,
+        location: session.location,
+        sessionAt: session.sessionAt,
+        registerBy: session.registerBy,
+        level: session.level,
+        status: session.status,
+        pace: session.pace,
+        maxParticipantCount: session.maxParticipantCount,
+        currentParticipantCount: 0,
+        createdAt: session.createdAt,
+        updatedAt: session.updatedAt,
+        liked:
+          isLoggedIn &&
+          (sessionLikes.findFirst((q) =>
+            q.where({ sessionId: session.id, userId: user.id })
+          )
+            ? true
+            : false),
+      })),
+      hasNext: hasNext,
+    };
 
-    return HttpResponse.json(
-      successResponse({
-        data: data,
-        hasNext: hasNext,
-      }),
-      { status: 200 }
-    );
+    return HttpResponse.json(successResponse(data), { status: 200 });
   }),
 
   // 세션 상세 조회

@@ -1,7 +1,6 @@
 import {
   PaginationQueryParams,
   ResponseData,
-  ResponseErrorData,
   Session,
   SliceData,
 } from '@/types';

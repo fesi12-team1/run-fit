@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
-import { handleRequest } from '@/api/util';
+import { handleRequest } from '@/lib/api';
 
 export async function GET(request: NextRequest) {
-  return handleRequest(request, '/api/sessions', false);
+  return handleRequest(request, '/sessions', false);
 }

@@ -1,14 +1,11 @@
 import { NextResponse } from 'next/server';
-import { proxyUrl } from '@/api/utils';
+import { proxyUrl } from '@/lib/api';
 import { getAccessToken } from '@/lib/auth';
 
 export async function POST() {
-  const apiUrl = proxyUrl('/auth/signout');
-
-  const accessToken = await getAccessToken();
-
   try {
-    const proxyResponse = await fetch(apiUrl, {
+    const accessToken = await getAccessToken();
+    const proxyResponse = await fetch(proxyUrl('/api/auth/signout'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
@@ -18,27 +15,33 @@ export async function POST() {
     });
 
     if (!proxyResponse.ok) {
-      if (proxyResponse.status >= 400 && proxyResponse.status < 500) {
-        const errorData = await proxyResponse.json();
-        return NextResponse.json(
-          { ...errorData },
-          {
-            status: proxyResponse.status,
-          }
-        );
+      const errorData = await proxyResponse.json();
+      const response = NextResponse.json(
+        { ...errorData },
+        { status: proxyResponse.status }
+      );
+
+      if (proxyResponse.status === 401) {
+        response.cookies.set('accessToken', '', {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+          path: '/api',
+          maxAge: 0,
+        });
       }
-      throw new Error('서버에 연결할 수 없습니다.');
+
+      return response;
     }
 
-    const { message, data } = await proxyResponse.json();
-
-    const response = NextResponse.json({ message, data });
+    const data = await proxyResponse.json();
+    const response = NextResponse.json(data, { status: proxyResponse.status });
 
     response.cookies.set('accessToken', '', {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
-      path: '/api/auth',
+      path: '/api',
       maxAge: 0,
     });
 

@@ -4,10 +4,15 @@ import {
   getCrewMemberCount,
   getCrewMemberDetailById,
   getCrewMembers,
+  getCrewReviews,
   getCrews,
 } from '@/api/fetch/crews';
 import { normalizeParams } from '@/lib/utils';
-import { CrewListFilters, MemberRoleFilters } from '@/types';
+import {
+  CrewListFilters,
+  MemberRoleFilters,
+  PaginationQueryParams,
+} from '@/types';
 
 export const crewQueries = {
   all: () => ['crews'],
@@ -62,5 +67,19 @@ export const crewQueries = {
         staleTime: 0, // 권한 조회 기능이므로 즉시 만료
         enabled: !!crewId && !!userId, // crewId 및 userId가 유효할 때만 쿼리가 자동으로 실행
       }),
+  }),
+
+  // 크루 리뷰 목록 조회
+  reviews: (crewId: number) => ({
+    all: () => [...crewQueries.detail(crewId).queryKey, 'reviews'],
+    list: (params: PaginationQueryParams) => {
+      const cleanParams = normalizeParams(params);
+      return queryOptions({
+        queryKey: [...crewQueries.reviews(crewId).all(), 'list', cleanParams],
+        queryFn: () => getCrewReviews(crewId, cleanParams),
+        placeholderData: (previousData) => previousData,
+        enabled: !!crewId, // crewId가 유효할 때만 실행
+      });
+    },
   }),
 };

@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { handleRequest } from '@/api/util';
+import { handleRequest } from '@/lib/api';
 
 export async function GET(
   request: NextRequest,
@@ -8,7 +8,7 @@ export async function GET(
   const { crewId, userId } = await ctx.params;
   return handleRequest(
     request,
-    `/api/crews/${crewId}/members/${userId}/role`,
+    `/crews/${crewId}/members/${userId}/role`,
     false
   );
 }

@@ -1,34 +1,54 @@
 'use client';
 
+import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
+import Link from 'next/link';
+import { crewQueries } from '@/api/queries/crewQueries';
+import { sessionQueries } from '@/api/queries/sessionQueries';
 import Liked from '@/assets/icons/liked.svg';
 import Location from '@/assets/icons/location.svg';
 import { formatTimeToKorean } from '@/lib/time';
-import { Profile, Session } from '@/types';
+import { cn } from '@/lib/utils';
+import type { Session } from '@/types';
 import { DdayBadge, LevelBadge, PaceBadge } from '../../ui/Badge';
 import ProfileList from '../../user/ProfileList';
 
 interface SessionCardProps {
-  data: Session;
+  session: Session;
 }
 
-export default function SessionCard({ data }: SessionCardProps) {
-  // TODO: use tanstack query to fetch
-  const crewData = { name: '달리는 거북이' };
-  const crewMemberProfiles: Profile[] = [];
+export default function SessionCard({
+  session: {
+    crewId,
+    id: sessionId,
+    registerBy,
+    sessionAt,
+    image,
+    city,
+    name,
+    pace,
+    level,
+    currentParticipantCount,
+    maxParticipantCount,
+  },
+}: SessionCardProps) {
+  const { data: crewData } = useQuery(crewQueries.detail(crewId));
+  const { data: participantsData } = useQuery(
+    sessionQueries.participants(sessionId)
+  );
 
   const today = new Date();
-  const registerBy = new Date(data.registerBy);
-  const timeDiff = registerBy.getTime() - today.getTime();
+  const registerByDate = new Date(registerBy);
+  const timeDiff = registerByDate.getTime() - today.getTime();
   const dayDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
   const ddayText =
-    dayDiff > 0 ? `마감 D-${dayDiff}` : dayDiff === 0 ? '마감 D-Day' : '마감됨';
+    timeDiff < 0 ? '마감됨' : dayDiff > 0 ? `마감 D-${dayDiff}` : '마감 D-Day';
 
-  const sessionAt = new Date(data.sessionAt);
-  const sessionDate = `${sessionAt.getMonth() + 1}월 ${sessionAt.getDate()}일`;
+  const sessionAtDate = new Date(sessionAt);
+  const sessionDate = `${sessionAtDate.getMonth() + 1}월 ${sessionAtDate.getDate()}일`;
   const sessionTime = formatTimeToKorean(
-    sessionAt.getHours(),
-    sessionAt.getMinutes()
+    sessionAtDate.getHours(),
+    sessionAtDate.getMinutes()
   );
 
   const levelMap: Record<string, 'easy' | 'medium' | 'hard'> = {
@@ -36,20 +56,26 @@ export default function SessionCard({ data }: SessionCardProps) {
     INTERMEDIATE: 'medium',
     ADVANCED: 'hard',
   };
-  const level = levelMap[data.level] || 'easy';
+  const levelValue = levelMap[level] || 'easy';
 
   return (
-    <li className="flex w-full flex-col">
-      <div className="laptop:mb-6 tablet:aspect-video relative mb-3 aspect-165/185 self-stretch overflow-hidden rounded-lg">
+    <div className="flex w-full flex-col">
+      <Link
+        href={`/sessions/${sessionId}`}
+        className="tablet:aspect-video relative aspect-165/185 w-full cursor-pointer self-stretch overflow-hidden rounded-lg"
+      >
         <Image
-          src="/session.local.jpg"
+          src={image || '/assets/session-default.png'}
           alt="Session"
           fill
-          className="object-cover"
+          className={cn(
+            'rounded-xl object-cover transition-opacity duration-300 hover:opacity-80',
+            image ? 'shadow-sm' : 'border border-gray-500'
+          )}
         />
         {/* prettier-ignore */}
-        <div className="absolute top-3 left-3">
-          <DdayBadge className="tablet:hidden"  size="sm">{ddayText}</DdayBadge>
+        <div className="absolute top-3 left-3 pointer-events-none">
+          <DdayBadge className="tablet:hidden" size="sm">{ddayText}</DdayBadge>
           <DdayBadge className="hidden tablet:inline-flex laptop:hidden" size="md">{ddayText}</DdayBadge>
           <DdayBadge className="hidden laptop:inline-flex" size="lg">{ddayText}</DdayBadge>
         </div>
@@ -58,32 +84,36 @@ export default function SessionCard({ data }: SessionCardProps) {
         </button>
         <div className="absolute bottom-3 left-3 flex items-center gap-0.5 md:gap-1">
           <Location className="size-4 fill-gray-200" />
-          <div className="text-caption-medium laptop:text-body3-medium font-medium text-gray-200">
-            {data.city}
+          <div className="text-caption-medium laptop:text-body3-medium text-gray-200">
+            {city}
           </div>
         </div>
+      </Link>
+      <div className="mobile:mb-2 desktop:mt-[18px] pointer-events-none my-3">
+        <span className="text-body3-semibold tablet:text-body2-semibold laptop:text-title3-semibold mb-0.5 line-clamp-1 text-gray-50">
+          {name}
+        </span>
+        <div className="text-caption-regular tablet:text-body3-regular mobile:mb-1 mb-2 text-gray-300">
+          {`${sessionDate} • ${sessionTime}`}
+        </div>
+        {/* prettier-ignore */}
+        <div className="flex gap-0.5 desktop:gap-1 items-center">
+          <PaceBadge pace={pace} size="sm" className="tablet:hidden" />
+          <PaceBadge pace={pace} size="md" className="hidden tablet:inline-flex laptop:hidden" />
+          <PaceBadge pace={pace} size="lg" className="hidden laptop:inline-flex" />
+          <LevelBadge level={levelValue} size="sm" className="tablet:hidden" />
+          <LevelBadge level={levelValue} size="md" className="hidden tablet:inline-flex laptop:hidden" />
+          <LevelBadge level={levelValue} size="lg" className="hidden laptop:inline-flex" />
       </div>
-      <div className="text-body3-semibold tablet:text-body2-semibold laptop:text-title3-semibold line-clamp-1 text-gray-50">
-        {data.name}
       </div>
-      <div className="text-caption-regular tablet:text-body3-regular tablet:mb-2 mb-1 text-gray-300">
-        {`${sessionDate} • ${sessionTime}`}
-      </div>
-      {/* prettier-ignore */}
-      <div className="flex gap-0.5 laptop:gap-1 mb-2 tablet:mb-3">
-          <PaceBadge pace={data.pace} size="sm" className="tablet:hidden" />
-          <PaceBadge pace={data.pace} size="md" className="hidden tablet:inline-flex laptop:hidden" />
-          <PaceBadge pace={data.pace} size="lg" className="hidden laptop:inline-flex" />
-          <LevelBadge level={level} size="sm" className="tablet:hidden" />
-          <LevelBadge level={level} size="md" className="hidden tablet:inline-flex laptop:hidden" />
-          <LevelBadge level={level} size="lg" className="hidden laptop:inline-flex" />
-      </div>
-      <div className="flex gap-1">
-        <ProfileList data={crewMemberProfiles} />
-        <div className="text-caption-regular laptop:text-body3-regular text-gray-300">
-          {`${data.currentParticipantCount}/${data.maxParticipantCount}명 • ${crewData.name}`}
+      <div className="desktop:gap-2 flex items-center gap-1">
+        <ProfileList members={participantsData?.participants || []} />
+        <div className="text-caption-regular laptop:text-body3-regular pointer-events-none text-gray-300">
+          {crewData?.name
+            ? `${currentParticipantCount}/${maxParticipantCount}명 • ${crewData.name}`
+            : `${currentParticipantCount}/${maxParticipantCount}명`}
         </div>
       </div>
-    </li>
+    </div>
   );
 }

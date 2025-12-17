@@ -45,7 +45,7 @@ export const sessionQueries = {
   // 세션 참가자 조회
   participants: (sessionId: number) =>
     queryOptions({
-      queryKey: [...sessionQueries.detail(sessionId).queryKey, 'participants'],
+      queryKey: [...sessionQueries.details(), sessionId, 'participants'],
       queryFn: () => getSessionParticipants(sessionId),
       enabled: !!sessionId, // sessionId가 유효할 때만 실행
     }),

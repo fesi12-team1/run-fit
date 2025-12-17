@@ -4,7 +4,7 @@ import { jest } from '@jest/globals';
 
 globalThis.jest = jest;
 
-if (process.env.USE_MSW === 'true') {
+if (process.env.NEXT_PUBLIC_USE_MSW === 'true') {
   const { server } = await import('@/mocks/server');
 
   beforeAll(() => server.listen());

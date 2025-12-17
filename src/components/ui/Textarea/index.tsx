@@ -9,7 +9,7 @@ export default function Textarea({
     <textarea
       data-slot="textarea"
       className={cn(
-        'h-30 w-full resize-none overflow-hidden rounded-lg border border-transparent bg-[#181820] px-3 py-2 text-sm text-[#FFFFFF] transition-[color,box-shadow] outline-none placeholder:text-[#5D616F] focus-visible:border-[#6C6BE2] focus-visible:ring-2 focus-visible:ring-[#6C6BE2]/20 disabled:cursor-not-allowed aria-invalid:border-[#DC2626] aria-invalid:ring-2 aria-invalid:ring-[#DC2626]/20 md:rounded-xl md:px-4 md:py-3 md:text-base',
+        'scrollbar-hidden focus-visible:border-brand-400 aria-invalid:border-error-100 tablet:rounded-xl tablet:px-4 tablet:py-3 tablet:text-body2-medium h-30 w-full resize-none rounded-lg border border-transparent bg-gray-800 px-3 py-2 text-sm text-white transition-all outline-none placeholder:text-gray-300 disabled:cursor-not-allowed',
         className
       )}
       {...props}
