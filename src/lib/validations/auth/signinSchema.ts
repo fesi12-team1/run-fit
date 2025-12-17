@@ -8,7 +8,7 @@ export const signinSchema = z.object({
 
   password: z
     .string()
-    .min(2, '비밀번호를 입력해주세요.')
+    .min(1, '비밀번호를 입력해주세요.')
     .min(8, '비밀번호는 최소 8자 이상이어야 합니다.'),
 });
 
