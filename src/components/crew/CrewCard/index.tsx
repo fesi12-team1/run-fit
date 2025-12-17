@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { crewQueries } from '@/api/queries/crewQueries';
 import { sessionQueries } from '@/api/queries/sessionQueries';
 import ProfileList from '@/components/user/ProfileList';
+import { cn } from '@/lib/utils';
 import type { Crew } from '@/types';
 
 interface CrewCardProps {
@@ -32,13 +33,16 @@ export default function CrewCard({
         {/* 크루 이미지 */}
         <Link
           href={`/crews/${crewId}`}
-          className="tablet:w-60 tablet:aspect-video relative aspect-327/75 shrink-0 self-stretch overflow-hidden rounded-lg bg-gray-300"
+          className="tablet:w-60 tablet:aspect-video relative aspect-327/75 shrink-0 self-stretch overflow-hidden rounded-lg"
         >
           <Image
             src={image || '/assets/crew-default.png'}
             alt="Crew"
             fill
-            className="object-cover"
+            className={cn(
+              'rounded-lg object-cover transition-opacity duration-300 hover:opacity-80',
+              image ? 'shadow-sm' : 'border border-gray-500'
+            )}
           />
         </Link>
         {/* 크루 정보 */}
@@ -75,7 +79,9 @@ export default function CrewCard({
                 key={session.id}
                 className="text-body2-regular flex justify-between text-gray-100"
               >
-                <span className="truncate">{session.name}</span>
+                <Link href={`/sessions/${session.id}`} className="truncate">
+                  {session.name}
+                </Link>
                 <div className="text-body3-regular text-nowrap text-gray-200">
                   {sessionDate}
                 </div>
