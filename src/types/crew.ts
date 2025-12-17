@@ -7,6 +7,7 @@ export interface Crew {
   city: string;
   image?: string | null;
   createdAt: string;
+  memberCount: number;
 }
 
 export type CrewListFilters = PaginationQueryParams & {
