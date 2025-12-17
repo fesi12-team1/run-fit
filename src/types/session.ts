@@ -1,4 +1,5 @@
 import { PaginationQueryParams } from './api';
+import { CrewMember } from './crew';
 import { Sido, Sigungu } from './region';
 
 export interface Session<City extends Sido = Sido> {
