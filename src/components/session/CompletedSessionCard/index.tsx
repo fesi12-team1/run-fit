@@ -85,10 +85,10 @@ export default function CompletedSessionCard({
           </div>
           {/* prettier-ignore */}
           <div className="flex gap-0.5 desktop:gap-1 items-center">
-            <PaceBadge pace={session.pace} size="sm" className={ size === "sm" ? "inline-flex" : "hidden" } />
-            <LevelBadge level={levelValue} size="sm" className={ size === "sm" ? "inline-flex" : "hidden" } />
-            <PaceBadge pace={session.pace} size="lg" className={ size === "lg" ? "inline-flex" : "hidden" } />
-            <LevelBadge level={levelValue} size="lg" className={ size === "lg" ? "inline-flex" : "hidden" } />
+          <div className="flex gap-0.5 desktop:gap-1 items-center">
+            <PaceBadge pace={session.pace} size={size} />
+            <LevelBadge level={levelValue} size={size} />
+          </div>
           </div>
         </div>
         <div className="flex items-center">

@@ -75,29 +75,29 @@ export default function SessionCard({
               image ? 'shadow-sm' : 'border border-gray-500'
             )}
           />
-          {/* prettier-ignore */}
-          <div className="absolute top-3 left-3 pointer-events-none">
+        </Link>
+        {/* prettier-ignore */}
+        <div className="absolute top-3 left-3 pointer-events-none">
           <DdayBadge className="tablet:hidden" size="sm">{ddayText}</DdayBadge>
           <DdayBadge className="hidden tablet:inline-flex laptop:hidden" size="md">{ddayText}</DdayBadge>
           <DdayBadge className="hidden laptop:inline-flex" size="lg">{ddayText}</DdayBadge>
         </div>
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              // TODO: 좋아요 기능 구현
-            }}
-            className="absolute top-3 right-3"
-          >
-            <Liked className="stroke-offset-[-0.50px] size-6 fill-neutral-900/50 stroke-sky-100 stroke-1" />
-          </button>
-          <div className="absolute bottom-3 left-3 flex items-center gap-0.5 md:gap-1">
-            <Location className="size-4 fill-gray-200" />
-            <div className="text-caption-medium laptop:text-body3-medium text-gray-200">
-              {city}
-            </div>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            // TODO: 좋아요 기능 구현
+          }}
+          className="absolute top-3 right-3"
+        >
+          <Liked className="stroke-offset-[-0.50px] size-6 fill-neutral-900/50 stroke-sky-100 stroke-1" />
+        </button>
+        <div className="absolute bottom-3 left-3 flex items-center gap-0.5 md:gap-1">
+          <Location className="size-4 fill-gray-200" />
+          <div className="text-caption-medium laptop:text-body3-medium text-gray-200">
+            {city}
           </div>
-        </Link>
+        </div>
       </div>
 
       <div className="mobile:mb-2 desktop:mt-[18px] pointer-events-none my-3">
