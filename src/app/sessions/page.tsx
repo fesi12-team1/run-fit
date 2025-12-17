@@ -18,7 +18,7 @@ export default function SessionPage() {
   );
 
   return (
-    <main className="h-main mx-auto flex max-w-[1198px] flex-col items-center justify-start">
+    <main className="h-main mx-auto flex max-w-[1120px] flex-col items-center justify-start">
       <div className="flex w-full items-center justify-between">
         {/** 배너 */}
         <div>

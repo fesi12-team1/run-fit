@@ -16,16 +16,14 @@ export default function Page() {
   );
 
   return (
-    <main className="h-main tablet:px-8 mx-auto flex max-w-[1198px] flex-col items-center justify-start px-6">
+    <main className="h-main tablet:px-8 mx-auto flex max-w-[1120px] flex-col items-center justify-start px-6">
       <section className="flex w-full items-center justify-between">
         <div className="my-[45px]">
           <h2 className="text-title2-semibold mb-4">
-            나와 FIT한
-            <br />
-            러닝 메이트를 찾다
+            나와 FIT한 러닝 메이트를 찾다
           </h2>
           <span className="text-body3-regular text-gray-300">
-            러닝 페이스와 선호하는 스타일에 딱 맞는 세션을 찾아보세요!
+            러닝 페이스와 선호하는 스타일에 딱 맞는 크루를 찾아보세요!
           </span>
         </div>
       </section>
