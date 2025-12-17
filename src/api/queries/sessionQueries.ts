@@ -1,6 +1,5 @@
 import { queryOptions } from '@tanstack/react-query';
 import {
-  getMySessions,
   getSessionDetail,
   getSessionParticipants,
   getSessions,
@@ -20,16 +19,6 @@ export const sessionQueries = {
       queryFn: () => getSessions(cleanFilters),
       placeholderData: (previousData) => previousData, // 필터가 변경되어 데이터를 새로 불러올 때 화면이 깜빡이는 현상 방지
       staleTime: 1000 * 60, // 1분동안 fresh 상태
-    });
-  },
-
-  // 내가 만든 세션 조회
-  mineLists: () => [...sessionQueries.lists(), 'mine'],
-  mineList: (params: PaginationQueryParams) => {
-    const cleanParams = normalizeParams(params);
-    return queryOptions({
-      queryKey: [...sessionQueries.mineLists(), cleanParams],
-      queryFn: () => getMySessions(cleanParams),
     });
   },
 
