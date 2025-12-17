@@ -1,0 +1,76 @@
+import Camera from '@/assets/icons/camera.svg?react';
+import XIcon from '@/assets/icons/x.svg?react';
+import { useImagePicker } from '.';
+
+export default function ReviewImagesUploader({
+  maxFiles = 6,
+  maxSizeMB = 5,
+  onChange,
+}: {
+  maxFiles?: number;
+  maxSizeMB?: number;
+  onChange?: (file: File | null) => void;
+}) {
+  const { inputRef, items, errors, open, addFiles, remove, acceptAttr } =
+    useImagePicker({
+      maxFiles,
+      maxSizeMB,
+    });
+
+  const has = items.length > 0;
+
+  return (
+    <div>
+      <input
+        ref={inputRef}
+        type="file"
+        accept={acceptAttr}
+        className="hidden"
+        onChange={(e) => {
+          addFiles(e.target.files, 'replace');
+          const f = e.target.files?.[0] ?? null;
+          onChange?.(f);
+        }}
+      />
+
+      <div className={'relative h-[84px] w-[84px]'}>
+        <div className="aspect-84/84 overflow-hidden rounded-lg border border-gray-300 bg-gray-800">
+          {has && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={items[0].previewUrl}
+              alt="이미지 미리보기"
+              className="h-full w-full object-cover"
+            />
+          )}
+        </div>
+
+        <div className="transparent absolute inset-0 flex flex-col items-center justify-center gap-3">
+          {has || (
+            <button
+              type="button"
+              onClick={open}
+              className={
+                'text-body3-semibold flex h-full w-full flex-col items-center justify-center gap-1 text-gray-300'
+              }
+            >
+              <Camera className="size-6" />
+              사진 추가
+            </button>
+          )}
+        </div>
+        {has && (
+          <button
+            type="button"
+            onClick={() => remove(items[0].id)}
+            className={
+              'absolute -top-2 -right-2 flex size-6 items-center justify-center rounded-full bg-gray-50 text-gray-700'
+            }
+          >
+            <XIcon className="size-4" />
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
