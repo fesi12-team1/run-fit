@@ -9,14 +9,14 @@ interface FixedBottomBarProps {
 
 export default function FixedBottomBar({ children, ref }: FixedBottomBarProps) {
   return (
-    <nav
+    <footer
       ref={ref}
-      className="bg-gray-750 laptop:hidden fixed right-0 bottom-0 left-0 flex items-center gap-7 p-6"
+      className="bg-gray-750 laptop:hidden fixed right-0 bottom-0 left-0 p-6"
       role="navigation"
       aria-label="하단 고정 메뉴"
     >
       {children}
-    </nav>
+    </footer>
   );
 }
 
