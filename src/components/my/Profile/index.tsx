@@ -23,9 +23,6 @@ export default function Profile() {
           <button
             className="bg-gray-750 text-caption-medium tablet:text-body3-medium tablet:px-3 rounded-xl px-2 py-2 text-gray-200"
             type="button"
-            onClick={() => {
-              alert('아직 구현되지 않은 기능입니다.');
-            }}
           >
             내 정보 수정
           </button>
