@@ -10,11 +10,10 @@ export default function CoverImageUploader({
   maxSizeMB?: number;
   onChange?: (file: File | null) => void;
 }) {
-  const { inputRef, items, errors, open, addFiles, acceptAttr } =
-    useImageUploader({
-      maxFiles: 1,
-      maxSizeMB,
-    });
+  const { inputRef, items, open, addFiles, acceptAttr } = useImageUploader({
+    maxFiles: 1,
+    maxSizeMB,
+  });
 
   const has = items.length > 0;
 

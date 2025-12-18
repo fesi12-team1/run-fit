@@ -10,7 +10,7 @@ export default function ReviewImageUploader({
   maxSizeMB?: number;
   onChange?: (file: File | null) => void;
 }) {
-  const { inputRef, items, errors, open, addFiles, remove, acceptAttr } =
+  const { inputRef, items, open, addFiles, remove, acceptAttr } =
     useImageUploader({
       maxFiles: 1,
       maxSizeMB,
