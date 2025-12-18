@@ -8,7 +8,6 @@ import { sessionQueries } from '@/api/queries/sessionQueries';
 import Liked from '@/assets/icons/liked.svg?react';
 import Location from '@/assets/icons/location.svg?react';
 import { formatTimeToKorean } from '@/lib/time';
-import { cn } from '@/lib/utils';
 import type { Session } from '@/types';
 import { DdayBadge, LevelBadge, PaceBadge } from '../../ui/Badge';
 import ProfileList from '../../user/ProfileList';
@@ -70,10 +69,9 @@ export default function SessionCard({
             src={image || '/assets/session-default.png'}
             alt="Session"
             fill
-            className={cn(
-              'rounded-xl object-cover transition-opacity duration-300 hover:opacity-80',
-              image ? 'shadow-sm' : 'border border-gray-500'
-            )}
+            className={
+              'rounded-xl object-cover transition-opacity duration-300 hover:opacity-80'
+            }
           />
         </Link>
         {/* prettier-ignore */}
