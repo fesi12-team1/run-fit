@@ -4,16 +4,29 @@ import { useQuery } from '@tanstack/react-query';
 import { crewQueries } from '@/api/queries/crewQueries';
 import CrewCard from '@/components/crew/CrewCard';
 import Dropdown from '@/components/ui/Dropdown';
-import type { Crew } from '@/types';
 
 export default function Page() {
-  const { data } = useQuery(
+  const { data, isLoading, isError } = useQuery(
     crewQueries.list({
       page: 0,
       size: 10,
       sort: 'createdAtDesc',
     })
   );
+
+  if (isLoading) {
+    return (
+      <div className="h-main flex items-center justify-center">로딩 중...</div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="h-main flex items-center justify-center text-red-500">
+        크루 목록을 불러오는데 실패했습니다.
+      </div>
+    );
+  }
 
   return (
     <main className="h-main tablet:px-8 mx-auto flex max-w-[1120px] flex-col items-center justify-start px-6">
@@ -46,9 +59,13 @@ export default function Page() {
           </Dropdown>
         </div>
         <div className="grid w-full grid-cols-1 gap-6">
-          {data?.content?.map((crew: Crew) => (
-            <CrewCard key={crew.id} crew={crew} />
-          ))}
+          {data?.content && data.content.length > 0 ? (
+            data.content.map((crew) => <CrewCard key={crew.id} crew={crew} />)
+          ) : (
+            <div className="flex h-40 items-center justify-center text-gray-400">
+              등록된 크루가 없습니다.
+            </div>
+          )}
         </div>
       </section>
     </main>
