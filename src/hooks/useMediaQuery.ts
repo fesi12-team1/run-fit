@@ -1,20 +1,20 @@
 import { useSyncExternalStore } from 'react';
 
-export const BREAK_POINTS = {
+export const BREAKPOINTS = {
   mobile: 0,
   tablet: 744,
   laptop: 1200,
   desktop: 1400,
 } as const;
 
-export type BreakPointKey = keyof typeof BREAK_POINTS;
+export type Breakpoint = keyof typeof BREAKPOINTS;
 
-export const MQ = {
-  mobile: `(min-width: ${BREAK_POINTS.mobile}px)`,
-  tablet: `(min-width: ${BREAK_POINTS.tablet}px)`,
-  laptop: `(min-width: ${BREAK_POINTS.laptop}px)`,
-  desktop: `(min-width: ${BREAK_POINTS.desktop}px)`,
-} as const;
+type BreakpointQuery =
+  | { min: Exclude<Breakpoint, 'mobile'>; max?: never }
+  | {
+      min: Exclude<Breakpoint, 'mobile' | 'desktop'>;
+      max: Exclude<Breakpoint, 'mobile'>;
+    };
 
 /**
  * 현재 뷰포트가 설정한 media query와 일치하는지 여부를 반환하는 훅입니다.
@@ -22,15 +22,29 @@ export const MQ = {
  * @param query - `MQ`의 키 중 하나 ('mobile' | 'tablet' | 'laptop' | 'desktop').
  * @returns 뷰포트가 media query와 일치하면 `true`, 그렇지 않으면 `false`.
  */
-export function useMediaQuery(query: keyof typeof MQ) {
+export function useMediaQuery(input: BreakpointQuery) {
+  const query = buildMediaQuery(input);
   const subscribe = (onStoreChange: () => void) => {
-    const mql = window.matchMedia(MQ[query]);
+    const mql = window.matchMedia(query);
     mql.addEventListener('change', onStoreChange);
     return () => mql.removeEventListener('change', onStoreChange);
   };
 
-  const getSnapshot = () => window.matchMedia(MQ[query]).matches;
+  const getSnapshot = () => window.matchMedia(query).matches;
   const getServerSnapshot = () => false;
 
   return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+}
+
+const maxWidthExclusive = (px: number) => `${px - 0.02}px`;
+
+export function buildMediaQuery(input: BreakpointQuery) {
+  const minPx = BREAKPOINTS[input.min];
+
+  if (input.max === undefined) {
+    return `(min-width: ${minPx}px)`;
+  }
+
+  const maxPx = BREAKPOINTS[input.max];
+  return `(min-width: ${minPx}px) and (max-width: ${maxWidthExclusive(maxPx)})`;
 }
