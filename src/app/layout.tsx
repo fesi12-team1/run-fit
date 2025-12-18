@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { QueryProvider } from '@/provider/QueryProvider';
 import './globals.css';
 import Header from '@/components/layout/Header';
-import MockProvider from '@/mocks/worker/Provider';
+import MockProvider from '@/mocks/browser/Provider';
 
 export const metadata: Metadata = {
   title: 'RunFit - 러너를 위한 지역 기반 러닝 모임 플랫폼',

@@ -1,222 +1,194 @@
 import { http, HttpResponse } from 'msw';
-import { crews, memberships, reviews, sessions, users } from '../db';
-import {
-  errorResponse,
-  getAuthenticatedUser,
-  parseIdParam,
-  path,
-  successResponse,
-} from '../utils';
+import { AuthMode, requireAuth } from '../core/auth';
+import type { PathFn } from '../core/path';
+import { faker, reviews, sessions } from '../data';
+import { parseIdParam, successResponse } from '../utils';
 
-export const reviewHandlers = [
-  // 세션 리뷰 목록 조회
-  http.get(path('/api/sessions/:id/reviews'), ({ params }) => {
-    const sessionId = Number(params.id);
-    const session = sessions.findFirst((q) => q.where({ id: sessionId }));
+export function createReviewHandlers(p: PathFn, authMode: AuthMode) {
+  return [
+    // 세션 리뷰 목록 조회
+    http.get(p('/api/sessions/:id/reviews'), ({ params, request }) => {
+      const sessionId = parseIdParam(params.id);
+      const url = new URL(request.url);
 
-    if (!session) {
-      return HttpResponse.json(
-        { message: 'Session not found' },
-        { status: 404 }
+      const page = parseInt(url.searchParams.get('page') || '0', 10);
+      const size = parseInt(url.searchParams.get('size') || '10', 10);
+
+      let sessionReviews = reviews.filter(
+        (review) => review.sessionId === sessionId
       );
-    }
 
-    const data = {
-      content: [
-        {
-          id: 10,
-          sessionId: 12,
-          crewId: 3,
-          userId: 1,
-          userName: '홍길동',
-          userImage: 'https://.../profile.jpg',
-          description: '분위기가 좋았어요!',
-          ranks: 5,
-          image: 'https://.../review1.jpg',
-          createdAt: '2025-11-20T12:00:00+09:00',
-        },
-      ],
-      page: 0,
-      size: 10,
-      totalElements: 5,
-      totalPages: 1,
-      hasNext: false,
-      hasPrevious: false,
-    };
+      const totalElements = sessionReviews.length;
+      const totalPages = Math.ceil(totalElements / size);
+      const hasNext = page < totalPages - 1;
+      const hasPrevious = page > 0;
 
-    return HttpResponse.json(successResponse(data), { status: 200 });
-  }),
+      const startIndex = page * size;
+      const endIndex = startIndex + size;
+      sessionReviews = sessionReviews.slice(startIndex, endIndex);
 
-  // 세션 리뷰 작성
-  http.post(path('/api/sessions/:id/reviews'), async ({ request, params }) => {
-    const sessionId = Number(params.id);
-    const session = sessions.findFirst((q) => q.where({ id: sessionId }));
+      const content = sessionReviews.map((review, i) => ({
+        id: review.id,
+        sessionId: review.sessionId,
+        crewId: i,
+        userId: i,
+        userName: faker.person.lastName(),
+        userImage: faker.image.avatar(),
+        description: review.description,
+        ranks: review.ranks,
+        image: review.image,
+        createdAt: review.createdAt,
+      }));
 
-    if (!session) {
-      return HttpResponse.json(
-        { message: 'Session not found' },
-        { status: 404 }
-      );
-    }
+      const data = {
+        content,
+        page,
+        size,
+        totalElements,
+        totalPages,
+        hasNext,
+        hasPrevious,
+      };
 
-    const reqBody = (await request.json()) as {
-      description: string;
-      ranks: number;
-      image?: string;
-    };
+      return HttpResponse.json(successResponse(data), { status: 200 });
+    }),
 
-    const data = {
-      success: true,
-      data: {
-        id: 10,
-        sessionId: 12,
-        crewId: 3,
-        userId: 1,
-        description: reqBody.description,
-        ranks: reqBody.ranks,
-        image: reqBody.image,
-        createdAt: Date.now().toString(),
-      },
-      error: null,
-    };
+    // 세션 리뷰 작성
+    http.post(
+      p('/api/sessions/:id/reviews'),
+      requireAuth(authMode, async ({ request }) => {
+        const reqBody = (await request.json()) as {
+          description: string;
+          ranks: number;
+          image?: string;
+        };
 
-    return HttpResponse.json(successResponse(data), { status: 201 });
-  }),
+        const data = {
+          id: 0,
+          sessionId: 0,
+          crewId: 0,
+          userId: 0,
+          userName: faker.person.lastName(),
+          userImage: faker.image.avatar(),
+          description: faker.lorem.paragraph(),
+          ranks: reqBody.ranks || 4,
+          image: reqBody.image || 'string',
+          createdAt: new Date().toISOString(),
+        };
 
-  // 리뷰 삭제
-  http.delete(path('/api/reviews'), async ({ request }) => {
-    const user = getAuthenticatedUser(request);
-
-    if (!user) {
-      return HttpResponse.json(
-        errorResponse({ code: 'UNAUTHORIZED', message: 'Unauthorized' }),
-        { status: 401 }
-      );
-    }
-
-    const body = (await request.json()) as {
-      reviewId: number;
-    };
-
-    const membership = memberships.findFirst((q) =>
-      q.where({ userId: Number(user.id) })
-    );
-
-    if (!membership) {
-      return HttpResponse.json(
-        errorResponse({ code: 'NOT_FOUND', message: 'Membership not found' }),
-        { status: 404 }
-      );
-    }
-
-    const review = reviews.findFirst((q) =>
-      q.where({
-        id: body.reviewId,
+        return HttpResponse.json(successResponse(data), { status: 201 });
       })
-    );
+    ),
 
-    if (!review) {
-      return HttpResponse.json(
-        errorResponse({ code: 'NOT_FOUND', message: 'Review not found' }),
-        { status: 404 }
-      );
-    }
+    // 리뷰 삭제
+    http.delete(
+      p('/api/reviews/:reviewId'),
+      requireAuth(authMode, async () => {
+        const data = {
+          message: '리뷰가 삭제되었습니다.',
+        };
 
-    reviews.delete((q) => q.where({ id: review.id }));
+        return HttpResponse.json(successResponse(data), { status: 200 });
+      })
+    ),
 
-    const data = {
-      message: '리뷰가 삭제되었습니다.',
-    };
+    // 크루 리뷰 목록 조회
+    http.get(p('/api/crews/:id/reviews'), ({ request }) => {
+      const url = new URL(request.url);
 
-    return HttpResponse.json(successResponse(data), { status: 200 });
-  }),
+      const page = parseInt(url.searchParams.get('page') || '0', 10);
+      const size = parseInt(url.searchParams.get('size') || '10', 10);
 
-  // 크루 리뷰 목록 조회
-  http.get(path('/api/crews/:id/reviews'), ({ params }) => {
-    const crewId = parseIdParam(params.id);
+      let crewReviews = reviews;
 
-    if (crewId === null) {
-      return HttpResponse.json(
-        errorResponse({
-          code: 'BAD_REQUEST',
-          message: '유효하지 않은 크루 ID입니다.',
-        }),
-        { status: 400 }
-      );
-    }
+      const totalElements = crewReviews.length;
+      const totalPages = Math.ceil(totalElements / size);
+      const hasNext = page < totalPages - 1;
+      const hasPrevious = page > 0;
 
-    const crew = crews.findFirst((q) => q.where({ id: crewId }));
-    if (!crew) {
-      return HttpResponse.json(
-        errorResponse({
-          code: 'NOT_FOUND',
-          message: '크루가 존재하지 않습니다.',
-        }),
-        { status: 404 }
-      );
-    }
+      const startIndex = page * size;
+      const endIndex = startIndex + size;
+      crewReviews = crewReviews.slice(startIndex, endIndex);
 
-    const data = {
-      content: [
-        {
-          id: 10,
-          sessionId: 12,
-          sessionName: '한강 야간 러닝',
-          crewId: 3,
-          userId: 1,
-          userName: '홍길동',
-          userImage: 'https://.../profile.jpg',
-          description: '분위기가 좋았어요!',
-          ranks: 5,
-          image: 'https://.../review1.jpg',
-          createdAt: '2025-11-20T12:00:00+09:00',
-        },
-      ],
-      page: 0,
-      size: 10,
-      totalElements: 25,
-      totalPages: 3,
-      hasNext: true,
-      hasPrevious: false,
-    };
+      const content = crewReviews.map((review, i) => {
+        const session = sessions.find((s) => s.id === review.sessionId);
+        return {
+          id: review.id,
+          sessionId: review.sessionId,
+          sessionName: session ? session.name : 'Unknown Session',
+          crewId: i,
+          userId: review.userId,
+          userName: faker.person.lastName(),
+          userImage: faker.image.avatar(),
+          description: review.description,
+          ranks: review.ranks,
+          image: review.image,
+          createdAt: review.createdAt,
+        };
+      });
 
-    return HttpResponse.json(successResponse(data), { status: 200 });
-  }),
+      const data = {
+        content,
+        page,
+        size,
+        totalElements,
+        totalPages,
+        hasNext,
+        hasPrevious,
+      };
 
-  // 내가 작성한 리뷰 목록
-  http.get(path('/api/user/me/reviews'), ({ request }) => {
-    const user = getAuthenticatedUser(request);
+      return HttpResponse.json(successResponse(data), { status: 200 });
+    }),
 
-    if (!user) {
-      return HttpResponse.json(
-        errorResponse({ code: 'NOT_FOUND', message: 'Crew not found' }),
-        { status: 404 }
-      );
-    }
+    // 내가 작성한 리뷰 목록
+    http.get(
+      p('/api/user/me/reviews'),
+      requireAuth(authMode, ({ request }) => {
+        const url = new URL(request.url);
 
-    const data = {
-      content: [
-        {
-          id: 10,
-          sessionId: 12,
-          crewId: 3,
-          userId: 1,
-          userName: '홍길동',
-          userImage: 'https://.../profile.jpg',
-          description: '좋은 분위기에서 즐겁게 뛰었습니다.',
-          ranks: 5,
-          image: 'https://.../review1.jpg',
-          createdAt: '2025-11-20T12:00:00+09:00',
-        },
-      ],
-      page: 0,
-      size: 4,
-      totalElements: 12,
-      totalPages: 3,
-      hasNext: true,
-      hasPrevious: false,
-    };
+        const page = parseInt(url.searchParams.get('page') || '0', 10);
+        const size = parseInt(url.searchParams.get('size') || '10', 10);
 
-    return HttpResponse.json(successResponse(data), { status: 200 });
-  }),
-];
+        let crewReviews = reviews;
+
+        const totalElements = crewReviews.length;
+        const totalPages = Math.ceil(totalElements / size);
+        const hasNext = page < totalPages - 1;
+        const hasPrevious = page > 0;
+
+        const startIndex = page * size;
+        const endIndex = startIndex + size;
+        crewReviews = crewReviews.slice(startIndex, endIndex);
+
+        const content = crewReviews.map((review, i) => {
+          const session = sessions.find((s) => s.id === review.sessionId);
+          return {
+            id: review.id,
+            sessionId: review.sessionId,
+            sessionName: session ? session.name : 'Unknown Session',
+            crewId: i,
+            userId: 1,
+            userName: faker.person.lastName(),
+            userImage: faker.image.avatar(),
+            description: review.description,
+            ranks: review.ranks,
+            image: review.image,
+            createdAt: review.createdAt,
+          };
+        });
+
+        const data = {
+          content,
+          page,
+          size,
+          totalElements,
+          totalPages,
+          hasNext,
+          hasPrevious,
+        };
+
+        return HttpResponse.json(successResponse(data), { status: 200 });
+      })
+    ),
+  ];
+}
