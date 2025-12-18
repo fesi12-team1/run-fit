@@ -55,13 +55,6 @@ export default function SessionCard({
     sessionAtDate.getMinutes()
   );
 
-  const levelMap: Record<string, 'easy' | 'medium' | 'hard'> = {
-    BEGINNER: 'easy',
-    INTERMEDIATE: 'medium',
-    ADVANCED: 'hard',
-  };
-  const levelValue = levelMap[level] || 'easy';
-
   return (
     <div className="flex w-full flex-col">
       <div className="tablet:aspect-video relative aspect-165/185 w-full cursor-pointer self-stretch overflow-hidden rounded-lg">
@@ -110,11 +103,11 @@ export default function SessionCard({
         {/* prettier-ignore */}
         <div className="flex gap-0.5 desktop:gap-1 items-center">
           <PaceBadge pace={pace} size="sm" className="tablet:hidden" />
-          <LevelBadge level={levelValue} size="sm" className="tablet:hidden" />
+          <LevelBadge level={level} size="sm" className="tablet:hidden" />
           <PaceBadge pace={pace} size="md" className="hidden tablet:inline-flex laptop:hidden" />
-          <LevelBadge level={levelValue} size="md" className="hidden tablet:inline-flex laptop:hidden" />
+          <LevelBadge level={level} size="md" className="hidden tablet:inline-flex laptop:hidden" />
           <PaceBadge pace={pace} size="lg" className="hidden laptop:inline-flex" />
-          <LevelBadge level={levelValue} size="lg" className="hidden laptop:inline-flex" />
+          <LevelBadge level={level} size="lg" className="hidden laptop:inline-flex" />
         </div>
       </div>
       {displayParticipants && (

@@ -23,13 +23,6 @@ export default function CompletedSessionCard({
     sessionAtDate.getMinutes()
   );
 
-  const levelMap: Record<string, 'easy' | 'medium' | 'hard'> = {
-    BEGINNER: 'easy',
-    INTERMEDIATE: 'medium',
-    ADVANCED: 'hard',
-  };
-  const levelValue = levelMap[session.level] || 'easy';
-
   return (
     <div className="flex w-full items-center gap-3">
       <Link href={`/sessions/${session.id}`}>
@@ -86,7 +79,7 @@ export default function CompletedSessionCard({
           {/* prettier-ignore */}
           <div className="flex gap-0.5 desktop:gap-1 items-center">
             <PaceBadge pace={session.pace} size={size} />
-            <LevelBadge level={levelValue} size={size} />
+            <LevelBadge level={session.level} size={size} />
           </div>
         </div>
         <div className="flex items-center">

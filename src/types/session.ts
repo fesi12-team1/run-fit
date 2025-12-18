@@ -18,8 +18,8 @@ export interface Session<City extends Sido = Sido> {
   };
   sessionAt: string;
   registerBy: string;
-  level: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED';
-  status: 'OPEN' | 'CLOSED';
+  level: Level;
+  status: SessionStatus;
   pace: number;
   maxParticipantCount: number;
   currentParticipantCount: number;
@@ -32,10 +32,13 @@ export type SessionListFilters = PaginationQueryParams & {
   city?: string[];
   district?: string[];
   crewId?: number;
-  level?: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED';
+  level?: Level;
   dateFrom?: string;
   dateTo?: string;
   timeFrom?: string;
   timeTo?: string;
   sort: 'createdAtDesc' | 'sessionAtAsc' | 'registerByAsc';
 };
+
+export type Level = 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED';
+export type SessionStatus = 'OPEN' | 'CLOSED';
