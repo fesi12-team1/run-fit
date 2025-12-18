@@ -1,12 +1,10 @@
 'use client';
 
-// import { useQuery } from '@tanstack/react-query';
 import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { crewQueries } from '@/api/queries/crewQueries';
 import { sessionQueries } from '@/api/queries/sessionQueries';
-// import { sessionQueries } from '@/api/queries/sessionQueries';
 import VerticalEllipsisIcon from '@/assets/icons/vertical-ellipsis.svg?react';
 import FixedBottomBar, {
   useFixedBottomBar,
@@ -16,7 +14,6 @@ import Badge, { LevelBadge, PaceBadge } from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
 import ProgressBar from '@/components/ui/ProgressBar';
 import Rating from '@/components/ui/Rating';
-// import TimeSlider from '@/components/ui/TimeSlider';
 import UserAvatar from '@/components/ui/UserAvatar';
 import {
   formatDDay,
@@ -39,12 +36,15 @@ export default function Page() {
 
   const { data: crew } = useQuery({
     ...crewQueries.detail(Number(crewId)),
+    enabled: !!crewId,
   });
 
-  const { data: reviews } = useQuery(
-    crewQueries.reviews(Number(crewId)).list({ page: 0, size: 1 })
-  );
-  const { ref, height } = useFixedBottomBar();
+  const { data: reviews } = useQuery({
+    ...crewQueries.reviews(Number(crewId)).list({ page: 0, size: 1 }),
+    enabled: !!crewId,
+  });
+
+  const { ref } = useFixedBottomBar();
 
   if (isLoading) return null;
   if (error) return null;
@@ -69,7 +69,7 @@ export default function Page() {
         <SessionDetailInfo session={session} participants={participants} />
         <CrewShortInfo crew={crew} review={review} />
       </div>
-      <FixedBottomBar ref={ref}>hellowolrd</FixedBottomBar>
+      <FixedBottomBar ref={ref}>Fixed Bottom Bar</FixedBottomBar>
     </main>
   );
 }
@@ -171,7 +171,7 @@ function SessionDetailInfo({
           <div className="min-h-0 flex-1">
             <KakaoMap
               coords={coords}
-              address="city"
+              address={location}
               className="h-full w-full"
             />
           </div>
@@ -244,12 +244,14 @@ function CrewShortInfo({ crew, review }: { crew: Crew; review: Review }) {
       </div>
       <hr className="text-gray-600" />
 
-      <div>
-        <Rating value={ranks} onChange={() => 1} className="mb-2" />
-        <p className="text-caption-regular tablet-text-body3-regular line-clamp-2 text-gray-200">
-          {description}
-        </p>
-      </div>
+      {review && (
+        <div>
+          <Rating value={ranks} onChange={() => 1} className="mb-2" />
+          <p className="text-caption-regular tablet-text-body3-regular line-clamp-2 text-gray-200">
+            {description}
+          </p>
+        </div>
+      )}
     </div>
   );
 }
