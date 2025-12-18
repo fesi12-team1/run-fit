@@ -59,7 +59,10 @@ export async function handleRequest(
       ? pathname.slice(1)
       : pathname;
     const requestPath = proxyUrl(`/api/${trimmedPathname}?${searchParams}`);
-    console.log('requestPath: ', requestPath);
+
+    const hasBody =
+      request.method !== 'GET' && request.method !== 'HEAD' && request.body;
+
     const proxyResponse = await fetch(requestPath, {
       method: request.method,
       headers: {
@@ -68,11 +71,9 @@ export async function handleRequest(
         ...(requiresAuth &&
           accessToken && { Authorization: `Bearer ${accessToken}` }),
       },
-      body:
-        request.method !== 'GET' && request.method !== 'HEAD'
-          ? request.body
-          : undefined,
+      body: hasBody ? request.body : undefined,
       cache: requiresAuth ? 'no-cache' : 'default',
+      ...(hasBody && { duplex: 'half' }),
     });
 
     if (!proxyResponse.ok) {

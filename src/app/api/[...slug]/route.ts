@@ -7,7 +7,7 @@ const handler = async (
 ) => {
   const { slug } = await params;
   const pathname = slug.join('/');
-  console.log('pathname from slug:', pathname);
+
   return handleRequest(request, pathname, true);
 };
 
