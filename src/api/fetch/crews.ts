@@ -93,10 +93,9 @@ export async function getCrewMembers(
   }
 
   type CrewMembersResponseData = {
-    leader: CrewMember;
-    staff: CrewMember[];
     members: CrewMember[];
   };
+
   const { data }: ResponseData<CrewMembersResponseData> = await response.json();
   return data;
 }

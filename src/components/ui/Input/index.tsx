@@ -41,7 +41,7 @@ export default function Input({
               'focus-within:ring-brand-400 focus-within:ring-1',
 
             // warning (disabled보다 낮은 우선)
-            hasError ? 'border-warning border' : 'border-transparent',
+            hasError ? 'border-error-100 border' : 'border-transparent',
 
             // disabled
             disabled && 'pointer-events-none text-gray-400 opacity-50',
@@ -74,7 +74,7 @@ export default function Input({
         </div>
       </Label>
       {errorMessage && (
-        <p className="text-warning mt-0.5 text-xs">{errorMessage}</p>
+        <p className="text-error-100 mt-0.5 text-xs">{errorMessage}</p>
       )}
     </>
   );

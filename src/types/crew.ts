@@ -23,6 +23,7 @@ export type CrewListFilters = PaginationQueryParams & {
 
 export type MemberRoleFilters = {
   role?: 'leader' | 'staff' | 'general';
+  sort?: 'joinedAtAsc' | 'roleAsc';
 };
 
 export interface CrewMember {
