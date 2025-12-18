@@ -16,6 +16,12 @@ export const MQ = {
   desktop: `(min-width: ${BREAK_POINTS.desktop}px)`,
 } as const;
 
+/**
+ * 현재 뷰포트가 설정한 media query와 일치하는지 여부를 반환하는 훅입니다.
+ *
+ * @param query - `MQ`의 키 중 하나 ('mobile' | 'tablet' | 'laptop' | 'desktop').
+ * @returns 뷰포트가 media query와 일치하면 `true`, 그렇지 않으면 `false`.
+ */
 export function useMediaQuery(query: keyof typeof MQ) {
   const subscribe = (onStoreChange: () => void) => {
     const mql = window.matchMedia(MQ[query]);
