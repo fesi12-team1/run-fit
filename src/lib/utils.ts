@@ -96,7 +96,7 @@ export function normalizeParams<T extends object>(params?: T): T {
  * @returns 옵션의 레이블 또는 undefined
  */
 export function getOptionLabel<
-  T extends readonly { label: string; value: string }[],
+  T extends readonly { label: string; value: string | undefined }[],
 >(options: T, value?: T[number]['value']) {
   return options.find((option) => option.value === value)?.label;
 }

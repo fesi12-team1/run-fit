@@ -28,7 +28,7 @@ export default function SessionFilterBar({
         {/** 난이도 */}
         <Dropdown size="lg" hasSelected={Boolean(level)}>
           <Dropdown.Trigger>
-            {getOptionLabel(LEVEL_OPTIONS, level) || '난이도'}
+            {level ? getOptionLabel(LEVEL_OPTIONS, level) : '난이도'}
           </Dropdown.Trigger>
           <Dropdown.Content>
             {LEVEL_OPTIONS.map(({ label, value }) => (
