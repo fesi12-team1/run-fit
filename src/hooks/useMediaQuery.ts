@@ -19,8 +19,12 @@ type BreakpointQuery =
 /**
  * 현재 뷰포트가 설정한 media query와 일치하는지 여부를 반환하는 훅입니다.
  *
- * @param query - `MQ`의 키 중 하나 ('mobile' | 'tablet' | 'laptop' | 'desktop').
+ * @param input - 브레이크포인트 쿼리 객체. 예: { min: 'tablet' } 또는 { min: 'tablet', max: 'laptop' }
  * @returns 뷰포트가 media query와 일치하면 `true`, 그렇지 않으면 `false`.
+ *
+ * @example
+ * const isTabletAndAbove = useMediaQuery({ min: 'tablet' });
+ * const isTabletOnly = useMediaQuery({ min: 'tablet', max: 'laptop' });
  */
 export function useMediaQuery(input: BreakpointQuery) {
   const query = buildMediaQuery(input);
