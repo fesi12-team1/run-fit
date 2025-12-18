@@ -12,18 +12,18 @@ import { LEVEL_OPTIONS, SORT_OPTIONS } from '@/types';
 export default function SessionFilterBar({
   uiFilters: { region, date, time, level },
   queryFilters: { sort },
-  setRegion,
-  setDate,
-  setTime,
-  setLevel,
-  setSort,
+  changeRegion,
+  changeDate,
+  changeTime,
+  changeLevel,
+  changeSort,
 }: ReturnType<typeof useSessionFilters>) {
   return (
     <div className="mb-6 flex w-full items-center justify-between gap-2">
       <div className="flex items-center gap-2">
-        <RegionFilter value={region} onChange={setRegion} />
-        <DateFilter value={date} onChange={setDate} />
-        <TimeFilter value={time} onChange={setTime} />
+        <RegionFilter value={region} onChange={changeRegion} />
+        <DateFilter value={date} onChange={changeDate} />
+        <TimeFilter value={time} onChange={changeTime} />
 
         {/** 난이도 */}
         <Dropdown size="lg" hasSelected={Boolean(level)}>
@@ -35,7 +35,7 @@ export default function SessionFilterBar({
               <Dropdown.Item
                 key={value}
                 selected={level === value}
-                onSelect={() => setLevel(value)}
+                onSelect={() => changeLevel(value)}
               >
                 {label}
               </Dropdown.Item>
@@ -55,7 +55,7 @@ export default function SessionFilterBar({
             <Dropdown.Item
               key={value}
               selected={sort === value}
-              onSelect={() => setSort(value)}
+              onSelect={() => changeSort(value)}
             >
               {label}
             </Dropdown.Item>
