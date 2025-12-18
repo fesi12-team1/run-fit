@@ -31,7 +31,7 @@ export default function MineCrewList() {
                     <p className="text-caption-semibold tablet:text-body2-semibold truncate text-gray-50">
                       {crew.name}
                     </p>
-                    <p className="text-cation-regular text-body3-regular text-gray-300">{`${crew.city} • 멤버 ${crew.memberCount}명`}</p>
+                    <p className="text-caption-regular tablet:text-body3-regular text-gray-300">{`${crew.city} • 멤버 ${crew.memberCount}명`}</p>
                   </div>
                 </div>
               ))}
