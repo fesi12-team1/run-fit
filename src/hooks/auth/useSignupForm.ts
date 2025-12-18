@@ -1,64 +1,55 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import { useSignup } from '@/api/mutations/authMutations';
+import * as z from 'zod/v4';
 import {
-  SignupFormValues,
-  signupSchema,
-} from '@/lib/validations/auth/signupSchema';
+  useSignup,
+  type UseAuthFormOptions,
+} from '@/api/mutations/authMutations';
 
-/**
- * 회원가입 훅
- * @returns 회원가입 폼, 제출 핸들러, 제출 중 상태
- */
-export function useSignupForm() {
-  const router = useRouter();
-
-  const form = useForm<SignupFormValues>({
-    resolver: zodResolver(signupSchema),
-    mode: 'onSubmit',
+const signupSchema = z
+  .object({
+    email: z
+      .string()
+      .min(1, '이메일을 입력해주세요.')
+      .email('올바른 이메일 형식이 아닙니다.'),
+    password: z
+      .string()
+      .min(8, '비밀번호는 최소 8자 이상이어야 합니다.')
+      .max(32, '비밀번호는 최대 32자까지 가능합니다.')
+      .regex(/[0-9]/, '비밀번호에 숫자가 최소 1개 이상 포함되어야 합니다.')
+      .regex(
+        /[a-zA-Z]/,
+        '비밀번호에 영문자가 최소 1개 이상 포함되어야 합니다.'
+      ),
+    passwordConfirm: z.string().min(1, '비밀번호 확인을 입력해주세요.'),
+    name: z
+      .string()
+      .min(2, '이름은 최소 2자 이상이어야 합니다.')
+      .max(10, '이름은 최대 10자까지 가능합니다.'),
+  })
+  .refine((values) => values.password === values.passwordConfirm, {
+    path: ['passwordConfirm'],
+    message: '비밀번호가 일치하지 않습니다.',
   });
 
-  const mutation = useSignup();
+export function useSignupForm(options: UseAuthFormOptions) {
+  const form = useForm<z.infer<typeof signupSchema>>({
+    resolver: zodResolver(signupSchema),
+    mode: 'onChange',
+  });
+
+  const mutation = useSignup({
+    onSuccess: options?.onSuccess,
+    onError: (message) => {
+      options?.onError?.(message);
+      form.setError('root', { message });
+    },
+  });
 
   const submit = form.handleSubmit((values) => {
-    mutation.mutate(
-      {
-        email: values.email,
-        password: values.password,
-        name: values.name,
-      },
-      {
-        onSuccess: () => {
-          router.push('/signin');
-        },
-        onError: ({ error }) => {
-          form.setError('root', {
-            message: error.message,
-          });
-          // switch (error.code) {
-          //   case 'ALREADY_EXISTS_EMAIL':
-          //     form.setError('email', {
-          //       message: error.message,
-          //     });
-          //     break;
-
-          //   case 'VALIDATION_ERROR':
-          //     form.setError('root', {
-          //       message: error.message,
-          //     });
-          //     break;
-
-          //   default:
-          //     form.setError('root', {
-          //       message: '회원가입 중 오류가 발생했습니다.',
-          //     });
-          // }
-        },
-      }
-    );
+    mutation.mutate(values);
   });
 
   return {

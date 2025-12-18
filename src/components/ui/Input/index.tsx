@@ -5,8 +5,8 @@ import Label from '../Label';
 interface InputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
   size?: 'lg' | 'sm';
-  errorMessage?: string;
   label?: string;
+  errorMessage?: string;
   RightElement?: React.ReactNode;
 }
 
@@ -17,18 +17,10 @@ export default function Input({
   label,
   ...props
 }: InputProps) {
-  const {
-    'aria-invalid': ariaInvalid,
-    disabled,
-    className,
-    ...restProps
-  } = props;
-
-  const hasError =
-    !disabled && (ariaInvalid === true || ariaInvalid === 'true');
+  const hasError = !props.disabled && !!errorMessage;
 
   return (
-    <>
+    <div className="flex w-full flex-col gap-2">
       <Label htmlFor={props.id}>
         {label}
         <div
@@ -36,7 +28,7 @@ export default function Input({
             'mt-1 flex items-center bg-gray-800',
 
             // focus 상태 (disabled 제외)
-            !disabled &&
+            !props.disabled &&
               !hasError &&
               'focus-within:ring-brand-400 focus-within:ring-1',
 
@@ -44,14 +36,12 @@ export default function Input({
             hasError ? 'border-error-100 border' : 'border-transparent',
 
             // disabled
-            disabled && 'pointer-events-none text-gray-400 opacity-50',
+            props.disabled && 'pointer-events-none text-gray-400 opacity-50',
 
             // 사이즈
             size === 'lg'
               ? 'h-9 rounded-xl px-4 py-2'
-              : 'h-8 rounded-lg px-3 py-2.5',
-
-            className
+              : 'h-8 rounded-lg px-3 py-2.5'
           )}
         >
           <input
@@ -61,10 +51,9 @@ export default function Input({
                 'text-body2-medium placeholder:text-body2-medium',
               size === 'sm' && 'text-body3-medium placeholder:text-body3-medium'
             )}
-            aria-invalid={ariaInvalid}
-            disabled={disabled}
             aria-label={label}
-            {...restProps}
+            aria-invalid={hasError}
+            {...props}
           />
           {RightElement && (
             <span className="flex size-5 items-center justify-center text-gray-300">
@@ -76,6 +65,6 @@ export default function Input({
       {errorMessage && (
         <p className="text-error-100 mt-0.5 text-xs">{errorMessage}</p>
       )}
-    </>
+    </div>
   );
 }
