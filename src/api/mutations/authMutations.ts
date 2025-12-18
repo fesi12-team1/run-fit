@@ -6,8 +6,12 @@ import {
   SignupRequestBody,
 } from '@/api/fetch/auth';
 import { userQueries } from '@/api/queries/userQueries';
-import type { SigninFormValues } from '@/lib/validations/auth/signinSchema';
-import type { ErrorResponse, SigninResponse, User } from '@/types';
+import type {
+  ErrorResponse,
+  SigninResponse,
+  User,
+  UserCredentials,
+} from '@/types';
 
 export interface UseAuthFormOptions {
   onSuccess?: () => void;
@@ -31,7 +35,7 @@ export function useSignup(options?: UseAuthFormOptions) {
 export function useSignin(options?: UseAuthFormOptions) {
   const queryClient = useQueryClient();
 
-  return useMutation<SigninResponse | null, ErrorResponse, SigninFormValues>({
+  return useMutation<SigninResponse | null, ErrorResponse, UserCredentials>({
     mutationFn: postSignin,
     onSuccess: () => {
       queryClient.invalidateQueries({
