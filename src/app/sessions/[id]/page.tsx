@@ -12,7 +12,7 @@ import FixedBottomBar, {
   useFixedBottomBar,
 } from '@/components/layout/FixedBottomBar';
 import KakaoMap from '@/components/session/KakaoMap';
-import Badge, { PaceBadge } from '@/components/ui/Badge';
+import Badge, { LevelBadge, PaceBadge } from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
 import ProgressBar from '@/components/ui/ProgressBar';
 import Rating from '@/components/ui/Rating';
@@ -33,26 +33,7 @@ export default function Page() {
   } = useQuery(sessionQueries.detail(Number(id)));
   const crewId = session?.crewId;
 
-  // const { data: participants } = useQuery(
-  //   sessionQueries.participants(Number(id))
-  // );
-
-  const participants = [
-    {
-      userId: 1,
-      name: '홍길동',
-      profileImage:
-        'https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-      role: '운영자',
-    },
-    {
-      userId: 2,
-      name: '김철수',
-      profileImage:
-        'https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMj A3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-      role: '멤버',
-    },
-  ];
+  const { data } = useQuery(sessionQueries.participants(Number(id)));
 
   const { data: crew } = useQuery({
     ...crewQueries.detail(Number(crewId)),
@@ -67,7 +48,7 @@ export default function Page() {
   if (error) return null;
   if (!session) return null;
 
-  if (!participants) return null;
+  if (!data) return null;
   if (!crew) return null;
   if (!reviews) return null;
 
@@ -75,19 +56,19 @@ export default function Page() {
     name,
     description,
     image,
-    city,
-    district,
     coords,
     sessionAt,
     registerBy,
     level,
-    status,
+    location,
     pace,
     maxParticipantCount,
     currentParticipantCount,
     createdAt,
     liked,
   } = session;
+
+  const { participants, totalCount } = data;
 
   const review = reviews?.content[0];
 
@@ -101,54 +82,60 @@ export default function Page() {
         className="z-0 aspect-375/267 w-full object-cover"
       />
 
-      <div className="relative z-100 -mt-5 rounded-t-[20px] bg-gray-800 p-6">
-        <div className="mb-6 px-1">
-          <div className="mb-1 flex w-full items-center justify-between gap-2">
-            <Badge variant="dday" size="sm">
-              마감 {formatDDay(registerBy)}
-            </Badge>
-            <VerticalEllipsisIcon className="size-6" />
-          </div>
-          <div className="mb-2">
-            <h1 className="text-title3-semibold text-gray-50">{name}</h1>
-            <div className="text-body3-regular text-gray-300">
-              {formatKoMonthDayTime(sessionAt)}
-            </div>
-          </div>
-          <div className="mb-6 flex items-center gap-1">
-            <PaceBadge size="sm" pace={pace} />
-            {/* <LevelBadge size="sm" level={} /> */}
-          </div>
-          <ProgressBar
-            value={currentParticipantCount}
-            max={maxParticipantCount}
-          />
+      <div className="tablet:p-12 tablet:py-10 relative z-100 -mt-5 rounded-t-[20px] bg-gray-800 px-7 py-6">
+        <div className="mb-1 flex w-full items-center justify-between gap-2">
+          <Badge variant="dday" size="sm">
+            마감 {formatDDay(registerBy)}
+          </Badge>
+          <VerticalEllipsisIcon className="size-6" />
         </div>
+        <div className="mb-2">
+          <h1 className="text-title3-semibold text-gray-50">{name}</h1>
+          <div className="text-body3-regular text-gray-300">
+            {formatKoMonthDayTime(sessionAt)}
+          </div>
+        </div>
+        <div className="flex items-center gap-1">
+          <PaceBadge size="sm" pace={pace} />
+          <LevelBadge size="sm" level={level} />
+        </div>
+        <ProgressBar
+          value={currentParticipantCount}
+          max={maxParticipantCount}
+        />
+      </div>
 
-        <hr className="mb-6 text-gray-700" />
+      <hr className="tablet:mx-12 mx-6 text-gray-700" />
 
-        <div className="mb-6 flex flex-col gap-1">
-          <h2 className="text-body2-semibold text-gray-50">세션 소개</h2>
-          <p className="text-body3-regular text-gray-200">{description}</p>
+      <div className="tablet:px-12 tablet:py-8 tablet:gap-8 flex flex-col gap-6 bg-gray-800 px-6 py-6">
+        <div className="tablet:gap-2 flex flex-col gap-1">
+          <h2 className="text-body2-semibold tablet:text-title3-semibold text-gray-50">
+            세션 소개
+          </h2>
+          <p className="text-body3-regular tablet:text-body2-regular text-gray-200">
+            {description}
+          </p>
           <div className="text-body3-regular text-gray-300">
             {formatKoYearMonthDay(createdAt)}
           </div>
         </div>
 
-        <div className="mb-6 flex flex-col gap-1">
-          <h2 className="text-body2-semibold text-gray-50">일정</h2>
-          <ul>
-            <li>&nbsp;{`• 모임 일시: ${formatKoYearMonthDay(sessionAt)}`}</li>{' '}
+        <div className="tablet:gap-2 flex flex-col gap-1">
+          <h2 className="text-body2-semibold tablet:text-title3-semibold text-gray-50">
+            일정
+          </h2>
+          <ul className="text-body3-regular tablet:text-body2-regular text-gray-200">
+            <li>&nbsp;{`• 모임 일시: ${formatKoYearMonthDay(sessionAt)}`}</li>
             <li>
               &nbsp;{`• 모집 일정: ~ ${formatKoMonthDayTime(registerBy)} 마감`}
             </li>
           </ul>
         </div>
-        <div className="mb-6 flex flex-col gap-1">
-          <h2 className="text-body2-semibold flex flex-col text-gray-50">
+        <div className="tablet:gap-2 flex flex-col gap-1">
+          <h2 className="text-body2-semibold tablet:text-body3-semibold flex flex-col text-gray-50">
             장소
           </h2>
-          <div className="flex h-[218px] flex-col overflow-hidden rounded-xl border border-gray-600">
+          <div className="tablet:h-[312px] flex h-[218px] flex-col overflow-hidden rounded-xl border border-gray-600">
             <div className="min-h-0 flex-1">
               <KakaoMap
                 coords={coords}
@@ -157,20 +144,20 @@ export default function Page() {
               />
             </div>
 
-            <div className="text-body3-semibold flex-none px-4 py-5">
-              반포 한강공원 (서울 서초구 신반포로11길 40)
+            <div className="text-body3-semibold tablet:text-body1-semibold flex-none px-4 py-5">
+              {location}
             </div>
           </div>
         </div>
-        <div className="mb-6 flex flex-col gap-1">
-          <h2 className="text-body2-semibold inline-flex items-center gap-1 text-gray-50">
+        <div className="tablet:gap-2 flex flex-col gap-1">
+          <h2 className="text-body2-semibold tablet:text-title3-semibold inline-flex items-center gap-1 text-gray-50">
             참여 멤버
             <span className="text-body1-semibold text-brand-300">
-              {currentParticipantCount}
+              {totalCount}
             </span>
           </h2>
-          <ul className="mb-3 flex flex-col gap-2">
-            {participants.map((participant) => (
+          <ul className="tablet:gap-5 mb-3 flex flex-col gap-2">
+            {participants.slice(0, 4).map((participant) => (
               <li key={participant.userId} className="flex items-center gap-3">
                 <UserAvatar
                   src={participant.profileImage}
@@ -178,17 +165,15 @@ export default function Page() {
                 />
                 <div className="flex flex-col gap-1">
                   <div className="flex items-center gap-1.5">
-                    <span className="text-body3-semibold">
+                    <span className="text-body3-semibold tablet:text-body2-semibold">
                       {participant.name}
                     </span>
                     <Badge size="sm" variant="dday">
                       {participant.role}
                     </Badge>
                   </div>
-                  <p className="text-caption-regular line-clamp-1 text-gray-200">
-                    {/* {participant.introduction} */}
-                    안녕하세요, 잘 부탁드립니다. 안녕하세요, 잘 부탁드립니다.
-                    안녕하세요, 잘 부탁드립니다. 안녕하세요, 잘 부탁드립니다.
+                  <p className="text-caption-regular tablet:text-body3-regular line-clamp-1 text-gray-200">
+                    {participant.introduction}
                   </p>
                 </div>
               </li>
@@ -210,8 +195,10 @@ export default function Page() {
               className="rounded-lg"
             />
             <div>
-              <div className="text-caption-semibold mb-0.5">{crew.name}</div>
-              <div className="text-caption-regular">
+              <div className="text-caption-semibold tablet:text-body2-semibold mb-0.5">
+                {crew.name}
+              </div>
+              <div className="text-caption-regular tablet:text-body3-regular text-gray-300">
                 {`${crew.city} • 멤버 ${crew.memberCount}명`}
               </div>
             </div>
@@ -220,7 +207,7 @@ export default function Page() {
 
           <div className="gap">
             <Rating value={review.ranks} onChange={() => 1} className="mb-2" />
-            <p className="text-caption-regular text-gray-200">
+            <p className="text-caption-regular tablet-text-body3-regular line-clamp-2 text-gray-200">
               {review.description}
             </p>
           </div>
