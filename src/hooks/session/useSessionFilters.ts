@@ -43,6 +43,15 @@ export function useSessionFilters() {
     setPage(0);
   };
 
+  const resetFilters = () => {
+    setRegion(undefined);
+    setDate(undefined);
+    setTime(undefined);
+    setLevel(undefined);
+    setSort(undefined);
+    setPage(0);
+  };
+
   // API 쿼리용 필터 묶음
   const queryFilters = useMemo<SessionListFilters>(() => {
     return {
@@ -72,5 +81,6 @@ export function useSessionFilters() {
     changeTime,
     changeLevel,
     changeSort,
+    resetFilters,
   };
 }
