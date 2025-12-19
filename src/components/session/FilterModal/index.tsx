@@ -1,41 +1,21 @@
 'use client';
 
-import { DateRange } from 'react-day-picker';
 import Button from '@/components/ui/Button';
 import Calendar from '@/components/ui/Calendar';
 import Chip from '@/components/ui/Chip';
 import Modal from '@/components/ui/Modal';
 import Tabs from '@/components/ui/Tabs';
 import TimeSlider from '@/components/ui/TimeSlider';
-import {
-  FILTER_TABS,
-  LEVEL_OPTIONS,
-  type RegionFilterValue,
-  type SessionFilterState,
-} from '@/constants/session-filter';
-import { Level } from '@/types';
-
-interface FilterModalProps {
-  children: React.ReactNode;
-  filters: {
-    region?: RegionFilterValue;
-    date?: DateRange;
-    time?: [number, number];
-    level?: Level;
-  };
-  changeFilter: <K extends keyof SessionFilterState>(
-    key: K,
-    value: SessionFilterState[K]
-  ) => void;
-  resetFilters: () => void;
-}
+import { FILTER_TABS, LEVEL_OPTIONS } from '@/constants/session-filter';
+import { useSessionFilterContext } from '@/provider/SessionFilterProvider';
 
 export default function FilterModal({
-  filters,
-  changeFilter,
-  resetFilters,
   children,
-}: FilterModalProps) {
+}: {
+  children: React.ReactNode;
+}) {
+  const { draft, setDraft, reset, apply } = useSessionFilterContext();
+
   return (
     <Modal>
       {/* Trigger */}
@@ -63,14 +43,14 @@ export default function FilterModal({
               <Tabs.Content value="date">
                 <Calendar.Range
                   className="w-[315px]"
-                  selected={filters.date}
-                  onSelect={(value) => changeFilter('date', value)}
+                  selected={draft.date}
+                  onSelect={(date) => setDraft({ ...draft, date })}
                 />
               </Tabs.Content>
               <Tabs.Content value="time" className="w-full px-[78px]">
                 <TimeSlider
-                  value={[filters.time?.[0] || 0, filters.time?.[1] || 720]}
-                  onValueChange={(value) => changeFilter('time', value)}
+                  value={[draft.time?.[0] || 0, draft.time?.[1] || 720]}
+                  onValueChange={(time) => setDraft({ ...draft, time })}
                 />
               </Tabs.Content>
               <Tabs.Content value="level" className="flex w-full gap-2">
@@ -78,8 +58,8 @@ export default function FilterModal({
                   <Chip
                     key={value ?? 'all'}
                     tone="secondary"
-                    state={filters.level === value ? 'active' : 'default'}
-                    onClick={() => changeFilter('level', value)}
+                    state={draft.level === value ? 'active' : 'default'}
+                    onClick={() => setDraft({ ...draft, level: value })}
                   >
                     {label}
                   </Chip>
@@ -91,12 +71,14 @@ export default function FilterModal({
         {/* Footer */}
         <Modal.Footer className="flex w-full justify-between">
           <Modal.Close asChild>
-            <button className="px-6 py-2" onClick={resetFilters}>
+            <button className="px-6 py-2" onClick={reset}>
               초기화
             </button>
           </Modal.Close>
           <Modal.Close asChild>
-            <Button className="flex-1">결과 보기</Button>
+            <Button className="flex-1" onClick={apply}>
+              결과 보기
+            </Button>
           </Modal.Close>
         </Modal.Footer>
         <Modal.CloseButton />
