@@ -75,23 +75,37 @@ export default function SessionPage() {
       </div>
       <div className="mb-6 w-full">
         <div className="flex w-full items-center justify-between gap-2">
-          <div className="flex items-center gap-2 overflow-x-auto">
-            <RegionFilter
-              value={filters.region}
-              onChange={(v) => changeFilter('region', v)}
-            />
-            <DateFilter
-              value={filters.date}
-              onChange={(v) => changeFilter('date', v)}
-            />
-            <TimeFilter
-              value={filters.time}
-              onChange={(v) => changeFilter('time', v)}
-            />
-            <LevelFilter
-              value={filters.level}
-              onChange={(v) => changeFilter('level', v)}
-            />
+          <div
+            className={cn(
+              'flex items-center gap-2',
+              (isMobile || isTablet) &&
+                'scrollbar-hidden w-full overflow-scroll'
+            )}
+          >
+            <div className="shrink-0">
+              <RegionFilter
+                value={filters.region}
+                onChange={(v) => changeFilter('region', v)}
+              />
+            </div>
+            <div className="shrink-0">
+              <DateFilter
+                value={filters.date}
+                onChange={(v) => changeFilter('date', v)}
+              />
+            </div>
+            <div className="shrink-0">
+              <TimeFilter
+                value={filters.time}
+                onChange={(v) => changeFilter('time', v)}
+              />
+            </div>
+            <div className="shrink-0">
+              <LevelFilter
+                value={filters.level}
+                onChange={(v) => changeFilter('level', v)}
+              />
+            </div>
             {isDesktop && (
               <FilterModal
                 filters={filters}
@@ -113,10 +127,12 @@ export default function SessionPage() {
                   <FilterButton count={activeFilterCount} />
                 </FilterModal>
               )}
-              <SortOptions
-                value={filters.sort}
-                onChange={(v) => changeFilter('sort', v)}
-              />
+              <div className="shrink-0">
+                <SortOptions
+                  value={filters.sort}
+                  onChange={(v) => changeFilter('sort', v)}
+                />
+              </div>
             </div>
           )}
           {isMobile && (
@@ -132,7 +148,7 @@ export default function SessionPage() {
           )}
         </div>
         {isMobile && (
-          <div className="mt-2 flex w-full justify-end">
+          <div className="mt-2 flex w-full shrink-0 justify-end">
             <SortOptions
               value={filters.sort}
               onChange={(v) => changeFilter('sort', v)}
