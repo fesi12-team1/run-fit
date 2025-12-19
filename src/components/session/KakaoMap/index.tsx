@@ -1,8 +1,7 @@
 'use client';
 
-import { cx } from 'class-variance-authority';
 import { useEffect, useRef } from 'react';
-import { createKakaoMapLink } from '@/lib/utils';
+import { cn, createKakaoMapLink } from '@/lib/utils';
 import { useKakaoMap } from '@/provider/KakaoMapProvider';
 
 interface KakaoMapProps {
@@ -57,7 +56,7 @@ export default function KakaoMap({
       onClick={handleMapClick}
       onKeyDown={(e) => e.key === 'Enter' && handleMapClick()}
       tabIndex={0}
-      className={cx('cursor-pointer', className)}
+      className={cn('cursor-pointer', className)}
       aria-label="지도 보기"
       role="link"
     />

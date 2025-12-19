@@ -9,6 +9,8 @@ import { useState } from 'react';
 import { crewQueries } from '@/api/queries/crewQueries';
 import { sessionQueries } from '@/api/queries/sessionQueries';
 import { userQueries } from '@/api/queries/userQueries';
+import Camera from '@/assets/icons/camera.svg?react';
+import Share from '@/assets/icons/share.svg?react';
 import VerticalEllipsisIcon from '@/assets/icons/vertical-ellipsis.svg?react';
 import FixedBottomBar, {
   useFixedBottomBar,
@@ -20,12 +22,10 @@ import Dropdown from '@/components/ui/Dropdown';
 import Modal from '@/components/ui/Modal';
 import ProgressBar from '@/components/ui/ProgressBar';
 import Rating from '@/components/ui/Rating';
+import SafeImage from '@/components/ui/SafeImage';
 import UserAvatar from '@/components/ui/UserAvatar';
-import {
-  formatDDay,
-  formatKoMonthDayTime,
-  formatKoYearMonthDay,
-} from '@/lib/time';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { formatDDay, formatKoYMD, formatKoYYMDMeridiemTime } from '@/lib/time';
 import { Crew, Review } from '@/types';
 import { Session } from '@/types/session';
 
@@ -38,7 +38,9 @@ export default function Page() {
   } = useQuery(sessionQueries.detail(Number(id)));
   const crewId = session?.crewId;
 
-  const { data } = useQuery(sessionQueries.participants(Number(id)));
+  const { data: participantsResponse } = useQuery(
+    sessionQueries.participants(Number(id))
+  );
 
   const { data: crew } = useQuery({
     ...crewQueries.detail(Number(crewId)),
@@ -50,45 +52,94 @@ export default function Page() {
     enabled: !!crewId,
   });
 
-  const { ref } = useFixedBottomBar();
+  const { ref, height } = useFixedBottomBar();
 
   if (isLoading) return null;
   if (error) return null;
   if (!session) return null;
 
-  if (!data) return null;
+  if (!participantsResponse) return null;
   if (!crew) return null;
   if (!reviews) return null;
 
-  const { name, image } = session;
-
-  const { participants } = data;
-
-  const review = reviews?.content[0];
+  const { participants } = participantsResponse;
+  const review = reviews?.content[0] || null;
 
   return (
-    <main className="h-main laptop:pt-10 relative">
-      <div className="laptop:grid-cols-2 mx-auto grid max-w-[1120px] grid-cols-1 items-start gap-4">
-        <SessionImage image={image} name={name} />
-        <SessionShortInfo session={session} crewId={crew.id} />
-        <hr className="tablet:mx-12 laptop:hidden mx-6 text-gray-700" />
-        <SessionDetailInfo session={session} participants={participants} />
-        <CrewShortInfo crew={crew} review={review} />
-      </div>
-      <FixedBottomBar ref={ref}>Fixed Bottom Bar</FixedBottomBar>
+    <main
+      className="h-main laptop:bg-gray-900 relative bg-gray-800"
+      style={{ paddingBottom: `${height}px` }}
+    >
+      <SessionDetailView
+        session={session}
+        crew={crew}
+        review={review}
+        participants={participants}
+      />
+      <FixedBottomBar ref={ref}>
+        <div className="flex items-center gap-7">
+          <div className="flex items-center gap-4">
+            <Camera className="block size-6 text-white" />
+            <Share className="block size-6 text-white" />
+          </div>
+          <Button variant="default" className="flex-1">
+            참여하기
+          </Button>
+        </div>
+      </FixedBottomBar>
     </main>
+  );
+}
+
+function SessionDetailView({
+  session,
+  crew,
+  review,
+  participants,
+}: {
+  session: Session;
+  crew: Crew;
+  review: Review;
+  participants: Session['participants'];
+}) {
+  const isLaptopUp = useMediaQuery({ min: 'laptop' });
+
+  if (isLaptopUp) {
+    return (
+      <div className="mx-auto flex max-w-[1120px] gap-10 bg-gray-900 py-10">
+        <div className="flex flex-1 flex-col gap-10 px-5">
+          <SessionImage image={session.image} name={session.name} />
+          <SessionDetailInfo session={session} participants={participants} />
+        </div>
+        <div className="laptop:w-[360px] flex flex-col gap-10">
+          <SessionShortInfo session={session} crewId={crew.id} />
+          <CrewShortInfo crew={crew} review={review} />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-gray-800 py-10">
+      <SessionImage image={session.image} name={session.name} />
+      <SessionShortInfo session={session} crewId={crew.id} />
+      <SessionDetailInfo session={session} participants={participants} />
+      <CrewShortInfo crew={crew} review={review} />
+    </div>
   );
 }
 
 function SessionImage({ image, name }: { image: string; name: string }) {
   return (
-    <Image
-      src={image}
-      alt={name}
-      height={267}
-      width={375}
-      className="tablet:aspect-744/313 laptop:aspect-680/374 laptop:rounded-[20px] z-0 aspect-375/267 w-full object-cover"
-    />
+    <div className="tablet:aspect-744/313 laptop:aspect-680/374 laptop:rounded-[20px] relative aspect-375/267 w-full overflow-hidden">
+      <SafeImage
+        src={image}
+        fallbackSrc="/assets/session-default.png"
+        alt={name}
+        fill
+        className="object-cover"
+      />
+    </div>
   );
 }
 
@@ -116,46 +167,56 @@ function SessionShortInfo({
     enabled: !!profileId,
   });
 
-  // const isManager =
-  //   memberRole?.role === 'LEADER' || memberRole?.role === 'STAFF';
-  const isManager = true;
+  const isManager =
+    memberRole?.role === 'LEADER' || memberRole?.role === 'STAFF';
 
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   return (
-    <div className="laptop:px-7 laptop:py-6 laptop:mt-0 laptop:max-w-[360px] tablet:p-12 tablet:py-10 relative z-10 -mt-5 rounded-t-[20px] bg-gray-800 px-7 py-6">
-      <div className="mb-1 flex w-full items-center justify-between gap-2">
-        <Badge variant="dday" size="sm">
-          마감 {formatDDay(registerBy)}
-        </Badge>
-        {isManager && (
-          <Dropdown>
-            <Dropdown.TriggerNoArrow>
-              <VerticalEllipsisIcon className="size-6" />
-            </Dropdown.TriggerNoArrow>
-            <Dropdown.Content className="z-100">
-              <Dropdown.Item>
-                <Link href={`/sessions/${session.id}/edit`}>수정하기</Link>
-              </Dropdown.Item>
-              <Dropdown.Item onClick={() => setIsDeleteModalOpen(true)}>
-                삭제하기
-              </Dropdown.Item>
-            </Dropdown.Content>
-          </Dropdown>
-        )}
-      </div>
-      <div className="mb-2">
-        <h1 className="text-title3-semibold text-gray-50">{name}</h1>
-        <div className="text-body3-regular text-gray-300">
-          {formatKoMonthDayTime(sessionAt)}
+    <div className="laptop:bg-gray-750 laptop:rounded-b-[20px] laptop:px-6 laptop:pt-7 laptop:pb-6 laptop:mt-0 tablet:px-12 tablet:pt-10 laptop:gap-8 relative z-10 -mt-5 flex flex-col gap-6 rounded-t-[20px] bg-gray-800 px-7 pt-6">
+      <div>
+        <div className="mb-1 flex w-full items-center justify-between gap-2">
+          <Badge variant="dday" size="sm">
+            마감 {formatDDay(registerBy)}
+          </Badge>
+          {isManager && (
+            <Dropdown>
+              <Dropdown.TriggerNoArrow>
+                <VerticalEllipsisIcon className="size-6" />
+              </Dropdown.TriggerNoArrow>
+              <Dropdown.Content className="z-100">
+                <Dropdown.Item>
+                  <Link href={`/sessions/${session.id}/edit`}>수정하기</Link>
+                </Dropdown.Item>
+                <Dropdown.Item onClick={() => setIsDeleteModalOpen(true)}>
+                  삭제하기
+                </Dropdown.Item>
+              </Dropdown.Content>
+            </Dropdown>
+          )}
+        </div>
+        <div className="mb-2">
+          <h1 className="text-title3-semibold text-gray-50">{name}</h1>
+          <div className="text-body3-regular text-gray-300">
+            {formatKoYYMDMeridiemTime(sessionAt)}
+          </div>
+        </div>
+        <div className="flex items-center gap-1">
+          <PaceBadge size="sm" pace={pace} />
+          <LevelBadge size="sm" level={level} />
         </div>
       </div>
-      <div className="flex items-center gap-1">
-        <PaceBadge size="sm" pace={pace} />
-        <LevelBadge size="sm" level={level} />
-      </div>
       <ProgressBar value={currentParticipantCount} max={maxParticipantCount} />
+      <hr className="text-gray-500" />
+      <div className="laptop:flex hidden items-center gap-7">
+        <div className="flex items-center gap-4">
+          <Camera className="block size-6 text-white" />
+          <Share className="block size-6 text-white" />
+        </div>
+        <Button variant="default" className="flex-1">
+          참여하기
+        </Button>
+      </div>
       <Modal open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
         <Modal.Content className="z-999">
           <Modal.Header>
@@ -199,7 +260,7 @@ function SessionDetailInfo({
   } = session;
 
   return (
-    <div className="laptop:px-0 laptop:mx-5 laptop:bg-gray-900 tablet:px-12 tablet:py-8 tablet:gap-8 flex flex-col gap-6 bg-gray-800 px-6 py-6">
+    <div className="tablet:px-12 laptop:px-3 laptop:py-0 tablet:py-8 tablet:gap-8 laptop:bg-gray-900 flex flex-col gap-6 bg-gray-800 px-6 py-6">
       <div className="tablet:gap-2 flex flex-col gap-1">
         <h2 className="text-body2-semibold tablet:text-title3-semibold text-gray-50">
           세션 소개
@@ -208,7 +269,7 @@ function SessionDetailInfo({
           {description}
         </p>
         <div className="text-body3-regular text-gray-300">
-          {formatKoYearMonthDay(createdAt)}
+          {formatKoYMD(createdAt)}
         </div>
       </div>
 
@@ -217,18 +278,19 @@ function SessionDetailInfo({
           일정
         </h2>
         <ul className="text-body3-regular tablet:text-body2-regular text-gray-200">
-          <li>&nbsp;{`• 모임 일시: ${formatKoYearMonthDay(sessionAt)}`}</li>
+          <li>&nbsp;{`• 모임 일시: ${formatKoYYMDMeridiemTime(sessionAt)}`}</li>
           <li>
             &nbsp;
-            {`• 모집 일정: ~ ${formatKoMonthDayTime(registerBy)} 마감`}
+            {`• 모집 일정: ~ ${formatKoYYMDMeridiemTime(registerBy)} 마감`}
           </li>
         </ul>
       </div>
+
       <div className="tablet:gap-2 flex flex-col gap-1">
-        <h2 className="text-body2-semibold tablet:text-body3-semibold flex flex-col text-gray-50">
+        <h2 className="text-body2-semibold tablet:text-title3-semibold flex flex-col text-gray-50">
           장소
         </h2>
-        <div className="tablet:h-[312px] flex h-[218px] flex-col overflow-hidden rounded-xl border border-gray-600">
+        <div className="tablet:h-[312px] tabler:rounded-[20px] flex h-[218px] flex-col overflow-hidden rounded-xl border border-gray-600 bg-gray-700">
           <div className="min-h-0 flex-1">
             <KakaoMap
               coords={coords}
@@ -242,12 +304,11 @@ function SessionDetailInfo({
           </div>
         </div>
       </div>
+
       <div className="tablet:gap-2 flex flex-col gap-1">
-        <h2 className="text-body2-semibold tablet:text-title3-semibold inline-flex items-center gap-1 text-gray-50">
-          참여 멤버
-          <span className="text-body1-semibold text-brand-300">
-            {currentParticipantCount}
-          </span>
+        <h2 className="text-body2-semibold tablet:text-title3-semibold text-gray-50">
+          참여 멤버&nbsp;
+          <span className="text-brand-300">{currentParticipantCount}</span>
         </h2>
         <ul className="tablet:gap-5 mb-3 flex flex-col gap-2">
           {participants.slice(0, 4).map((participant) => (
@@ -280,20 +341,28 @@ function SessionDetailInfo({
   );
 }
 
-function CrewShortInfo({ crew, review }: { crew: Crew; review: Review }) {
+function CrewShortInfo({
+  crew,
+  review,
+}: {
+  crew: Crew;
+  review: Review | null;
+}) {
   const { name, image } = crew;
-  const { ranks, description } = review;
 
   return (
-    <div className="laptop:max-w-[360px] flex h-fit flex-col gap-4 rounded-xl border-gray-600 bg-gray-700 p-3">
-      <div className="flex gap-3">
-        <Image
-          src={image || '/assets/crew-default.png'}
-          alt={name}
-          height={44}
-          width={66}
-          className="rounded-lg"
-        />
+    <div className="laptop:mx-0 tablet:mx-12 tablet:rounded-[20px] tablet:px-6 tablet:py-4 tablet:bg-gray-750 mx-6 flex flex-col gap-4 rounded-xl border-gray-700 bg-gray-700 p-3 px-3 py-3">
+      <div className="flex items-center gap-3">
+        <div className="tablet:aspect-84/56 relative aspect-66/44 w-20">
+          <SafeImage
+            src={image}
+            alt={name}
+            fallbackSrc="/assets/crew-default.png"
+            height={44}
+            width={66}
+            className="object-cover"
+          />
+        </div>
         <div>
           <div className="text-caption-semibold tablet:text-body2-semibold mb-0.5">
             {name}
@@ -303,13 +372,19 @@ function CrewShortInfo({ crew, review }: { crew: Crew; review: Review }) {
           </div>
         </div>
       </div>
+
       <hr className="text-gray-600" />
 
       {review && (
         <div>
-          <Rating value={ranks} onChange={() => 1} className="mb-2" />
-          <p className="text-caption-regular tablet-text-body3-regular line-clamp-2 text-gray-200">
-            {description}
+          <Rating
+            value={review.ranks}
+            onChange={() => {}}
+            disabled
+            className="mb-2"
+          />
+          <p className="text-caption-regular tablet-text-body3-regular laptop:max-w-[320px] line-clamp-2 text-gray-200">
+            {review.description}
           </p>
         </div>
       )}
