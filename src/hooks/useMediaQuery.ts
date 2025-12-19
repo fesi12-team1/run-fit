@@ -1,5 +1,4 @@
 import { useSyncExternalStore } from 'react';
-import { Breakpoint } from './useMediaQuery';
 
 export const BREAKPOINTS = {
   mobile: 0,
