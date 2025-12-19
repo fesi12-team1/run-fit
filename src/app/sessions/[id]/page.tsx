@@ -22,6 +22,7 @@ import Dropdown from '@/components/ui/Dropdown';
 import Modal from '@/components/ui/Modal';
 import ProgressBar from '@/components/ui/ProgressBar';
 import Rating from '@/components/ui/Rating';
+import SafeImage from '@/components/ui/SafeImage';
 import UserAvatar from '@/components/ui/UserAvatar';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { formatDDay, formatKoYMD, formatKoYYMDMeridiemTime } from '@/lib/time';
@@ -130,13 +131,15 @@ function SessionDetailView({
 
 function SessionImage({ image, name }: { image: string; name: string }) {
   return (
-    <Image
-      src={image}
-      alt={name}
-      height={267}
-      width={375}
-      className="tablet:aspect-744/313 laptop:aspect-680/374 laptop:rounded-[20px] z-0 aspect-375/267 w-full object-cover"
-    />
+    <div className="tablet:aspect-744/313 laptop:aspect-680/374 laptop:rounded-[20px] aspect-375/267 w-full">
+      <SafeImage
+        src={image}
+        fallbackSrc="/assets/session-default"
+        alt={name}
+        fill
+        className="object-cover"
+      />
+    </div>
   );
 }
 
@@ -345,13 +348,16 @@ function CrewShortInfo({ crew, review }: { crew: Crew; review: Review }) {
   return (
     <div className="laptop:mx-0 tablet:mx-12 tablet:rounded-[20px] tablet:px-6 tablet:py-4 tablet:bg-gray-750 mx-6 flex flex-col gap-4 rounded-xl border-gray-700 bg-gray-700 p-3 px-3 py-3">
       <div className="flex items-center gap-3">
-        <Image
-          src={image || '/assets/crew-default.png'}
-          alt={name}
-          height={44}
-          width={66}
-          className="tablet:aspect-84/56 aspect-66/44 rounded-lg object-cover"
-        />
+        <div className="tablet:aspect-84/56 aspect-66/44">
+          <SafeImage
+            src={image}
+            alt={name}
+            fallbackSrc="/assets/crew-default.png"
+            height={44}
+            width={66}
+            className="object-cover"
+          />
+        </div>
         <div>
           <div className="text-caption-semibold tablet:text-body2-semibold mb-0.5">
             {name}
