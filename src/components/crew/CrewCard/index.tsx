@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { crewQueries } from '@/api/queries/crewQueries';
 import { sessionQueries } from '@/api/queries/sessionQueries';
 import ProfileList from '@/components/user/ProfileList';
-import { cn } from '@/lib/utils';
 import type { Crew } from '@/types';
 
 interface CrewCardProps {
@@ -38,10 +37,9 @@ export default function CrewCard({
             src={image || '/assets/crew-default.png'}
             alt="Crew"
             fill
-            className={cn(
-              'rounded-lg object-cover transition-opacity duration-300 hover:opacity-80',
-              image ? 'shadow-sm' : 'border border-gray-500'
-            )}
+            className={
+              'rounded-xl object-cover transition-opacity duration-300 hover:opacity-80'
+            }
           />
         </Link>
         {/* 크루 정보 */}
@@ -56,17 +54,17 @@ export default function CrewCard({
             {description}
           </span>
           <div className="flex items-center gap-1">
-            <span className="text-caption-medium tablet:text-body3-medium rounded-lg bg-gray-500 px-2 py-1 text-gray-100">{`${city}`}</span>
-            <span className="text-caption-regular tablet:text-body3-regular mr-1 text-gray-300">{`• 멤버 ${memberCount}명`}</span>
+            <span className="text-caption-medium tablet:text-body3-medium pointer-events-none rounded-lg bg-gray-500 px-2 py-1 text-gray-100">
+              {city}
+            </span>
+            <span className="text-caption-regular tablet:text-body3-regular pointer-events-none mr-1 text-gray-300">{`• 멤버 ${memberCount}명`}</span>
             <ProfileList members={crewMembers?.members} />
           </div>
         </div>
       </div>
-      {/* 진행된 세션 */}
+      {/* 최근 세션 */}
       <div className="desktop:flex hidden w-[300px] shrink-0 flex-col p-3">
-        <div className="text-body3-semibold mb-2 text-gray-300">
-          진행된 세션
-        </div>
+        <div className="text-body3-semibold mb-2 text-gray-300">최근 세션</div>
         <ul className="flex flex-col gap-2">
           {crewSessionData?.content?.map((session) => {
             const sessionAt = new Date(session.sessionAt);

@@ -18,7 +18,7 @@ export default function SessionPage() {
   );
 
   return (
-    <main className="h-main mx-auto flex max-w-[1198px] flex-col items-center justify-start">
+    <main className="h-main mx-auto flex max-w-[1120px] flex-col items-center justify-start">
       <div className="flex w-full items-center justify-between">
         {/** 배너 */}
         <div>
@@ -27,7 +27,7 @@ export default function SessionPage() {
             <br />
             러닝 메이트를 찾다
           </h2>
-          <span className="text-body3-regular">
+          <span className="text-body3-regular text-gray-200">
             러닝 페이스와 선호하는 스타일에 딱 맞는 세션을 찾아보세요!
           </span>
         </div>
@@ -44,16 +44,16 @@ export default function SessionPage() {
       <div className="flex w-full flex-col items-center">
         <div className="mb-6 flex w-full items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <Dropdown>
+            <Dropdown size="lg">
               <Dropdown.Trigger>지역 전체</Dropdown.Trigger>
             </Dropdown>
-            <Dropdown>
+            <Dropdown size="lg">
               <Dropdown.Trigger>날짜 전체</Dropdown.Trigger>
             </Dropdown>
-            <Dropdown>
+            <Dropdown size="lg">
               <Dropdown.Trigger>시간</Dropdown.Trigger>
             </Dropdown>
-            <Dropdown>
+            <Dropdown size="lg">
               <Dropdown.Trigger>난이도</Dropdown.Trigger>
               <Dropdown.Content>
                 {['초급', '중급', '상급'].map((item) => (
@@ -63,7 +63,7 @@ export default function SessionPage() {
             </Dropdown>
             <FilterButton className="pl-2" />
           </div>
-          <Dropdown>
+          <Dropdown size="lg">
             <Dropdown.Trigger>최근 생성순</Dropdown.Trigger>
           </Dropdown>
         </div>

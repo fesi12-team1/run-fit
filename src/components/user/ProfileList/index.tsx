@@ -13,7 +13,7 @@ export default function ProfileList({ members }: ProfileListProps) {
           key={member.userId}
           src={member.profileImage || '/assets/profile-default.png'}
           alt={member.name}
-          className="mobile:size-4 size-6 ring-1 ring-gray-700"
+          className="tablet:size-6 size-4 data-[slot=avatar]:ring-1 data-[slot=avatar]:ring-gray-900"
         />
       ))}
     </div>

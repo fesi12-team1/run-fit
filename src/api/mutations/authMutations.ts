@@ -6,26 +6,45 @@ import {
   SignupRequestBody,
 } from '@/api/fetch/auth';
 import { userQueries } from '@/api/queries/userQueries';
-import type { SigninFormValues } from '@/lib/validations/auth/signinSchema';
-import type { ErrorResponse, SigninResponse, User } from '@/types';
+import type {
+  ErrorResponse,
+  SigninResponse,
+  User,
+  UserCredentials,
+} from '@/types';
+
+export interface UseAuthFormOptions {
+  onSuccess?: () => void;
+  onError?: (message: string) => void;
+}
 
 // 회원가입
-export function useSignup() {
+export function useSignup(options?: UseAuthFormOptions) {
   return useMutation<User | null, ErrorResponse, SignupRequestBody>({
     mutationFn: postSignup,
+    onSuccess: () => {
+      options?.onSuccess?.();
+    },
+    onError: (error) => {
+      options?.onError?.(error.error.message);
+    },
   });
 }
 
 // 로그인
-export function useSignin() {
+export function useSignin(options?: UseAuthFormOptions) {
   const queryClient = useQueryClient();
 
-  return useMutation<SigninResponse | null, ErrorResponse, SigninFormValues>({
+  return useMutation<SigninResponse | null, ErrorResponse, UserCredentials>({
     mutationFn: postSignin,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: userQueries.me.all(), // 내 정보 조회 캐시 무효화
       });
+      options?.onSuccess?.();
+    },
+    onError: (error) => {
+      options?.onError?.(error.error.message);
     },
   });
 }

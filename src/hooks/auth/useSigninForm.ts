@@ -1,53 +1,41 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import { useSignin } from '@/api/mutations/authMutations';
+import * as z from 'zod/v4';
 import {
-  SigninFormValues,
-  signinSchema,
-} from '@/lib/validations/auth/signinSchema';
+  useSignin,
+  type UseAuthFormOptions,
+} from '@/api/mutations/authMutations';
 
-export function useSigninForm() {
-  const router = useRouter();
+const signinSchema = z.object({
+  email: z
+    .string()
+    .min(1, '이메일을 입력해주세요.')
+    .email('올바른 이메일 형식이 아닙니다.'),
 
-  const form = useForm<SigninFormValues>({
+  password: z
+    .string()
+    .min(1, '비밀번호를 입력해주세요.')
+    .min(8, '비밀번호는 최소 8자 이상이어야 합니다.'),
+});
+
+export function useSigninForm(options: UseAuthFormOptions) {
+  const form = useForm<z.infer<typeof signinSchema>>({
     resolver: zodResolver(signinSchema),
-    mode: 'onSubmit',
+    mode: 'onChange',
   });
 
-  const mutation = useSignin();
+  const mutation = useSignin({
+    onSuccess: options?.onSuccess,
+    onError: (message) => {
+      options?.onError?.(message);
+      form.setError('root', { message });
+    },
+  });
 
   const submit = form.handleSubmit((values) => {
-    mutation.mutate(
-      {
-        email: values.email,
-        password: values.password,
-      },
-      {
-        onSuccess: () => {
-          router.push('/');
-        },
-        onError: ({ error }) => {
-          form.setError('root', {
-            message: error.message,
-          });
-          // switch (error.code) {
-          //   case 'INVALID_CREDENTIALS':
-          //     form.setError('root', {
-          //       message: error.message,
-          //     });
-          //     break;
-
-          //   default:
-          //     form.setError('root', {
-          //       message: '로그인 중 오류가 발생했습니다.',
-          //     });
-          // }
-        },
-      }
-    );
+    mutation.mutate(values);
   });
 
   return {

@@ -8,7 +8,6 @@ import { sessionQueries } from '@/api/queries/sessionQueries';
 import Liked from '@/assets/icons/liked.svg?react';
 import Location from '@/assets/icons/location.svg?react';
 import { formatTimeToKorean } from '@/lib/time';
-import { cn } from '@/lib/utils';
 import type { Session } from '@/types';
 import { DdayBadge, LevelBadge, PaceBadge } from '../../ui/Badge';
 import ProfileList from '../../user/ProfileList';
@@ -55,13 +54,6 @@ export default function SessionCard({
     sessionAtDate.getMinutes()
   );
 
-  const levelMap: Record<string, 'easy' | 'medium' | 'hard'> = {
-    BEGINNER: 'easy',
-    INTERMEDIATE: 'medium',
-    ADVANCED: 'hard',
-  };
-  const levelValue = levelMap[level] || 'easy';
-
   return (
     <div className="flex w-full flex-col">
       <div className="tablet:aspect-video relative aspect-165/185 w-full cursor-pointer self-stretch overflow-hidden rounded-lg">
@@ -70,10 +62,9 @@ export default function SessionCard({
             src={image || '/assets/session-default.png'}
             alt="Session"
             fill
-            className={cn(
-              'rounded-xl object-cover transition-opacity duration-300 hover:opacity-80',
-              image ? 'shadow-sm' : 'border border-gray-500'
-            )}
+            className={
+              'rounded-xl object-cover transition-opacity duration-300 hover:opacity-80'
+            }
           />
         </Link>
         {/* prettier-ignore */}
@@ -110,11 +101,11 @@ export default function SessionCard({
         {/* prettier-ignore */}
         <div className="flex gap-0.5 desktop:gap-1 items-center">
           <PaceBadge pace={pace} size="sm" className="tablet:hidden" />
-          <LevelBadge level={levelValue} size="sm" className="tablet:hidden" />
+          <LevelBadge level={level} size="sm" className="tablet:hidden" />
           <PaceBadge pace={pace} size="md" className="hidden tablet:inline-flex laptop:hidden" />
-          <LevelBadge level={levelValue} size="md" className="hidden tablet:inline-flex laptop:hidden" />
+          <LevelBadge level={level} size="md" className="hidden tablet:inline-flex laptop:hidden" />
           <PaceBadge pace={pace} size="lg" className="hidden laptop:inline-flex" />
-          <LevelBadge level={levelValue} size="lg" className="hidden laptop:inline-flex" />
+          <LevelBadge level={level} size="lg" className="hidden laptop:inline-flex" />
         </div>
       </div>
       {displayParticipants && (

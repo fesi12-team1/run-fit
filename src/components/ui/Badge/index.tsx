@@ -1,8 +1,9 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
-import Level from '@/assets/icons/level.svg?react';
+import LevelIcon from '@/assets/icons/level.svg?react';
 import { formatPaceText, secondsToMinutes } from '@/lib/pace';
 import { cn } from '@/lib/utils';
+import { type Level } from '@/types/session';
 
 export const badgeVariants = cva(
   'inline-flex items-center justify-center whitespace-nowrap shrink-0 [&>svg]:size-3 [&>svg]:pointer-events-none overflow-hidden font-semibold pointer-events-none',
@@ -12,6 +13,7 @@ export const badgeVariants = cva(
         dday: 'text-brand-600 bg-linear-to-br from-[rgba(247,223,249,1)] via-[rgba(223,229,249,1)] to-[rgba(186,186,250,1)]',
         level: 'bg-gray-800',
         pace: 'bg-blue-950 text-blue-300',
+        none: '',
       },
       size: {
         sm: 'rounded-sm px-1 py-0.5 text-[10px] font-semibold',
@@ -34,7 +36,7 @@ type BaseBadgeProps = React.ComponentProps<'div'> & {
 
 type LevelBadgeProps = BaseBadgeProps & {
   variant: 'level';
-  level: 'easy' | 'medium' | 'hard';
+  level: Level;
   pace?: never;
 };
 
@@ -50,7 +52,11 @@ type DdayBadgeProps = BaseBadgeProps & {
   pace?: never;
 };
 
-type BadgeProps = LevelBadgeProps | PaceBadgeProps | DdayBadgeProps;
+type BadgeProps =
+  | LevelBadgeProps
+  | PaceBadgeProps
+  | DdayBadgeProps
+  | BaseBadgeProps;
 
 export default function Badge({
   className,
@@ -93,23 +99,23 @@ export function LevelBadge({
     lg: 'size-4',
   };
   const fillColor = {
-    easy: 'fill-gray-200',
-    medium: 'fill-[#F2B48A]',
-    hard: 'fill-[#FF819E]',
+    BEGINNER: 'fill-gray-200',
+    INTERMEDIATE: 'fill-[#F2B48A]',
+    ADVANCED: 'fill-[#FF819E]',
   };
   const textColor = {
-    easy: 'text-gray-200',
-    medium: 'text-[#F2B48A]',
-    hard: 'text-[#FF819E]',
+    BEGINNER: 'text-gray-200',
+    INTERMEDIATE: 'text-[#F2B48A]',
+    ADVANCED: 'text-[#FF819E]',
   };
   const text = {
-    easy: '초급',
-    medium: '중급',
-    hard: '고급',
+    BEGINNER: '초급',
+    INTERMEDIATE: '중급',
+    ADVANCED: '고급',
   };
   return (
     <Badge variant="level" level={level} size={size} className={className}>
-      <Level className={cn(iconSize[size], fillColor[level])} />
+      <LevelIcon className={cn(iconSize[size], fillColor[level])} />
       <span className={textColor[level]}>{text[level]}</span>
     </Badge>
   );

@@ -38,12 +38,12 @@ export const Level: StoryObj<typeof LevelBadge> = {
     );
   },
   args: {
-    level: 'easy',
+    level: 'BEGINNER',
   },
   argTypes: {
     level: {
       control: { type: 'select' },
-      options: ['easy', 'medium', 'hard'],
+      options: ['BEGINNER', 'INTERMEDIATE', 'ADVANCED'],
     },
   },
 };
