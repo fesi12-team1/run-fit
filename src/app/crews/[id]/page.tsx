@@ -83,6 +83,7 @@ function PageAction({
 export default function Page() {
   const params = useParams<{ id: string }>();
   const crewId = Number(params.id);
+  const [currentPage, setCurrentPage] = useState(0);
 
   const today = new Date().toISOString().split('T')[0];
 
@@ -93,19 +94,32 @@ export default function Page() {
       sort: 'roleAsc',
     })
   );
+  const members = [...(crewMembers?.members || [])].filter(
+    (member): member is CrewMember => member !== undefined
+  );
   const { data: crewSessions } = useQuery(
     sessionQueries.list({ crewId, sort: 'registerByAsc' })
   );
-
   const { data: myProfile } = useQuery(userQueries.me.info());
   const { data: myRole } = useQuery({
     ...crewQueries.members(crewId).detail(myProfile?.id ?? 0),
     enabled: !!myProfile?.id,
   });
+  const { data: crewReviewsPageData } = useInfiniteQuery({
+    queryKey: [...crewQueries.reviews(crewId).all(), 'infinite-list'],
+    queryFn: ({ pageParam = currentPage }) =>
+      getCrewReviews(crewId, { page: pageParam, size: 4 }),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => {
+      return lastPage?.hasNext ? lastPage.page + 1 : undefined;
+    },
+    enabled: !!crewId,
+  });
 
-  const members = [...(crewMembers?.members || [])].filter(
-    (member): member is CrewMember => member !== undefined
-  );
+  const crewReviewsData = crewReviewsPageData?.pages || [];
+  const allReviews = crewReviewsData.flatMap((page) => page?.content) ?? [];
+  const totalElements = crewReviewsPageData?.pages[0]?.totalElements ?? 0;
+  const totalPages = crewReviewsPageData?.pages[0]?.totalPages ?? 0;
 
   const { ref, height } = useFixedBottomBar();
 
