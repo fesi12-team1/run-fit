@@ -2,7 +2,6 @@
 
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { useQuery } from '@tanstack/react-query';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
@@ -26,7 +25,7 @@ import SafeImage from '@/components/ui/SafeImage';
 import UserAvatar from '@/components/ui/UserAvatar';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { formatDDay, formatKoYMD, formatKoYYMDMeridiemTime } from '@/lib/time';
-import { Crew, Review } from '@/types';
+import { Crew } from '@/types';
 import { Session } from '@/types/session';
 
 export default function Page() {
@@ -369,7 +368,7 @@ function CrewShortInfo({ crew }: { crew: Crew }) {
               disabled
               className="mb-2"
             />
-            <p className="text-caption-regular tablet-text-body3-regular laptop:max-w-[320px] line-clamp-2 text-gray-200">
+            <p className="text-caption-regular tablet:text-body3-regular laptop:max-w-[320px] line-clamp-2 text-gray-200">
               {review.description}
             </p>
           </div>
