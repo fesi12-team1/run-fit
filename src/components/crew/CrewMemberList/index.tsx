@@ -21,7 +21,7 @@ function StaffTag() {
 function CrewMemberListItem({ member }: { member: CrewMember }) {
   return (
     <div className="mb-3 flex gap-3">
-      <UserAvatar src={member.profileImage} className="size-10" />
+      <UserAvatar src={member.profileImage} className="size-10 shrink-0" />
       <div className="flex flex-col gap-1">
         <div className="flex items-start gap-1.5">
           <span className="text-body3-semibold">{member.name}</span>

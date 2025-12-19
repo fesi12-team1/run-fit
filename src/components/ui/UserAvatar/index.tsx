@@ -23,7 +23,7 @@ export default function UserAvatar({
   return (
     <div
       data-slot="avatar"
-      className={cx('relative overflow-hidden rounded-full', className)}
+      className={cx('relative size-10 overflow-hidden rounded-full', className)}
     >
       {showImage ? (
         <Image
