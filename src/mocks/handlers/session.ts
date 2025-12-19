@@ -142,6 +142,7 @@ export function createSessionHandlers(p: PathFn, authMode: AuthMode) {
         ({ maxParticipantCount, ...rest }) => ({
           ...rest,
           liked: faker.datatype.boolean(),
+          maxParticipantCount,
           currentParticipantCount: faker.number.int({
             min: 0,
             max: maxParticipantCount,
