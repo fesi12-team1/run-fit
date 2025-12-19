@@ -18,6 +18,9 @@ const meta: Meta<typeof HeaderView> = {
     docs: {
       story: { inline: false },
     },
+    nextjs: {
+      appDirectory: true,
+    },
   },
   tags: ['autodocs'],
   decorators: [
