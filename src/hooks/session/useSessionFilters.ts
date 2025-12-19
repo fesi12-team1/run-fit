@@ -106,10 +106,22 @@ export function useSessionFilters() {
     router.push(`/sessions?${params.toString()}`);
   };
 
+  const activeFilterCount = useMemo(() => {
+    let count = 0;
+    if (filters.region && Object.keys(filters.region).length > 0) count++;
+    if (filters.date?.from || filters.date?.to) count++;
+    if (filters.time && (filters.time[0] !== 0 || filters.time[1] !== 720))
+      count++;
+    if (filters.level) count++;
+    if (filters.sort !== DEFAULT_SESSION_FILTER.sort) count++;
+    return count;
+  }, [filters]);
+
   return {
     filters,
     queryFilters,
     applyFilters,
     resetFilters: () => applyFilters(DEFAULT_SESSION_FILTER),
+    activeFilterCount,
   };
 }
