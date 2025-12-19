@@ -2,6 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
+import Link from 'next/link';
 import { userQueries } from '@/api/queries/userQueries';
 import Button from '@/components/ui/Button';
 
@@ -18,7 +19,11 @@ export default function MineCrewList() {
           {data?.content.length !== 0 ? (
             <div className="flex flex-col gap-4">
               {data?.content.map((crew) => (
-                <div key={crew.id} className="flex items-center gap-3">
+                <Link
+                  key={crew.id}
+                  href={`/crews/${crew.id}`}
+                  className="flex items-center gap-3"
+                >
                   <div className="relative h-11 w-[66px] shrink-0 overflow-hidden rounded-xl">
                     <Image
                       src={crew.image || '/assets/crew-default.png'}
@@ -33,7 +38,7 @@ export default function MineCrewList() {
                     </p>
                     <p className="text-caption-regular tablet:text-body3-regular text-gray-300">{`${crew.city} • 멤버 ${crew.memberCount}명`}</p>
                   </div>
-                </div>
+                </Link>
               ))}
               {data?.hasNext && (
                 <Button variant="neutral" size="sm">
