@@ -1,55 +1,55 @@
 import { format } from 'date-fns';
 import { useMemo, useState } from 'react';
 import { DateRange } from 'react-day-picker';
-import type { RegionFilterValue } from '@/constants/session-filter';
+import type {
+  LevelFilterValue,
+  RegionFilterValue,
+} from '@/constants/session-filter';
 import { formatMinutesToHHmm } from '@/lib/time';
-import type { Level, SessionListFilters, SessionSort } from '@/types';
+import type { SessionListFilters, SessionSort } from '@/types';
+
+export type SessionFilterState = {
+  page: number;
+  sort: SessionSort;
+  region?: RegionFilterValue;
+  date?: DateRange;
+  time?: [number, number];
+  level?: LevelFilterValue;
+};
+
+export const DEFAULT_SESSION_FILTER = {
+  page: 0,
+  sort: 'createdAtDesc',
+  region: undefined,
+  date: undefined,
+  time: [0, 720],
+  level: undefined,
+} satisfies SessionFilterState;
 
 export function useSessionFilters() {
   // UI 상태 관리용 필터들
-  const [region, setRegion] = useState<RegionFilterValue | undefined>();
-  const [date, setDate] = useState<DateRange | undefined>();
-  const [time, setTime] = useState<[number, number] | undefined>();
-  const [level, setLevel] = useState<Level | undefined>();
-  const [sort, setSort] = useState<SessionSort>();
+  const [filters, setFilters] = useState<SessionFilterState>(
+    DEFAULT_SESSION_FILTER
+  );
   const [page, setPage] = useState(0);
 
-  const changeRegion = (next?: RegionFilterValue) => {
-    setRegion(next);
-    setPage(0);
-  };
-
-  const changeDate = (next?: DateRange) => {
-    setDate(next);
-    setPage(0);
-  };
-
-  const changeTime = (next?: [number, number]) => {
-    setTime(next);
-    setPage(0);
-  };
-
-  const changeLevel = (next?: Level) => {
-    setLevel(next);
-    setPage(0);
-  };
-
-  const changeSort = (next: SessionSort) => {
-    setSort(next);
+  const changeFilter = <K extends keyof SessionFilterState>(
+    key: K,
+    value: SessionFilterState[K]
+  ) => {
+    setFilters((prev) => ({ ...prev, [key]: value }));
     setPage(0);
   };
 
   const resetFilters = () => {
-    setRegion(undefined);
-    setDate(undefined);
-    setTime(undefined);
-    setLevel(undefined);
-    setSort(undefined);
+    setFilters(DEFAULT_SESSION_FILTER);
     setPage(0);
   };
 
   // API 쿼리용 필터 묶음
   const queryFilters = useMemo<SessionListFilters>(() => {
+    const { region, date, time, level, sort } = filters;
+
     return {
       level,
       city: region ? Object.keys(region) : undefined,
@@ -61,22 +61,12 @@ export function useSessionFilters() {
       sort: sort || 'createdAtDesc',
       page,
     };
-  }, [region, date, time, level, sort, page]);
-
-  // UI 용 필터 묶음
-  const uiFilters = useMemo(
-    () => ({ region, date, time, level, sort, page }),
-    [region, date, time, level, sort, page]
-  );
+  }, [filters, page]);
 
   return {
-    uiFilters,
+    filters,
     queryFilters,
-    changeRegion,
-    changeDate,
-    changeTime,
-    changeLevel,
-    changeSort,
+    changeFilter,
     resetFilters,
   };
 }
