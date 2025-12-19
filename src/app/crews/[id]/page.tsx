@@ -2,7 +2,7 @@
 
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
-import { useParams } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { getCrewReviews } from '@/api/fetch/crews';
 import { crewQueries } from '@/api/queries/crewQueries';
@@ -17,32 +17,58 @@ import FixedBottomBar, {
 import CompletedSessionCard from '@/components/session/CompletedSessionCard';
 import SessionCard from '@/components/session/SessionCard';
 import Button from '@/components/ui/Button';
+import Modal from '@/components/ui/Modal';
 import Pagination from '@/components/ui/Pagination';
 import Tabs from '@/components/ui/Tabs';
 import { cn } from '@/lib/utils';
 import { CrewMember } from '@/types';
 
 function PageAction({
-  className,
   myRole,
+  className,
 }: {
-  className?: string;
   myRole: 'LEADER' | 'STAFF' | 'MEMBER' | undefined;
+  className?: string;
 }) {
   const isCrewAdmin = myRole === 'LEADER' || myRole === 'STAFF';
-  const handleShare = () => {};
+  const pathname = usePathname();
+
+  const handleShare = async () => {
+    if (typeof window !== 'undefined' && navigator) {
+      const type = 'text/plain';
+      const pageUrl = `${new URL(pathname, process.env.NEXT_PUBLIC_APP_URL)}`;
+      const clipboardItemData = {
+        [type]: pageUrl,
+      };
+
+      const clipboardItem = new ClipboardItem(clipboardItemData);
+      await navigator.clipboard.write([clipboardItem]);
+    }
+  };
   const handleCreateSession = () => {};
   const handleJoinCrew = () => {};
 
   return (
     <div className={cn('flex gap-7', className)}>
-      <button
-        type="button"
-        aria-label="크루 링크 공유하기"
-        onClick={handleShare}
-      >
-        <Share className="size-6 stroke-[#9CA3AF]" />
-      </button>
+      <Modal>
+        <Modal.Trigger
+          aria-label="크루 링크 공유하기"
+          asChild
+          onClick={handleShare}
+        >
+          <Share className="size-6 stroke-[#9CA3AF]" />
+        </Modal.Trigger>
+        <Modal.Content className="flex h-[200px] w-[360px] flex-col gap-7">
+          <Modal.Title />
+          <Modal.CloseButton />
+          <Modal.Description>크루 URL 주소가 복사되었어요!</Modal.Description>
+          <Modal.Footer>
+            <Modal.Close asChild>
+              <Button>닫기</Button>
+            </Modal.Close>
+          </Modal.Footer>
+        </Modal.Content>
+      </Modal>
       <Button
         type="button"
         className="bg-brand-500 text-body2-semibold flex-1 px-6 py-3"
