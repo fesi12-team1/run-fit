@@ -13,6 +13,7 @@ export const badgeVariants = cva(
         dday: 'text-brand-600 bg-linear-to-br from-[rgba(247,223,249,1)] via-[rgba(223,229,249,1)] to-[rgba(186,186,250,1)]',
         level: 'bg-gray-800',
         pace: 'bg-blue-950 text-blue-300',
+        none: '',
       },
       size: {
         sm: 'rounded-sm px-1 py-0.5 text-[10px] font-semibold',
@@ -51,7 +52,11 @@ type DdayBadgeProps = BaseBadgeProps & {
   pace?: never;
 };
 
-type BadgeProps = LevelBadgeProps | PaceBadgeProps | DdayBadgeProps;
+type BadgeProps =
+  | LevelBadgeProps
+  | PaceBadgeProps
+  | DdayBadgeProps
+  | BaseBadgeProps;
 
 export default function Badge({
   className,
