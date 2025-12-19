@@ -8,17 +8,20 @@ interface SortOptionsProps {
   onChange: (value: SessionSort) => void;
 }
 
-export default function SortOptions({ value, onChange }: SortOptionsProps) {
+export default function SortOptions({
+  value: optionValue,
+  onChange,
+}: SortOptionsProps) {
   return (
     <Dropdown size="lg">
       <Dropdown.Trigger className="bg-transparent">
-        {getOptionLabel(SORT_OPTIONS, value)}
+        {getOptionLabel(SORT_OPTIONS, optionValue)}
       </Dropdown.Trigger>
       <Dropdown.Content>
         {SORT_OPTIONS.map(({ label, value }) => (
           <Dropdown.Item
             key={value}
-            selected={value === value}
+            selected={value === optionValue}
             onSelect={() => onChange(value)}
           >
             {label}

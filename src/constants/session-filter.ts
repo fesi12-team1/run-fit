@@ -1,3 +1,4 @@
+import type { DateRange } from 'react-day-picker';
 import type { Level, SessionSort } from '@/types';
 
 /* ----------------------------------------------
@@ -24,6 +25,16 @@ export type FilterTab = {
   label: string;
 };
 
+export type SessionFilterState = {
+  page: number;
+  // TODO: size 추가하기
+  sort: SessionSort;
+  region?: RegionFilterValue;
+  date?: DateRange;
+  time?: [number, number];
+  level?: LevelFilterValue;
+};
+
 /* ----------------------------------------------
  * 상수 정의
  * ---------------------------------------------- */
@@ -46,3 +57,12 @@ export const FILTER_TABS = [
   { key: 'time', label: '시간' },
   { key: 'level', label: '난이도' },
 ] as const satisfies readonly FilterTab[];
+
+export const DEFAULT_SESSION_FILTER = {
+  page: 0,
+  sort: 'createdAtDesc',
+  region: undefined,
+  date: undefined,
+  time: undefined,
+  level: undefined,
+} satisfies SessionFilterState;

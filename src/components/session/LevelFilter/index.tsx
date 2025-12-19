@@ -9,17 +9,20 @@ interface LevelFilterProps {
   onChange: (value?: LevelFilterValue) => void;
 }
 
-export default function LevelFilter({ value, onChange }: LevelFilterProps) {
+export default function LevelFilter({
+  value: optionValue,
+  onChange,
+}: LevelFilterProps) {
   return (
-    <Dropdown size="lg" hasSelected={Boolean(value)}>
+    <Dropdown size="lg" hasSelected={Boolean(optionValue)}>
       <Dropdown.Trigger>
-        {value ? getOptionLabel(LEVEL_OPTIONS, value) : '난이도'}
+        {optionValue ? getOptionLabel(LEVEL_OPTIONS, optionValue) : '난이도'}
       </Dropdown.Trigger>
       <Dropdown.Content>
         {LEVEL_OPTIONS.map(({ label, value }) => (
           <Dropdown.Item
             key={value ?? 'all'}
-            selected={value === value}
+            selected={value === optionValue}
             onSelect={() => onChange(value)}
           >
             {label}

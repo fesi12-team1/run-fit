@@ -11,8 +11,8 @@ import {
   FILTER_TABS,
   LEVEL_OPTIONS,
   type RegionFilterValue,
+  type SessionFilterState,
 } from '@/constants/session-filter';
-import { SessionFilterState } from '@/hooks/session/useSessionFilters';
 import { Level } from '@/types';
 
 interface FilterModalProps {
