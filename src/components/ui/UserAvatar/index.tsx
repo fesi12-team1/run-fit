@@ -4,6 +4,7 @@ import Profile from 'assets/icons/profile.svg';
 import { cx } from 'class-variance-authority';
 import Image from 'next/image';
 import { useState } from 'react';
+import { isValidImageUrl } from '@/lib/image';
 
 interface UserAvatarProps {
   src?: string | null;
@@ -36,17 +37,5 @@ export default function UserAvatar({
         <Profile role="img" aria-label={alt} />
       )}
     </div>
-  );
-}
-
-function isValidImageUrl(url: string | null | undefined): url is string {
-  if (typeof url !== 'string') return false;
-
-  if (url.trim() === '') return false;
-
-  return (
-    url.startsWith('/') ||
-    url.startsWith('http://') ||
-    url.startsWith('https://')
   );
 }
