@@ -157,7 +157,12 @@ export default function SessionPage() {
           </div>
         )}
       </div>
-      <div className="grid w-full grid-cols-3 gap-6">
+      <div
+        className={cn(
+          'grid w-full grid-cols-2 gap-6',
+          isDesktop && 'grid-cols-3'
+        )}
+      >
         {sessions?.content?.map((session) => (
           <SessionCard key={session.id} session={session} />
         ))}
