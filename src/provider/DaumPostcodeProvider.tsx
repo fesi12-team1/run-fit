@@ -25,7 +25,7 @@ export function DaumPostcodeProvider({
   const [, setError] = useState<Error | null>(null);
 
   const openAddressSearch = (onSelectComplete: (data: AddressData) => void) => {
-    if (!loaded || !window.daum?.Postcode) {
+    if (!window.daum?.Postcode) {
       console.warn('Daum Postcode script가 로드되지 않았습니다.');
       return;
     }

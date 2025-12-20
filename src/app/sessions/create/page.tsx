@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import React, { use } from 'react';
 import ShevronLeft from '@/assets/icons/chevron-left.svg?react';
 import SessionLevelCard from '@/components/session/SessionLevelCard';
 import Button from '@/components/ui/Button';
@@ -10,6 +11,7 @@ import Input from '@/components/ui/Input';
 import PaceSlider from '@/components/ui/PaceSlider';
 import Textarea from '@/components/ui/Textarea';
 import { cn } from '@/lib/utils';
+import { useDaumPostcode } from '@/provider/DaumPostcodeProvider';
 
 export default function Page() {
   return (
@@ -38,7 +40,10 @@ export function BackButton() {
 
 function SessionCreateForm() {
   const date = new Date();
-  const location = '서울특별시 어쩌구';
+  const [location, setLocation] = React.useState('서울특별시 어쩌구');
+  const [city, setCity] = React.useState('');
+  const [district, setDistrict] = React.useState('');
+  const { openAddressSearch } = useDaumPostcode();
 
   return (
     <form>
@@ -71,8 +76,20 @@ function SessionCreateForm() {
             className="text-body2-medium w-full rounded-xl bg-gray-800 px-4 py-2 text-white"
           />
         </div>
-        <Button variant="outlined" className="w-full" size="sm">
-          생성하기
+        <Button
+          type="button"
+          variant="outlined"
+          className="w-full"
+          size="sm"
+          onClick={() =>
+            openAddressSearch((data) => {
+              setLocation(data.address);
+              setCity(data.sido);
+              setDistrict(data.sigungu);
+            })
+          }
+        >
+          {location ? '다시 검색하기' : '주소 검색하기'}
         </Button>
       </div>
       <div>

@@ -1,3 +1,4 @@
+import { DaumPostcodeProvider } from '@/provider/DaumPostcodeProvider';
 import { KakaoMapProvider } from '@/provider/KakaoMapProvider';
 
 export default function Layout({
@@ -5,5 +6,9 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <KakaoMapProvider>{children}</KakaoMapProvider>;
+  return (
+    <KakaoMapProvider>
+      <DaumPostcodeProvider>{children}</DaumPostcodeProvider>
+    </KakaoMapProvider>
+  );
 }
