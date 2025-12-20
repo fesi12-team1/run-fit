@@ -35,7 +35,13 @@ export function BackButton() {
     else router.replace('/sessions');
   };
 
-  return <ShevronLeft type="button" onClick={handleClick} className="size-6" />;
+  return (
+    <ShevronLeft
+      type="button"
+      onClick={handleClick}
+      className="size-6 hover:cursor-pointer"
+    />
+  );
 }
 
 function SessionCreateForm() {
