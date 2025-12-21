@@ -12,6 +12,7 @@ export default function Tag({
   size: 'sm' | 'lg';
   selected?: boolean;
   onClick?: () => void;
+  isPc?: boolean;
 }) {
   return (
     <div

@@ -16,13 +16,11 @@ export default function ProfileImageUploader({
     maxSizeMB: 5,
   });
 
-  // 우선순위: 새로 업로드한 이미지 > 기존 이미지 > default
   const displaySrc =
     items[0]?.previewUrl || imageUrl || '/assets/profile-default.png';
 
   return (
     <div className="relative mx-auto" style={{ width: size, height: size }}>
-      {/* 실제 파일 input */}
       <input
         ref={inputRef}
         type="file"
@@ -34,12 +32,10 @@ export default function ProfileImageUploader({
         }}
       />
 
-      {/* 프로필 이미지 */}
       <div className="relative size-20 overflow-hidden rounded-full border-[1.5px] border-gray-700">
         <Image src={displaySrc} alt="profile" fill className="object-cover" />
       </div>
 
-      {/* 연필 버튼 */}
       <button
         type="button"
         onClick={open}

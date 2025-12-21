@@ -16,9 +16,9 @@ export type SigninResponse = {
 
 export interface Profile extends User {
   image?: string | null;
-  introduction: string;
-  city: string;
-  pace: number;
+  introduction: string | null;
+  city: string | null;
+  pace: number | null;
   styles?: string[];
   updatedAt: string;
 }

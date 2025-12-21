@@ -37,7 +37,7 @@ export default function ProfileEdit({ open, setOpen, user }: ProfileEditProps) {
   const isPc = useMediaQuery({ min: 'laptop' });
 
   const [name, setName] = useState('');
-  const [introduction, setIntroduction] = useState('');
+  const [introduction, setIntroduction] = useState(null);
   const [pace, setPace] = useState<number | null>(null);
   const [city, setCity] = useState<string | null>(null);
   const [styles, setStyles] = useState<string[]>([]);
@@ -52,7 +52,7 @@ export default function ProfileEdit({ open, setOpen, user }: ProfileEditProps) {
     setPace(user.pace ?? null);
     setCity(user.city ?? null);
     setStyles(user.styles ?? []);
-    setImage(null);
+    setImage(user.image ?? null);
   }, [open, user]);
 
   const { mutateAsync: updateProfile } = useUpdateMyProfile();
@@ -88,7 +88,9 @@ export default function ProfileEdit({ open, setOpen, user }: ProfileEditProps) {
                 size="sm"
                 value={name}
                 placeholder="이름을 입력해주세요"
-                errorMessage={name.length === 0 && '이름은 필수 입력값입니다.'}
+                errorMessage={
+                  name.length === 0 ? '이름은 필수 입력값입니다.' : ''
+                }
                 label="이름"
                 onChange={(e) => setName(e.target.value)}
                 className={isPc ? 'bg-gray-750' : 'bg-gray-800'}

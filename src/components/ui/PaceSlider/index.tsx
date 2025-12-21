@@ -17,7 +17,7 @@ interface PaceSliderProps
     'value' | 'onValueChange' | 'defaultValue'
   > {
   // Radix의 배열 타입을 number로 재정의
-  value: number;
+  value: number | null;
   onValueChange: (value: number) => void;
 }
 
@@ -30,15 +30,18 @@ export default function PaceSlider({
   onValueChange,
   ...props
 }: PaceSliderProps) {
+  const centerValue = (min + max) / 2;
   // Radix에 전달할 배열 타입으로 변환
-  const radixValue = [value];
+  const radixValue = [value ?? centerValue];
   const handleRadixValueChange = (newValue: number[]) => {
     onValueChange(newValue[0]);
   };
   return (
     <div className="w-full">
       <div className="text-body2-semibold pt-3 pb-3.5 text-center text-white">
-        {`${formatTimeText(...secondsToMinutes(value))}/km`}
+        {value === null
+          ? '- 분/km'
+          : `${formatTimeText(...secondsToMinutes(value))}/km`}
       </div>
       <div className="flex items-center justify-between gap-2">
         <div className="text-body3-regular shrink-0 text-gray-300">

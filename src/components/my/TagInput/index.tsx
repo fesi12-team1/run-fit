@@ -10,6 +10,7 @@ type TagInputProps = {
   options: string[];
   max?: number;
   placeholder?: string;
+  isPc?: boolean;
 };
 
 export default function TagInput({
@@ -54,8 +55,7 @@ export default function TagInput({
             key={tag}
             size="sm"
             selected
-            onClick={(e) => {
-              e.stopPropagation();
+            onClick={() => {
               toggleTag(tag);
             }}
           >

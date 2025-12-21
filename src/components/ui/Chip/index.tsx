@@ -7,6 +7,7 @@ export default function Chip({
 }: {
   value: 'primary' | 'secondary';
   children: React.ReactNode;
+  active?: boolean;
 }) {
   return (
     <div
