@@ -47,10 +47,6 @@ export default function CrewMemberList({
     <div className="flex flex-col">
       {children}
       <div className="flex flex-col">
-        {/*
-          최대 3명까지 데이터를 받아오고 있어서
-          컴포넌트 내부에서 slice 하지 않아도 될 것 같습니다 :)
-        */}
         {members.slice(0, 4).map((member) => {
           return <CrewMemberListItem key={member.userId} member={member} />;
         })}

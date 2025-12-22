@@ -50,14 +50,7 @@ function PaginationLink({
       aria-current={isActive ? 'page' : undefined}
       data-slot="pagination-link"
       data-active={isActive}
-      className={cn(
-        isActive ? 'text-gray-100' : 'text-gray-300',
-        // buttonVariants({
-        //   // variant: isActive ? "outline" : "ghost",
-        //   // size,
-        // }),
-        className
-      )}
+      className={cn(isActive ? 'text-gray-100' : 'text-gray-300', className)}
       {...props}
     />
   );
