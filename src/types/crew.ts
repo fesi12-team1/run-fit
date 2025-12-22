@@ -1,4 +1,5 @@
 import { PaginationQueryParams } from './api';
+import { Profile } from './user';
 
 export interface Crew {
   id: number;
@@ -31,6 +32,7 @@ export interface CrewMember {
   name: string;
   profileImage: string | null;
   role: 'LEADER' | 'STAFF' | 'MEMBER';
+  introduction: Profile['introduction'];
   joinedAt: string;
 }
 

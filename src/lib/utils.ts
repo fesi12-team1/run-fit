@@ -88,3 +88,15 @@ export function normalizeParams<T extends object>(params?: T): T {
 
   return Object.fromEntries(entries) as T;
 }
+
+/**
+ * 옵션 배열에서 값에 해당하는 레이블을 반환합니다.
+ * @param options
+ * @param value
+ * @returns 옵션의 레이블 또는 undefined
+ */
+export function getOptionLabel<
+  T extends readonly { label: string; value: string | undefined }[],
+>(options: T, value?: T[number]['value']) {
+  return options.find((option) => option.value === value)?.label;
+}

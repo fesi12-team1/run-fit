@@ -1,9 +1,10 @@
 'use client';
 
 import Profile from 'assets/icons/profile.svg';
-import { cx } from 'class-variance-authority';
 import Image from 'next/image';
 import { useState } from 'react';
+import { isValidImageUrl } from '@/lib/image';
+import { cn } from '@/lib/utils';
 
 interface UserAvatarProps {
   src?: string | null;
@@ -22,7 +23,7 @@ export default function UserAvatar({
   return (
     <div
       data-slot="avatar"
-      className={cx('relative overflow-hidden rounded-full', className)}
+      className={cn('relative size-10 overflow-hidden rounded-full', className)}
     >
       {showImage ? (
         <Image
@@ -36,17 +37,5 @@ export default function UserAvatar({
         <Profile role="img" aria-label={alt} />
       )}
     </div>
-  );
-}
-
-function isValidImageUrl(url: string | null | undefined): url is string {
-  if (typeof url !== 'string') return false;
-
-  if (url.trim() === '') return false;
-
-  return (
-    url.startsWith('/') ||
-    url.startsWith('http://') ||
-    url.startsWith('https://')
   );
 }

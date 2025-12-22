@@ -1,26 +1,80 @@
+import { cva } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
+export const chipVariants = cva(
+  'text-body3-regular h-[36px] w-[52px] inline-flex items-center justify-center whitespace-nowrap shrink-0 font-semibold transition-colors rounded-xl cursor-pointer',
+  {
+    variants: {
+      tone: {
+        primary: '',
+        secondary: '',
+      },
+      state: {
+        default: '',
+        hover: '',
+        active: '',
+      },
+    },
+    compoundVariants: [
+      // primary
+      {
+        tone: 'primary',
+        state: 'default',
+        className: 'border border-gray-700 bg-gray-800',
+      },
+      {
+        tone: 'primary',
+        state: 'hover',
+        className: 'border-2 border-brand-800 bg-gray-800',
+      },
+      {
+        tone: 'primary',
+        state: 'active',
+        className: 'border border-brand-500 bg-brand-950 text-brand-300',
+      },
+
+      // secondary
+      {
+        tone: 'secondary',
+        state: 'default',
+        className: 'bg-gray-600 border-gray-500',
+      },
+      {
+        tone: 'secondary',
+        state: 'hover',
+        className: 'border-brand-800 border-2 bg-gray-600',
+      },
+      {
+        tone: 'secondary',
+        state: 'active',
+        className: 'text-brand-300 border border-brand-500 bg-brand-900',
+      },
+    ],
+    defaultVariants: {
+      tone: 'primary',
+      state: 'default',
+    },
+  }
+);
+
+type BadgeProps = React.ComponentProps<'div'> & {
+  children?: React.ReactNode;
+  tone?: 'primary' | 'secondary';
+  state?: 'default' | 'hover' | 'active';
+};
+
 export default function Chip({
-  value = 'primary',
+  className,
+  tone,
+  state,
   children,
-  active = false,
-}: {
-  value: 'primary' | 'secondary';
-  children: React.ReactNode;
-  active?: boolean;
-}) {
+  ...rest
+}: BadgeProps) {
   return (
     <div
-      className={cn(
-        'text-body3-regular hover:border-brand-800 flex items-center justify-center rounded-xl border px-3 py-2 text-gray-100',
-        value === 'primary'
-          ? 'border-gray-700 bg-gray-800'
-          : 'border-gray-500 bg-gray-600',
-        active &&
-          (value === 'primary'
-            ? 'border-brand-500 bg-brand-950 text-brand-300'
-            : 'border-brand-500 bg-brand-900 text-brand-300')
-      )}
+      data-slot="chip"
+      className={cn(chipVariants({ tone, state }), className)}
+      {...rest}
     >
       {children}
     </div>

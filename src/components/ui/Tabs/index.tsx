@@ -35,13 +35,23 @@ function TabsList({
 
 function TabsTrigger({
   className,
+  size = 'lg',
   ...props
-}: React.ComponentProps<typeof TabsPrimitive.Trigger>) {
+}: React.ComponentProps<typeof TabsPrimitive.Trigger> & {
+  size?: 'sm' | 'lg';
+}) {
   return (
     <TabsPrimitive.Trigger
       data-slot="tabs-trigger"
       className={cn(
-        "inline-flex flex-1 cursor-pointer items-center justify-center gap-1.5 border-b border-b-gray-400 p-2.5 text-sm whitespace-nowrap text-gray-300 transition-all disabled:pointer-events-none data-[state=active]:border-b-white data-[state=active]:text-white lg:text-xl [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "inline-flex flex-1 cursor-pointer items-center justify-center gap-1.5 border-b border-b-gray-400 p-2.5 whitespace-nowrap text-gray-300 transition-all disabled:pointer-events-none data-[state=active]:border-b-white data-[state=active]:text-white [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+
+        // size별 스타일
+        size === 'sm' &&
+          'text-body3-medium data-[state=active]:text-body3-semibold',
+        size === 'lg' &&
+          'text-body2-medium data-[state=active]:text-body2-semibold',
+
         className
       )}
       {...props}

@@ -3,24 +3,58 @@
 import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import { sessionQueries } from '@/api/queries/sessionQueries';
+import DateFilter from '@/components/session/DateFilter';
+import FilterModal from '@/components/session/FilterModal';
+import LevelFilter from '@/components/session/LevelFilter';
+import RegionFilter from '@/components/session/RegionFilter';
 import SessionCard from '@/components/session/SessionCard';
-import Dropdown from '@/components/ui/Dropdown';
+import SortOptions from '@/components/session/SortOptions';
+import TimeFilter from '@/components/session/TimeFilter';
 import FilterButton from '@/components/ui/FilterButton';
-import { Session } from '@/types';
+import { useSessionFilters } from '@/hooks/session/useSessionFilters';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { cn } from '@/lib/utils';
 
 export default function SessionPage() {
+  const {
+    filters,
+    queryFilters,
+    changeFilter,
+    resetFilters,
+    activeFilterCount,
+  } = useSessionFilters();
+
   const { data: sessions } = useQuery(
     sessionQueries.list({
-      page: 0,
       size: 10,
-      sort: 'createdAtDesc',
+      ...queryFilters,
     })
   );
 
+  const isTabletUp = useMediaQuery({ min: 'tablet' });
+  const isLaptopUp = useMediaQuery({ min: 'laptop' });
+
+  const isDesktop = isLaptopUp;
+  const isTablet = isTabletUp && !isLaptopUp;
+  const isMobile = !isTabletUp;
+
   return (
-    <main className="h-main mx-auto flex max-w-[1120px] flex-col items-center justify-start">
-      <div className="flex w-full items-center justify-between">
-        {/** 배너 */}
+    <main
+      className={cn(
+        'h-main mx-auto flex max-w-[1120px] flex-col items-center justify-start',
+        isMobile && 'px-4 pt-6',
+        isTablet && 'px-8',
+        isDesktop && 'px-0'
+      )}
+    >
+      <div
+        className={cn(
+          'flex w-full items-center justify-between',
+          isMobile && 'hidden',
+          isTablet && 'py-[26px]',
+          isDesktop && 'pt-[33px]'
+        )}
+      >
         <div>
           <h2 className="text-title1-bold mb-4 italic">
             나와 FIT한
@@ -35,43 +69,103 @@ export default function SessionPage() {
           <Image
             src="/assets/session-list.png"
             alt="Session List"
-            // className="origin-center scale-[0.8]"
             width={417}
             height={235}
           />
         </div>
       </div>
-      <div className="flex w-full flex-col items-center">
-        <div className="mb-6 flex w-full items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <Dropdown size="lg">
-              <Dropdown.Trigger>지역 전체</Dropdown.Trigger>
-            </Dropdown>
-            <Dropdown size="lg">
-              <Dropdown.Trigger>날짜 전체</Dropdown.Trigger>
-            </Dropdown>
-            <Dropdown size="lg">
-              <Dropdown.Trigger>시간</Dropdown.Trigger>
-            </Dropdown>
-            <Dropdown size="lg">
-              <Dropdown.Trigger>난이도</Dropdown.Trigger>
-              <Dropdown.Content>
-                {['초급', '중급', '상급'].map((item) => (
-                  <Dropdown.Item key={item}>{item}</Dropdown.Item>
-                ))}
-              </Dropdown.Content>
-            </Dropdown>
-            <FilterButton className="pl-2" />
+      <div className="mb-6 w-full">
+        <div className="flex w-full items-center justify-between gap-2">
+          <div
+            className={cn(
+              'flex items-center gap-2',
+              (isMobile || isTablet) &&
+                'scrollbar-hidden w-full overflow-scroll'
+            )}
+          >
+            <div className="shrink-0">
+              <RegionFilter
+                value={filters.region}
+                onChange={(v) => changeFilter('region', v)}
+              />
+            </div>
+            <div className="shrink-0">
+              <DateFilter
+                value={filters.date}
+                onChange={(v) => changeFilter('date', v)}
+              />
+            </div>
+            <div className="shrink-0">
+              <TimeFilter
+                value={filters.time}
+                onChange={(v) => changeFilter('time', v)}
+              />
+            </div>
+            <div className="shrink-0">
+              <LevelFilter
+                value={filters.level}
+                onChange={(v) => changeFilter('level', v)}
+              />
+            </div>
+            {isDesktop && (
+              <FilterModal
+                filters={filters}
+                changeFilter={changeFilter}
+                resetFilters={resetFilters}
+              >
+                <FilterButton count={activeFilterCount} />
+              </FilterModal>
+            )}
           </div>
-          <Dropdown size="lg">
-            <Dropdown.Trigger>최근 생성순</Dropdown.Trigger>
-          </Dropdown>
+          {(isTablet || isDesktop) && (
+            <div className="flex items-center gap-2">
+              {isTablet && (
+                <FilterModal
+                  filters={filters}
+                  changeFilter={changeFilter}
+                  resetFilters={resetFilters}
+                >
+                  <FilterButton count={activeFilterCount} />
+                </FilterModal>
+              )}
+              <div className="shrink-0">
+                <SortOptions
+                  value={filters.sort}
+                  onChange={(v) => changeFilter('sort', v)}
+                />
+              </div>
+            </div>
+          )}
+          {isMobile && (
+            <div className="ml-auto flex items-center">
+              <FilterModal
+                filters={filters}
+                changeFilter={changeFilter}
+                resetFilters={resetFilters}
+              >
+                <FilterButton count={activeFilterCount} />
+              </FilterModal>
+            </div>
+          )}
         </div>
-        <div className="grid w-full grid-cols-3 gap-6">
-          {sessions?.content?.map((session: Session) => (
-            <SessionCard key={session.id} session={session} />
-          ))}
-        </div>
+        {isMobile && (
+          <div className="mt-2 flex w-full shrink-0 justify-end">
+            <SortOptions
+              value={filters.sort}
+              onChange={(v) => changeFilter('sort', v)}
+            />
+          </div>
+        )}
+      </div>
+      <div
+        className={cn(
+          'grid w-full grid-cols-2 gap-6',
+          isDesktop && 'grid-cols-3'
+        )}
+      >
+        {sessions?.content?.map((session) => (
+          <SessionCard key={session.id} session={session} />
+        ))}
       </div>
     </main>
   );

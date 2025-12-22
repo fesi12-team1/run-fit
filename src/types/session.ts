@@ -37,8 +37,9 @@ export type SessionListFilters = PaginationQueryParams & {
   dateTo?: string;
   timeFrom?: string;
   timeTo?: string;
-  sort: 'createdAtDesc' | 'sessionAtAsc' | 'registerByAsc';
+  sort: SessionSort;
 };
 
 export type Level = 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED';
 export type SessionStatus = 'OPEN' | 'CLOSED';
+export type SessionSort = 'createdAtDesc' | 'sessionAtAsc' | 'registerByAsc';

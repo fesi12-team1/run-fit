@@ -142,6 +142,7 @@ export function createSessionHandlers(p: PathFn, authMode: AuthMode) {
         ({ maxParticipantCount, ...rest }) => ({
           ...rest,
           liked: faker.datatype.boolean(),
+          maxParticipantCount,
           currentParticipantCount: faker.number.int({
             min: 0,
             max: maxParticipantCount,
@@ -270,6 +271,7 @@ export function createSessionHandlers(p: PathFn, authMode: AuthMode) {
             name: faker.person.fullName(),
             profileImage: faker.image.avatar(),
             role: 'LEADER',
+            introduction: faker.lorem.sentence(),
             joinedAt: '2025-12-11T02:49:35.793Z',
           },
           {
@@ -277,6 +279,7 @@ export function createSessionHandlers(p: PathFn, authMode: AuthMode) {
             name: faker.person.fullName(),
             profileImage: faker.image.avatar(),
             role: 'STAFF',
+            introduction: faker.lorem.sentence(),
             joinedAt: '2025-12-12T02:49:35.793Z',
           },
           {
@@ -284,6 +287,7 @@ export function createSessionHandlers(p: PathFn, authMode: AuthMode) {
             name: faker.person.fullName(),
             profileImage: faker.image.avatar(),
             role: 'MEMBER',
+            introduction: faker.lorem.sentence(),
             joinedAt: '2025-12-13T02:49:35.793Z',
           },
         ],

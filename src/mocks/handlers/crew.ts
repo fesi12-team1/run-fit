@@ -106,49 +106,65 @@ export function createCrewHandlers(p: PathFn, authMode: AuthMode) {
     }),
 
     // 크루 상세 조회
-    http.get(
-      p('/api/crews/:id'),
-      requireAuth(authMode, ({ params }) => {
-        const id = parseIdParam(params.id);
+    http.get(p('/api/crews/:id'), ({ params }) => {
+      const id = parseIdParam(params.id);
 
-        const data = {
-          id: id,
-          name: faker.company.name() + ' 러닝 크루',
-          description: faker.lorem.paragraph(),
-          city: '서울',
-          image: faker.image.avatar(),
-          createdAt: new Date().toISOString(),
-        };
+      const data = {
+        id: id,
+        name: faker.company.name() + ' 러닝 크루',
+        description: faker.lorem.paragraph(),
+        city: '서울',
+        image: faker.image.avatar(),
+        memberCount: faker.number.int({ min: 2, max: 100 }),
+        createdAt: new Date().toISOString(),
+      };
 
-        return HttpResponse.json(successResponse(data), { status: 200 });
-      })
-    ),
+      return HttpResponse.json(successResponse(data), { status: 200 });
+    }),
 
     // 크루 멤버 목록 조회
     http.get(p('/api/crews/:id/members'), () => {
       const data = {
-        leader: {
-          userId: 1,
-          name: '홍길동',
-          profileImage: faker.image.avatar(),
-          role: 'LEADER',
-          joinedAt: '2025-11-10T12:00:00+09:00',
-        },
-        staff: [
-          {
-            userId: 2,
-            name: '김운영',
-            profileImage: null,
-            role: 'STAFF',
-            joinedAt: '2025-11-15T12:00:00+09:00',
-          },
-        ],
         members: [
           {
-            userId: 3,
+            userId: 1,
+            name: '일멤버',
+            profileImage: faker.image.avatar(),
+            role: 'LEADER',
+            introduction: faker.lorem.sentence(),
+            joinedAt: '2025-11-20T12:00:00+09:00',
+          },
+          {
+            userId: 2,
             name: '이멤버',
             profileImage: faker.image.avatar(),
+            role: 'STAFF',
+            introduction: faker.lorem.sentence(),
+
+            joinedAt: '2025-11-20T12:00:00+09:00',
+          },
+          {
+            userId: 3,
+            name: '삼멤버',
+            profileImage: faker.image.avatar(),
             role: 'MEMBER',
+            introduction: faker.lorem.sentence(),
+            joinedAt: '2025-11-20T12:00:00+09:00',
+          },
+          {
+            userId: 4,
+            name: '사멤버',
+            profileImage: faker.image.avatar(),
+            role: 'MEMBER',
+            introduction: faker.lorem.sentence(),
+            joinedAt: '2025-11-20T12:00:00+09:00',
+          },
+          {
+            userId: 5,
+            name: '오멤버',
+            profileImage: faker.image.avatar(),
+            role: 'MEMBER',
+            introduction: faker.lorem.sentence(),
             joinedAt: '2025-11-20T12:00:00+09:00',
           },
         ],
