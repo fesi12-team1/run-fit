@@ -30,7 +30,12 @@ export function useMediaQuery(input: BreakpointQuery) {
   const subscribe = (onStoreChange: () => void) => {
     const mql = window.matchMedia(query);
     mql.addEventListener('change', onStoreChange);
-    return () => mql.removeEventListener('change', onStoreChange);
+    // console.log('mql.addEventListener');
+
+    return () => {
+      mql.removeEventListener('change', onStoreChange);
+      // console.log('mql.removeEventListener');
+    };
   };
 
   const getSnapshot = () => window.matchMedia(query).matches;
@@ -41,7 +46,8 @@ export function useMediaQuery(input: BreakpointQuery) {
 
 const maxWidthExclusive = (px: number) => `${px - 0.02}px`;
 
-export function buildMediaQuery(input: BreakpointQuery) {
+// helper function
+function buildMediaQuery(input: BreakpointQuery) {
   // max만 있는 경우
   if (input.min === undefined && input.max !== undefined) {
     const maxPx = BREAKPOINTS[input.max];
