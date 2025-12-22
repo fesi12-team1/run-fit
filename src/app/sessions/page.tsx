@@ -27,12 +27,9 @@ export default function SessionPage() {
     })
   );
 
-  const isTabletUp = useMediaQuery({ min: 'tablet' });
-  const isLaptopUp = useMediaQuery({ min: 'laptop' });
-
-  const isDesktop = isLaptopUp;
-  const isTablet = isTabletUp && !isLaptopUp;
-  const isMobile = !isTabletUp;
+  const isDesktop = useMediaQuery({ min: 'laptop' });
+  const isTablet = useMediaQuery({ min: 'tablet', max: 'laptop' });
+  const isMobile = useMediaQuery({ max: 'tablet' });
 
   return (
     <SessionFilterProvider initialFilters={filters} applyFilters={applyFilters}>
