@@ -57,7 +57,7 @@ export const chipVariants = cva(
   }
 );
 
-type BadgeProps = React.ComponentProps<'div'> & {
+type ChipProps = React.ComponentProps<'div'> & {
   children?: React.ReactNode;
   tone?: 'primary' | 'secondary';
   state?: 'default' | 'hover' | 'active';
@@ -69,7 +69,7 @@ export default function Chip({
   state,
   children,
   ...rest
-}: BadgeProps) {
+}: ChipProps) {
   return (
     <div
       data-slot="chip"
