@@ -18,7 +18,7 @@ const baseSchema = {
   createdAt: z.iso.datetime(),
 };
 
-const userSchema = z.object({
+const _userSchema = z.object({
   id: z.number(),
   name: z.string(),
   email: z.email(),
@@ -30,7 +30,7 @@ const userSchema = z.object({
   ...baseSchema,
 });
 
-const crewSchema = z.object({
+const _crewSchema = z.object({
   id: z.number(),
   name: z.string(),
   description: z.string().nullable().optional(),
@@ -39,7 +39,7 @@ const crewSchema = z.object({
   ...baseSchema,
 });
 
-const membershipSchema = z.object({
+const _membershipSchema = z.object({
   id: z.number(),
   userId: z.number(),
   crewId: z.number(),
@@ -48,7 +48,7 @@ const membershipSchema = z.object({
   ...baseSchema,
 });
 
-const sessionSchema = z.object({
+const _sessionSchema = z.object({
   id: z.number(),
   crewId: z.number(),
   hostUserId: z.number(),
@@ -71,7 +71,7 @@ const sessionSchema = z.object({
   ...baseSchema,
 });
 
-const sessionLikeSchema = z.object({
+const _sessionLikeSchema = z.object({
   id: z.number(),
   sessionId: z.number(),
   userId: z.number(),
@@ -79,7 +79,7 @@ const sessionLikeSchema = z.object({
   ...baseSchema,
 });
 
-const sessionParticipantSchema = z.object({
+const _sessionParticipantSchema = z.object({
   id: z.number(),
   sessionId: z.number(),
   userId: z.number(),
@@ -87,7 +87,7 @@ const sessionParticipantSchema = z.object({
   ...baseSchema,
 });
 
-const reviewSchema = z.object({
+const _reviewSchema = z.object({
   id: z.number(),
   sessionId: z.number(),
   userId: z.number(),
@@ -128,7 +128,7 @@ const mockUser2 = {
   updatedAt: new Date().toISOString(),
 };
 
-type User = z.infer<typeof userSchema>;
+type User = z.infer<typeof _userSchema>;
 export const users: User[] = [
   mockUser1,
   mockUser2,
@@ -149,7 +149,7 @@ export const users: User[] = [
   })),
 ];
 
-type Crew = z.infer<typeof crewSchema>;
+type Crew = z.infer<typeof _crewSchema>;
 export const crews: Crew[] = Array.from({ length: 95 }, (_, i) => ({
   id: i + 1,
   name: `${faker.company.name()}`,
@@ -160,7 +160,7 @@ export const crews: Crew[] = Array.from({ length: 95 }, (_, i) => ({
   updatedAt: new Date().toISOString(),
 }));
 
-type Session = z.infer<typeof sessionSchema>;
+type Session = z.infer<typeof _sessionSchema>;
 export const sessions: Session[] = Array.from({ length: 101 }, (_, i) => {
   const city = faker.helpers.arrayElement(SIDO_LIST);
   const districts = SIGUNGU_MAP[city] || [];
@@ -190,7 +190,7 @@ export const sessions: Session[] = Array.from({ length: 101 }, (_, i) => {
   };
 });
 
-type Review = z.infer<typeof reviewSchema>;
+type Review = z.infer<typeof _reviewSchema>;
 export const reviews: Review[] = Array.from({ length: 30 }, (_, i) => ({
   id: i + 1,
   sessionId: faker.number.int({ min: 1, max: sessions.length }),
@@ -203,11 +203,11 @@ export const reviews: Review[] = Array.from({ length: 30 }, (_, i) => ({
   createdAt: faker.date.past().toISOString(),
 }));
 
-type Membership = z.infer<typeof membershipSchema>;
+type Membership = z.infer<typeof _membershipSchema>;
 export const memberships: Membership[] = [];
 
-type SessionParticipant = z.infer<typeof sessionParticipantSchema>;
+type SessionParticipant = z.infer<typeof _sessionParticipantSchema>;
 export const sessionParticipants: SessionParticipant[] = [];
 
-type SessionLike = z.infer<typeof sessionLikeSchema>;
+type SessionLike = z.infer<typeof _sessionLikeSchema>;
 export const sessionLikes: SessionLike[] = [];
