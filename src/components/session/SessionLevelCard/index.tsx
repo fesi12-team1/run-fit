@@ -1,14 +1,15 @@
 'use client';
 
 import { Label } from '@radix-ui/react-label';
-import { cva } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 import Checkbox from '@/components/ui/Checkbox';
 import { cn } from '@/lib/utils';
+import { Level } from '@/types';
 
-interface SessionLevelCardProps {
-  label: string;
+interface SessionLevelCardProps
+  extends VariantProps<typeof sessionLevelCardVariants> {
+  level: Level;
   description: string;
-  size?: 'md' | 'sm';
   checked: boolean;
   disabled?: boolean;
   onClick: () => void;
@@ -16,7 +17,7 @@ interface SessionLevelCardProps {
 
 const sessionLevelCardVariants = cva(
   [
-    'relative flex w-[327px] items-start gap-2 rounded-lg outline-1 bg-gray-800 outline-gray-750',
+    'relative flex w-full items-start gap-2 rounded-lg outline-1 bg-gray-800 outline-gray-750',
     'transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/40',
   ].join(' '),
   {
@@ -43,8 +44,7 @@ const sessionLevelCardVariants = cva(
 );
 
 export default function SessionLevelCard({
-  label,
-  description,
+  level,
   size = 'md',
   checked,
   disabled = false,
@@ -54,9 +54,8 @@ export default function SessionLevelCard({
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
     e.preventDefault();
-    if (!disabled && onClick) {
-      onClick();
-    }
+    if (disabled) return;
+    onClick();
   };
 
   return (
@@ -77,7 +76,7 @@ export default function SessionLevelCard({
               'text-white'
             )}
           >
-            {label}
+            {LEVEL_COPY[level].label}
           </p>
           <p
             className={cn(
@@ -85,7 +84,7 @@ export default function SessionLevelCard({
               'text-gray-300'
             )}
           >
-            {description}
+            {LEVEL_COPY[level].description}
           </p>
         </div>
         <Checkbox
@@ -99,3 +98,18 @@ export default function SessionLevelCard({
     </div>
   );
 }
+
+const LEVEL_COPY = {
+  BEGINNER: {
+    label: '초급',
+    description: '천천히 몸을 풀며 가볍게 달리는 데 집중해요',
+  },
+  INTERMEDIATE: {
+    label: '중급',
+    description: '거리와 페이스를 꾸준히 유지하며 러닝 리듬을 만들어가요',
+  },
+  ADVANCED: {
+    label: '고급',
+    description: '빠른 페이스의 강도 있는 훈련을 통해 기록 단축에 집중해요',
+  },
+} as const;

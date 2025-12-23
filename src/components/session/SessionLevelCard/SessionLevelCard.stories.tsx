@@ -19,11 +19,17 @@ const meta: Meta<typeof SessionLevelCard> = {
   },
   args: {
     size: 'md',
-    label: '초급 러너',
-    description: '5~6분 페이스, 러닝 입문자 추천',
+    level: 'BEGINNER',
     checked: false,
     disabled: false,
   },
+  decorators: [
+    (Story) => (
+      <div className="w-[327px]">
+        <Story />
+      </div>
+    ),
+  ],
 };
 
 export default meta;
@@ -77,14 +83,14 @@ export const Sizes: Story = {
           size="sm"
           checked={selected === 'sm'}
           onClick={() => setSelected(selected === 'sm' ? null : 'sm')}
-          label="초급(sm)"
+          level="BEGINNER"
         />
         <SessionLevelCard
           {...args}
           size="md"
           checked={selected === 'md'}
           onClick={() => setSelected(selected === 'md' ? null : 'md')}
-          label="중급(md)"
+          level="INTERMEDIATE"
         />
       </div>
     );
@@ -106,7 +112,7 @@ export const LevelList: Story = {
           onClick={() =>
             setSelected(selected === 'beginner' ? null : 'beginner')
           }
-          label="초급"
+          level="BEGINNER"
         />
         <SessionLevelCard
           {...args}
@@ -114,7 +120,7 @@ export const LevelList: Story = {
           onClick={() =>
             setSelected(selected === 'intermediate' ? null : 'intermediate')
           }
-          label="중급"
+          level="INTERMEDIATE"
         />
         <SessionLevelCard
           {...args}
@@ -122,7 +128,7 @@ export const LevelList: Story = {
           onClick={() =>
             setSelected(selected === 'advanced' ? null : 'advanced')
           }
-          label="고급"
+          level="ADVANCED"
         />
       </div>
     );
