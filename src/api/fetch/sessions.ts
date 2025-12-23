@@ -4,6 +4,7 @@ import {
   Session,
   SessionListFilters,
   SliceData,
+  SuccessResponse,
 } from '@/types';
 
 export async function getSessions(queryParams?: SessionListFilters) {
@@ -35,7 +36,7 @@ export async function getSessions(queryParams?: SessionListFilters) {
     }
   }
 
-  const { data }: ResponseData<SliceData<Session>> = await response.json();
+  const { data }: SuccessResponse<SliceData<Session>> = await response.json();
   return data;
 }
 
