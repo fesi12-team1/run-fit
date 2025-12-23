@@ -4,6 +4,7 @@ import {
   CrewMember,
   CrewMemberRoleData,
   MemberRoleFilters,
+  PageData,
   PaginationQueryParams,
   ResponseData,
   Review,
@@ -316,7 +317,7 @@ export async function getCrewReviews(
 
   type getCrewReviewsResponseData = Review & { sessionName: string };
 
-  const { data }: ResponseData<SliceData<getCrewReviewsResponseData>> =
+  const { data }: ResponseData<PageData<getCrewReviewsResponseData>> =
     await response.json();
   return data;
 }
