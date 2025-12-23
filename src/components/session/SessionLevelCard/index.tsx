@@ -18,7 +18,8 @@ interface SessionLevelCardProps
 
 const sessionLevelCardVariants = cva(
   [
-    'relative flex w-full items-start gap-2 rounded-lg outline-1 bg-gray-800 outline-gray-750',
+    'relative w-full rounded-lg outline-1 bg-gray-800 outline-gray-750',
+    'px-3 pt-5 pb-4 tablet:px-4',
     'transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/40',
   ].join(' '),
   {
@@ -67,9 +68,7 @@ export default function SessionLevelCard({
         <div className="flex flex-1 flex-col gap-1.5">
           <p
             className={cn(
-              'flex items-center gap-0.5',
-              'text-body3-semibold px-3 py-3',
-              'tablet:pt-5 tabel:pb-4 tablet:px-3 tablet:text-body2-semibold',
+              'text-body3-semibold flex items-center gap-0.5',
               level === 'BEGINNER' && 'text-level-beginner',
               level === 'INTERMEDIATE' && 'text-level-intermediate',
               level === 'ADVANCED' && 'text-level-advanced'
@@ -81,7 +80,7 @@ export default function SessionLevelCard({
           <p
             className={cn(
               'tablet:text-body3-medium',
-              'text-caption-medium text-gray-300'
+              'text-caption-medium line-clamp-1 overflow-hidden text-ellipsis text-gray-300'
             )}
           >
             {LEVEL_COPY[level].description}
