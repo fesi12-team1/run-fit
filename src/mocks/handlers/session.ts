@@ -156,14 +156,14 @@ export function createSessionHandlers(p: PathFn, authMode: AuthMode) {
               joinedAt: '2025-12-17T03:11:18.981Z',
             },
             {
-              userId: 0,
+              userId: 1,
               name: faker.person.fullName(),
               profileImage: faker.image.avatar(),
               role: 'STAFF',
               joinedAt: '2025-12-17T03:11:18.981Z',
             },
             {
-              userId: 0,
+              userId: 2,
               name: faker.person.fullName(),
               profileImage: faker.image.avatar(),
               role: 'MEMBER',
