@@ -92,11 +92,34 @@ function CrewMemberListItem({
               </Dropdown>
             )}
           </div>
-          <button type="button" onClick={() => expelMember.mutate(crewId ?? 0)}>
-            <span className="text-body3-medium text-error-100 shrink-0 px-3 py-2">
-              삭제하기
-            </span>
-          </button>
+          <Modal>
+            <Modal.Trigger aria-label="크루 링크 공유하기" asChild>
+              <span className="text-body3-medium text-error-100 shrink-0 px-3 py-2">
+                삭제하기
+              </span>
+            </Modal.Trigger>
+            <Modal.Content className="flex h-[200px] w-[360px] flex-col gap-7">
+              <Modal.Title />
+              <Modal.CloseButton />
+              <Modal.Description className="flex flex-col items-center justify-center">
+                <span>삭제 후에는 되돌릴 수 없어요</span>
+                <span>정말 삭제하시겠어요?</span>
+              </Modal.Description>
+              <Modal.Footer className="w-full flex-row">
+                <div className="flex flex-row gap-2">
+                  <Button className="w-full" variant="neutral">
+                    취소
+                  </Button>
+                  <Button
+                    className="w-full"
+                    onClick={() => expelMember.mutate(crewId ?? 0)}
+                  >
+                    확인
+                  </Button>
+                </div>
+              </Modal.Footer>
+            </Modal.Content>
+          </Modal>
         </div>
       )}
     </div>
