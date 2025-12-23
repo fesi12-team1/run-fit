@@ -6,7 +6,7 @@ import SessionCard from '../SessionCard';
 
 export default function SessionList({ data: sessions }: { data?: Session[] }) {
   return (
-    <div className="mt-6 flex w-full flex-1 items-center justify-center">
+    <div className="mt-6 flex w-full flex-1">
       {sessions?.length ? (
         <div className="desktop:grid-cols-3 grid w-full grid-cols-2 gap-6">
           {sessions.map((session) => (
@@ -22,7 +22,7 @@ export default function SessionList({ data: sessions }: { data?: Session[] }) {
 
 function EmptyState() {
   return (
-    <div className="flex flex-col items-center gap-10">
+    <div className="flex w-full flex-1 flex-col items-center justify-center gap-10">
       <Image
         src="/assets/empty-session.png"
         alt="No Sessions"

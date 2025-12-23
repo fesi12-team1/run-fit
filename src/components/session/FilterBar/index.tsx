@@ -26,13 +26,10 @@ export default function FilterBar({
 
   return (
     <>
-      <div id="scrollable-filter-list" className="flex w-full items-center">
+      <div className="flex w-full items-center">
         <div className="scrollbar-hide tablet:pt-5 relative flex flex-1 items-center gap-2 overflow-x-auto">
           <div className="scrollbar-hide relative flex items-center overflow-x-auto">
-            <div
-              id="scrollable-filter-list"
-              className="flex w-max items-center gap-2"
-            >
+            <div className="flex w-max items-center gap-2">
               <RegionFilter
                 value={filters.region}
                 onChange={(region) => applyFilters({ ...filters, region })}
