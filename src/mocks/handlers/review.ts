@@ -93,52 +93,55 @@ export function createReviewHandlers(p: PathFn, authMode: AuthMode) {
     ),
 
     // 크루 리뷰 목록 조회
-    http.get(p('/api/crews/:id/reviews'), ({ request }) => {
-      const url = new URL(request.url);
+    http.get(
+      p('/api/crews/:id/reviews'),
+      requireAuth(authMode, ({ request }) => {
+        const url = new URL(request.url);
 
-      const page = parseInt(url.searchParams.get('page') || '0', 10);
-      const size = parseInt(url.searchParams.get('size') || '10', 10);
+        const page = parseInt(url.searchParams.get('page') || '0', 10);
+        const size = parseInt(url.searchParams.get('size') || '10', 10);
 
-      let crewReviews = reviews;
+        let crewReviews = reviews;
 
-      const totalElements = crewReviews.length;
-      const totalPages = Math.ceil(totalElements / size);
-      const hasNext = page < totalPages - 1;
-      const hasPrevious = page > 0;
+        const totalElements = crewReviews.length;
+        const totalPages = Math.ceil(totalElements / size);
+        const hasNext = page < totalPages - 1;
+        const hasPrevious = page > 0;
 
-      const startIndex = page * size;
-      const endIndex = startIndex + size;
-      crewReviews = crewReviews.slice(startIndex, endIndex);
+        const startIndex = page * size;
+        const endIndex = startIndex + size;
+        crewReviews = crewReviews.slice(startIndex, endIndex);
 
-      const content = crewReviews.map((review, i) => {
-        const session = sessions.find((s) => s.id === review.sessionId);
-        return {
-          id: review.id,
-          sessionId: review.sessionId,
-          sessionName: session ? session.name : 'Unknown Session',
-          crewId: i,
-          userId: review.userId,
-          userName: faker.person.lastName(),
-          userImage: faker.image.avatar(),
-          description: review.description,
-          ranks: review.ranks,
-          image: review.image,
-          createdAt: review.createdAt,
+        const content = crewReviews.map((review, i) => {
+          const session = sessions.find((s) => s.id === review.sessionId);
+          return {
+            id: review.id,
+            sessionId: review.sessionId,
+            sessionName: session ? session.name : 'Unknown Session',
+            crewId: i,
+            userId: review.userId,
+            userName: faker.person.lastName(),
+            userImage: faker.image.avatar(),
+            description: review.description,
+            ranks: review.ranks,
+            image: review.image,
+            createdAt: review.createdAt,
+          };
+        });
+
+        const data = {
+          content,
+          page,
+          size,
+          totalElements,
+          totalPages,
+          hasNext,
+          hasPrevious,
         };
-      });
 
-      const data = {
-        content,
-        page,
-        size,
-        totalElements,
-        totalPages,
-        hasNext,
-        hasPrevious,
-      };
-
-      return HttpResponse.json(successResponse(data), { status: 200 });
-    }),
+        return HttpResponse.json(successResponse(data), { status: 200 });
+      })
+    ),
 
     // 내가 작성한 리뷰 목록
     http.get(
