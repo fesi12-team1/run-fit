@@ -5,7 +5,7 @@ import {
   CrewMemberRoleData,
   MemberRoleFilters,
   PaginationQueryParams,
-  ResponseData,
+  SuccessResponse,
   Review,
   Role,
   SliceData,
@@ -35,7 +35,7 @@ export async function createCrew(body: CrewRequestBody) {
     }
   }
 
-  const { data }: ResponseData<Crew> = await response.json();
+  const { data }: SuccessResponse<Crew> = await response.json();
   return data;
 }
 
@@ -54,7 +54,7 @@ export async function getCrews(queryParams?: CrewListFilters) {
     }
   }
 
-  const { data }: ResponseData<SliceData<Crew>> = await response.json();
+  const { data }: SuccessResponse<SliceData<Crew>> = await response.json();
   return data;
 }
 
@@ -70,7 +70,7 @@ export async function getCrewDetail(crewId: number) {
     }
   }
 
-  const { data }: ResponseData<Crew> = await response.json();
+  const { data }: SuccessResponse<Crew> = await response.json();
   return data;
 }
 
@@ -96,7 +96,7 @@ export async function getCrewMembers(
     members: CrewMember[];
   };
 
-  const { data }: ResponseData<CrewMembersResponseData> = await response.json();
+  const { data }: SuccessResponse<CrewMembersResponseData> = await response.json();
   return data;
 }
 
@@ -118,7 +118,7 @@ export async function getCrewMemberCount(crewId: number) {
     memberCount: number;
   };
 
-  const { data }: ResponseData<CrewMembersCountResponseData> =
+  const { data }: SuccessResponse<CrewMembersCountResponseData> =
     await response.json();
   return data;
 }
@@ -135,7 +135,7 @@ export async function getCrewMemberDetailById(crewId: number, userId: number) {
     }
   }
 
-  const { data }: ResponseData<CrewMemberRoleData> = await response.json();
+  const { data }: SuccessResponse<CrewMemberRoleData> = await response.json();
   return data;
 }
 
@@ -170,7 +170,7 @@ export async function delegateCrewLeader(
     oldLeaderId: number;
     newLeaderId: number;
   };
-  const { data }: ResponseData<DelegateCrewLeaderData> = await response.json();
+  const { data }: SuccessResponse<DelegateCrewLeaderData> = await response.json();
   return data;
 }
 
@@ -214,7 +214,7 @@ export async function updateMemberRole(
         newRole: 'MEMBER';
         message: '운영진에서 해제되었습니다.';
       };
-  const { data }: ResponseData<RoleUpdateResponseData> = await response.json();
+  const { data }: SuccessResponse<RoleUpdateResponseData> = await response.json();
   return data;
 }
 
@@ -238,7 +238,7 @@ export async function expelMember(crewId: number, userId: number) {
     userId: number;
   };
 
-  const { data }: ResponseData<ExpelResponseData> = await response.json();
+  const { data }: SuccessResponse<ExpelResponseData> = await response.json();
   return data;
 }
 
@@ -269,7 +269,7 @@ export async function updateCrewDetail(
     }
   }
 
-  const { data }: ResponseData<Crew> = await response.json();
+  const { data }: SuccessResponse<Crew> = await response.json();
   return data;
 }
 
@@ -292,7 +292,7 @@ export async function deleteCrew(crewId: number) {
     message: string;
   };
 
-  const { data }: ResponseData<DeleteCrewResponseData> = await response.json();
+  const { data }: SuccessResponse<DeleteCrewResponseData> = await response.json();
   return data;
 }
 
@@ -316,7 +316,7 @@ export async function getCrewReviews(
 
   type getCrewReviewsResponseData = Review & { sessionName: string };
 
-  const { data }: ResponseData<SliceData<getCrewReviewsResponseData>> =
+  const { data }: SuccessResponse<SliceData<getCrewReviewsResponseData>> =
     await response.json();
   return data;
 }

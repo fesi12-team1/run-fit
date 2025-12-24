@@ -8,15 +8,15 @@ export interface SuccessResponse<T> {
 export interface ErrorResponse {
   success: false;
   data: null;
-  error: ResponseError;
+  error: ResponseErrorData;
 }
 
-export type ResponseData<T> = SuccessResponse<T> | ErrorResponse;
-
-export interface ResponseError {
+export interface ResponseErrorData {
   code: string;
   message: string;
 }
+
+export type Response<T> = SuccessResponse<T> | ErrorResponse;
 
 // Slice/Page 형태의 데이터
 export interface SliceData<T> {
@@ -39,5 +39,3 @@ export interface PaginationQueryParams {
   page?: number;
   size?: number;
 }
-
-export type ResponseErrorData = ErrorResponse;
