@@ -13,6 +13,8 @@ import { normalizeParams } from '@/lib/utils';
 import {
   Crew,
   InfiniteQueryPageParam,
+  LikeSessions,
+  PageData,
   PaginationQueryParams,
   Review,
   Session,
@@ -41,8 +43,8 @@ export const userQueries = {
         queryFn: ({ pageParam }: InfiniteQueryPageParam) =>
           getMyReviews({ page: pageParam, size: 10 }),
         getNextPageParam: (
-          lastPage: SliceData<Review>,
-          allPages: SliceData<Review>[]
+          lastPage: PageData<Review>,
+          allPages: PageData<Review>[]
         ) => {
           if (!lastPage.hasNext) return undefined;
           return allPages.length;
@@ -50,7 +52,7 @@ export const userQueries = {
         initialPageParam: 0,
         staleTime: 1000 * 60,
 
-        select: (data: InfiniteData<SliceData<Review>>) => {
+        select: (data: InfiniteData<PageData<Review>>) => {
           return {
             ...data,
             reviews: data.pages.flatMap((p) => p.content),
@@ -70,8 +72,8 @@ export const userQueries = {
             size: 18,
           }),
         getNextPageParam: (
-          lastPage: SliceData<Session>,
-          allPages: SliceData<Session>[]
+          lastPage: SliceData<LikeSessions>,
+          allPages: SliceData<LikeSessions>[]
         ) => {
           if (!lastPage.hasNext) return undefined;
           return allPages.length;
@@ -79,7 +81,7 @@ export const userQueries = {
         initialPageParam: 0,
         staleTime: 1000 * 60,
 
-        select: (data: InfiniteData<SliceData<Session>>) => {
+        select: (data: InfiniteData<SliceData<LikeSessions>>) => {
           return {
             ...data,
             sessions: data.pages.flatMap((p) => p.content),
@@ -140,8 +142,8 @@ export const userQueries = {
               size: 18,
             }),
           getNextPageParam: (
-            lastPage: SliceData<Session>,
-            allPages: SliceData<Session>[]
+            lastPage: SliceData<Omit<Session, 'description'>>,
+            allPages: SliceData<Omit<Session, 'description'>>[]
           ) => {
             if (!lastPage.hasNext) return undefined;
             return allPages.length;
@@ -149,7 +151,9 @@ export const userQueries = {
           initialPageParam: 0,
           staleTime: 1000 * 60,
 
-          select: (data: InfiniteData<SliceData<Session>>) => {
+          select: (
+            data: InfiniteData<SliceData<Omit<Session, 'description'>>>
+          ) => {
             return {
               ...data,
               sessions: data.pages.flatMap((p) => p.content),
@@ -172,8 +176,8 @@ export const userQueries = {
               status,
             }),
           getNextPageParam: (
-            lastPage: SliceData<Session>,
-            allPages: SliceData<Session>[]
+            lastPage: SliceData<Omit<Session, 'description'>>,
+            allPages: SliceData<Omit<Session, 'description'>>[]
           ) => {
             if (!lastPage.hasNext) return undefined;
             return allPages.length;
@@ -181,7 +185,9 @@ export const userQueries = {
           initialPageParam: 0,
           staleTime: 1000 * 60,
 
-          select: (data: InfiniteData<SliceData<Session>>) => {
+          select: (
+            data: InfiniteData<SliceData<Omit<Session, 'description'>>>
+          ) => {
             return {
               ...data,
               sessions: data.pages.flatMap((p) => p.content),

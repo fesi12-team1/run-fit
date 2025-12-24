@@ -1,5 +1,6 @@
 import {
   Crew,
+  LikeSessions,
   PageData,
   PaginationQueryParams,
   Profile,
@@ -124,23 +125,7 @@ export async function getMyLikedSessions(queryParams?: PaginationQueryParams) {
     }
   }
 
-  type LikeSessionsResponseData = SliceData<
-    Pick<
-      Session,
-      | 'crewId'
-      | 'name'
-      | 'image'
-      | 'city'
-      | 'district'
-      | 'location'
-      | 'coords'
-      | 'sessionAt'
-      | 'level'
-      | 'status'
-    > & { sessionId: number }
-  >;
-
-  const { data }: SuccessResponse<LikeSessionsResponseData> =
+  const { data }: SuccessResponse<SliceData<LikeSessions>> =
     await response.json();
   return data;
 }

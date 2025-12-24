@@ -7,6 +7,7 @@ import {
 import { normalizeParams } from '@/lib/utils';
 import {
   InfiniteQueryPageParam,
+  MemberRoleFilters,
   Session,
   SessionListFilters,
   SliceData,

@@ -43,3 +43,17 @@ export type SessionListFilters = PaginationQueryParams & {
 export type Level = 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED';
 export type SessionStatus = 'OPEN' | 'CLOSED';
 export type SessionSort = 'createdAtDesc' | 'sessionAtAsc' | 'registerByAsc';
+
+export type LikeSessions = Pick<
+  Session,
+  | 'crewId'
+  | 'name'
+  | 'image'
+  | 'city'
+  | 'district'
+  | 'location'
+  | 'coords'
+  | 'sessionAt'
+  | 'level'
+  | 'status'
+> & { sessionId: number };
