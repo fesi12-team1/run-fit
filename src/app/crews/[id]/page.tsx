@@ -12,7 +12,7 @@ import {
   useRouter,
   useSearchParams,
 } from 'next/navigation';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { getCrewReviews } from '@/api/fetch/crews';
 import { useJoinCrew, useLeaveCrew } from '@/api/mutations/crewMutations';
 import { crewQueries } from '@/api/queries/crewQueries';
@@ -30,7 +30,7 @@ import Button from '@/components/ui/Button';
 import Modal from '@/components/ui/Modal';
 import Pagination from '@/components/ui/Pagination';
 import Tabs from '@/components/ui/Tabs';
-import { CrewDetailContext } from '@/context/CrewDetailContext';
+import { CrewDetailContext, useCrewRole } from '@/context/CrewDetailContext';
 import { cn } from '@/lib/utils';
 import { CrewMember } from '@/types';
 
@@ -385,7 +385,7 @@ function PageAction({ className }: { className?: string }) {
     description: '',
   });
 
-  const { crewId, myRole } = useContext(CrewDetailContext);
+  const { crewId, myRole } = useCrewRole();
   const isCrewAdmin = myRole === 'LEADER' || myRole === 'STAFF';
 
   const joinCrew = useJoinCrew(crewId ?? 0);

@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import {
   useDelegateCrewLeader,
   useDeleteCrew,
@@ -14,7 +14,7 @@ import Button from '@/components/ui/Button';
 import Dropdown from '@/components/ui/Dropdown';
 import Modal from '@/components/ui/Modal';
 import UserAvatar from '@/components/ui/UserAvatar';
-import { CrewDetailContext } from '@/context/CrewDetailContext';
+import { useCrewRole } from '@/context/CrewDetailContext';
 import { Crew, CrewMember } from '@/types';
 
 interface CrewMemberListProps {
@@ -27,7 +27,7 @@ export default function CrewMemberList({
   members,
   children,
 }: CrewMemberListProps) {
-  const { myRole } = useContext(CrewDetailContext);
+  const { myRole } = useCrewRole();
   const [editMode, setEditMode] = useState<'view' | 'edit'>('view');
   return (
     <div className="flex flex-col">
@@ -93,7 +93,7 @@ export default function CrewMemberList({
               />
             ))}
           </Modal.Description>
-          {editMode === 'edit' && (
+          {editMode !== 'view' && (
             <Modal.Footer className="w-full">
               <Button className="w-full" onClick={() => setEditMode('view')}>
                 완료
@@ -107,7 +107,7 @@ export default function CrewMemberList({
 }
 
 function CrewMenuActions() {
-  const { crewId, myRole } = useContext(CrewDetailContext);
+  const { crewId, myRole } = useCrewRole();
 
   const leaveCrew = useLeaveCrew(crewId ?? 0);
   const updateCrewDetail = useUpdateCrewDetail(crewId ?? 0);
@@ -198,7 +198,7 @@ function CrewMemberListItem({
   member: CrewMember;
   editMode: 'view' | 'edit';
 }) {
-  const { crewId } = useContext(CrewDetailContext);
+  const { crewId } = useCrewRole();
 
   const expelMember = useExpelMember(crewId ?? 0);
   const updateMemberRole = useUpdateMemberRole(crewId ?? 0);
