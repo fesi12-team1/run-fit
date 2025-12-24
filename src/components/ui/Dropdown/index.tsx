@@ -56,6 +56,7 @@ function DropdownTrigger({
         'bg-gray-800 text-gray-200',
         'border border-transparent',
         'data-[state=open]:border-brand-500 data-[state=open]:bg-brand-950 data-[state=open]:text-brand-200',
+        'shrink-0',
         hasSelected && 'border-brand-500 bg-brand-950 text-brand-200',
         className
       )}

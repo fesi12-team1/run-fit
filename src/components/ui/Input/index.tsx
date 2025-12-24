@@ -15,6 +15,7 @@ export default function Input({
   errorMessage,
   RightElement,
   label,
+  className,
   ...props
 }: InputProps) {
   const hasError = !props.disabled && !!errorMessage;
@@ -41,7 +42,8 @@ export default function Input({
             // 사이즈
             size === 'lg'
               ? 'h-9 rounded-xl px-4 py-2'
-              : 'h-8 rounded-lg px-3 py-2.5'
+              : 'h-8 rounded-lg px-3 py-2.5',
+            className
           )}
         >
           <input

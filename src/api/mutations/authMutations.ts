@@ -50,13 +50,14 @@ export function useSignin(options?: UseAuthFormOptions) {
 }
 
 // 로그아웃
-export function useSignout() {
+export function useSignout(options?: UseAuthFormOptions) {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: postSignout,
     onSuccess: () => {
-      queryClient.removeQueries({ queryKey: userQueries.me.all() }); // 개인정보 삭제
+      queryClient.removeQueries({ queryKey: userQueries.me.all() });
+      options?.onSuccess?.();
     },
   });
 }

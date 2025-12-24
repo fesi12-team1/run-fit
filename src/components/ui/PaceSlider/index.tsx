@@ -17,7 +17,7 @@ interface PaceSliderProps
     'value' | 'onValueChange' | 'defaultValue'
   > {
   // Radix의 배열 타입을 number로 재정의
-  value: number;
+  value: number | null;
   onValueChange: (value: number) => void;
 }
 
@@ -30,15 +30,18 @@ export default function PaceSlider({
   onValueChange,
   ...props
 }: PaceSliderProps) {
+  const centerValue = (min + max) / 2;
   // Radix에 전달할 배열 타입으로 변환
-  const radixValue = [value];
+  const radixValue = [value ?? centerValue];
   const handleRadixValueChange = (newValue: number[]) => {
     onValueChange(newValue[0]);
   };
   return (
     <div className="w-full">
       <div className="text-body2-semibold pt-3 pb-3.5 text-center text-white">
-        {`${formatTimeText(...secondsToMinutes(value))}/km`}
+        {value === null
+          ? '- 분/km'
+          : `${formatTimeText(...secondsToMinutes(value))}/km`}
       </div>
       <div className="flex items-center justify-between gap-2">
         <div className="text-body3-regular shrink-0 text-gray-300">
@@ -52,17 +55,17 @@ export default function PaceSlider({
           max={max}
           onValueChange={handleRadixValueChange}
           className={cn(
-            'relative flex w-full touch-none items-center select-none data-disabled:opacity-50',
-            className
+            'relative flex w-full touch-none items-center select-none data-disabled:opacity-50'
           )}
           step={step}
           {...props}
         >
           <SliderPrimitive.Track
             data-slot="slider-track"
-            className={
-              'relative grow overflow-hidden rounded-full bg-gray-800 data-[orientation=horizontal]:h-2 data-[orientation=horizontal]:w-full'
-            }
+            className={cn(
+              'relative grow overflow-hidden rounded-full bg-gray-800 data-[orientation=horizontal]:h-2 data-[orientation=horizontal]:w-full',
+              className
+            )}
           >
             {Array.from({ length: CIRCLE_COUNT }, (_, index) => {
               return (

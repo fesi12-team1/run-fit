@@ -35,7 +35,7 @@ export function useLikeSession(sessionId: number) {
       return { previousSessionData };
     },
 
-    onError: (err, isLiked, context) => {
+    onError: (_err, _isLiked, context) => {
       if (context?.previousSessionData) {
         queryClient.setQueryData(
           sessionQueries.detail(sessionId).queryKey,

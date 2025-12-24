@@ -26,6 +26,10 @@
 
   --color-error-100: oklch(0.6779 0.2102 23.83);
 
+  --color-level-beginner: #ffffff;
+  --color-level-intermediate: #f2b48a;
+  --color-level-advanced: #ff819e;
+
   /* Typography */
   --title1: 32px/40px var(--pretendard);
   --title2: 24px/32px var(--pretendard);

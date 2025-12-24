@@ -5,7 +5,7 @@ import {
   getSessions,
 } from '@/api/fetch/sessions';
 import { normalizeParams } from '@/lib/utils';
-import { SessionListFilters } from '@/types';
+import { MemberRoleFilters, SessionListFilters } from '@/types';
 
 export const sessionQueries = {
   all: () => ['sessions'],
@@ -32,10 +32,18 @@ export const sessionQueries = {
     }),
 
   // 세션 참가자 조회
-  participants: (sessionId: number) =>
-    queryOptions({
-      queryKey: [...sessionQueries.details(), sessionId, 'participants'],
-      queryFn: () => getSessionParticipants(sessionId),
-      enabled: !!sessionId, // sessionId가 유효할 때만 실행
-    }),
+  participants: (sessionId: number, filters?: MemberRoleFilters) => {
+    const cleanFilters = normalizeParams(filters);
+
+    return queryOptions({
+      queryKey: [
+        ...sessionQueries.details(),
+        sessionId,
+        'participants',
+        cleanFilters,
+      ],
+      queryFn: () => getSessionParticipants(sessionId, cleanFilters),
+      enabled: !!sessionId,
+    });
+  },
 };

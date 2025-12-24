@@ -59,7 +59,7 @@ export default function DateFilter({ value, onChange }: DateFilterProps) {
       </Popover.Trigger>
 
       <Popover.Content>
-        <div className="flex flex-col items-center justify-center gap-6">
+        <div className="flex shrink-0 flex-col items-center justify-center gap-6">
           <Calendar.Range selected={tempValue} onSelect={setTempValue} />
           <div className="flex w-full items-center justify-center gap-3">
             <button className="py-2 pr-3 pl-6" onClick={handleReset}>

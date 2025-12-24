@@ -55,7 +55,7 @@ export default function TimeFilter({ value, onChange }: TimeFilterProps) {
       </Popover.Trigger>
 
       <Popover.Content>
-        <div className="flex w-[320px] flex-col items-center justify-center gap-6">
+        <div className="flex w-[320px] shrink-0 flex-col items-center justify-center gap-6">
           <div className="w-full px-3">
             <TimeSlider value={tempValue} onValueChange={setTempValue} />
           </div>

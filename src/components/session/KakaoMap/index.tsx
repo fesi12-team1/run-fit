@@ -15,13 +15,13 @@ export default function KakaoMap({
   coords,
   className,
 }: KakaoMapProps) {
-  const { loaded, createMap, createMarker } = useKakaoMap();
+  const { createMap, createMarker } = useKakaoMap();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<kakao.maps.Map | null>(null);
   const markerRef = useRef<kakao.maps.Marker | null>(null);
 
   useEffect(() => {
-    if (!loaded || !containerRef.current) return;
+    if (!containerRef.current) return;
 
     const container = containerRef.current;
 
@@ -40,7 +40,7 @@ export default function KakaoMap({
       container.innerHTML = '';
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loaded, createMap, createMarker, coords.lat, coords.lng]);
+  }, [createMap, createMarker, coords.lat, coords.lng]);
 
   const handleMapClick = () => {
     window.open(

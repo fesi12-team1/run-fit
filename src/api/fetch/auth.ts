@@ -1,4 +1,4 @@
-import { ResponseData, User, UserCredentials } from '@/types';
+import { SuccessResponse, User, UserCredentials } from '@/types';
 
 export type SignupRequestBody = UserCredentials & { name: string };
 
@@ -19,7 +19,7 @@ export async function postSignup(body: SignupRequestBody) {
       throw new Error('서버에 연결할 수 없습니다.');
     }
   }
-  const { data }: ResponseData<User> = await response.json();
+  const { data }: SuccessResponse<User> = await response.json();
   return data;
 }
 
@@ -42,7 +42,7 @@ export async function postSignin(body: UserCredentials) {
   }
 
   type SigninResponseData = { token: string };
-  const { data }: ResponseData<SigninResponseData> = await response.json();
+  const { data }: SuccessResponse<SigninResponseData> = await response.json();
   return data;
 }
 
@@ -62,7 +62,7 @@ export async function postRefresh() {
   }
 
   type RefreshResponseData = { token: string };
-  const { data }: ResponseData<RefreshResponseData> = await response.json();
+  const { data }: SuccessResponse<RefreshResponseData> = await response.json();
   return data;
 }
 
@@ -81,6 +81,6 @@ export async function postSignout() {
     }
   }
   type SignoutResponseData = { message: string };
-  const { data }: ResponseData<SignoutResponseData> = await response.json();
+  const { data }: SuccessResponse<SignoutResponseData> = await response.json();
   return data;
 }

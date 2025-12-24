@@ -1,94 +1,103 @@
-import { faker } from '@faker-js/faker';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { http, HttpResponse } from 'msw';
-import { errorResponse, successResponse } from '@/mocks/utils';
-import Header from '.';
+import { useState } from 'react';
+import { faker } from '@/mocks/data';
+import { Profile } from '@/types/user';
+import { HeaderView } from '.';
 
 /**
  *
  * 로고, 네비게이션, 사용자 아바타를 표시하는 애플리케이션 헤더 컴포넌트입니다.
  */
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: false,
-    },
-  },
-});
-
-const meta: Meta<typeof Header> = {
+const meta: Meta<typeof HeaderView> = {
   title: 'layout/Header',
-  component: Header,
+  component: HeaderView,
   parameters: {
     layout: 'fullscreen',
     docs: {
       story: { inline: false },
     },
+    nextjs: {
+      appDirectory: true,
+    },
   },
   tags: ['autodocs'],
   decorators: [
-    (Story) => (
-      <QueryClientProvider client={queryClient}>
-        <Story />
-      </QueryClientProvider>
-    ),
+    (Story) => {
+      const [client] = useState(
+        () =>
+          new QueryClient({
+            defaultOptions: {
+              queries: {
+                retry: false,
+                refetchOnWindowFocus: false,
+              },
+            },
+          })
+      );
+
+      return (
+        <QueryClientProvider client={client}>
+          <Story />
+        </QueryClientProvider>
+      );
+    },
   ],
 };
 export default meta;
 
-type Story = StoryObj<typeof Header>;
+type Story = StoryObj<typeof HeaderView>;
 
-export const LoggedIn: Story = {
-  parameters: {
-    msw: {
-      handlers: [
-        http.get('/api/user', () => {
-          return HttpResponse.json(
-            successResponse({
-              id: 1,
-              email: 'user@example.com',
-              name: '러너',
-              image: faker.image.avatar(),
-              introduction: '안녕하세요, 러너입니다!',
-              city: '서울',
-              page: '06:00',
-              style: ['기록 경신'],
-            })
-          );
-        }),
-      ],
-    },
-  },
-};
+const mockUser = {
+  city: '전북',
+  createdAt: '2025-09-27T11:03:16.030Z',
+  email: 'admin2@example.com',
+  id: 2,
+  image: faker.image.avatar(),
+  introduction: '안녕하세요!',
+  name: '관리자2',
+  pace: 367,
+  styles: ['조깅', '인터벌'],
+  updatedAt: '2025-12-19T09:05:36.463Z',
+} as Profile;
 
-export const LoggedOut: Story = {
-  parameters: {
-    msw: {
-      handlers: [
-        http.get('/api/user', () => {
-          return HttpResponse.json(
-            errorResponse({
-              code: 'UNAUTHORIZED',
-              message: '인증되지 않은 사용자입니다.',
-            }),
-            { status: 401 }
-          );
-        }),
-      ],
-    },
+export const LoggedInSessions: Story = {
+  args: {
+    pathname: '/sessions',
+    user: mockUser,
+    isLoading: false,
   },
 };
 
 export const Loading: Story = {
-  parameters: {
-    msw: {
-      handlers: [
-        http.get('/api/user', async () => {
-          await new Promise(() => {});
-        }),
-      ],
-    },
+  args: {
+    pathname: '/sessions',
+    user: null,
+    isLoading: true,
+  },
+};
+
+export const GuestSessions: Story = {
+  args: {
+    pathname: '/sessions',
+    user: null,
+    isLoading: false,
+  },
+};
+
+export const LoggedInCrews: Story = {
+  args: {
+    pathname: '/crews/123',
+    user: mockUser,
+    isLoading: false,
+  },
+};
+
+export const LoggedInLikes: Story = {
+  args: {
+    pathname: '/sessions/likes',
+    user: mockUser,
+    isLoading: false,
   },
 };

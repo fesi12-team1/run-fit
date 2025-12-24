@@ -2,7 +2,6 @@
 
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { useQuery } from '@tanstack/react-query';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
@@ -24,60 +23,38 @@ import ProgressBar from '@/components/ui/ProgressBar';
 import Rating from '@/components/ui/Rating';
 import SafeImage from '@/components/ui/SafeImage';
 import UserAvatar from '@/components/ui/UserAvatar';
-import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { formatDDay, formatKoYMD, formatKoYYMDMeridiemTime } from '@/lib/time';
 import { cn } from '@/lib/utils';
-import { Crew, Review } from '@/types';
+import { Crew } from '@/types';
 import { Session } from '@/types/session';
 
 export default function Page() {
   const { id } = useParams();
-  const {
-    data: session,
-    error,
-    isLoading,
-  } = useQuery(sessionQueries.detail(Number(id)));
+  const sessionQuery = useQuery(sessionQueries.detail(Number(id)));
+  const session = sessionQuery.data;
   const crewId = session?.crewId;
-
-  const { data: participantsResponse } = useQuery(
-    sessionQueries.participants(Number(id))
-  );
-
-  const { data: crew } = useQuery({
+  const crewQuery = useQuery({
     ...crewQueries.detail(Number(crewId)),
-    enabled: !!crewId,
-  });
-
-  const { data: reviews } = useQuery({
-    ...crewQueries.reviews(Number(crewId)).list({ page: 0, size: 1 }),
     enabled: !!crewId,
   });
 
   const { ref, height } = useFixedBottomBar();
 
-  if (isLoading) return null;
-  if (error) return null;
+  if (sessionQuery.isLoading) return null;
+  if (sessionQuery.isError) return null;
   if (!session) return null;
 
-  if (!participantsResponse) return null;
-  if (!crew) return null;
-  if (!reviews) return null;
-
-  const { participants } = participantsResponse;
-  const review = reviews?.content[0] || null;
+  if (crewQuery.isLoading) return null;
+  if (crewQuery.isError) return null;
+  if (!crewQuery.data) return null;
 
   return (
     <>
       <main
         className="h-main laptop:bg-gray-900 bg-gray-800"
-        style={{ paddingBottom: 96 }}
+        style={{ paddingBottom: height }}
       >
-        <SessionDetailView
-          session={session}
-          crew={crew}
-          review={review}
-          participants={participants}
-        />
+        <SessionDetailView session={session} crew={crewQuery.data} />
       </main>
       <FixedBottomBar ref={ref}>
         <div className="flex items-center gap-7">
@@ -97,43 +74,32 @@ export default function Page() {
 function SessionDetailView({
   session,
   crew,
-  review,
-  participants,
 }: {
   session: Session;
   crew: Crew;
-  review: Review;
-  participants: Session['participants'];
 }) {
-  const isLaptopUp = useMediaQuery({ min: 'laptop' });
-
   return (
     <>
-      <div
-        className={cn(
-          'flex flex-col bg-gray-800 py-10',
-          isLaptopUp && 'hidden'
-        )}
-      >
+      <div className={cn('laptop:hidden flex', 'flex-col bg-gray-800 py-10')}>
         <SessionImage image={session.image} name={session.name} />
         <SessionShortInfo session={session} crewId={crew.id} />
-        <SessionDetailInfo session={session} participants={participants} />
-        <CrewShortInfo crew={crew} review={review} />
+        <SessionDetailInfo session={session} />
+        <CrewShortInfo crew={crew} />
       </div>
 
       <div
         className={cn(
-          'mx-auto flex max-w-[1120px] gap-10 bg-gray-900 py-10',
-          !isLaptopUp && 'hidden'
+          'laptop:flex hidden',
+          'mx-auto max-w-[1120px] gap-10 bg-gray-900 py-10'
         )}
       >
         <div className="flex flex-1 flex-col gap-10 px-5">
           <SessionImage image={session.image} name={session.name} />
-          <SessionDetailInfo session={session} participants={participants} />
+          <SessionDetailInfo session={session} />
         </div>
         <div className="laptop:w-[360px] flex flex-col gap-10">
           <SessionShortInfo session={session} crewId={crew.id} />
-          <CrewShortInfo crew={crew} review={review} />
+          <CrewShortInfo crew={crew} />
         </div>
       </div>
     </>
@@ -253,13 +219,7 @@ function SessionShortInfo({
   );
 }
 
-function SessionDetailInfo({
-  session,
-  participants,
-}: {
-  session: Session;
-  participants: Session['participants'];
-}) {
+function SessionDetailInfo({ session }: { session: Session }) {
   const {
     description,
     createdAt,
@@ -321,29 +281,8 @@ function SessionDetailInfo({
           참여 멤버&nbsp;
           <span className="text-brand-300">{currentParticipantCount}</span>
         </h2>
-        <ul className="tablet:gap-5 mb-3 flex flex-col gap-2">
-          {participants.slice(0, 4).map((participant) => (
-            <li key={participant.userId} className="flex items-center gap-3">
-              <UserAvatar
-                src={participant.profileImage}
-                className="size-12 shrink-0"
-              />
-              <div className="flex flex-col gap-1">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-body3-semibold tablet:text-body2-semibold">
-                    {participant.name}
-                  </span>
-                  <Badge size="sm" variant="dday">
-                    {participant.role}
-                  </Badge>
-                </div>
-                <p className="text-caption-regular tablet:text-body3-regular line-clamp-1 text-gray-200">
-                  {participant.introduction}
-                </p>
-              </div>
-            </li>
-          ))}
-        </ul>
+        <ParticipantsList sessionId={Number(session.id)} />
+
         <Button variant="neutral" size="sm" className="w-full">
           더보기
         </Button>
@@ -352,14 +291,53 @@ function SessionDetailInfo({
   );
 }
 
-function CrewShortInfo({
-  crew,
-  review,
-}: {
-  crew: Crew;
-  review: Review | null;
-}) {
+function ParticipantsList({ sessionId }: { sessionId: number }) {
+  const participantsQuery = useQuery(sessionQueries.participants(sessionId));
+  const participants = participantsQuery.data?.participants || [];
+
+  if (participantsQuery.isLoading) return <h1>Loading...</h1>;
+
+  return participantsQuery.isError ? (
+    <div className="h-10">
+      {participantsQuery.error?.message === 'UNAUTHORIZED'
+        ? '참가자 목록을 보려면 로그인이 필요합니다.'
+        : '참가자 목록을 불러올 수 없습니다.'}
+    </div>
+  ) : (
+    <ul className="tablet:gap-5 mb-3 flex flex-col gap-2">
+      {participants.slice(0, 4).map((participant) => (
+        <li key={participant.userId} className="flex items-center gap-3">
+          <UserAvatar
+            src={participant.profileImage}
+            className="size-12 shrink-0"
+          />
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-1.5">
+              <span className="text-body3-semibold tablet:text-body2-semibold">
+                {participant.name}
+              </span>
+              <Badge size="sm" variant="dday">
+                {participant.role}
+              </Badge>
+            </div>
+            <p className="text-caption-regular tablet:text-body3-regular line-clamp-1 text-gray-200">
+              {participant.introduction}
+            </p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function CrewShortInfo({ crew }: { crew: Crew }) {
   const { name, image } = crew;
+  const reviewsQuery = useQuery({
+    ...crewQueries.reviews(Number(crew.id)).list({ page: 0, size: 1 }),
+  });
+  const review = reviewsQuery.data?.content?.[0] || null;
+
+  if (reviewsQuery.isLoading) return null;
 
   return (
     <div className="laptop:mx-0 tablet:mx-12 tablet:rounded-[20px] tablet:px-6 tablet:py-4 tablet:bg-gray-750 mx-6 flex flex-col gap-4 rounded-xl border-gray-700 bg-gray-700 p-3 px-3 py-3">
@@ -386,18 +364,26 @@ function CrewShortInfo({
 
       <hr className="text-gray-600" />
 
-      {review && (
+      {reviewsQuery.isError ? (
         <div>
-          <Rating
-            value={review.ranks}
-            onChange={() => {}}
-            disabled
-            className="mb-2"
-          />
-          <p className="text-caption-regular tablet-text-body3-regular laptop:max-w-[320px] line-clamp-2 text-gray-200">
-            {review.description}
-          </p>
+          {reviewsQuery.error?.message === 'UNAUTHORIZED'
+            ? '크루 리뷰를 보려면 로그인이 필요합니다.'
+            : '크루 리뷰를 불러올 수 없습니다.'}
         </div>
+      ) : (
+        review && (
+          <div>
+            <Rating
+              value={review.ranks}
+              onChange={() => {}}
+              disabled
+              className="mb-2"
+            />
+            <p className="text-caption-regular tablet:text-body3-regular laptop:max-w-[320px] line-clamp-2 text-gray-200">
+              {review.description}
+            </p>
+          </div>
+        )
       )}
     </div>
   );

@@ -88,7 +88,7 @@ export default function RegionFilter({ value, onChange }: RegionFilterProps) {
 
       <Popover.Content
         align="start"
-        className="flex w-auto flex-col items-center justify-center gap-6 overflow-hidden border-none bg-gray-700"
+        className="flex w-auto shrink-0 flex-col items-center justify-center gap-6 overflow-hidden border-none bg-gray-700"
       >
         <div className="flex h-[310px] w-[350px]">
           <ul className="w-[120px] overflow-y-auto rounded-lg bg-gray-600 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-400 [&::-webkit-scrollbar-track]:bg-transparent">

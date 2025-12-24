@@ -263,38 +263,41 @@ export function createSessionHandlers(p: PathFn, authMode: AuthMode) {
     ),
 
     // 세션 참가자 목록 조회
-    http.get(p('/api/sessions/:id/participants'), () => {
-      const data = {
-        participants: [
-          {
-            userId: 1,
-            name: faker.person.fullName(),
-            profileImage: faker.image.avatar(),
-            role: 'LEADER',
-            introduction: faker.lorem.sentence(),
-            joinedAt: '2025-12-11T02:49:35.793Z',
-          },
-          {
-            userId: 2,
-            name: faker.person.fullName(),
-            profileImage: faker.image.avatar(),
-            role: 'STAFF',
-            introduction: faker.lorem.sentence(),
-            joinedAt: '2025-12-12T02:49:35.793Z',
-          },
-          {
-            userId: 3,
-            name: faker.person.fullName(),
-            profileImage: faker.image.avatar(),
-            role: 'MEMBER',
-            introduction: faker.lorem.sentence(),
-            joinedAt: '2025-12-13T02:49:35.793Z',
-          },
-        ],
-        totalCount: 3,
-      };
-      return HttpResponse.json(successResponse(data), { status: 200 });
-    }),
+    http.get(
+      p('/api/sessions/:id/participants'),
+      requireAuth(authMode, () => {
+        const data = {
+          participants: [
+            {
+              userId: 1,
+              name: faker.person.fullName(),
+              profileImage: faker.image.avatar(),
+              role: 'LEADER',
+              introduction: faker.lorem.sentence(),
+              joinedAt: '2025-12-11T02:49:35.793Z',
+            },
+            {
+              userId: 2,
+              name: faker.person.fullName(),
+              profileImage: faker.image.avatar(),
+              role: 'STAFF',
+              introduction: faker.lorem.sentence(),
+              joinedAt: '2025-12-12T02:49:35.793Z',
+            },
+            {
+              userId: 3,
+              name: faker.person.fullName(),
+              profileImage: faker.image.avatar(),
+              role: 'MEMBER',
+              introduction: faker.lorem.sentence(),
+              joinedAt: '2025-12-13T02:49:35.793Z',
+            },
+          ],
+          totalCount: 3,
+        };
+        return HttpResponse.json(successResponse(data), { status: 200 });
+      })
+    ),
 
     // 세션 정보 수정
     http.put(

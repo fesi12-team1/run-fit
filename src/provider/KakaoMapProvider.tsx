@@ -8,7 +8,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { Coords } from '@/types/kakaoMap';
+import { Coords, Document } from '@/types/kakaoMap';
 
 const KAKAO_JS_KEY = process.env.NEXT_PUBLIC_KAKAO_JS_KEY;
 const KAKAO_MAP_URL = process.env.NEXT_PUBLIC_KAKAO_MAP_URL;
@@ -17,12 +17,6 @@ const KAKAO_MAP_SCRIPT_SRC =
   KAKAO_JS_KEY && KAKAO_MAP_URL
     ? `${KAKAO_MAP_URL}?appkey=${KAKAO_JS_KEY}&autoload=false`
     : null;
-
-// https://developers.kakao.com/docs/latest/ko/local/dev-guide#address-coord-response-body-document
-type Document = {
-  x: string; // 경도, longitude
-  y: string; // 위도, latitude
-};
 
 type CreateMapFn = (
   container: HTMLElement,
@@ -42,7 +36,6 @@ type ConvertAddressToCoordsFn = (
 ) => void;
 
 interface KakaoMapContextValue {
-  loaded: boolean;
   createMap: CreateMapFn;
   createMarker: CreateMarkerFn;
   convertAddressToCoords: ConvertAddressToCoordsFn;
@@ -54,49 +47,43 @@ export function KakaoMapProvider({ children }: { children: React.ReactNode }) {
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
-  const createMap: CreateMapFn = useCallback(
-    (container, options) => {
-      if (!loaded || !window.kakao?.maps) {
-        console.warn('Kakao Map is not loaded yet.');
-        return;
-      }
+  const createMap: CreateMapFn = useCallback((container, options) => {
+    if (!window.kakao?.maps) {
+      console.warn('Kakao Map is not loaded yet.');
+      return;
+    }
 
-      const center = new window.kakao.maps.LatLng(
-        options.center.lat,
-        options.center.lng
-      );
+    const center = new window.kakao.maps.LatLng(
+      options.center.lat,
+      options.center.lng
+    );
 
-      const mapOptions = {
-        draggable: false,
-        scrollwheel: false,
-        ...options,
-        center: center,
-      };
+    const mapOptions = {
+      draggable: false,
+      scrollwheel: false,
+      ...options,
+      center: center,
+    };
 
-      return new window.kakao.maps.Map(container, mapOptions);
-    },
-    [loaded]
-  );
+    return new window.kakao.maps.Map(container, mapOptions);
+  }, []);
 
-  const createMarker: CreateMarkerFn = useCallback(
-    (map, position) => {
-      if (!loaded || !window.kakao?.maps) {
-        console.warn('Kakao Map is not loaded yet.');
-        return;
-      }
-      const marker = new window.kakao.maps.Marker({
-        position: new window.kakao.maps.LatLng(position.lat, position.lng),
-      });
+  const createMarker: CreateMarkerFn = useCallback((map, position) => {
+    if (!window.kakao?.maps) {
+      console.warn('Kakao Map is not loaded yet.');
+      return;
+    }
+    const marker = new window.kakao.maps.Marker({
+      position: new window.kakao.maps.LatLng(position.lat, position.lng),
+    });
 
-      marker.setMap(map);
-      return marker;
-    },
-    [loaded]
-  );
+    marker.setMap(map);
+    return marker;
+  }, []);
 
   const convertAddressToCoords: ConvertAddressToCoordsFn = useCallback(
     (address, onComplete) => {
-      if (!loaded || !window.kakao?.maps) {
+      if (!window.kakao?.maps) {
         onComplete(null);
         return;
       }
@@ -117,7 +104,7 @@ export function KakaoMapProvider({ children }: { children: React.ReactNode }) {
         }
       );
     },
-    [loaded]
+    []
   );
 
   const handleLoad = () => {
@@ -139,6 +126,12 @@ export function KakaoMapProvider({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
+    if (window.kakao?.maps && !loaded) {
+      window.kakao.maps.load(() => setLoaded(true));
+    }
+  }, [loaded]);
+
+  useEffect(() => {
     if (error) {
       console.error('Kakao Map Provider Error:', error);
     }
@@ -155,7 +148,7 @@ export function KakaoMapProvider({ children }: { children: React.ReactNode }) {
         />
       )}
       <KakaoMapContext.Provider
-        value={{ loaded, createMap, createMarker, convertAddressToCoords }}
+        value={{ createMap, createMarker, convertAddressToCoords }}
       >
         {children}
       </KakaoMapContext.Provider>
