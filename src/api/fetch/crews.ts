@@ -4,6 +4,7 @@ import {
   CrewMember,
   CrewMemberRoleData,
   MemberRoleFilters,
+  PageData,
   PaginationQueryParams,
   Review,
   Role,
@@ -36,6 +37,34 @@ export async function createCrew(body: CrewRequestBody) {
   }
 
   const { data }: SuccessResponse<Crew> = await response.json();
+  return data;
+}
+export async function joinCrew(crewId: number) {
+  // const accessToken = '';
+  const response = await fetch(`/api/crews/${crewId}/join`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    const resData = await response.json();
+    if (resData.error) {
+      throw new Error(resData.error.message);
+    } else {
+      throw new Error('서버에 연결할 수 없습니다.');
+    }
+  }
+
+  type JoinCrewResponseData = {
+    crewId: number;
+    userId: number;
+    role: 'MEMBER';
+    joinedAt: string;
+  };
+
+  const { data }: SuccessResponse<JoinCrewResponseData> = await response.json();
   return data;
 }
 
@@ -221,6 +250,29 @@ export async function updateMemberRole(
   return data;
 }
 
+export async function leaveCrew(crewId: number) {
+  // const accessToken = '';
+  const response = await fetch(`/api/crews/${crewId}/leave`, {
+    method: 'DELETE',
+  });
+
+  if (!response.ok) {
+    const resData = await response.json();
+    if (resData.error) {
+      throw new Error(resData.error.message);
+    } else {
+      throw new Error('서버에 연결할 수 없습니다.');
+    }
+  }
+
+  type LeaveResponseData = {
+    message: string;
+  };
+
+  const { data }: SuccessResponse<LeaveResponseData> = await response.json();
+  return data;
+}
+
 export async function expelMember(crewId: number, userId: number) {
   // const accessToken = '';
   const response = await fetch(`/api/crews/${crewId}/members/${userId}`, {
@@ -320,7 +372,7 @@ export async function getCrewReviews(
 
   type getCrewReviewsResponseData = Review & { sessionName: string };
 
-  const { data }: SuccessResponse<SliceData<getCrewReviewsResponseData>> =
+  const { data }: SuccessResponse<PageData<getCrewReviewsResponseData>> =
     await response.json();
   return data;
 }

@@ -1,10 +1,13 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 import {
   createCrew,
   CrewRequestBody,
   delegateCrewLeader,
   deleteCrew,
   expelMember,
+  joinCrew,
+  leaveCrew,
   updateCrewDetail,
   updateMemberRole,
   UpdateMemberRoleRequestBody,
@@ -40,14 +43,20 @@ export function useDelegateCrewLeader(crewId: number) {
 }
 
 // 크루 삭제
-export function useDeleteCrew() {
+export function useDeleteCrew(crewId: number) {
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   return useMutation({
-    mutationFn: (crewId: number) => deleteCrew(crewId),
+    mutationFn: () => deleteCrew(crewId),
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: crewQueries.all() }); // 크루 목록 캐시 무효화
+      router.push('/crews');
+    },
+    onError: (error) => {
+      console.error('크루 삭제 실패:', error);
+      router.refresh(); // 현재 페이지 새로 고침
     },
   });
 }
@@ -63,6 +72,42 @@ export function useExpelMember(crewId: number) {
       queryClient.invalidateQueries({
         queryKey: crewQueries.members(crewId).all(), // 크루 멤버 목록 캐시 무효화
       });
+    },
+  });
+}
+
+// 크루 가입
+export function useJoinCrew(crewId: number) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => joinCrew(crewId),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: crewQueries.members(crewId).all(), // 크루 멤버 목록 캐시 무효화
+      });
+    },
+  });
+}
+
+// 크루 탈퇴
+export function useLeaveCrew(crewId: number) {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
+  return useMutation({
+    mutationFn: () => leaveCrew(crewId),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: crewQueries.members(crewId).all(), // 크루 멤버 목록 캐시 무효화
+      });
+      router.push('/crews');
+    },
+    onError: (error) => {
+      console.error('크루 탈퇴 실패:', error);
+      router.refresh(); // 현재 페이지 새로 고침
     },
   });
 }
@@ -84,12 +129,17 @@ export function useUpdateCrewDetail(crewId: number) {
 }
 
 // 멤버 역할 변경 (운영진 <-> 멤버)
-export function useUpdateMemberRole(crewId: number, userId: number) {
+export function useUpdateMemberRole(crewId: number) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (body: UpdateMemberRoleRequestBody) =>
-      updateMemberRole(crewId, userId, body),
+    mutationFn: ({
+      userId,
+      body,
+    }: {
+      userId: number;
+      body: UpdateMemberRoleRequestBody;
+    }) => updateMemberRole(crewId, userId, body),
 
     onSuccess: () => {
       queryClient.invalidateQueries({
