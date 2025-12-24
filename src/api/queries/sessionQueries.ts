@@ -29,12 +29,16 @@ export const sessionQueries = {
   },
 
   // 세션 목록 조회(무한 스크롤)
-  infiniteList: (filters: Omit<SessionListFilters, 'page' | 'size'>) => {
+  infiniteList: (filters: Omit<SessionListFilters, 'page'>) => {
     const cleanFilters = normalizeParams(filters);
     return {
-      queryKey: [...sessionQueries.lists(), 'infinite', cleanFilters],
+      queryKey: [...sessionQueries.lists(), cleanFilters],
       queryFn: ({ pageParam }: InfiniteQueryPageParam) =>
-        getSessions({ ...cleanFilters, page: pageParam, size: 18 }),
+        getSessions({
+          ...cleanFilters,
+          page: pageParam,
+          size: filters.size ?? 18,
+        }),
       getNextPageParam: (
         lastPage: SliceData<Session>,
         allPages: SliceData<Session>[]
