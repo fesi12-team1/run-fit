@@ -4,7 +4,6 @@ import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import Link from 'next/link';
 import { crewQueries } from '@/api/queries/crewQueries';
-import { sessionQueries } from '@/api/queries/sessionQueries';
 import Liked from '@/assets/icons/liked.svg?react';
 import Location from '@/assets/icons/location.svg?react';
 import { formatTimeToKorean } from '@/lib/time';
@@ -33,12 +32,9 @@ export default function SessionCard({
     level,
     currentParticipantCount,
     maxParticipantCount,
+    participants,
   } = session;
   const { data: crewData } = useQuery(crewQueries.detail(crewId));
-  const { data: participantsData } = useQuery({
-    ...sessionQueries.participants(sessionId),
-    enabled: displayParticipants && !!sessionId,
-  });
 
   const today = new Date();
   const registerByDate = new Date(registerBy);
@@ -110,7 +106,7 @@ export default function SessionCard({
       </div>
       {displayParticipants && (
         <div className="desktop:gap-2 flex items-center gap-1">
-          <ProfileList members={participantsData?.participants || []} />
+          <ProfileList members={participants || []} />
           <div className="text-caption-regular laptop:text-body3-regular pointer-events-none text-gray-300">
             {crewData?.name
               ? `${currentParticipantCount}/${maxParticipantCount}명 • ${crewData.name}`

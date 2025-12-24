@@ -1,4 +1,9 @@
-import { PageData, PaginationQueryParams, ResponseData, Review } from '@/types';
+import {
+  PageData,
+  PaginationQueryParams,
+  Review,
+  SuccessResponse,
+} from '@/types';
 
 // 세션 리뷰 목록 조회
 export async function getSessionReviews(
@@ -26,7 +31,7 @@ export async function getSessionReviews(
     }
   }
 
-  const { data }: ResponseData<PageData<Review>> = await response.json();
+  const { data }: SuccessResponse<PageData<Review>> = await response.json();
   return data;
 }
 
@@ -58,7 +63,7 @@ export async function createSessionReview(
     }
   }
 
-  const { data }: ResponseData<Omit<Review, 'userName' | 'userImage'>> =
+  const { data }: SuccessResponse<Omit<Review, 'userName' | 'userImage'>> =
     await response.json();
   return data;
 }
@@ -80,6 +85,6 @@ export async function deleteSessionReview(reviewId: number) {
   }
 
   type DeleteData = { message: string };
-  const { data }: ResponseData<DeleteData> = await response.json();
+  const { data }: SuccessResponse<DeleteData> = await response.json();
   return data;
 }

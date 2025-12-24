@@ -1,4 +1,4 @@
-import type { ResponseData, ResponseErrorData } from '@/types/api';
+import type { ErrorResponse, SuccessResponse } from '@/types/api';
 
 export function parseIdParam(
   id: string | readonly string[] | undefined
@@ -11,7 +11,7 @@ export function parseIdParam(
   return isNaN(parsed) ? null : parsed;
 }
 
-export function successResponse<T>(data: T): ResponseData<T> {
+export function successResponse<T>(data: T): SuccessResponse<T> {
   return {
     success: true,
     data,
@@ -25,7 +25,7 @@ export function errorResponse({
 }: {
   code: string;
   message: string;
-}): ResponseErrorData {
+}): ErrorResponse {
   return {
     success: false,
     data: null,

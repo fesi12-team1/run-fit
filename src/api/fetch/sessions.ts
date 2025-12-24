@@ -1,6 +1,6 @@
 import {
   CrewMember,
-  ResponseData,
+  MemberRoleFilters,
   Session,
   SessionListFilters,
   SliceData,
@@ -76,7 +76,8 @@ export async function createSession(body: CreateSessionRequestBody) {
     }
   }
 
-  const { data }: ResponseData<Omit<Session, 'liked'>> = await response.json();
+  const { data }: SuccessResponse<Omit<Session, 'liked'>> =
+    await response.json();
   return data;
 }
 
@@ -92,7 +93,7 @@ export async function getSessionDetail(sessionId: number) {
     }
   }
 
-  const { data }: ResponseData<Session> = await response.json();
+  const { data }: SuccessResponse<Session> = await response.json();
   return data;
 }
 
@@ -117,7 +118,7 @@ export async function registerForSession(sessionId: number) {
     maxParticipantCount: number;
   };
 
-  const { data }: ResponseData<RegisterResponseData> = await response.json();
+  const { data }: SuccessResponse<RegisterResponseData> = await response.json();
   return data;
 }
 
@@ -141,13 +142,22 @@ export async function unregisterFromSession(sessionId: number) {
     currentParticipantCount: number;
   };
 
-  const { data }: ResponseData<UnregisterResponseData> = await response.json();
+  const { data }: SuccessResponse<UnregisterResponseData> =
+    await response.json();
   return data;
 }
 
-export async function getSessionParticipants(sessionId: number) {
+export async function getSessionParticipants(
+  sessionId: number,
+  queryParams?: MemberRoleFilters
+) {
   // const accessToken = '';
-  const response = await fetch(`/api/sessions/${sessionId}/participants`);
+  const query = new URLSearchParams(
+    queryParams as Record<string, string>
+  ).toString();
+  const response = await fetch(
+    `/api/sessions/${sessionId}/participants?${query}`
+  );
 
   if (!response.ok) {
     const resData = await response.json();
@@ -163,7 +173,7 @@ export async function getSessionParticipants(sessionId: number) {
     totalCount: number;
   };
 
-  const { data }: ResponseData<ParticipantsResponseData> =
+  const { data }: SuccessResponse<ParticipantsResponseData> =
     await response.json();
   return data;
 }
@@ -195,7 +205,8 @@ export async function updateSessionDetail(
     }
   }
 
-  const { data }: ResponseData<Omit<Session, 'liked'>> = await response.json();
+  const { data }: SuccessResponse<Omit<Session, 'liked'>> =
+    await response.json();
   return data;
 }
 
@@ -218,7 +229,7 @@ export async function deleteSession(sessionId: number) {
     message: string;
   };
 
-  const { data }: ResponseData<DeleteSessionResponseData> =
+  const { data }: SuccessResponse<DeleteSessionResponseData> =
     await response.json();
   return data;
 }
@@ -242,7 +253,7 @@ export async function postLikeSession(sessionId: number) {
     message: string;
   };
 
-  const { data }: ResponseData<PostLikeSessionResponseData> =
+  const { data }: SuccessResponse<PostLikeSessionResponseData> =
     await response.json();
   return data;
 }
@@ -266,7 +277,7 @@ export async function deleteLikeSession(sessionId: number) {
     message: string;
   };
 
-  const { data }: ResponseData<DeleteLikeSessionResponseData> =
+  const { data }: SuccessResponse<DeleteLikeSessionResponseData> =
     await response.json();
   return data;
 }
