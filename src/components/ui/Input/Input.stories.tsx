@@ -23,23 +23,26 @@ export const Default: Story = {
   },
 };
 
-/** Normal / Disabled / Invalid 상태 모음 */
-export const States: Story = {
+export const WithLabel: Story = {
   render: () => (
     <div className="flex flex-col gap-4">
-      <Input placeholder="Normal" />
-      <Input placeholder="Disabled" disabled />
-      <Input placeholder="Invalid" aria-invalid />
+      <Input label="아이디" placeholder="이메일을 입력해주세요" />
     </div>
   ),
 };
 
-/** Large / Small 크기 모음 */
-export const Sizes: Story = {
+/** Normal / Disabled / Invalid 상태 모음 */
+export const States: Story = {
   render: () => (
     <div className="flex flex-col gap-4">
-      <Input size="lg" placeholder="Large Size" />
-      <Input size="sm" placeholder="Small Size" />
+      <Input label="normal" placeholder="Normal" />
+      <Input label="disabled" placeholder="Disabled" disabled />
+      <Input
+        label="invalid"
+        placeholder="Invalid"
+        aria-invalid
+        errorMessage="에러 메시지입니다"
+      />
     </div>
   ),
 };

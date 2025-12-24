@@ -1,6 +1,5 @@
 @layer base {
   button,
-  input,
   select {
     cursor: pointer;
     border-radius: 0;

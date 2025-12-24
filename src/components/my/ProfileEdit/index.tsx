@@ -133,7 +133,6 @@ export default function ProfileEdit({ open, setOpen, user }: ProfileEditProps) {
             <div className="laptop:gap-5 mb-4 flex flex-col gap-6">
               <div>
                 <Input
-                  size="sm"
                   value={name}
                   placeholder="이름을 입력해주세요"
                   errorMessage={
