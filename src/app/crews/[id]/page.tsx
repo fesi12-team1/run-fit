@@ -394,8 +394,11 @@ function PageAction({ className }: { className?: string }) {
   const handleShare = async () => {
     if (typeof window !== 'undefined' && navigator) {
       const pageUrl = `${new URL(pathname, process.env.NEXT_PUBLIC_APP_URL)}`;
-
-      await navigator.clipboard.writeText(pageUrl);
+      try {
+        await navigator.clipboard.writeText(pageUrl);
+      } catch (error) {
+        console.error('클립보드 복사 실패:', error);
+      }
     }
   };
   const handleCreateSession = () => {
