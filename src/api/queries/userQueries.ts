@@ -39,7 +39,7 @@ export const userQueries = {
     // 내가 작성한 리뷰 목록(무한 스크롤)
     reviews: () => {
       return {
-        queryKey: [...userQueries.me.all(), 'reviews', 'infinite'],
+        queryKey: [...userQueries.me.all(), 'reviews'],
         queryFn: ({ pageParam }: InfiniteQueryPageParam) =>
           getMyReviews({ page: pageParam, size: 10 }),
         getNextPageParam: (
@@ -65,7 +65,7 @@ export const userQueries = {
     likeAll: () => [...userQueries.me.all(), 'likes'],
     likes: () => {
       return {
-        queryKey: [...userQueries.me.all(), 'likes', 'infinite'],
+        queryKey: [...userQueries.me.all(), 'likes'],
         queryFn: ({ pageParam }: InfiniteQueryPageParam) =>
           getMyLikedSessions({
             page: pageParam,
@@ -103,7 +103,7 @@ export const userQueries = {
       // 무한 스크롤
       joined: () => {
         return {
-          queryKey: [...userQueries.me.all(), 'crews', 'joined', 'infinite'],
+          queryKey: [...userQueries.me.all(), 'crews', 'joined'],
           queryFn: ({ pageParam }: InfiniteQueryPageParam) =>
             getMyJoinedCrews({ page: pageParam, size: 10 }),
           getNextPageParam: (
@@ -130,12 +130,7 @@ export const userQueries = {
     sessions: {
       created: () => {
         return {
-          queryKey: [
-            ...userQueries.me.all(),
-            'sessions',
-            'created',
-            'infinite',
-          ],
+          queryKey: [...userQueries.me.all(), 'sessions', 'created'],
           queryFn: ({ pageParam }: InfiniteQueryPageParam) =>
             getMyCreatedSessions({
               page: pageParam,
@@ -167,7 +162,7 @@ export const userQueries = {
             ...userQueries.me.all(),
             'sessions',
             'participating',
-            'infinite',
+            status,
           ],
           queryFn: ({ pageParam }: InfiniteQueryPageParam) =>
             getMyParticipatingSessions({

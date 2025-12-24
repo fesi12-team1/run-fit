@@ -26,7 +26,7 @@ export const crewQueries = {
   list: (filters: Omit<CrewListFilters, 'page' | 'size'>) => {
     const cleanFilters = normalizeParams(filters);
     return {
-      queryKey: [...crewQueries.lists(), 'infinite', cleanFilters],
+      queryKey: [...crewQueries.lists(), cleanFilters],
       queryFn: ({ pageParam }: InfiniteQueryPageParam) =>
         getCrews({ ...cleanFilters, page: pageParam, size: 10 }),
       getNextPageParam: (
