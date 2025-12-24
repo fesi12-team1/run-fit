@@ -1,8 +1,8 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import Location from '@/assets/icons/location.svg?react';
 import Star from '@/assets/icons/star.svg?react';
 import { LevelBadge, PaceBadge } from '@/components/ui/Badge';
+import SafeImage from '@/components/ui/SafeImage';
 import { formatTimeToKorean } from '@/lib/time';
 import { cn } from '@/lib/utils';
 import { Session } from '@/types';
@@ -33,8 +33,9 @@ export default function CompletedSessionCard({
             size === 'lg' && 'h-[92px] w-[148px]'
           )}
         >
-          <Image
-            src={session.image || '/assets/session-default.png'}
+          <SafeImage
+            src={session.image}
+            fallbackSrc="/assets/session-default.png"
             alt="Session"
             fill
             className={cn(
