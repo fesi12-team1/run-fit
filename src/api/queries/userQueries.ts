@@ -1,4 +1,4 @@
-import { queryOptions } from '@tanstack/react-query';
+import { InfiniteData, queryOptions } from '@tanstack/react-query';
 import {
   getMyCreatedSessions,
   getMyJoinedCrews,
@@ -49,6 +49,13 @@ export const userQueries = {
         },
         initialPageParam: 0,
         staleTime: 1000 * 60,
+
+        select: (data: InfiniteData<SliceData<Review>>) => {
+          return {
+            ...data,
+            reviews: data.pages.flatMap((p) => p.content),
+          };
+        },
       };
     },
 
@@ -71,6 +78,13 @@ export const userQueries = {
         },
         initialPageParam: 0,
         staleTime: 1000 * 60,
+
+        select: (data: InfiniteData<SliceData<Session>>) => {
+          return {
+            ...data,
+            sessions: data.pages.flatMap((p) => p.content),
+          };
+        },
       };
     },
 
@@ -99,6 +113,13 @@ export const userQueries = {
           },
           initialPageParam: 0,
           staleTime: 1000 * 60,
+
+          select: (data: InfiniteData<SliceData<Crew>>) => {
+            return {
+              ...data,
+              crews: data.pages.flatMap((p) => p.content),
+            };
+          },
         };
       },
     },
@@ -127,6 +148,13 @@ export const userQueries = {
           },
           initialPageParam: 0,
           staleTime: 1000 * 60,
+
+          select: (data: InfiniteData<SliceData<Session>>) => {
+            return {
+              ...data,
+              sessions: data.pages.flatMap((p) => p.content),
+            };
+          },
         };
       },
       participating: (status: 'SCHEDULED' | 'COMPLETED') => {
@@ -152,6 +180,13 @@ export const userQueries = {
           },
           initialPageParam: 0,
           staleTime: 1000 * 60,
+
+          select: (data: InfiniteData<SliceData<Session>>) => {
+            return {
+              ...data,
+              sessions: data.pages.flatMap((p) => p.content),
+            };
+          },
         };
       },
     },
