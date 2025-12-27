@@ -3,12 +3,17 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { crewQueries } from '@/api/queries/crewQueries';
 import CrewCard from '@/components/crew/CrewCard';
-import Dropdown from '@/components/ui/Dropdown';
+import RegionFilter from '@/components/crew/RegionFilter';
+import OptionDropdown from '@/components/ui/OptionDropdown';
+import { CREW_SORT_OPTIONS } from '@/constants/crew';
+import { useCrewFilters } from '@/hooks/crew/useCrewFilters';
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 
 export default function Page() {
+  const { filters, applyFilters } = useCrewFilters();
+
   const { data, fetchNextPage, hasNextPage, isLoading, isError } =
-    useInfiniteQuery(crewQueries.list({ sort: 'createdAtDesc' }));
+    useInfiniteQuery(crewQueries.list({ ...filters }));
 
   const loadMoreRef = useInfiniteScroll(() => fetchNextPage(), hasNextPage);
 
@@ -40,21 +45,15 @@ export default function Page() {
       </section>
       <section className="flex w-full flex-col items-center">
         <div className="mb-6 flex w-full items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <Dropdown size="lg">
-              <Dropdown.Trigger>지역 전체</Dropdown.Trigger>
-            </Dropdown>
-          </div>
-          <Dropdown size="lg">
-            <Dropdown.Trigger className="bg-transparent">
-              최근 생성순
-            </Dropdown.Trigger>
-            <Dropdown.Content>
-              {['최근 생성순', '이름 오름차순', '이름 내림차순'].map((item) => (
-                <Dropdown.Item key={item}>{item}</Dropdown.Item>
-              ))}
-            </Dropdown.Content>
-          </Dropdown>
+          <RegionFilter
+            value={filters.city}
+            onChange={(city) => applyFilters({ ...filters, city })}
+          />
+          <OptionDropdown
+            options={CREW_SORT_OPTIONS}
+            value={filters.sort || CREW_SORT_OPTIONS[0].value}
+            onChange={(sort) => applyFilters({ ...filters, sort })}
+          />
         </div>
         <div className="grid w-full grid-cols-1 gap-6">
           {data?.crews && data.crews.length > 0 ? (
