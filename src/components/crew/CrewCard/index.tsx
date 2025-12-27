@@ -25,7 +25,7 @@ export default function CrewCard({
   );
 
   return (
-    <div className="desktop:flex tablet:border-t desktop:border-t gap-5 border-gray-700 pt-5">
+    <div className="flex justify-between border-t border-gray-700 py-5">
       {/* 크루 카드 */}
       <div className="tablet:flex-row flex flex-col">
         {/* 크루 이미지 */}
