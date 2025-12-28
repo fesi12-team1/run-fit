@@ -90,6 +90,7 @@ export default function SessionShortInfo({
       <SessionDeleteModal
         isDeleteModalOpen={isDeleteModalOpen}
         setIsDeleteModalOpen={setIsDeleteModalOpen}
+        sessionId={session.id}
       />
     </div>
   );

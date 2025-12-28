@@ -76,11 +76,11 @@ export function useUnregisterSession(sessionId: number) {
 }
 
 // 세션 삭제
-export function useDeleteSession() {
+export function useDeleteSession(sessionId: number) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: deleteSession,
+    mutationFn: () => deleteSession(sessionId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: sessionQueries.lists() });
     },

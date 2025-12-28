@@ -1,14 +1,21 @@
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
+import { useRouter } from 'next/navigation';
+import { useDeleteSession } from '@/api/mutations/sessionMutations';
 import Button from '@/components/ui/Button';
 import Modal from '@/components/ui/Modal';
 
 export default function SessionDeleteModal({
   isDeleteModalOpen,
   setIsDeleteModalOpen,
+  sessionId,
 }: {
   isDeleteModalOpen: boolean;
   setIsDeleteModalOpen: (open: boolean) => void;
+  sessionId: number;
 }) {
+  const mutation = useDeleteSession(sessionId);
+  const router = useRouter();
+
   return (
     <Modal open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
       <Modal.Content className="z-999">
@@ -24,7 +31,15 @@ export default function SessionDeleteModal({
           <Button variant="neutral" onClick={() => setIsDeleteModalOpen(false)}>
             취소
           </Button>
-          <Button onClick={() => setIsDeleteModalOpen(false)}>확인</Button>
+          <Button
+            onClick={() => {
+              mutation.mutate();
+              setIsDeleteModalOpen(false);
+              router.replace('/sessions');
+            }}
+          >
+            확인
+          </Button>
         </Modal.Footer>
       </Modal.Content>
     </Modal>
