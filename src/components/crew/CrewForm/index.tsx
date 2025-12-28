@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback } from 'react';
+import { toast } from 'sonner';
 import Button from '@/components/ui/Button';
 import Chip from '@/components/ui/Chip';
 import { CoverImageUploader } from '@/components/ui/ImageUploader';
@@ -14,19 +15,43 @@ import { SIDO_LIST } from '@/types/region';
 export default function CrewCreateForm() {
   const { form, submit, isPending } = useCreateCrewForm({
     onSuccess() {
-      alert('크루가 생성되었습니다!');
+      toast.success('크루가 생성되었습니다!');
+    },
+    onError: (message) => {
+      toast.error(`크루 생성 실패: ${message}`);
     },
   });
 
   const isPc = useMediaQuery({ min: 'laptop' });
-  const [city, setCity] = useState<string | null>(null);
+
+  const selectedCity = form.watch('city');
+
+  const handleSelectCity = (sido: string) => {
+    if (selectedCity === sido) {
+      form.setValue('city', '', { shouldValidate: true });
+    } else {
+      form.setValue('city', sido, { shouldValidate: true });
+    }
+  };
+
+  const handleImageChange = useCallback(
+    (file: File | null) => {
+      if (file) {
+        const url = URL.createObjectURL(file);
+        form.setValue('image', url, { shouldValidate: true });
+      } else {
+        form.setValue('image', '', { shouldValidate: true });
+      }
+    },
+    [form]
+  );
 
   return (
     <form
       onSubmit={submit}
       className="tablet:justify-between flex h-full w-full flex-col gap-4"
     >
-      <CoverImageUploader />
+      <CoverImageUploader onChange={handleImageChange} />
 
       <Input
         label="크루 이름"
@@ -35,7 +60,7 @@ export default function CrewCreateForm() {
         errorMessage={form.formState.errors.name?.message}
       />
 
-      <div className="flex flex-col">
+      <div className="flex flex-col gap-2">
         <Label>
           크루 소개
           <Textarea
@@ -44,7 +69,7 @@ export default function CrewCreateForm() {
           />
         </Label>
         {form.formState.errors.description && (
-          <p className="text-error-100 tablet:text-body3-semibold text-caption-semibold mt-2">
+          <p className="text-error-100 tablet:text-body3-semibold text-caption-semibold">
             {form.formState.errors.description.message}
           </p>
         )}
@@ -56,20 +81,22 @@ export default function CrewCreateForm() {
         </label>
         <div className="tablet:grid-cols-7 mt-1 grid w-full grid-cols-5 gap-4">
           {SIDO_LIST.map((sido) => (
-            <button
+            <Chip
               key={sido}
-              aria-label={`${sido} ${city === sido ? '선택됨' : '선택'}`}
-              onClick={() => setCity((prev) => (prev === sido ? null : sido))}
+              tone={isPc ? 'secondary' : 'primary'}
+              state={selectedCity === sido ? 'active' : 'default'}
+              aria-label={`${sido} ${selectedCity === sido ? '선택됨' : '선택'}`}
+              onClick={() => handleSelectCity(sido)}
             >
-              <Chip
-                tone={isPc ? 'secondary' : 'primary'}
-                state={city === sido ? 'active' : 'default'}
-              >
-                {sido}
-              </Chip>
-            </button>
+              {sido}
+            </Chip>
           ))}
         </div>
+        {form.formState.errors.city && (
+          <p className="text-error-100 tablet:text-body3-semibold text-caption-semibold mt-2">
+            {form.formState.errors.city.message}
+          </p>
+        )}
       </div>
 
       <Button type="submit" disabled={isPending || !form.formState.isValid}>
