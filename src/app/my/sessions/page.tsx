@@ -9,11 +9,7 @@ import SessionCard from '@/components/session/SessionCard';
 import Button from '@/components/ui/Button';
 import Spinner from '@/components/ui/Spinner';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
-import { Session } from '@/types';
-
-type ParticipatingSession = Omit<Session, 'description'> & {
-  reviewed: boolean;
-};
+import { ParticipatingSession, Session } from '@/types';
 
 export default function Page() {
   const isMobile = useMediaQuery({ max: 'tablet' });

@@ -58,3 +58,7 @@ export type LikeSessions = Pick<
   | 'level'
   | 'status'
 > & { sessionId: number };
+
+export type ParticipatingSession = Omit<Session, 'description'> & {
+  reviewed?: boolean;
+};
