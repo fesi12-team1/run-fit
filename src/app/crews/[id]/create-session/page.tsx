@@ -1,7 +1,11 @@
 import BackButton from './_components/BackButton';
 import SessionCreateForm from './_components/SessionCreateForm';
 
-export default async function Page({ params }: { params: { id: string } }) {
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = await params;
 
   return (
