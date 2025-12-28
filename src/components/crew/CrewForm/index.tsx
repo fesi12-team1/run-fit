@@ -7,6 +7,7 @@ import Chip from '@/components/ui/Chip';
 import { CoverImageUploader } from '@/components/ui/ImageUploader';
 import Input from '@/components/ui/Input';
 import Label from '@/components/ui/Label';
+import Spinner from '@/components/ui/Spinner';
 import Textarea from '@/components/ui/Textarea';
 import { useCreateCrewForm } from '@/hooks/crew/useCreateCrewForm';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
@@ -104,7 +105,8 @@ export default function CrewCreateForm({
       </div>
 
       <Button type="submit" disabled={isPending || !form.formState.isValid}>
-        {isPending ? '생성 중...' : '완료'}
+        {form.formState.isSubmitting ? '생성 중...' : '완료'}
+        {form.formState.isSubmitting && <Spinner className="ml-3" />}
       </Button>
     </form>
   );
