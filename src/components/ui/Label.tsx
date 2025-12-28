@@ -7,18 +7,15 @@ import { cn } from '@/lib/utils';
 export default function Label({
   className,
   htmlFor,
-  size = 'lg',
   ...props
-}: React.ComponentProps<typeof LabelPrimitive.Root> & {
-  size?: 'lg' | 'sm';
-}) {
+}: React.ComponentProps<typeof LabelPrimitive.Root>) {
   return (
     <LabelPrimitive.Root
       data-slot="label"
       htmlFor={htmlFor}
       className={cn(
-        'text-white',
-        size === 'lg' ? 'text-body3-semibold' : 'text-caption-semibold',
+        'text-caption-semibold text-gray-50',
+        'tablet:text-body3-semibold',
         className
       )}
       {...props}
