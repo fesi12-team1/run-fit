@@ -7,7 +7,7 @@ import { useCreateSession } from '@/api/mutations/sessionMutations';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { formSchema, SessionCreateFormValues } from '../_others/schema';
 import AddressInput from './AddressInput';
-import DescriptionInputField from './DescriptionInputField';
+import DetailInputField from './DescriptionInputField';
 import ImageInputField from './ImageInputField';
 import LevelInputField from './LevelInputField';
 import MaxParticipantsInputField from './MaxParticipantsInputField';
@@ -63,10 +63,10 @@ export default function SessionCreateForm({ crewId }: { crewId?: number }) {
             <NameInputField />
             <ImageInputField />
           </div>
-          <div className="laptop:gap-5 laoptop:mb-0 mb-6 flex flex-col gap-6">
+          <div className="laptop:gap-5 laptop:mb-0 mb-6 flex flex-col gap-6">
             <SessionAtInputField />
             <AddressInput />
-            {isLaptopUp && <DescriptionInputField />}
+            {isLaptopUp && <DetailInputField />}
           </div>
         </div>
         <div className="laptop:flex-1 laptop:gap-7 flex flex-col gap-6">
@@ -76,7 +76,7 @@ export default function SessionCreateForm({ crewId }: { crewId?: number }) {
           <hr className="text-gray-800" />
           <MaxParticipantsInputField />
           <RegisterAtInputField />
-          {isLaptopUp || <DescriptionInputField />}
+          {isLaptopUp || <DetailInputField />}
           <SubmitButton className="laptop:mt-5 mt-4" />
         </div>
       </form>
