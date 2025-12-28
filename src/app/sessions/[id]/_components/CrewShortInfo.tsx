@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import Link from 'next/link';
 import { crewQueries } from '@/api/queries/crewQueries';
 import Rating from '@/components/ui/Rating';
 import SafeImage from '@/components/ui/SafeImage';
@@ -15,7 +16,7 @@ export default function CrewShortInfo({ crew }: { crew: Crew }) {
 
   return (
     <div className="laptop:mx-0 tablet:mx-12 tablet:rounded-[20px] tablet:px-6 tablet:py-4 tablet:bg-gray-750 mx-6 flex flex-col gap-4 rounded-xl border-gray-700 bg-gray-700 p-3 px-3 py-3">
-      <div className="flex items-center gap-3">
+      <Link href={`/crews/${crew.id}`} className="flex items-center gap-3">
         <div className="tablet:aspect-84/56 relative aspect-66/44 w-20">
           <SafeImage
             src={image}
@@ -34,7 +35,7 @@ export default function CrewShortInfo({ crew }: { crew: Crew }) {
             {`${crew.city} • 멤버 ${crew.memberCount}명`}
           </div>
         </div>
-      </div>
+      </Link>
 
       <hr className="text-gray-600" />
 
