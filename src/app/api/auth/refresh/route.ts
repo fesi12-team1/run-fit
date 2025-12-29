@@ -1,11 +1,11 @@
-import { NextResponse } from 'next/server';
-import { proxyUrl } from '@/lib/api';
-import { getRefreshToken } from '@/lib/auth';
+import { NextRequest, NextResponse } from 'next/server';
+import { getBackendUrl } from '@/lib/api';
+import { getRefreshToken } from '@/lib/cookie';
 
-export async function POST() {
+export async function POST(request: NextRequest) {
   try {
     const refreshToken = await getRefreshToken();
-    const proxyResponse = await fetch(proxyUrl('/api/auth/refresh'), {
+    const proxyResponse = await fetch(getBackendUrl(request.nextUrl), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',

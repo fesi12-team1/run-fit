@@ -1,10 +1,6 @@
 import { NextRequest } from 'next/server';
 import { handleRequest } from '@/lib/api';
 
-export async function GET(
-  request: NextRequest,
-  ctx: RouteContext<'/api/crews/[crewId]'>
-) {
-  const { crewId } = await ctx.params;
-  return handleRequest(request, `/crews/${crewId}`, false);
+export async function GET(request: NextRequest) {
+  return handleRequest(request, false);
 }

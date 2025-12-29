@@ -1,14 +1,8 @@
 import { NextRequest } from 'next/server';
 import { handleRequest } from '@/lib/api';
 
-const handler = async (
-  request: NextRequest,
-  { params }: { params: Promise<{ slug: string[] }> }
-) => {
-  const { slug } = await params;
-  const pathname = slug.join('/');
-
-  return handleRequest(request, pathname, true);
+const handler = async (request: NextRequest) => {
+  return handleRequest(request, true);
 };
 
 export const GET = handler;
