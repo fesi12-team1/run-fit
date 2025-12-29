@@ -3,15 +3,14 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef } from 'react';
 import { userQueries } from '@/api/queries/userQueries';
 import MyCrewCard from '@/components/my/MyCrewCard';
 import Button from '@/components/ui/Button';
 import Spinner from '@/components/ui/Spinner';
+import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 
 export default function MyCrewsPage() {
-  const bottomRef = useRef<HTMLDivElement | null>(null);
   const isMobile = useMediaQuery({ max: 'tablet' });
   const router = useRouter();
 
@@ -21,22 +20,7 @@ export default function MyCrewsPage() {
   const crews = data?.crews ?? [];
   const hasNoCrews = !isLoading && crews.length === 0;
 
-  useEffect(() => {
-    if (!bottomRef.current || !hasNextPage) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !isFetchingNextPage) {
-          fetchNextPage();
-        }
-      },
-      { threshold: 0.4 }
-    );
-
-    observer.observe(bottomRef.current);
-
-    return () => observer.disconnect();
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+  const bottomRef = useInfiniteScroll(fetchNextPage, !!hasNextPage);
 
   if (isLoading) {
     return (
