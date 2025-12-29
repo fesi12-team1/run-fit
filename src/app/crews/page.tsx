@@ -1,20 +1,29 @@
 'use client';
 
 import { Suspense } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import CrewPageContent from '@/components/crew/CrewPageContent';
 
 export default function Page() {
   return (
     <Layout>
-      <Suspense
+      <ErrorBoundary
         fallback={
-          <div className="h-main flex items-center justify-center">
-            로딩 중...
+          <div className="h-main flex items-center justify-center text-red-500">
+            크루 목록을 불러오는데 실패했습니다.
           </div>
         }
       >
-        <CrewPageContent />
-      </Suspense>
+        <Suspense
+          fallback={
+            <div className="h-main flex items-center justify-center">
+              로딩 중...
+            </div>
+          }
+        >
+          <CrewPageContent />
+        </Suspense>
+      </ErrorBoundary>
     </Layout>
   );
 }

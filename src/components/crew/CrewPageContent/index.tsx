@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { crewQueries } from '@/api/queries/crewQueries';
 import CrewList from '@/components/crew/CrewList';
 import RegionFilter from '@/components/crew/RegionFilter';
@@ -11,24 +11,11 @@ import { CrewListFilters } from '@/types';
 export default function CrewPageContent() {
   const { filters, applyFilters } = useCrewFilters();
 
-  const { data, fetchNextPage, hasNextPage, isLoading, isError } =
-    useInfiniteQuery(crewQueries.list({ ...filters }));
+  const { data, fetchNextPage, hasNextPage } = useSuspenseInfiniteQuery(
+    crewQueries.list({ ...filters })
+  );
 
   const loadMoreRef = useInfiniteScroll(() => fetchNextPage(), hasNextPage);
-
-  if (isLoading) {
-    return (
-      <div className="h-main flex items-center justify-center">로딩 중...</div>
-    );
-  }
-
-  if (isError) {
-    return (
-      <div className="h-main flex items-center justify-center text-red-500">
-        크루 목록을 불러오는데 실패했습니다.
-      </div>
-    );
-  }
 
   return (
     <>
