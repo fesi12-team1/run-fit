@@ -51,6 +51,7 @@ export default function SessionAtInputField({
                 if (!nextDate) return;
                 field.onChange(combineDateAndMinutesToIso(nextDate, minutes));
               }}
+              className="flex-1"
             />
 
             <div>
@@ -64,7 +65,7 @@ export default function SessionAtInputField({
                     combineDateAndMinutesToIso(dateOnly, nextMinutes)
                   );
                 }}
-                className="tablet:max-w-60 laptop:max-w-[120px] max-w-[110px]"
+                className="tablet:w-[240px] laptop:w-[120px] w-[110px]"
               />
               {fieldState.error?.message && (
                 <p className="mt-2 text-sm text-red-400">
