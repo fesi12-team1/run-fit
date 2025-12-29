@@ -21,9 +21,7 @@ import { userQueries } from '@/api/queries/userQueries';
 import Share from '@/assets/icons/share.svg';
 import CrewMemberList from '@/components/crew/CrewMemberList';
 import ReviewCard from '@/components/crew/ReviewCard';
-import FixedBottomBar, {
-  useFixedBottomBar,
-} from '@/components/layout/FixedBottomBar';
+import FixedBottomBar from '@/components/layout/FixedBottomBar';
 import CompletedSessionCard from '@/components/session/CompletedSessionCard';
 import SessionCard from '@/components/session/SessionCard';
 import Button from '@/components/ui/Button';
@@ -167,16 +165,11 @@ export default function Page() {
     router.push(`/crews/${crewId}?page=${targetPageIndex + 1}`);
   };
 
-  const { ref, height } = useFixedBottomBar();
-
   return (
     <>
       <CrewDetailContext value={{ crewId: crew?.id, myRole: myRoleData?.role }}>
         {crew && (
-          <div
-            className="h-main flex flex-col items-center"
-            style={{ paddingBottom: height }}
-          >
+          <div className="h-main flex flex-col items-center">
             {/* Crew Image */}
             <div
               className={cn(
@@ -368,7 +361,7 @@ export default function Page() {
           </div>
         )}
 
-        <FixedBottomBar ref={ref}>
+        <FixedBottomBar>
           <PageAction />
         </FixedBottomBar>
       </CrewDetailContext>

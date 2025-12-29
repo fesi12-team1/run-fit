@@ -11,9 +11,7 @@ import { userQueries } from '@/api/queries/userQueries';
 import Camera from '@/assets/icons/camera.svg?react';
 import Share from '@/assets/icons/share.svg?react';
 import VerticalEllipsisIcon from '@/assets/icons/vertical-ellipsis.svg?react';
-import FixedBottomBar, {
-  useFixedBottomBar,
-} from '@/components/layout/FixedBottomBar';
+import FixedBottomBar from '@/components/layout/FixedBottomBar';
 import KakaoMap from '@/components/session/KakaoMap';
 import Badge, { LevelBadge, PaceBadge } from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
@@ -38,8 +36,6 @@ export default function Page() {
     enabled: !!crewId,
   });
 
-  const { ref, height } = useFixedBottomBar();
-
   if (sessionQuery.isLoading) return null;
   if (sessionQuery.isError) return null;
   if (!session) return null;
@@ -50,13 +46,10 @@ export default function Page() {
 
   return (
     <>
-      <main
-        className="h-main laptop:bg-gray-900 bg-gray-800"
-        style={{ paddingBottom: height }}
-      >
+      <main className="h-main laptop:bg-gray-900 bg-gray-800">
         <SessionDetailView session={session} crew={crewQuery.data} />
       </main>
-      <FixedBottomBar ref={ref}>
+      <FixedBottomBar>
         <div className="flex items-center gap-7">
           <div className="flex items-center gap-4">
             <Camera className="block size-6 text-white" />
