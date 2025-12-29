@@ -24,7 +24,7 @@ export function PaceBadge({
   className,
   ...props
 }: PaceBadgeProps) {
-  const baseStyle = 'bg-blue-900 text-blue-100';
+  const baseStyle = 'bg-brand-900 text-brand-100';
 
   const badgeSize = {
     sm: 'rounded-sm px-1.5 py-0.5',
@@ -156,7 +156,7 @@ export function RoleBadge({ role, className, ...props }: RoleBadgeProps) {
   const baseStyle = 'px-2 py-1 rounded-md';
 
   const roleStyles = {
-    LEADER: 'bg-blue-900 text-blue-200 text-[10px]/[100%] font-bold',
+    LEADER: 'bg-brand-900 text-brand-200 text-[10px]/[100%] font-bold',
     STAFF: 'bg-gray-700 text-gray-200 text-[10px]/[100%] font-semibold',
     MEMBER: 'hidden',
   };
