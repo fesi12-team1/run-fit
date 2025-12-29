@@ -22,7 +22,7 @@ export default function FilterBar({
   applyFilters,
   activeFilterCount,
 }: FilterBarProps) {
-  const isDesktop = useMediaQuery({ min: 'laptop' });
+  const isTabletUp = useMediaQuery({ min: 'laptop' });
   const isMobile = useMediaQuery({ max: 'tablet' });
 
   return (
@@ -49,7 +49,7 @@ export default function FilterBar({
               />
             </div>
           </div>
-          {isDesktop && (
+          {isTabletUp && (
             <div className="relative overflow-visible">
               <FilterModal>
                 <FilterButton count={activeFilterCount} />
@@ -63,7 +63,7 @@ export default function FilterBar({
           />
         </div>
         <div className="tablet:pt-5 flex items-center">
-          {!isDesktop && (
+          {!isTabletUp && (
             <FilterModal>
               <FilterButton count={activeFilterCount} />
             </FilterModal>
@@ -78,7 +78,7 @@ export default function FilterBar({
         </div>
       </div>
       {isMobile && (
-        <div className="mt-4 mb-2 flex w-full shrink-0 justify-end">
+        <div className="mt-2 flex w-full shrink-0 justify-end">
           <OptionDropdown
             value={filters.sort}
             onChange={(sort) => applyFilters({ ...filters, sort })}

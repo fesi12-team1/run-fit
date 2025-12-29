@@ -34,7 +34,7 @@ function Layout({ children }: { children: React.ReactNode }) {
   return (
     <main
       className={
-        'h-main desktop:px-0 tablet:px-8 tablet:pt-0 mx-auto flex max-w-[1120px] flex-col items-center justify-start px-4 pt-6'
+        'h-main tablet:px-8 tablet:pt-0 laptop:px-0 mx-auto flex max-w-[1120px] flex-col items-center justify-start px-4 pt-6'
       }
     >
       <Header />
@@ -44,12 +44,12 @@ function Layout({ children }: { children: React.ReactNode }) {
 }
 
 function Header() {
-  const isDesktop = useMediaQuery({ min: 'laptop' });
+  const isTabletUp = useMediaQuery({ max: 'tablet' });
 
   return (
     <div
       className={
-        'desktop:pt-[33px] tablet:py-[26px] mobile:hidden flex w-full items-center justify-between'
+        'laptop:pt-[33px] tablet:py-[26px] tablet:flex tablet:items-center tablet:justify-between hidden w-full'
       }
     >
       <div>
@@ -69,8 +69,8 @@ function Header() {
         <Image
           src="/assets/session-list.png"
           alt="Session List"
-          width={isDesktop ? 417 : 302}
-          height={isDesktop ? 235 : 170}
+          width={isTabletUp ? 417 : 302}
+          height={isTabletUp ? 235 : 170}
         />
       </div>
     </div>

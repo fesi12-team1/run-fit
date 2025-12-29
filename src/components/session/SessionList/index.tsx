@@ -12,9 +12,9 @@ export default function SessionList({
   loadMoreRef?: React.RefObject<HTMLDivElement | null>;
 }) {
   return (
-    <div className="mt-6 flex w-full flex-1">
+    <div className="tablet:mt-6 mt-2 flex w-full flex-1">
       {sessions?.length ? (
-        <div className="desktop:grid-cols-3 grid w-full grid-cols-2 gap-6">
+        <div className="laptop:grid-cols-3 grid w-full grid-cols-2 gap-6">
           {sessions.map((session) => (
             <SessionCard key={session.id} session={session} />
           ))}

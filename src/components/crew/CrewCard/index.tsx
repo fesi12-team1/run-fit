@@ -80,7 +80,7 @@ function CrewCardInfo({
   members?: CrewMember[];
 }) {
   return (
-    <div className="desktop:w-[500px] flex flex-col justify-evenly gap-2 p-3">
+    <div className="tablet:w-[500px] flex flex-col justify-evenly gap-2 p-3">
       <Link
         href={`/crews/${id}`}
         className="tablet:text-title3-semibold text-body2-semibold line-clamp-1 text-gray-50"
@@ -127,7 +127,7 @@ function CrewCardMembers({
 
 function CrewCardRight({ sessions }: { sessions?: Session[] }) {
   return (
-    <div className="desktop:flex hidden w-[300px] shrink-0 flex-col p-3">
+    <div className="tablet:flex hidden w-[300px] shrink-0 flex-col p-3">
       <div className="text-body3-semibold mb-2 text-gray-300">최근 세션</div>
       <CrewCardSessions sessions={sessions} />
     </div>
