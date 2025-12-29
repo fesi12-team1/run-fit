@@ -54,8 +54,18 @@ export function useCreateCrewForm(options?: UseCrewMutationOptions) {
 
     // 이미지 선택된 경우 업로드
     if (values.image instanceof File) {
-      const result = await uploadImage.mutateAsync({ file: values.image });
-      imageUrl = result.url; // presigned-url로 업로드 후 반환된 실제 imageUrl
+      try {
+        const result = await uploadImage.mutateAsync({ file: values.image });
+        imageUrl = result.url; // presigned-url로 업로드 후 반환된 실제 imageUrl
+      } catch (error) {
+        const message =
+          error instanceof Error
+            ? error.message
+            : '이미지 업로드에 실패했습니다.';
+        options?.onError?.(message);
+        form.setError('root', { message });
+        return;
+      }
     }
 
     // 이제 서버에 보낼 body 구성
