@@ -48,7 +48,14 @@ export default function Page() {
   const isMobile = useMediaQuery({ max: 'tablet' });
 
   // fetch queries
-  const { data: crew } = useQuery(crewQueries.detail(crewId));
+  const { data: crew, isError } = useQuery(crewQueries.detail(crewId));
+
+  // Redirect to /crews if there's no crew data or error
+  useEffect(() => {
+    if (isError || (crew === null && !crew)) {
+      router.push('/crews');
+    }
+  }, [crew, isError, router]);
 
   const { data: crewMembers } = useQuery(
     crewQueries.members(crewId).list({
