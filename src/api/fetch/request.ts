@@ -1,4 +1,4 @@
-import { ApiError } from './error';
+import { ApiError } from '@/lib/error';
 
 /**
  * fetch 응답을 처리하는 공통 함수
@@ -18,6 +18,10 @@ async function handleResponse<T>(response: Response): Promise<T> {
       (typeof resData === 'string' ? resData : undefined);
 
     throw new ApiError({ message, status, code });
+  }
+
+  if (!resData || typeof resData !== 'object') {
+    throw new Error('Invalid response format');
   }
 
   return resData.data;

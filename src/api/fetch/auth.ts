@@ -1,5 +1,5 @@
-import request from '@/lib/request';
 import { User, UserCredentials } from '@/types';
+import request from './request';
 
 export type SignupRequestBody = UserCredentials & { name: string };
 

@@ -1,5 +1,5 @@
-import request from '@/lib/request';
 import { PageData, PaginationQueryParams, Review } from '@/types';
+import request from './request';
 
 // 세션 리뷰 목록 조회
 export type GetSessionReviewsResponse = PageData<Review>;

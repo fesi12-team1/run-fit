@@ -1,4 +1,3 @@
-import request from '@/lib/request';
 import {
   CrewMember,
   MemberRoleFilters,
@@ -6,6 +5,7 @@ import {
   SessionListFilters,
   SliceData,
 } from '@/types';
+import request from './request';
 
 export type GetSessionsResponse = SliceData<Session>;
 export async function getSessions(queryParams?: SessionListFilters) {

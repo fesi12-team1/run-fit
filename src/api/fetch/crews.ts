@@ -1,4 +1,3 @@
-import request from '@/lib/request';
 import {
   Crew,
   CrewListFilters,
@@ -11,6 +10,7 @@ import {
   Role,
   SliceData,
 } from '@/types';
+import request from './request';
 
 export type CrewRequestBody = Pick<
   Crew,

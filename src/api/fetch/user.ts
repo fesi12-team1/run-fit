@@ -1,4 +1,3 @@
-import request from '@/lib/request';
 import {
   Crew,
   LikeSessions,
@@ -9,6 +8,7 @@ import {
   Session,
   SliceData,
 } from '@/types';
+import request from './request';
 
 export type GetMyProfileResponse = Profile;
 export async function getMyProfile() {
