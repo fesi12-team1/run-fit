@@ -2,24 +2,35 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import {
   createCrew,
+  CreateCrewResponse,
   CrewRequestBody,
   delegateCrewLeader,
+  DelegateCrewLeaderRequestBody,
+  DelegateCrewLeaderResponse,
   deleteCrew,
+  DeleteCrewResponse,
   expelMember,
+  ExpelMemberResponse,
   joinCrew,
+  JoinCrewResponse,
   leaveCrew,
+  LeaveCrewResponse,
   updateCrewDetail,
+  UpdateCrewDetailRequestBody,
+  UpdateCrewDetailResponse,
   updateMemberRole,
   UpdateMemberRoleRequestBody,
+  UpdateMemberRoleResponse,
 } from '@/api/fetch/crews';
 import { crewQueries } from '@/api/queries/crewQueries';
+import { ApiError } from '@/lib/error';
 
 // 크루 생성
 export function useCreateCrew() {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: createCrew,
+  return useMutation<CreateCrewResponse, ApiError, CrewRequestBody>({
+    mutationFn: (body: CrewRequestBody) => createCrew(body),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: crewQueries.all() }); // 크루 목록 캐시 무효화 (새 크루 목록에 반영)
     },
@@ -30,8 +41,12 @@ export function useCreateCrew() {
 export function useDelegateCrewLeader(crewId: number) {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: (body: { newLeaderId: number }) =>
+  return useMutation<
+    DelegateCrewLeaderResponse,
+    ApiError,
+    DelegateCrewLeaderRequestBody
+  >({
+    mutationFn: (body: DelegateCrewLeaderRequestBody) =>
       delegateCrewLeader(crewId, body),
 
     onSuccess: () => {
@@ -47,7 +62,7 @@ export function useDeleteCrew(crewId: number) {
   const queryClient = useQueryClient();
   const router = useRouter();
 
-  return useMutation({
+  return useMutation<DeleteCrewResponse, ApiError>({
     mutationFn: () => deleteCrew(crewId),
 
     onSuccess: () => {
@@ -65,7 +80,7 @@ export function useDeleteCrew(crewId: number) {
 export function useExpelMember(crewId: number) {
   const queryClient = useQueryClient();
 
-  return useMutation({
+  return useMutation<ExpelMemberResponse, ApiError, number>({
     mutationFn: (userId: number) => expelMember(crewId, userId),
 
     onSuccess: () => {
@@ -80,7 +95,7 @@ export function useExpelMember(crewId: number) {
 export function useJoinCrew(crewId: number) {
   const queryClient = useQueryClient();
 
-  return useMutation({
+  return useMutation<JoinCrewResponse, ApiError, void>({
     mutationFn: () => joinCrew(crewId),
 
     onSuccess: () => {
@@ -96,7 +111,7 @@ export function useLeaveCrew(crewId: number) {
   const queryClient = useQueryClient();
   const router = useRouter();
 
-  return useMutation({
+  return useMutation<LeaveCrewResponse, ApiError, void>({
     mutationFn: () => leaveCrew(crewId),
 
     onSuccess: () => {
@@ -116,8 +131,13 @@ export function useLeaveCrew(crewId: number) {
 export function useUpdateCrewDetail(crewId: number) {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: (body: CrewRequestBody) => updateCrewDetail(crewId, body),
+  return useMutation<
+    UpdateCrewDetailResponse,
+    ApiError,
+    UpdateCrewDetailRequestBody
+  >({
+    mutationFn: (body: UpdateCrewDetailRequestBody) =>
+      updateCrewDetail(crewId, body),
 
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -132,7 +152,11 @@ export function useUpdateCrewDetail(crewId: number) {
 export function useUpdateMemberRole(crewId: number) {
   const queryClient = useQueryClient();
 
-  return useMutation({
+  return useMutation<
+    UpdateMemberRoleResponse,
+    ApiError,
+    { userId: number; body: UpdateMemberRoleRequestBody }
+  >({
     mutationFn: ({
       userId,
       body,

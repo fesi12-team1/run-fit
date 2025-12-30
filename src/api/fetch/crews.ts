@@ -83,7 +83,7 @@ export async function getCrewMemberDetailById(crewId: number, userId: number) {
   );
 }
 
-type DelegateCrewLeaderRequestBody = {
+export type DelegateCrewLeaderRequestBody = {
   newLeaderId: CrewMember['userId'];
 };
 
