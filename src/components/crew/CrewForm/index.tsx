@@ -20,7 +20,7 @@ interface CrewCreateFormProps {
 export default function CrewCreateForm({
   onSuccessHandler,
 }: CrewCreateFormProps) {
-  const [selectedCity, setSelectedCity] = useState<string>('');
+  const [selectedCity, setSelectedCity] = useState<string>('서울');
   const isPc = useMediaQuery({ min: 'laptop' });
 
   const { form, submit } = useCreateCrewForm({
@@ -57,19 +57,10 @@ export default function CrewCreateForm({
 
   const { errors, isSubmitting } = form.formState;
 
-  const name = form.getValues('name');
-  const description = form.getValues('description');
-  const city = form.getValues('city');
-
-  const canSubmit =
-    name.trim().length > 0 &&
-    description.trim().length > 0 &&
-    city.trim().length > 0;
-
   return (
     <form onSubmit={submit} className="flex w-full flex-col gap-4">
       <CoverImageUploader
-        onChange={handleImageChange}
+        onFileChange={handleImageChange}
         className="bg-gray-750"
       />
 
@@ -123,7 +114,7 @@ export default function CrewCreateForm({
         )}
       </div>
 
-      <Button type="submit" disabled={!canSubmit || isSubmitting}>
+      <Button type="submit">
         {isSubmitting ? '생성 중...' : '완료'}
         {isSubmitting && <Spinner className="ml-3" />}
       </Button>

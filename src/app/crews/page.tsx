@@ -77,7 +77,11 @@ function CrewCreateModal() {
         <PlusIcon className="size-8 text-white" />
       </Button>
       <Modal open={open} onOpenChange={setOpen}>
-        <Modal.Content className="tablet:w-[484px] tablet:max-h-[80vh] tablet:h-[744px] h-dvh w-full items-start gap-6 bg-gray-800">
+        <Modal.Content
+          className={
+            'tablet:w-[484px] tablet:gap-4 tablet:h-fit tablet:overflow-hidden tablet:items-center h-dvh w-full items-start bg-gray-800'
+          }
+        >
           <Modal.Header className="relative flex items-center justify-center">
             <button
               className="tablet:hidden absolute left-0"
