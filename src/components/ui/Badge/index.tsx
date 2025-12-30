@@ -3,7 +3,7 @@ import * as React from 'react';
 import LevelIcon from '@/assets/icons/level.svg?react';
 import { formatPaceText, secondsToMinutes } from '@/lib/pace';
 import { cn } from '@/lib/utils';
-import { type Level } from '@/types/session';
+import { type SessionLevel } from '@/types/session';
 
 export const badgeVariants = cva(
   'inline-flex items-center justify-center whitespace-nowrap shrink-0 [&>svg]:size-3 [&>svg]:pointer-events-none overflow-hidden font-semibold pointer-events-none',
@@ -36,7 +36,7 @@ type BaseBadgeProps = React.ComponentProps<'div'> & {
 
 type LevelBadgeProps = BaseBadgeProps & {
   variant: 'level';
-  level: Level;
+  level: SessionLevel;
   pace?: never;
 };
 

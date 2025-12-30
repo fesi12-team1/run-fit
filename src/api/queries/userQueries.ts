@@ -108,8 +108,12 @@ export const userQueries = {
           queryFn: ({ pageParam }: InfiniteQueryPageParam) =>
             getMyJoinedCrews({ page: pageParam, size: 10 }),
           getNextPageParam: (
-            lastPage: SliceData<Crew>,
-            allPages: SliceData<Crew>[]
+            lastPage: SliceData<
+              Crew & { myRole: 'LEADER' | 'STAFF' | 'MEMBER' }
+            >,
+            allPages: SliceData<
+              Crew & { myRole: 'LEADER' | 'STAFF' | 'MEMBER' }
+            >[]
           ) => {
             if (!lastPage.hasNext) return undefined;
             return allPages.length;
@@ -117,7 +121,11 @@ export const userQueries = {
           initialPageParam: 0,
           staleTime: 1000 * 60,
 
-          select: (data: InfiniteData<SliceData<Crew>>) => {
+          select: (
+            data: InfiniteData<
+              SliceData<Crew & { myRole: 'LEADER' | 'STAFF' | 'MEMBER' }>
+            >
+          ) => {
             return {
               ...data,
               crews: data.pages.flatMap((p) => p.content),

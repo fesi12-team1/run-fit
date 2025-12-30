@@ -140,7 +140,10 @@ export default function RegionFilter({ value, onChange }: RegionFilterProps) {
         </div>
 
         <div className="flex w-full items-center justify-center gap-3">
-          <button className="py-2 pr-3 pl-6" onClick={handleReset}>
+          <button
+            className="text-body3-regular py-2 pr-3 pl-6"
+            onClick={handleReset}
+          >
             초기화
           </button>
           <Button className="flex-1" onClick={handleApply}>

@@ -1,5 +1,7 @@
+import { RadioGroup } from '@radix-ui/react-radio-group';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { useState } from 'react';
+import { SessionLevel } from '@/types';
 import SessionLevelCard from '.';
 
 /**
@@ -39,14 +41,15 @@ type Story = StoryObj<typeof SessionLevelCard>;
  */
 export const Default: Story = {
   render: (args) => {
-    const [checked, setChecked] = useState(args.checked ?? false);
-
     return (
-      <SessionLevelCard
-        {...args}
-        checked={checked}
-        onClick={() => setChecked(!checked)}
-      />
+      <RadioGroup>
+        <SessionLevelCard
+          {...args}
+          checked={false}
+          level="INTERMEDIATE"
+          value="INTERMEDIATE"
+        />
+      </RadioGroup>
     );
   },
 };
@@ -56,7 +59,11 @@ export const Default: Story = {
  */
 export const Checked: Story = {
   args: { checked: true },
-  render: (args) => <SessionLevelCard {...args} />,
+  render: (args) => (
+    <RadioGroup>
+      <SessionLevelCard {...args} value={args.level} />
+    </RadioGroup>
+  ),
 };
 
 /**
@@ -64,7 +71,11 @@ export const Checked: Story = {
  */
 export const Disabled: Story = {
   args: { disabled: true },
-  render: (args) => <SessionLevelCard {...args} />,
+  render: (args) => (
+    <RadioGroup>
+      <SessionLevelCard {...args} value={args.level} />
+    </RadioGroup>
+  ),
 };
 
 /**
@@ -72,35 +83,35 @@ export const Disabled: Story = {
  */
 export const LevelList: Story = {
   render: (args) => {
-    const [selected, setSelected] = useState<string | null>(null);
+    const [selected, setSelected] = useState<SessionLevel>('INTERMEDIATE');
 
     return (
-      <div className="flex w-[327px] flex-col gap-4">
+      <RadioGroup
+        value={selected}
+        onValueChange={(val) => {
+          setSelected(val as SessionLevel);
+        }}
+        className="flex w-[327px] flex-col gap-4"
+      >
         <SessionLevelCard
           {...args}
-          checked={selected === 'beginner'}
-          onClick={() =>
-            setSelected(selected === 'beginner' ? null : 'beginner')
-          }
+          checked={selected === 'BEGINNER'}
           level="BEGINNER"
+          value="BEGINNER"
         />
         <SessionLevelCard
           {...args}
-          checked={selected === 'intermediate'}
-          onClick={() =>
-            setSelected(selected === 'intermediate' ? null : 'intermediate')
-          }
+          checked={selected === 'INTERMEDIATE'}
           level="INTERMEDIATE"
+          value="INTERMEDIATE"
         />
         <SessionLevelCard
           {...args}
-          checked={selected === 'advanced'}
-          onClick={() =>
-            setSelected(selected === 'advanced' ? null : 'advanced')
-          }
+          checked={selected === 'ADVANCED'}
           level="ADVANCED"
+          value="ADVANCED"
         />
-      </div>
+      </RadioGroup>
     );
   },
 };

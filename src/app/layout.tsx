@@ -3,6 +3,7 @@ import { QueryProvider } from '@/provider/QueryProvider';
 import './globals.css';
 import Header from '@/components/layout/Header';
 import MockProvider from '@/mocks/browser/Provider';
+import { KakaoMapProvider } from '@/provider/KakaoMapProvider';
 import SuspensiveDefaultPropsProvider from '@/provider/SuspensiveDefaultPropsProvider';
 import ToastProvider from '@/provider/ToastProvider';
 
@@ -23,9 +24,11 @@ export default function RootLayout({
         <MockProvider>
           <SuspensiveDefaultPropsProvider>
             <QueryProvider>
-              <ToastProvider />
-              <Header />
-              {children}
+              <KakaoMapProvider>
+                <ToastProvider />
+                <Header />
+                {children}
+              </KakaoMapProvider>
             </QueryProvider>
           </SuspensiveDefaultPropsProvider>
         </MockProvider>

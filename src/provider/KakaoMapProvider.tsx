@@ -15,7 +15,7 @@ const KAKAO_MAP_URL = process.env.NEXT_PUBLIC_KAKAO_MAP_URL;
 
 const KAKAO_MAP_SCRIPT_SRC =
   KAKAO_JS_KEY && KAKAO_MAP_URL
-    ? `${KAKAO_MAP_URL}?appkey=${KAKAO_JS_KEY}&autoload=false`
+    ? `${KAKAO_MAP_URL}?appkey=${KAKAO_JS_KEY}&autoload=false&libraries=services`
     : null;
 
 type CreateMapFn = (

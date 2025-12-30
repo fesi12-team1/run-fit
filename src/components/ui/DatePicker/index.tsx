@@ -7,6 +7,7 @@ import * as Popover from '@radix-ui/react-popover';
 import { CalendarIcon } from 'lucide-react';
 import * as React from 'react';
 import { DateRange } from 'react-day-picker';
+import { cn } from '@/lib/utils';
 
 function formatSingle(date?: Date) {
   if (!date) return '';
@@ -25,6 +26,7 @@ interface DatePickerSingleProps {
   id?: string;
   value?: Date;
   onChange: (value: Date) => void;
+  className?: string;
 }
 
 interface DatePickerRangeProps {
@@ -34,6 +36,7 @@ interface DatePickerRangeProps {
   id?: string;
   value?: DateRange;
   onChange: (value: DateRange) => void;
+  className?: string;
 }
 
 export type DatePickerProps = DatePickerSingleProps | DatePickerRangeProps;
@@ -45,6 +48,7 @@ export default function DatePicker({
   id,
   value,
   onChange,
+  className,
 }: DatePickerProps) {
   const [open, setOpen] = React.useState(false);
   const autoId = React.useId();
@@ -54,7 +58,7 @@ export default function DatePicker({
     mode === 'single' ? formatSingle(value) : formatRange(value);
 
   return (
-    <div className="flex flex-col gap-1">
+    <div className={cn('flex flex-col gap-1', className)}>
       <Label htmlFor={inputId}>{label}</Label>
       <Input
         id={inputId}

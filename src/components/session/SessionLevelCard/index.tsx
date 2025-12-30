@@ -1,18 +1,17 @@
 'use client';
 
-import { Label } from '@radix-ui/react-label';
+import { RadioGroupItem } from '@radix-ui/react-radio-group';
 import { cva, type VariantProps } from 'class-variance-authority';
 import LevelIcon from '@/assets/icons/level.svg?react';
-import Checkbox from '@/components/ui/Checkbox';
 import { cn } from '@/lib/utils';
-import { Level } from '@/types';
+import { SessionLevel } from '@/types';
 
 interface SessionLevelCardProps
   extends VariantProps<typeof sessionLevelCardVariants> {
-  level: Level;
+  level: SessionLevel;
+  value: SessionLevel;
   checked: boolean;
   disabled?: boolean;
-  onClick: () => void;
 }
 
 const sessionLevelCardVariants = cva(
@@ -29,7 +28,6 @@ const sessionLevelCardVariants = cva(
       },
       disabled: {
         true: 'cursor-not-allowed opacity-60 hover:outline-gray-750',
-        false: 'cursor-pointer',
       },
     },
     defaultVariants: {
@@ -41,30 +39,18 @@ const sessionLevelCardVariants = cva(
 
 export default function SessionLevelCard({
   level,
+  value,
   checked,
-  disabled = false,
-  onClick,
-  ...rest
+  disabled,
 }: SessionLevelCardProps) {
-  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-    e.preventDefault();
-    if (disabled) return;
-    onClick();
-  };
-
   return (
-    <div
-      role="checkbox"
-      aria-checked={checked}
-      aria-disabled={disabled}
-      tabIndex={disabled ? -1 : 0}
-      onClick={handleClick}
+    <RadioGroupItem
+      value={value}
+      disabled={disabled}
       className={cn(sessionLevelCardVariants({ checked, disabled }))}
-      {...rest}
     >
-      <Label className="flex w-full items-start justify-between gap-2">
-        <div className="flex flex-1 flex-col gap-1.5">
+      <div className="flex w-full items-start justify-between gap-2">
+        <div className="flex flex-1 flex-col gap-1.5 text-left">
           <p
             className={cn(
               'text-body3-semibold flex items-center gap-0.5',
@@ -76,24 +62,21 @@ export default function SessionLevelCard({
             <LevelIcon className="tablet:size-5 size-4" />
             {LEVEL_COPY[level].label}
           </p>
-          <p
-            className={cn(
-              'tablet:text-body3-medium',
-              'text-caption-medium line-clamp-1 overflow-hidden text-ellipsis text-gray-300'
-            )}
-          >
+          <p className="text-caption-medium line-clamp-1 text-gray-300">
             {LEVEL_COPY[level].description}
           </p>
         </div>
-        <Checkbox
-          aria-hidden="true"
-          checked={checked}
-          rounded
-          tabIndex={-1}
-          className="pointer-events-none absolute top-3 right-3"
-        />
-      </Label>
-    </div>
+
+        <div
+          className={cn(
+            'flex size-5 items-center justify-center rounded-full border border-gray-500',
+            checked && 'bg-brand-400 border-brand-400'
+          )}
+        >
+          {checked && <div className="size-2 rounded-full bg-gray-800" />}
+        </div>
+      </div>
+    </RadioGroupItem>
   );
 }
 

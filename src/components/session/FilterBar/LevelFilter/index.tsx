@@ -1,12 +1,13 @@
 'use client';
 
 import Dropdown from '@/components/ui/Dropdown';
-import { LEVEL_OPTIONS, LevelFilterValue } from '@/constants/session-filter';
+import { SESSION_LEVEL_OPTIONS } from '@/constants/session';
 import { getOptionLabel } from '@/lib/utils';
+import { SessionLevel } from '@/types';
 
 interface LevelFilterProps {
-  value?: LevelFilterValue;
-  onChange: (value?: LevelFilterValue) => void;
+  value?: SessionLevel;
+  onChange: (value?: SessionLevel) => void;
 }
 
 export default function LevelFilter({
@@ -16,10 +17,12 @@ export default function LevelFilter({
   return (
     <Dropdown size="lg" hasSelected={Boolean(optionValue)}>
       <Dropdown.Trigger>
-        {optionValue ? getOptionLabel(LEVEL_OPTIONS, optionValue) : '난이도'}
+        {optionValue
+          ? getOptionLabel(SESSION_LEVEL_OPTIONS, optionValue)
+          : '난이도'}
       </Dropdown.Trigger>
       <Dropdown.Content>
-        {LEVEL_OPTIONS.map(({ label, value }) => (
+        {SESSION_LEVEL_OPTIONS.map(({ label, value }) => (
           <Dropdown.Item
             key={value ?? 'all'}
             selected={value === optionValue}

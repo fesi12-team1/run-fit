@@ -10,11 +10,11 @@ import Tabs from '@/components/ui/Tabs';
 import TimeSlider from '@/components/ui/TimeSlider';
 import {
   DEFAULT_SESSION_FILTER,
-  FILTER_TABS,
-  LEVEL_OPTIONS,
-  SessionFilterState,
-} from '@/constants/session-filter';
+  SESSION_FILTER_TABS,
+  SESSION_LEVEL_OPTIONS,
+} from '@/constants/session';
 import { useSessionFilterContext } from '@/provider/SessionFilterProvider';
+import { SessionFilterState } from '@/types';
 import { Sido, SIDO_LIST, SIGUNGU_MAP } from '@/types/region';
 
 interface FilterModalProps {
@@ -111,7 +111,7 @@ export default function FilterModal({ children }: FilterModalProps) {
           <div className="min-h-[120px] w-full">
             <Tabs defaultValue="region" className="w-full">
               <Tabs.List className="mb-3">
-                {FILTER_TABS.map((tab) => (
+                {SESSION_FILTER_TABS.map((tab) => (
                   <Tabs.Trigger key={tab.key} value={tab.key} size="sm">
                     {tab.label}
                   </Tabs.Trigger>
@@ -188,7 +188,7 @@ export default function FilterModal({ children }: FilterModalProps) {
 
                 {/* 난이도 필터 */}
                 <Tabs.Content value="level" className="flex w-full gap-2">
-                  {LEVEL_OPTIONS.map(({ label, value }) => (
+                  {SESSION_LEVEL_OPTIONS.map(({ label, value }) => (
                     <Chip
                       key={value ?? 'all'}
                       tone="secondary"

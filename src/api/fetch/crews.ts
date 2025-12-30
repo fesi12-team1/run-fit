@@ -1,3 +1,4 @@
+import { buildQueryParams } from '@/lib/utils';
 import {
   Crew,
   CrewListFilters,
@@ -41,10 +42,10 @@ export async function joinCrew(crewId: number) {
 
 export type GetCrewsResponse = SliceData<Crew>;
 export async function getCrews(queryParams?: CrewListFilters) {
-  const query = new URLSearchParams(
-    queryParams as Record<string, string>
-  ).toString();
-  return request<GetCrewsResponse>(`/api/crews?${query}`);
+  const searchParams = buildQueryParams<CrewListFilters>(queryParams);
+  const queryString = searchParams.toString();
+
+  return request<GetCrewsResponse>(`/api/crews?${queryString}`);
 }
 
 export type GetCrewDetailResponse = Crew;

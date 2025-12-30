@@ -4,9 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 import { crewQueries } from '@/api/queries/crewQueries';
 import { sessionQueries } from '@/api/queries/sessionQueries';
-import FixedBottomBar, {
-  useFixedBottomBar,
-} from '@/components/layout/FixedBottomBar';
+import FixedBottomBar from '@/components/layout/FixedBottomBar';
 import CopyUrlButton from './_components/CopyUrlButton';
 import LikeButton from './_components/LikeButton';
 import ParticipateButton from './_components/ParticipateButton';
@@ -22,8 +20,6 @@ export default function Page() {
     enabled: !!crewId,
   });
 
-  const { ref, height } = useFixedBottomBar();
-
   if (sessionQuery.isLoading) return null;
   if (sessionQuery.isError) return null;
   if (!session) return null;
@@ -34,13 +30,10 @@ export default function Page() {
 
   return (
     <>
-      <main
-        className="h-main laptop:bg-gray-900 bg-gray-800"
-        style={{ paddingBottom: height }}
-      >
+      <main className="h-main laptop:bg-gray-900 bg-gray-800">
         <SessionDetailView session={session} crew={crewQuery.data} />
       </main>
-      <FixedBottomBar ref={ref}>
+      <FixedBottomBar>
         <div className="flex items-center gap-7">
           <div className="flex items-center gap-4">
             <LikeButton liked={session.liked} sessionId={session.id} />

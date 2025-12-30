@@ -1,55 +1,58 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
+import { cn } from '@/lib/utils';
 
-interface FixedBottomBarProps {
+type FixedBottomBarProps = {
   children: React.ReactNode;
-  ref: React.RefObject<HTMLDivElement | null>;
-}
+  className?: string;
+};
 
-export default function FixedBottomBar({ children, ref }: FixedBottomBarProps) {
-  return (
-    <nav
-      ref={ref}
-      className="bg-gray-750 laptop:hidden fixed right-0 bottom-0 left-0 z-10 p-6"
-      role="navigation"
-      aria-label="하단 고정 메뉴"
-    >
-      {children}
-    </nav>
-  );
-}
+export default function FixedBottomBar({
+  children,
+  className,
+}: FixedBottomBarProps) {
+  const barRef = useRef<HTMLElement>(null);
+  const [barHeight, setBarHeight] = useState(0);
 
-export function useFixedBottomBar() {
-  const [height, setHeight] = useState(0);
+  useLayoutEffect(() => {
+    const bar = barRef.current;
+    if (!bar) return;
 
-  const ref = useRef<HTMLDivElement>(null);
-  const blockHeight = useRef(0);
+    const update = () => {
+      const h = bar.getBoundingClientRect().height;
+      setBarHeight((prev) => (prev === h ? prev : h));
+    };
 
-  useEffect(() => {
-    // console.log('useEffect starts');
-    const observer = new ResizeObserver(([entry]) => {
-      const newBlockHeight = entry.target.getBoundingClientRect().height;
-      if (blockHeight.current !== newBlockHeight) {
-        blockHeight.current = newBlockHeight;
-        setHeight(newBlockHeight);
-      }
-    });
+    update();
 
-    const currentRef = ref.current;
-    if (currentRef) {
-      blockHeight.current = currentRef.offsetHeight;
-      setHeight(blockHeight.current);
+    const observer = new ResizeObserver(update);
+    observer.observe(bar);
 
-      observer.observe(currentRef);
-      // console.log('ResizeObserver observe');
-
-      return () => {
-        observer.disconnect();
-        // console.log('ResizeObserver disconnect');
-      };
-    }
+    return () => observer.disconnect();
   }, []);
 
-  return { ref, height };
+  return (
+    <>
+      <div
+        className="laptop:hidden"
+        aria-hidden="true"
+        style={{ height: barHeight }}
+      />
+
+      <nav
+        ref={barRef}
+        role="navigation"
+        aria-label="하단 고정 메뉴"
+        className={cn(
+          'laptop:hidden fixed inset-x-0 bottom-0 z-10',
+          'bg-gray-750 p-6',
+          'pb-[calc(1.5rem+env(safe-area-inset-bottom))]',
+          className
+        )}
+      >
+        {children}
+      </nav>
+    </>
+  );
 }

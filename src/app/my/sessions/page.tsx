@@ -10,6 +10,7 @@ import CompletedSessionCard from '@/components/session/CompletedSessionCard';
 import SessionCard from '@/components/session/SessionCard';
 import Button from '@/components/ui/Button';
 import Spinner from '@/components/ui/Spinner';
+import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { ParticipatingSession, Session } from '@/types';
 
@@ -38,7 +39,7 @@ export default function Page() {
   } = useInfiniteQuery(userQueries.me.sessions.participating('COMPLETED'));
 
   const scheduledRef = useRef<HTMLDivElement | null>(null);
-  const completedRef = useRef<HTMLDivElement | null>(null);
+  const completedRef = useInfiniteScroll(fetchNextCompleted, hasNextCompleted);
 
   const normalizeSession = (session: ParticipatingSession): Session => ({
     ...session,
@@ -66,23 +67,6 @@ export default function Page() {
     return () => el.removeEventListener('scroll', handleScroll);
   }, [hasNextScheduled, isFetchingNextScheduled, fetchNextScheduled]);
 
-  useEffect(() => {
-    if (!completedRef.current || !hasNextCompleted) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !isFetchingNextCompleted) {
-          fetchNextCompleted();
-        }
-      },
-      { threshold: 0.4 }
-    );
-
-    observer.observe(completedRef.current);
-
-    return () => observer.disconnect();
-  }, [hasNextCompleted, isFetchingNextCompleted, fetchNextCompleted]);
-
   const scheduledCount = scheduledSessions?.sessions.length ?? 0;
   const completedCount = completedSessions?.sessions.length ?? 0;
 
@@ -106,7 +90,7 @@ export default function Page() {
           src={'/assets/empty-session.png'}
           alt="세션 없음"
         />
-        <p className="tablet:text-body2-medium text-body3-regular text-gray-300">
+        <p className="tablet:text-body2-medium text-body3-regular text-center text-gray-300">
           아직 예정되거나 완료한 세션이 없어요
           <br />
           다양한 세션을 구경하러 가볼까요?

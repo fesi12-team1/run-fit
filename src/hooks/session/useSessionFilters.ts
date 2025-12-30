@@ -3,13 +3,14 @@
 import { format } from 'date-fns';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
-import {
-  DEFAULT_SESSION_FILTER,
-  LevelFilterValue,
-  SessionFilterState,
-} from '@/constants/session-filter';
+import { DEFAULT_SESSION_FILTER } from '@/constants/session';
 import { formatMinutesToHHmm } from '@/lib/time';
-import { SessionListFilters, SessionSort } from '@/types';
+import {
+  SessionFilterState,
+  SessionLevel,
+  SessionListFilters,
+  SessionSortKey,
+} from '@/types';
 
 /**
  * 세션 페이지의 필터 훅
@@ -50,10 +51,10 @@ export function useSessionFilters() {
 
     return {
       sort:
-        (searchParams.get('sort') as SessionSort) ??
+        (searchParams.get('sort') as SessionSortKey) ??
         DEFAULT_SESSION_FILTER.sort,
       level:
-        (searchParams.get('level') as LevelFilterValue) ??
+        (searchParams.get('level') as SessionLevel) ??
         DEFAULT_SESSION_FILTER.level,
       region,
       date: searchParams.get('dateFrom')
