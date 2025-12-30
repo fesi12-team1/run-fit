@@ -72,26 +72,28 @@ export default function CrewCreateForm({
         className="bg-gray-750"
       />
 
-      <div className="flex flex-col gap-2">
-        <Label>
-          크루 소개
-          <Textarea
-            {...form.register('description')}
-            placeholder="크루에 대한 상세 설명을 작성해주세요"
-            className="bg-gray-750"
-          />
-        </Label>
+      <div className="flex flex-col gap-1">
+        <Label htmlFor="crew-description">크루 소개</Label>
+        <Textarea
+          id="crew-description"
+          {...form.register('description')}
+          placeholder="크루에 대한 상세 설명을 작성해주세요"
+          className="bg-gray-750"
+        />
         {form.formState.errors.description && (
-          <p className="text-error-100 tablet:text-body3-semibold text-caption-semibold">
+          <p
+            id="crew-description-error"
+            className="text-error-100 tablet:text-body3-semibold text-caption-semibold"
+          >
             {form.formState.errors.description.message}
           </p>
         )}
       </div>
 
-      <div>
-        <label className="text-caption-semibold tablet:text-body3-semibold text-gray-50">
+      <div className="tablet:gap-2 flex flex-col gap-3">
+        <Label className="text-caption-semibold tablet:text-body3-semibold text-gray-50">
           지역
-        </label>
+        </Label>
         <div className="tablet:grid-cols-7 tablet:gap-2 mt-1 grid w-full grid-cols-5 place-items-center gap-3">
           {SIDO_LIST.map((sido) => (
             <Chip
