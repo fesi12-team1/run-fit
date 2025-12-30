@@ -22,5 +22,9 @@ export async function postRefresh(refreshToken: string) {
 
   const data: SuccessResponse<refreshResponse> = await res.json();
 
+  if (!data.data?.token) {
+    throw new Error('Invalid refresh response: missing token');
+  }
+
   return data.data;
 }
