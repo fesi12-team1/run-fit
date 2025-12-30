@@ -6,9 +6,9 @@ import Link from 'next/link';
 import { crewQueries } from '@/api/queries/crewQueries';
 import HeartFill from '@/assets/icons/heart-fill.svg?react';
 import Location from '@/assets/icons/location.svg?react';
+import { DdayBadge, LevelBadge, PaceBadge } from '@/components/ui/Badge';
 import { formatTimeToKorean } from '@/lib/time';
 import type { Session } from '@/types';
-import { DdayBadge, LevelBadge, PaceBadge } from '../../ui/Badge';
 import ProfileList from '../../user/ProfileList';
 
 interface SessionCardProps {
@@ -63,11 +63,8 @@ export default function SessionCard({
             }
           />
         </Link>
-        {/* prettier-ignore */}
-        <div className="absolute top-3 left-3 pointer-events-none">
-          <DdayBadge className="tablet:hidden" size="sm">{ddayText}</DdayBadge>
-          <DdayBadge className="hidden tablet:inline-flex laptop:hidden" size="md">{ddayText}</DdayBadge>
-          <DdayBadge className="hidden laptop:inline-flex" size="lg">{ddayText}</DdayBadge>
+        <div className="pointer-events-none absolute top-3 left-3">
+          <DdayBadge className="tablet:hidden" dday={ddayText} />
         </div>
         <button
           onClick={(e) => {
@@ -94,14 +91,9 @@ export default function SessionCard({
         <div className="text-caption-regular tablet:text-body3-regular mobile:mb-1 mb-2 text-gray-300">
           {`${sessionDate} • ${sessionTime}`}
         </div>
-        {/* prettier-ignore */}
-        <div className="flex gap-0.5 desktop:gap-1 items-center">
-          <PaceBadge pace={pace} size="sm" className="tablet:hidden" />
-          <LevelBadge level={level} size="sm" className="tablet:hidden" />
-          <PaceBadge pace={pace} size="md" className="hidden tablet:inline-flex laptop:hidden" />
-          <LevelBadge level={level} size="md" className="hidden tablet:inline-flex laptop:hidden" />
-          <PaceBadge pace={pace} size="lg" className="hidden laptop:inline-flex" />
-          <LevelBadge level={level} size="lg" className="hidden laptop:inline-flex" />
+        <div className="desktop:gap-1 flex items-center gap-0.5">
+          <PaceBadge paceSeconds={pace} />
+          <LevelBadge level={level} />
         </div>
       </div>
       {displayParticipants && (

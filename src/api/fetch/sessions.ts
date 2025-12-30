@@ -4,11 +4,11 @@ import {
   Session,
   SessionListFilters,
   SliceData,
-  SuccessResponse,
 } from '@/types';
+import request from './request';
 
+export type GetSessionsResponse = SliceData<Session>;
 export async function getSessions(queryParams?: SessionListFilters) {
-  // const accessToken = '';
   const searchParams = new URLSearchParams();
 
   if (queryParams) {
@@ -25,19 +25,7 @@ export async function getSessions(queryParams?: SessionListFilters) {
 
   const query = searchParams.toString();
 
-  const response = await fetch(`/api/sessions?${query}`);
-
-  if (!response.ok) {
-    const resData = await response.json();
-    if (resData.error) {
-      throw new Error(resData.error.message);
-    } else {
-      throw new Error('서버에 연결할 수 없습니다.');
-    }
-  }
-
-  const { data }: SuccessResponse<SliceData<Session>> = await response.json();
-  return data;
+  return request<GetSessionsResponse>(`/api/sessions?${query}`);
 }
 
 export type CreateSessionRequestBody = Pick<
@@ -57,125 +45,64 @@ export type CreateSessionRequestBody = Pick<
   | 'pace'
 >;
 
+export type CreateSessionResponse = Omit<Session, 'liked'>;
 export async function createSession(body: CreateSessionRequestBody) {
-  // const accessToken = '';
-  const response = await fetch('/api/sessions', {
+  return request<CreateSessionResponse>('/api/sessions', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(body),
   });
-
-  if (!response.ok) {
-    const resData = await response.json();
-    if (resData.error) {
-      throw new Error(resData.error.message);
-    } else {
-      throw new Error('서버에 연결할 수 없습니다.');
-    }
-  }
-
-  const { data }: SuccessResponse<Omit<Session, 'liked'>> =
-    await response.json();
-  return data;
 }
 
+export type GetSessionDetailResponse = Session;
 export async function getSessionDetail(sessionId: number) {
-  const response = await fetch(`/api/sessions/${sessionId}`);
-
-  if (!response.ok) {
-    const resData = await response.json();
-    if (resData.error) {
-      throw new Error(resData.error.message);
-    } else {
-      throw new Error('서버에 연결할 수 없습니다.');
-    }
-  }
-
-  const { data }: SuccessResponse<Session> = await response.json();
-  return data;
+  return request<GetSessionDetailResponse>(`/api/sessions/${sessionId}`);
 }
 
+export type RegisterForSessionResponse = {
+  message: string;
+  currentParticipantCount: number;
+  maxParticipantCount: number;
+};
 export async function registerForSession(sessionId: number) {
-  // const accessToken = '';
-  const response = await fetch(`/api/sessions/${sessionId}/join`, {
-    method: 'POST',
-  });
-
-  if (!response.ok) {
-    const resData = await response.json();
-    if (resData.error) {
-      throw new Error(resData.error.message);
-    } else {
-      throw new Error('서버에 연결할 수 없습니다.');
+  return request<RegisterForSessionResponse>(
+    `/api/sessions/${sessionId}/join`,
+    {
+      method: 'POST',
     }
-  }
-
-  type RegisterResponseData = {
-    message: string;
-    currentParticipantCount: number;
-    maxParticipantCount: number;
-  };
-
-  const { data }: SuccessResponse<RegisterResponseData> = await response.json();
-  return data;
+  );
 }
 
+export type UnregisterFromSessionResponse = {
+  message: string;
+  currentParticipantCount: number;
+};
 export async function unregisterFromSession(sessionId: number) {
-  // const accessToken = '';
-  const response = await fetch(`/api/sessions/${sessionId}/join`, {
-    method: 'DELETE',
-  });
-
-  if (!response.ok) {
-    const resData = await response.json();
-    if (resData.error) {
-      throw new Error(resData.error.message);
-    } else {
-      throw new Error('서버에 연결할 수 없습니다.');
+  return request<UnregisterFromSessionResponse>(
+    `/api/sessions/${sessionId}/join`,
+    {
+      method: 'DELETE',
     }
-  }
-
-  type UnregisterResponseData = {
-    message: string;
-    currentParticipantCount: number;
-  };
-
-  const { data }: SuccessResponse<UnregisterResponseData> =
-    await response.json();
-  return data;
+  );
 }
 
+export type GetSessionParticipantsResponse = {
+  participants: CrewMember[];
+  totalCount: number;
+};
 export async function getSessionParticipants(
   sessionId: number,
   queryParams?: MemberRoleFilters
 ) {
-  // const accessToken = '';
   const query = new URLSearchParams(
     queryParams as Record<string, string>
   ).toString();
-  const response = await fetch(
+
+  return request<GetSessionParticipantsResponse>(
     `/api/sessions/${sessionId}/participants?${query}`
   );
-
-  if (!response.ok) {
-    const resData = await response.json();
-    if (resData.error) {
-      throw new Error(resData.error.message);
-    } else {
-      throw new Error('서버에 연결할 수 없습니다.');
-    }
-  }
-
-  type ParticipantsResponseData = {
-    participants: CrewMember[];
-    totalCount: number;
-  };
-
-  const { data }: SuccessResponse<ParticipantsResponseData> =
-    await response.json();
-  return data;
 }
 
 export type UpdateSessionDetailRequestBody = Pick<
@@ -183,101 +110,37 @@ export type UpdateSessionDetailRequestBody = Pick<
   'name' | 'description' | 'image'
 >;
 
+export type UpdateSessionDetailResponse = Session;
 export async function updateSessionDetail(
   sessionId: number,
   body: UpdateSessionDetailRequestBody
 ) {
-  // const accessToken = '';
-  const response = await fetch(`/api/sessions/${sessionId}`, {
+  return request<UpdateSessionDetailResponse>(`/api/sessions/${sessionId}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(body),
   });
-
-  if (!response.ok) {
-    const resData = await response.json();
-    if (resData.error) {
-      throw new Error(resData.error.message);
-    } else {
-      throw new Error('서버에 연결할 수 없습니다.');
-    }
-  }
-
-  const { data }: SuccessResponse<Omit<Session, 'liked'>> =
-    await response.json();
-  return data;
 }
 
+export type DeleteSessionResponse = { message: string };
 export async function deleteSession(sessionId: number) {
-  // const accessToken = '';
-  const response = await fetch(`/api/sessions/${sessionId}`, {
+  return request<DeleteSessionResponse>(`/api/sessions/${sessionId}`, {
     method: 'DELETE',
   });
-
-  if (!response.ok) {
-    const resData = await response.json();
-    if (resData.error) {
-      throw new Error(resData.error.message);
-    } else {
-      throw new Error('서버에 연결할 수 없습니다.');
-    }
-  }
-
-  type DeleteSessionResponseData = {
-    message: string;
-  };
-
-  const { data }: SuccessResponse<DeleteSessionResponseData> =
-    await response.json();
-  return data;
 }
 
-// 세션 찜
+export type LikeSessionResponse = { message: string };
 export async function postLikeSession(sessionId: number) {
-  const response = await fetch(`/api/sessions/${sessionId}/like`, {
+  return request<LikeSessionResponse>(`/api/sessions/${sessionId}/like`, {
     method: 'POST',
   });
-
-  if (!response.ok) {
-    const resData = await response.json();
-    if (resData.error) {
-      throw new Error(resData.error.message);
-    } else {
-      throw new Error('서버에 연결할 수 없습니다.');
-    }
-  }
-
-  type PostLikeSessionResponseData = {
-    message: string;
-  };
-
-  const { data }: SuccessResponse<PostLikeSessionResponseData> =
-    await response.json();
-  return data;
 }
 
-// 세션 찜 취소
+export type UnlikeSessionResponse = { message: string };
 export async function deleteLikeSession(sessionId: number) {
-  const response = await fetch(`/api/sessions/${sessionId}/like`, {
+  return request<UnlikeSessionResponse>(`/api/sessions/${sessionId}/like`, {
     method: 'DELETE',
   });
-
-  if (!response.ok) {
-    const resData = await response.json();
-    if (resData.error) {
-      throw new Error(resData.error.message);
-    } else {
-      throw new Error('서버에 연결할 수 없습니다.');
-    }
-  }
-
-  type DeleteLikeSessionResponseData = {
-    message: string;
-  };
-
-  const { data }: SuccessResponse<DeleteLikeSessionResponseData> =
-    await response.json();
-  return data;
 }

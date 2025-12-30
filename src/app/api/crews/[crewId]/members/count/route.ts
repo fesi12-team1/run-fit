@@ -1,10 +1,6 @@
 import { NextRequest } from 'next/server';
-import { handleRequest } from '@/lib/api';
+import handleRequest from '@/server/api/handleRequest';
 
-export async function GET(
-  request: NextRequest,
-  ctx: RouteContext<'/api/crews/[crewId]/members/count'>
-) {
-  const { crewId } = await ctx.params;
-  return handleRequest(request, `/crews/${crewId}/members/count`, false);
+export async function GET(request: NextRequest) {
+  return handleRequest(request, false);
 }

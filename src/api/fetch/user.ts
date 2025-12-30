@@ -7,74 +7,36 @@ import {
   Review,
   Session,
   SliceData,
-  SuccessResponse,
 } from '@/types';
+import request from './request';
 
+export type GetMyProfileResponse = Profile;
 export async function getMyProfile() {
-  // const accessToken = '';
-  const response = await fetch('/api/user');
-
-  if (!response.ok) {
-    const resData = await response.json();
-    if (resData.error) {
-      throw new Error(resData.error.message);
-    } else {
-      throw new Error('서버에 연결할 수 없습니다.');
-    }
-  }
-
-  const { data }: SuccessResponse<Profile> = await response.json();
-  return data;
+  return request<GetMyProfileResponse>('/api/user');
 }
 
 export type UpdateMyProfileRequestBody = Partial<
   Pick<Profile, 'name' | 'image' | 'introduction' | 'city' | 'pace' | 'styles'>
 >;
 
+export type UpdateMyProfileResponse = Profile;
 export async function updateMyProfile(body: UpdateMyProfileRequestBody) {
-  // const accessToken = '';
-  const response = await fetch('/api/user', {
+  return request<UpdateMyProfileResponse>('/api/user', {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(body),
   });
-
-  if (!response.ok) {
-    const resData = await response.json();
-    if (resData.error) {
-      throw new Error(resData.error.message);
-    } else {
-      throw new Error('서버에 연결할 수 없습니다.');
-    }
-  }
-
-  const { data }: SuccessResponse<Profile> = await response.json();
-  return data;
 }
 
+export type GetUserProfileResponse = Omit<Profile, 'updatedAt' | 'email'>;
 export async function getUserProfile(userId: number) {
-  // const accessToken = '';
-  const response = await fetch(`/api/user/${userId}`);
-
-  if (!response.ok) {
-    const resData = await response.json();
-    if (resData.error) {
-      throw new Error(resData.error.message);
-    } else {
-      throw new Error('서버에 연결할 수 없습니다.');
-    }
-  }
-
-  type UserProfileResponseData = Omit<Profile, 'updatedAt' | 'email'>;
-  const { data }: SuccessResponse<UserProfileResponseData> =
-    await response.json();
-  return data;
+  return request<GetUserProfileResponse>(`/api/user/${userId}`);
 }
 
+export type GetMyReviewsResponse = PageData<Review>;
 export async function getMyReviews(queryParams?: PaginationQueryParams) {
-  // const accessToken = '';
   const searchParams = new URLSearchParams();
 
   if (queryParams) {
@@ -85,23 +47,11 @@ export async function getMyReviews(queryParams?: PaginationQueryParams) {
   }
 
   const query = searchParams.toString();
-
-  const response = await fetch(`/api/user/me/reviews?${query}`);
-
-  if (!response.ok) {
-    const resData = await response.json();
-    if (resData.error) {
-      throw new Error(resData.error.message);
-    } else {
-      throw new Error('서버에 연결할 수 없습니다.');
-    }
-  }
-
-  const { data }: SuccessResponse<PageData<Review>> = await response.json();
-  return data;
+  return request<GetMyReviewsResponse>(`/api/user/me/reviews?${query}`);
 }
 
 // 내가 찜한 세션 목록 조회
+export type GetMyLikedSessionsResponse = SliceData<LikeSessions>;
 export async function getMyLikedSessions(queryParams?: PaginationQueryParams) {
   const searchParams = new URLSearchParams();
 
@@ -113,24 +63,11 @@ export async function getMyLikedSessions(queryParams?: PaginationQueryParams) {
   }
 
   const query = searchParams.toString();
-
-  const response = await fetch(`/api/user/me/likes?${query}`);
-
-  if (!response.ok) {
-    const resData = await response.json();
-    if (resData.error) {
-      throw new Error(resData.error.message);
-    } else {
-      throw new Error('서버에 연결할 수 없습니다.');
-    }
-  }
-
-  const { data }: SuccessResponse<SliceData<LikeSessions>> =
-    await response.json();
-  return data;
+  return request<GetMyLikedSessionsResponse>(`/api/user/me/likes?${query}`);
 }
 
 // 내가 만든 크루 목록 조회 (무한스크롤)
+export type GetMyOwnedCrewsResponse = SliceData<Crew>;
 export async function getMyOwnedCrews(queryParams?: PaginationQueryParams) {
   const searchParams = new URLSearchParams();
 
@@ -142,23 +79,14 @@ export async function getMyOwnedCrews(queryParams?: PaginationQueryParams) {
   }
 
   const query = searchParams.toString();
-
-  const response = await fetch(`/api/user/me/crews/owned?${query}`);
-
-  if (!response.ok) {
-    const resData = await response.json();
-    if (resData.error) {
-      throw new Error(resData.error.message);
-    } else {
-      throw new Error('서버에 연결할 수 없습니다.');
-    }
-  }
-
-  const { data }: SuccessResponse<SliceData<Crew>> = await response.json();
-  return data;
+  return request<GetMyOwnedCrewsResponse>(`/api/user/me/crews/owned?${query}`);
 }
 
 // 내가 속한 크루 목록 조회 (무한스크롤)
+export type GetMyJoinedCrewsItem = Crew & {
+  myRole: 'LEADER' | 'STAFF' | 'MEMBER';
+};
+export type GetMyJoinedCrewsResponse = SliceData<GetMyJoinedCrewsItem>;
 export async function getMyJoinedCrews(queryParams?: PaginationQueryParams) {
   const searchParams = new URLSearchParams();
 
@@ -170,26 +98,13 @@ export async function getMyJoinedCrews(queryParams?: PaginationQueryParams) {
   }
 
   const query = searchParams.toString();
-  const response = await fetch(`/api/user/me/crews?${query}`);
-
-  if (!response.ok) {
-    const resData = await response.json();
-    if (resData.error) {
-      throw new Error(resData.error.message);
-    } else {
-      throw new Error('서버에 연결할 수 없습니다.');
-    }
-  }
-
-  type GetMyJoinedCrewsResponseData = SliceData<
-    Crew & { myRole: 'LEADER' | 'STAFF' | 'MEMBER' }
-  >;
-  const { data }: SuccessResponse<GetMyJoinedCrewsResponseData> =
-    await response.json();
-  return data;
+  return request<GetMyJoinedCrewsResponse>(`/api/user/me/crews?${query}`);
 }
 
 // 내가 만든 세션 목록 조회 (무한스크롤)
+export type GetMyCreatedSessionsResponse = SliceData<
+  Omit<Session, 'description'>
+>;
 export async function getMyCreatedSessions(
   queryParams?: PaginationQueryParams
 ) {
@@ -203,25 +118,25 @@ export async function getMyCreatedSessions(
   }
 
   const query = searchParams.toString();
-  const response = await fetch(`/api/user/me/sessions?${query}`);
-
-  if (!response.ok) {
-    const resData = await response.json();
-    if (resData.error) {
-      throw new Error(resData.error.message);
-    } else {
-      throw new Error('서버에 연결할 수 없습니다.');
-    }
-  }
-
-  const { data }: SuccessResponse<SliceData<Omit<Session, 'description'>>> =
-    await response.json();
-  return data;
+  return request<GetMyCreatedSessionsResponse>(
+    `/api/user/me/sessions?${query}`
+  );
 }
 
 // 내가 참여하는 세션 목록 조회 (무한스크롤)
+export type GetMyParticipatingSessionsQuery = PaginationQueryParams & {
+  status: 'SCHEDULED' | 'COMPLETED';
+};
+
+export type GetMyParticipatingSessionsItem = Omit<Session, 'description'> & {
+  reviewed: boolean;
+};
+
+export type GetMyParticipatingSessionsResponse =
+  SliceData<GetMyParticipatingSessionsItem>;
+
 export async function getMyParticipatingSessions(
-  queryParams?: PaginationQueryParams & { status: 'SCHEDULED' | 'COMPLETED' }
+  queryParams?: GetMyParticipatingSessionsQuery
 ) {
   const searchParams = new URLSearchParams();
 
@@ -233,22 +148,7 @@ export async function getMyParticipatingSessions(
   }
 
   const query = searchParams.toString();
-
-  const response = await fetch(`/api/user/me/sessions/participating?${query}`);
-
-  if (!response.ok) {
-    const resData = await response.json();
-    if (resData.error) {
-      throw new Error(resData.error.message);
-    } else {
-      throw new Error('서버에 연결할 수 없습니다.');
-    }
-  }
-
-  const {
-    data,
-  }: SuccessResponse<
-    SliceData<Omit<Session, 'description'> & { reviewed: boolean }>
-  > = await response.json();
-  return data;
+  return request<GetMyParticipatingSessionsResponse>(
+    `/api/user/me/sessions/participating?${query}`
+  );
 }

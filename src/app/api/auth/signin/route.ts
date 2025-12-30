@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { proxyUrl } from '@/lib/api';
+import { getBackendUrl } from '@/server/api/utils';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const proxyResponse = await fetch(proxyUrl('/api/auth/signin'), {
+    const proxyResponse = await fetch(getBackendUrl(request.nextUrl), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
@@ -40,13 +40,15 @@ export async function POST(request: NextRequest) {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
-      path: '/api',
-      maxAge: 60 * 60, // 1 hour (3600 seconds)
+      path: '/',
+      maxAge: 60 * 60, // 1 hour
     });
 
     const proxySetCookies = proxyResponse.headers.getSetCookie();
-    proxySetCookies.forEach((cookie) => {
-      response.headers.append('Set-Cookie', cookie);
+
+    proxySetCookies.forEach((cookieString) => {
+      const modifiedCookie = cookieString.replace(/Path=\/[^;]*/i, 'Path=/');
+      response.headers.append('Set-Cookie', modifiedCookie);
     });
 
     return response;

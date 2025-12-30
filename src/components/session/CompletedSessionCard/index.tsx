@@ -84,7 +84,7 @@ export default function CompletedSessionCard({
             </div>
             {showBadges && (
               <div className="flex items-center gap-0.5">
-                <PaceBadge pace={session.pace} size={size} />
+                <PaceBadge paceSeconds={session.pace} size={size} />
                 <LevelBadge level={session.level} size={size} />
               </div>
             )}

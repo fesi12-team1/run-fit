@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { userQueries } from '@/api/queries/userQueries';
 import Button from '@/components/ui/Button';
-import { formatPaceText, secondsToMinutes } from '@/lib/pace';
+import { formatPaceText, splitSecondsToMinutesAndSeconds } from '@/lib/pace';
 import type { Profile as ProfileType } from '@/types';
 import ProfileEdit from '../ProfileEdit';
 
@@ -72,7 +72,9 @@ export default function Profile() {
                 <p className="text-caption-medium text-gray-300">러닝 페이스</p>
                 <p className="text-body2-semibold">
                   {data?.pace
-                    ? formatPaceText(...secondsToMinutes(data?.pace))
+                    ? formatPaceText(
+                        splitSecondsToMinutesAndSeconds(data?.pace)
+                      )
                     : '-'}
                 </p>
               </div>

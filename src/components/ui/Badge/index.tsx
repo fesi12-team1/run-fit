@@ -1,134 +1,179 @@
-import { cva, type VariantProps } from 'class-variance-authority';
-import * as React from 'react';
 import LevelIcon from '@/assets/icons/level.svg?react';
-import { formatPaceText, secondsToMinutes } from '@/lib/pace';
+import { formatPaceText, splitSecondsToMinutesAndSeconds } from '@/lib/pace';
 import { cn } from '@/lib/utils';
+import { CrewMemberRole } from '@/types';
 import { type SessionLevel } from '@/types/session';
 
-export const badgeVariants = cva(
-  'inline-flex items-center justify-center whitespace-nowrap shrink-0 [&>svg]:size-3 [&>svg]:pointer-events-none overflow-hidden font-semibold pointer-events-none',
-  {
-    variants: {
-      variant: {
-        dday: 'text-brand-600 bg-linear-to-br from-[rgba(247,223,249,1)] via-[rgba(223,229,249,1)] to-[rgba(186,186,250,1)]',
-        level: 'bg-gray-800',
-        pace: 'bg-blue-950 text-blue-300',
-        none: '',
-      },
-      size: {
-        sm: 'rounded-sm px-1 py-0.5 text-[10px] font-semibold',
-        md: 'rounded-md px-2 py-1 text-[12px] font-semibold',
-        lg: 'rounded-lg px-2 py-1 text-[14px] font-semibold',
-      },
-    },
-    defaultVariants: {
-      variant: 'level',
-      size: 'sm',
-    },
-  }
-);
+type BaseBadgeProps = React.ComponentProps<'div'>;
 
-type BaseBadgeProps = React.ComponentProps<'div'> & {
-  children?: React.ReactNode;
-  variant?: VariantProps<typeof badgeVariants>['variant'];
-  size: NonNullable<VariantProps<typeof badgeVariants>['size']>;
-};
-
-type LevelBadgeProps = BaseBadgeProps & {
-  variant: 'level';
-  level: SessionLevel;
-  pace?: never;
-};
-
-type PaceBadgeProps = BaseBadgeProps & {
-  variant: 'pace';
-  pace: number;
-  level?: never;
-};
-
-type DdayBadgeProps = BaseBadgeProps & {
-  variant: 'dday';
-  level?: never;
-  pace?: never;
-};
-
-type BadgeProps =
-  | LevelBadgeProps
-  | PaceBadgeProps
-  | DdayBadgeProps
-  | BaseBadgeProps;
-
-export default function Badge({
-  className,
-  variant,
-  size,
-  children,
-  ...rest
-}: BadgeProps) {
+function BaseBadge({ className, children, ...props }: BaseBadgeProps) {
   return (
-    <div
-      data-slot="badge"
-      className={cn(badgeVariants({ variant, size }), className)}
-      {...rest}
-    >
+    <div className={cn(className)} {...props}>
       {children}
     </div>
   );
 }
 
+type PaceBadgeProps = BaseBadgeProps & {
+  paceSeconds: number;
+  size?: 'sm' | 'md' | 'lg' | 'responsive';
+};
+
 export function PaceBadge({
+  paceSeconds,
+  size = 'responsive',
   className,
-  pace,
-  size,
-}: Omit<PaceBadgeProps, 'variant'>) {
+  ...props
+}: PaceBadgeProps) {
+  const baseStyle = 'bg-brand-900 text-brand-100';
+
+  const badgeSize = {
+    sm: 'rounded-sm px-1.5 py-0.5',
+    md: 'rounded-md px-2 py-1',
+    lg: 'rounded-lg px-2 py-1',
+    responsive:
+      'laptop:rounded-lg laptop:px-2 laptop:py-1 tablet:rounded-md tablet:px-2 tablet:py-1 rounded-sm px-1.5 py-0.5',
+  };
+
+  const textSize = {
+    sm: 'text-[10px]/[16px] font-medium',
+    md: 'text-caption-medium',
+    lg: 'text-body3-medium',
+    responsive:
+      'laptop:text-body3-medium tablet:text-caption-medium text-[10px]/[16px] font-medium',
+  };
+
   return (
-    <Badge variant="pace" pace={pace} size={size} className={className}>
-      {formatPaceText(...secondsToMinutes(pace ?? 0))}
-    </Badge>
+    <BaseBadge
+      className={cn(className, baseStyle, badgeSize[size], textSize[size])}
+      {...props}
+    >
+      {formatPaceText(splitSecondsToMinutesAndSeconds(paceSeconds))}
+    </BaseBadge>
   );
 }
 
+type LevelBadgeProps = BaseBadgeProps & {
+  level: SessionLevel;
+  size?: 'sm' | 'md' | 'lg' | 'responsive';
+};
+
 export function LevelBadge({
-  className,
   level,
-  size,
-}: Omit<LevelBadgeProps, 'variant'>) {
+  size = 'responsive',
+  className,
+  ...props
+}: LevelBadgeProps) {
   const iconSize = {
     sm: 'size-3',
     md: 'size-3',
     lg: 'size-4',
+    responsive: 'laptop:size-4 size-3',
   };
-  const fillColor = {
-    BEGINNER: 'fill-gray-200',
-    INTERMEDIATE: 'fill-[#F2B48A]',
-    ADVANCED: 'fill-[#FF819E]',
+
+  const baseStyle = 'bg-gray-800 flex gap-0.5 ';
+
+  const badgeSize = {
+    sm: 'rounded-sm px-1 py-0.5',
+    md: 'rounded-md px-2 py-1',
+    lg: 'rounded-lg px-2 py-1',
+    responsive:
+      'laptop:rounded-lg laptop:px-2 laptop:py-1 tablet:rounded-md tablet:px-2 tablet:py-1 rounded-sm px-1 py-0.5',
   };
+
+  const textSize = {
+    sm: 'text-[10px]/[16px] font-medium',
+    md: 'text-caption-medium',
+    lg: 'text-body3-medium',
+    responsive:
+      'laptop:text-body3-medium tablet:text-caption-medium text-[10px]/[16px] font-medium',
+  };
+
   const textColor = {
-    BEGINNER: 'text-gray-200',
-    INTERMEDIATE: 'text-[#F2B48A]',
-    ADVANCED: 'text-[#FF819E]',
+    BEGINNER: 'text-level-beginner',
+    INTERMEDIATE: 'text-level-intermediate',
+    ADVANCED: 'text-level-advanced',
   };
+
   const text = {
     BEGINNER: '초급',
     INTERMEDIATE: '중급',
     ADVANCED: '고급',
   };
+
   return (
-    <Badge variant="level" level={level} size={size} className={className}>
-      <LevelIcon className={cn(iconSize[size], fillColor[level])} />
-      <span className={textColor[level]}>{text[level]}</span>
-    </Badge>
+    <BaseBadge
+      className={cn(className, baseStyle, badgeSize[size], textColor[level])}
+      {...props}
+    >
+      <LevelIcon className={cn(iconSize[size])} />
+      <span className={cn(textSize[size])}>{text[level]}</span>
+    </BaseBadge>
   );
 }
 
+type DdayBadgeProps = BaseBadgeProps & {
+  dday: string;
+  size?: 'md' | 'lg' | 'responsive';
+};
+
 export function DdayBadge({
+  dday,
+  size = 'responsive',
   className,
-  size,
-  children,
-}: Omit<DdayBadgeProps, 'variant'>) {
+  ...props
+}: DdayBadgeProps) {
+  const baseStyle =
+    'text-brand-600 bg-linear-to-br from-[rgba(247,223,249,1)] via-[rgba(223,229,249,1)] to-[rgba(186,186,250,1)]';
+
+  const badgeSize = {
+    md: 'rounded-sm px-1.5 py-0.5',
+    lg: 'rounded-lg px-2 py-1',
+    responsive:
+      'laptop:rounded-lg laptop:px-2 laptop:py-1 rounded-sm px-1.5 py-0.5',
+  };
+
+  const textSize = {
+    md: 'text-[10px]/[16px] font-semibold',
+    lg: 'text-body3-semibold',
+    responsive: 'laptop:text-body3-semibold text-[10px]/[16px] font-semibold',
+  };
+
   return (
-    <Badge variant="dday" size={size} className={className}>
-      {children}
-    </Badge>
+    <BaseBadge
+      className={cn(className, baseStyle, badgeSize[size], textSize[size])}
+      {...props}
+    >
+      {dday}
+    </BaseBadge>
+  );
+}
+
+type RoleBadgeProps = BaseBadgeProps & {
+  role: CrewMemberRole;
+};
+
+export function RoleBadge({ role, className, ...props }: RoleBadgeProps) {
+  const baseStyle = 'px-2 py-1 rounded-md';
+
+  const roleStyles = {
+    LEADER: 'bg-brand-900 text-brand-200 text-[10px]/[100%] font-bold',
+    STAFF: 'bg-gray-700 text-gray-200 text-[10px]/[100%] font-semibold',
+    MEMBER: 'hidden',
+  };
+
+  const text = {
+    LEADER: '크루장',
+    STAFF: '운영진',
+    MEMBER: '',
+  };
+
+  return (
+    <BaseBadge
+      className={cn(className, baseStyle, roleStyles[role])}
+      {...props}
+    >
+      {text[role]}
+    </BaseBadge>
   );
 }

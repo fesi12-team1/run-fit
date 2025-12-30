@@ -1,17 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-  postSignin,
-  postSignout,
-  postSignup,
-  SignupRequestBody,
-} from '@/api/fetch/auth';
+import { postSignin, postSignout, postSignup } from '@/api/fetch/auth';
 import { userQueries } from '@/api/queries/userQueries';
-import type {
-  ErrorResponse,
-  SigninResponse,
-  User,
-  UserCredentials,
-} from '@/types';
 
 export interface UseAuthFormOptions {
   onSuccess?: () => void;
@@ -20,13 +9,13 @@ export interface UseAuthFormOptions {
 
 // 회원가입
 export function useSignup(options?: UseAuthFormOptions) {
-  return useMutation<User | null, ErrorResponse, SignupRequestBody>({
+  return useMutation({
     mutationFn: postSignup,
     onSuccess: () => {
       options?.onSuccess?.();
     },
     onError: (error) => {
-      options?.onError?.(error.error.message);
+      options?.onError?.(error.message);
     },
   });
 }
@@ -35,7 +24,7 @@ export function useSignup(options?: UseAuthFormOptions) {
 export function useSignin(options?: UseAuthFormOptions) {
   const queryClient = useQueryClient();
 
-  return useMutation<SigninResponse | null, ErrorResponse, UserCredentials>({
+  return useMutation({
     mutationFn: postSignin,
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -44,7 +33,7 @@ export function useSignin(options?: UseAuthFormOptions) {
       options?.onSuccess?.();
     },
     onError: (error) => {
-      options?.onError?.(error.error.message);
+      options?.onError?.(error.message);
     },
   });
 }

@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { proxyUrl } from '@/lib/api';
+import { getBackendUrl } from '@/server/api/utils';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const proxyResponse = await fetch(proxyUrl('/api/auth/signup'), {
+    const proxyResponse = await fetch(getBackendUrl(request.nextUrl), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',

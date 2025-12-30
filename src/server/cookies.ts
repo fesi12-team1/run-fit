@@ -1,3 +1,4 @@
+import 'server-only';
 import { cookies } from 'next/headers';
 
 export async function getAllCookies() {
@@ -17,10 +18,15 @@ export async function getAccessToken() {
   return accessToken;
 }
 
-export async function hasAccessToken() {
+export async function setAccessToken(value: string) {
   const cookieStore = await cookies();
-
-  return cookieStore.has('accessToken');
+  cookieStore.set('accessToken', value, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+    path: '/',
+    maxAge: 60 * 60, // 1 hour
+  });
 }
 
 export async function getRefreshToken() {

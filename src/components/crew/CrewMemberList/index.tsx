@@ -7,7 +7,7 @@ import {
 } from '@/api/mutations/crewMutations';
 import Settings from '@/assets/icons/settings.svg?react';
 import VerticalEllipsis from '@/assets/icons/vertical-ellipsis.svg?react';
-import Badge from '@/components/ui/Badge';
+import { RoleBadge } from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
 import Dropdown from '@/components/ui/Dropdown';
 import Modal from '@/components/ui/Modal';
@@ -213,26 +213,6 @@ function CrewMenuActions() {
   );
 }
 
-function LeaderTag() {
-  return (
-    <Badge variant="none" size="md" className="bg-brand-900">
-      <span className="text-brand-200 font-700 text-[10px] leading-none">
-        크루장
-      </span>
-    </Badge>
-  );
-}
-
-function StaffTag() {
-  return (
-    <Badge variant="none" size="md" className="bg-gray-700">
-      <span className="font-700 text-[10px] leading-none text-gray-200">
-        운영진
-      </span>
-    </Badge>
-  );
-}
-
 function CrewMemberListItem({
   member,
   editMode,
@@ -257,8 +237,7 @@ function CrewMemberListItem({
         <div className="flex flex-col gap-1">
           <div className="flex w-full items-center gap-1.5">
             <span className="text-body3-semibold">{member.name}</span>
-            {member.role === 'LEADER' && <LeaderTag />}
-            {member.role === 'STAFF' && <StaffTag />}
+            <RoleBadge role={member.role} />
           </div>
           <span className="text-caption-regular line-clamp-1">
             {member.introduction || '안녕하세요:) 잘 부탁드립니다!'}
@@ -269,7 +248,7 @@ function CrewMemberListItem({
         <div className="flex w-full items-center justify-between">
           <div className="flex items-center gap-1.5">
             <span className="text-body3-semibold">{member.name}</span>
-            {member.role === 'LEADER' && <LeaderTag />}
+            {member.role === 'LEADER' && <RoleBadge role="LEADER" />}
             {member.role !== 'LEADER' && (
               <Dropdown size="lg">
                 <Dropdown.Trigger>{ROLE_LABEL[member.role]}</Dropdown.Trigger>

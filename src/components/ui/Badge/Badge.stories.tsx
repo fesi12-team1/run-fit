@@ -1,86 +1,94 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import Badge, { DdayBadge, LevelBadge, PaceBadge } from '.';
+import { type SessionLevel } from '@/types';
+import { DdayBadge, LevelBadge, PaceBadge, RoleBadge } from '.';
 
-const meta: Meta<typeof Badge> = {
-  title: 'UI/Badge',
-  component: Badge,
+const meta: Meta = {
+  title: 'UI/Badges',
   parameters: {
     layout: 'centered',
-  },
-  tags: ['autodocs'],
-  argTypes: {
-    variant: {
-      control: { type: 'select' },
-      options: ['level', 'pace', 'dday'],
-    },
-    size: {
-      control: { type: 'select' },
-      options: ['sm', 'md', 'lg'],
-    },
   },
 };
 export default meta;
 
-export const Default: StoryObj<typeof Badge> = {
-  args: {
-    children: 'Badge',
-  },
+type Story = StoryObj;
+
+export const Paces: Story = {
+  render: () => (
+    <div className="flex flex-col gap-4">
+      <div className="flex items-center gap-2">
+        <PaceBadge paceSeconds={330} size="sm" />
+        <PaceBadge paceSeconds={330} size="md" />
+        <PaceBadge paceSeconds={330} size="lg" />
+        <PaceBadge paceSeconds={330} size="responsive" />
+      </div>
+
+      <div className="flex items-center gap-2">
+        <PaceBadge paceSeconds={270} size="sm" />
+        <PaceBadge paceSeconds={450} size="sm" />
+        <PaceBadge paceSeconds={615} size="sm" />
+      </div>
+    </div>
+  ),
 };
 
-export const Level: StoryObj<typeof LevelBadge> = {
-  render: (args) => {
+export const Levels: Story = {
+  render: () => {
+    const levels: SessionLevel[] = ['BEGINNER', 'INTERMEDIATE', 'ADVANCED'];
+    const sizes: Array<'sm' | 'md' | 'lg' | 'responsive'> = [
+      'sm',
+      'md',
+      'lg',
+      'responsive',
+    ];
+
     return (
-      <div className="flex items-center gap-4">
-        <LevelBadge {...args} size="sm" />
-        <LevelBadge {...args} size="md" />
-        <LevelBadge {...args} size="lg" />
+      <div className="flex flex-col gap-4">
+        {sizes.map((size) => (
+          <div key={size} className="flex items-center gap-2">
+            {levels.map((level) => (
+              <LevelBadge key={level} level={level} size={size} />
+            ))}
+          </div>
+        ))}
       </div>
     );
   },
-  args: {
-    level: 'BEGINNER',
-  },
-  argTypes: {
-    level: {
-      control: { type: 'select' },
-      options: ['BEGINNER', 'INTERMEDIATE', 'ADVANCED'],
-    },
-  },
 };
 
-export const Pace: StoryObj<typeof PaceBadge> = {
-  render: (args) => (
-    <div className="flex items-center gap-4">
-      <PaceBadge {...args} size="sm" />
-      <PaceBadge {...args} size="md" />
-      <PaceBadge {...args} size="lg" />
+export const Ddays: Story = {
+  render: () => (
+    <div className="flex flex-col gap-4">
+      <div className="flex items-center gap-2">
+        <DdayBadge dday="D-3" size="md" />
+        <DdayBadge dday="D-3" size="lg" />
+        <DdayBadge dday="D-3" size="responsive" />
+      </div>
+
+      <div className="flex items-center gap-2">
+        <DdayBadge dday="D-day" size="md" />
+        <DdayBadge dday="D+1" size="md" />
+      </div>
     </div>
   ),
-  args: {
-    pace: 300,
-  },
-  argTypes: {
-    pace: {
-      control: { type: 'number' },
-    },
-  },
 };
 
-export const Dday: StoryObj<typeof DdayBadge> = {
-  render: (args) => (
-    <div className="flex items-center gap-4">
-      <DdayBadge {...args} size="sm">
-        {args.children}
-      </DdayBadge>
-      <DdayBadge {...args} size="md">
-        {args.children}
-      </DdayBadge>
-      <DdayBadge {...args} size="lg">
-        {args.children}
-      </DdayBadge>
+export const Roles: Story = {
+  render: () => (
+    <div className="flex items-center gap-2">
+      <RoleBadge role="LEADER" />
+      <RoleBadge role="STAFF" />
     </div>
   ),
-  args: {
-    children: 'D-day',
-  },
+};
+
+export const InContext: Story = {
+  name: 'In Context (Session Card snippet)',
+  render: () => (
+    <div className="flex items-center gap-1">
+      <DdayBadge dday="D-2" size="responsive" />
+      <PaceBadge paceSeconds={360} size="responsive" />
+      <LevelBadge level="INTERMEDIATE" size="responsive" />
+      <RoleBadge role="LEADER" />
+    </div>
+  ),
 };

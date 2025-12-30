@@ -1,10 +1,10 @@
 import { NextRequest } from 'next/server';
-import { handleRequest } from '@/lib/api';
+import handleRequest from '@/server/api/handleRequest';
 
 export async function GET(request: NextRequest) {
-  return handleRequest(request, '/sessions', false);
+  return handleRequest(request, false);
 }
 
 export async function POST(request: NextRequest) {
-  return handleRequest(request, '/sessions', true);
+  return handleRequest(request, true);
 }
