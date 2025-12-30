@@ -36,15 +36,9 @@ export default function CrewCreateForm({
   });
 
   const handleSelectCity = (city: string) => {
-    setSelectedCity((prev) => (prev === city ? '' : city));
-
-    if (selectedCity === city) {
-      setSelectedCity('');
-      form.setValue('city', '');
-    } else {
-      setSelectedCity(city);
-      form.setValue('city', city);
-    }
+    const newCity = selectedCity === city ? '' : city;
+    setSelectedCity(newCity);
+    form.setValue('city', newCity);
   };
 
   const handleImageChange = (file: File | null) => {
