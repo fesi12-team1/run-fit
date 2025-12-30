@@ -1,6 +1,6 @@
 import 'server-only';
 import { SuccessResponse } from '@/types';
-import { getBackendUrl } from './utils';
+import { getBackendUrl } from '../utils';
 
 type refreshResponse = {
   token: string;

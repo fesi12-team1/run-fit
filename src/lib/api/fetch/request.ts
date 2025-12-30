@@ -1,4 +1,4 @@
-import { ApiError } from '@/lib/error';
+import { ApiError } from '@/lib/api/error';
 import { ResponseErrorData } from '@/types';
 
 /**
