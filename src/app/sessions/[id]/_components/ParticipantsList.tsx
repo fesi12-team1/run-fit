@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { sessionQueries } from '@/api/queries/sessionQueries';
-import Badge from '@/components/ui/Badge';
+import { RoleBadge } from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
 import Modal from '@/components/ui/Modal';
 import UserAvatar from '@/components/ui/UserAvatar';
@@ -39,9 +39,7 @@ export default function ParticipantsList({ sessionId }: { sessionId: number }) {
                   <span className="text-body3-semibold tablet:text-body2-semibold">
                     {participant.name}
                   </span>
-                  <Badge size="sm" variant="dday">
-                    {participant.role}
-                  </Badge>
+                  <RoleBadge role={participant.role} />
                 </div>
                 <p className="text-caption-regular tablet:text-body3-regular line-clamp-1 text-gray-200">
                   {participant.introduction}
@@ -81,9 +79,7 @@ export default function ParticipantsList({ sessionId }: { sessionId: number }) {
                     <span className="text-body3-semibold tablet:text-body2-semibold">
                       {participant.name}
                     </span>
-                    <Badge size="sm" variant="dday">
-                      {participant.role}
-                    </Badge>
+                    <RoleBadge role={participant.role} />
                   </div>
                   <p className="text-caption-regular tablet:text-body3-regular line-clamp-1 text-gray-200">
                     {participant.introduction}

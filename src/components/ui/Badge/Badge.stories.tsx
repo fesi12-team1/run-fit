@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { Level } from '@/types';
+import { type SessionLevel } from '@/types';
 import { DdayBadge, LevelBadge, PaceBadge, RoleBadge } from '.';
 
 const meta: Meta = {
@@ -33,7 +33,7 @@ export const Paces: Story = {
 
 export const Levels: Story = {
   render: () => {
-    const levels: Level[] = ['BEGINNER', 'INTERMEDIATE', 'ADVANCED'];
+    const levels: SessionLevel[] = ['BEGINNER', 'INTERMEDIATE', 'ADVANCED'];
     const sizes: Array<'sm' | 'md' | 'lg' | 'responsive'> = [
       'sm',
       'md',

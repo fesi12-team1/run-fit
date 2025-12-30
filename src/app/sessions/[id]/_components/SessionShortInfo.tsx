@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { crewQueries } from '@/api/queries/crewQueries';
 import { userQueries } from '@/api/queries/userQueries';
 import VerticalEllipsisIcon from '@/assets/icons/vertical-ellipsis.svg?react';
-import Badge, { LevelBadge, PaceBadge } from '@/components/ui/Badge';
+import { DdayBadge, LevelBadge, PaceBadge } from '@/components/ui/Badge';
 import Dropdown from '@/components/ui/Dropdown';
 import ProgressBar from '@/components/ui/ProgressBar';
 import { formatDDay, formatKoYYMDMeridiemTime } from '@/lib/time';
@@ -47,9 +47,7 @@ export default function SessionShortInfo({
     <div className="laptop:bg-gray-750 laptop:rounded-b-[20px] laptop:px-6 laptop:pt-7 laptop:pb-6 laptop:mt-0 tablet:px-12 tablet:pt-10 laptop:gap-8 relative z-10 -mt-5 flex flex-col gap-6 rounded-t-[20px] bg-gray-800 px-7 pt-6">
       <div>
         <div className="mb-1 flex w-full items-center justify-between gap-2">
-          <Badge variant="dday" size="sm">
-            마감 {formatDDay(registerBy)}
-          </Badge>
+          <DdayBadge dday={formatDDay(registerBy)} />
           {isManager && (
             <Dropdown>
               <Dropdown.TriggerNoArrow>
@@ -73,8 +71,8 @@ export default function SessionShortInfo({
           </div>
         </div>
         <div className="flex items-center gap-1">
-          <PaceBadge size="sm" pace={pace} />
-          <LevelBadge size="sm" level={level} />
+          <PaceBadge paceSeconds={pace} />
+          <LevelBadge level={level} />
         </div>
       </div>
       <ProgressBar value={currentParticipantCount} max={maxParticipantCount} />
