@@ -20,7 +20,13 @@ export async function getAccessToken() {
 
 export async function setAccessToken(value: string) {
   const cookieStore = await cookies();
-  cookieStore.set('accessToken', value);
+  cookieStore.set('accessToken', value, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+    path: '/',
+    maxAge: 60 * 10, // 10 minutes
+  });
 }
 
 export async function getRefreshToken() {
