@@ -44,6 +44,12 @@ importers:
       '@radix-ui/react-visually-hidden':
         specifier: ^1.2.4
         version: 1.2.4(@types/react-dom@19.2.3(@types/react@19.2.6))(@types/react@19.2.6)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      '@suspensive/react':
+        specifier: ^3.17.2
+        version: 3.17.2(react@19.2.3)
+      '@suspensive/react-query':
+        specifier: ^3.17.2
+        version: 3.17.2(@tanstack/react-query@5.90.11(react@19.2.3))(react@19.2.3)
       '@tanstack/react-query':
         specifier: ^5.90.11
         version: 5.90.11(react@19.2.3)
@@ -71,6 +77,9 @@ importers:
       react-dom:
         specifier: 19.2.3
         version: 19.2.3(react@19.2.3)
+      react-error-boundary:
+        specifier: ^6.0.1
+        version: 6.0.1(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       react-hook-form:
         specifier: ^7.68.0
         version: 7.68.0(react@19.2.3)
@@ -874,6 +883,15 @@ packages:
 
   '@bcoe/v8-coverage@0.2.3':
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
+
+  '@colors/colors@1.5.0':
+    resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==}
+    engines: {node: '>=0.1.90'}
+
+  '@commander-js/extra-typings@13.1.0':
+    resolution: {integrity: sha512-q5P52BYb1hwVWE6dtID7VvuJWrlfbCv4klj7BjUUOqMz4jbSZD4C9fJ9lRjL2jnBGTg+gDDlaXN51rkWcLk4fg==}
+    peerDependencies:
+      commander: ~13.1.0
 
   '@commitlint/cli@20.1.0':
     resolution: {integrity: sha512-pW5ujjrOovhq5RcYv5xCpb4GkZxkO2+GtOdBW2/qrr0Ll9tl3PX0aBBobGQl3mdZUbOBgwAexEQLeH6uxL0VYg==}
@@ -2880,6 +2898,30 @@ packages:
     peerDependencies:
       storybook: ^0.0.0-0 || ^10.0.0 || ^10.0.0-0 || ^10.1.0-0 || ^10.2.0-0 || ^10.3.0-0
 
+  '@suspensive/react-query-4@3.17.2':
+    resolution: {integrity: sha512-db0O8Iuwnr+AwLVrPW79E9dd/lFn934YUidX9QpCQCV/a43RQ6pHbITzG0lg7teWfshXwHcN0mWtK2LGnn/JUg==}
+    peerDependencies:
+      '@tanstack/react-query': '*'
+      react: ^18 || ^19
+
+  '@suspensive/react-query-5@3.17.2':
+    resolution: {integrity: sha512-te336mO0gSqXTPhxLmA1CYsQ2BpSuEI7qUNLUtfgvCSogbRYIDgdqmsEGe9WOp0wB9BtUrj+bGQqYNRMkGUglQ==}
+    peerDependencies:
+      '@tanstack/react-query': '*'
+      react: ^18 || ^19
+
+  '@suspensive/react-query@3.17.2':
+    resolution: {integrity: sha512-Tk08J/FO0KU4mSWzkX5YcPOJXLfm6KsIqLOOkaZXzSB54vGm5/hg02NuEutdNE44TO6V1d4CTZ3Db+qyIPFf8g==}
+    hasBin: true
+    peerDependencies:
+      '@tanstack/react-query': ^4.42.0 || ^5.82.0
+      react: ^18 || ^19
+
+  '@suspensive/react@3.17.2':
+    resolution: {integrity: sha512-XlBUbYTGF4uxX6sWOG29sJkqNQqJImvr1A3OCX5F7ib5F9RP3JHZ0+Sy+leCL9AG0A78CFc/LdM065v4zQLJcw==}
+    peerDependencies:
+      react: ^18 || ^19
+
   '@svgr/babel-plugin-add-jsx-attribute@8.0.0':
     resolution: {integrity: sha512-b9MIk7yhdS1pMCZM8VeNfUlSKVRhsHZNMl5O9SfaX0l0t5wjdgu4IDzGB8bpnGBBOjGST3rRFVsaaEtI4W6f7g==}
     engines: {node: '>=14'}
@@ -3942,6 +3984,10 @@ packages:
     resolution: {integrity: sha512-aCj4O5wKyszjMmDT4tZj93kxyydN/K5zPWSCe6/0AV/AA1pqe5ZBIw0a2ZfPQV7lL5/yb5HsUreJ6UFAF1tEQw==}
     engines: {node: '>=18'}
 
+  cli-table3@0.6.5:
+    resolution: {integrity: sha512-+W/5efTR7y5HRD7gACw9yQjqMVvEMLBHmboM/kPWam+H+Hmyrgjh6YncVKK122YZkXrLudzTuAukUw9FnMf7IQ==}
+    engines: {node: 10.* || >= 12.*}
+
   cli-truncate@5.1.1:
     resolution: {integrity: sha512-SroPvNHxUnk+vIW/dOSfNqdy1sPEFkrTk6TUtqLCnBlo3N7TNYYkzzN7uSD6+jVjrdO4+p8nH7JzH6cIvUem6A==}
     engines: {node: '>=20'}
@@ -3996,6 +4042,10 @@ packages:
 
   commander@12.1.0:
     resolution: {integrity: sha512-Vw8qHK3bZM9y/P10u3Vib8o/DdkvA2OtPtZvD871QKjy74Wj1WSKFILMPRPSdUSx5RFK1arlJzEtA4PkFgnbuA==}
+    engines: {node: '>=18'}
+
+  commander@13.1.0:
+    resolution: {integrity: sha512-/rFeCpNJQbhSZjGVwO9RFV3xPqbnERS8MmIQzCtD/zl6gpJuV/bMLuN92oG3F7d8oDEHHRrujSXNUr8fpjntKw==}
     engines: {node: '>=18'}
 
   commander@14.0.2:
@@ -6405,6 +6455,12 @@ packages:
     peerDependencies:
       react: ^19.2.3
 
+  react-error-boundary@6.0.1:
+    resolution: {integrity: sha512-zArgQpjJUN1ZLMEKWtifxQweW3yfvwL5j2nh3Pesze1qG6r5oCDMy/TA97bUF01wy4xCeeL4/pd8GHmvEsP3Bg==}
+    peerDependencies:
+      react: ^18.0.0 || ^19.0.0
+      react-dom: ^18.0.0 || ^19.0.0
+
   react-hook-form@7.68.0:
     resolution: {integrity: sha512-oNN3fjrZ/Xo40SWlHf1yCjlMK417JxoSJVUXQjGdvdRCU07NTFei1i1f8ApUAts+IVh14e4EdakeLEA+BEAs/Q==}
     engines: {node: '>=18.0.0'}
@@ -8337,6 +8393,13 @@ snapshots:
 
   '@bcoe/v8-coverage@0.2.3': {}
 
+  '@colors/colors@1.5.0':
+    optional: true
+
+  '@commander-js/extra-typings@13.1.0(commander@13.1.0)':
+    dependencies:
+      commander: 13.1.0
+
   '@commitlint/cli@20.1.0(@types/node@20.19.25)(typescript@5.9.3)':
     dependencies:
       '@commitlint/format': 20.0.0
@@ -10114,6 +10177,30 @@ snapshots:
       - supports-color
       - ts-node
 
+  '@suspensive/react-query-4@3.17.2(@tanstack/react-query@5.90.11(react@19.2.3))(react@19.2.3)':
+    dependencies:
+      '@tanstack/react-query': 5.90.11(react@19.2.3)
+      react: 19.2.3
+
+  '@suspensive/react-query-5@3.17.2(@tanstack/react-query@5.90.11(react@19.2.3))(react@19.2.3)':
+    dependencies:
+      '@tanstack/react-query': 5.90.11(react@19.2.3)
+      react: 19.2.3
+
+  '@suspensive/react-query@3.17.2(@tanstack/react-query@5.90.11(react@19.2.3))(react@19.2.3)':
+    dependencies:
+      '@commander-js/extra-typings': 13.1.0(commander@13.1.0)
+      '@suspensive/react-query-4': 3.17.2(@tanstack/react-query@5.90.11(react@19.2.3))(react@19.2.3)
+      '@suspensive/react-query-5': 3.17.2(@tanstack/react-query@5.90.11(react@19.2.3))(react@19.2.3)
+      '@tanstack/react-query': 5.90.11(react@19.2.3)
+      cli-table3: 0.6.5
+      commander: 13.1.0
+      react: 19.2.3
+
+  '@suspensive/react@3.17.2(react@19.2.3)':
+    dependencies:
+      react: 19.2.3
+
   '@svgr/babel-plugin-add-jsx-attribute@8.0.0(@babel/core@7.28.5)':
     dependencies:
       '@babel/core': 7.28.5
@@ -11388,6 +11475,12 @@ snapshots:
     dependencies:
       restore-cursor: 5.1.0
 
+  cli-table3@0.6.5:
+    dependencies:
+      string-width: 4.2.3
+    optionalDependencies:
+      '@colors/colors': 1.5.0
+
   cli-truncate@5.1.1:
     dependencies:
       slice-ansi: 7.1.2
@@ -11436,6 +11529,8 @@ snapshots:
       delayed-stream: 1.0.0
 
   commander@12.1.0: {}
+
+  commander@13.1.0: {}
 
   commander@14.0.2: {}
 
@@ -14134,6 +14229,11 @@ snapshots:
     dependencies:
       react: 19.2.3
       scheduler: 0.27.0
+
+  react-error-boundary@6.0.1(react-dom@19.2.3(react@19.2.3))(react@19.2.3):
+    dependencies:
+      react: 19.2.3
+      react-dom: 19.2.3(react@19.2.3)
 
   react-hook-form@7.68.0(react@19.2.3):
     dependencies:

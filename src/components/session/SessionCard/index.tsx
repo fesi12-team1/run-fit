@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import Link from 'next/link';
 import { crewQueries } from '@/api/queries/crewQueries';
-import Liked from '@/assets/icons/liked.svg?react';
+import HeartFill from '@/assets/icons/heart-fill.svg?react';
 import Location from '@/assets/icons/location.svg?react';
 import { formatTimeToKorean } from '@/lib/time';
 import type { Session } from '@/types';
@@ -77,7 +77,7 @@ export default function SessionCard({
           }}
           className="absolute top-3 right-3"
         >
-          <Liked className="stroke-offset-[-0.50px] size-6 fill-neutral-900/50 stroke-sky-100 stroke-1" />
+          <HeartFill className="stroke-offset-[-0.50px] size-6 fill-neutral-900/50 stroke-sky-100 stroke-1" />
         </button>
         <div className="absolute bottom-3 left-3 flex items-center gap-0.5 md:gap-1">
           <Location className="size-4 fill-gray-200" />

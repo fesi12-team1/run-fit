@@ -12,9 +12,9 @@ export default function SessionList({
   loadMoreRef?: React.RefObject<HTMLDivElement | null>;
 }) {
   return (
-    <div className="mt-6 flex w-full flex-1">
+    <div className="tablet:mt-6 mt-2 flex w-full flex-1">
       {sessions?.length ? (
-        <div className="desktop:grid-cols-3 grid w-full grid-cols-2 gap-6">
+        <div className="laptop:grid-cols-3 grid w-full grid-cols-2 gap-6">
           {sessions.map((session) => (
             <SessionCard key={session.id} session={session} />
           ))}
@@ -31,7 +31,7 @@ function EmptyState() {
   return (
     <div className="flex w-full flex-1 flex-col items-center justify-center gap-10">
       <Image
-        src="/assets/empty-session.png"
+        src="/assets/session-default.png"
         alt="No Sessions"
         width={300}
         height={150}

@@ -100,3 +100,48 @@ export function getOptionLabel<
 >(options: T, value?: T[number]['value']) {
   return options.find((option) => option.value === value)?.label;
 }
+
+export async function copyStringToClipboard(text: string) {
+  // 최신 브라우저
+  if (navigator.clipboard?.writeText) {
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+
+  // fallback (구형/일부 환경)
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.style.position = 'fixed';
+  textarea.style.opacity = '0';
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.select();
+  document.execCommand('copy');
+  document.body.removeChild(textarea);
+}
+
+/**
+ * 객체를 쿼리 파라미터 형식으로 변환합니다.
+ * @param obj - 쿼리 파라미터로 변환할 객체
+ * @returns URLSearchParams 객체
+ */
+export function buildQueryParams<T extends object>(obj?: T) {
+  const params = new URLSearchParams();
+
+  if (!obj) return params;
+
+  Object.entries(obj).forEach(([key, value]) => {
+    if (value === undefined || value === null) return;
+
+    // 배열 파라미터
+    if (Array.isArray(value)) {
+      value.forEach((v) => params.append(key, v));
+      return;
+    }
+
+    // 숫자/문자
+    params.set(key, String(value));
+  });
+
+  return params;
+}

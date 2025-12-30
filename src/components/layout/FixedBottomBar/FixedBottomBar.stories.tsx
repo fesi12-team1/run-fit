@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import Share from '@/assets/icons/share.svg?react';
 import Button from '@/components/ui/Button';
-import FixedBottomBar, { useFixedBottomBar } from '.';
+import FixedBottomBar from '.';
 
 /**
  *
@@ -28,18 +28,13 @@ type Story = StoryObj<typeof FixedBottomBar>;
  */
 export const Default: Story = {
   render: () => {
-    const { ref, height } = useFixedBottomBar();
-
     return (
       <>
-        <div
-          className="flex flex-col items-center justify-center p-6"
-          style={{ paddingBottom: height }}
-        >
+        <div className="flex flex-col items-center justify-center p-6">
           <h1 className="text-3xl font-bold">페이지 콘텐츠</h1>
           <p>스크롤하여 고정 하단 바를 확인하세요.</p>
         </div>
-        <FixedBottomBar ref={ref}>
+        <FixedBottomBar>
           <div className="flex gap-7">
             <button type="button" aria-label="크루 링크 공유하기">
               <Share className="size-6 stroke-[#9CA3AF]" />
@@ -62,18 +57,13 @@ export const Default: Story = {
  */
 export const SessionJoin: Story = {
   render: () => {
-    const { ref, height } = useFixedBottomBar();
-
     return (
       <>
-        <div
-          className="flex flex-col items-center justify-center p-6"
-          style={{ paddingBottom: height }}
-        >
+        <div className="flex flex-col items-center justify-center p-6">
           <h1 className="text-3xl font-bold">세션 상세 페이지</h1>
           <p>세션에 참여하려면 아래 버튼을 클릭하세요.</p>
         </div>
-        <FixedBottomBar ref={ref}>
+        <FixedBottomBar>
           <Button
             type="button"
             className="bg-brand-500 text-body2-semibold w-full px-6 py-3"

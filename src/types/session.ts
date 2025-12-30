@@ -1,3 +1,4 @@
+import { DateRange } from 'react-day-picker';
 import { PaginationQueryParams } from './api';
 import { CrewMember } from './crew';
 import { Sido, Sigungu } from './region';
@@ -18,7 +19,7 @@ export interface Session<City extends Sido = Sido> {
   };
   sessionAt: string;
   registerBy: string;
-  level: Level;
+  level: SessionLevel;
   status: SessionStatus;
   pace: number;
   maxParticipantCount: number;
@@ -33,17 +34,26 @@ export type SessionListFilters = PaginationQueryParams & {
   city?: string[];
   district?: string[];
   crewId?: number;
-  level?: Level;
+  level?: SessionLevel | 'ALL';
   dateFrom?: string;
   dateTo?: string;
   timeFrom?: string;
   timeTo?: string;
-  sort: SessionSort;
+  sort: SessionSortKey;
 };
 
-export type Level = 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED';
+export type SessionSortKey = 'createdAtDesc' | 'sessionAtAsc' | 'registerByAsc';
+export type SessionLevel = 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED';
 export type SessionStatus = 'OPEN' | 'CLOSED';
-export type SessionSort = 'createdAtDesc' | 'sessionAtAsc' | 'registerByAsc';
+export type SessionTabKey = 'region' | 'date' | 'time' | 'level';
+
+export type SessionFilterState = {
+  sort: SessionSortKey;
+  region?: Record<string, string[]>;
+  date?: DateRange;
+  time?: [number, number];
+  level: SessionLevel | undefined;
+};
 
 export type LikeSessions = Pick<
   Session,

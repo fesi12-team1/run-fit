@@ -5,11 +5,11 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import LevelIcon from '@/assets/icons/level.svg?react';
 import Checkbox from '@/components/ui/Checkbox';
 import { cn } from '@/lib/utils';
-import { Level } from '@/types';
+import { SessionLevel } from '@/types';
 
 interface SessionLevelCardProps
   extends VariantProps<typeof sessionLevelCardVariants> {
-  level: Level;
+  level: SessionLevel;
   checked: boolean;
   disabled?: boolean;
   onClick: () => void;

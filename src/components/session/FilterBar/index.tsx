@@ -1,13 +1,14 @@
 'use client';
 
 import FilterButton from '@/components/ui/FilterButton';
-import { SessionFilterState } from '@/constants/session-filter';
+import OptionDropdown from '@/components/ui/OptionDropdown';
+import { SESSION_SORT_OPTIONS } from '@/constants/session';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { SessionFilterState } from '@/types';
 import DateFilter from './DateFilter';
 import FilterModal from './FilterModal';
 import LevelFilter from './LevelFilter';
 import RegionFilter from './RegionFilter';
-import SortOptions from './SortOptions';
 import TimeFilter from './TimeFilter';
 
 interface FilterBarProps {
@@ -21,7 +22,7 @@ export default function FilterBar({
   applyFilters,
   activeFilterCount,
 }: FilterBarProps) {
-  const isDesktop = useMediaQuery({ min: 'laptop' });
+  const isTabletUp = useMediaQuery({ min: 'laptop' });
   const isMobile = useMediaQuery({ max: 'tablet' });
 
   return (
@@ -48,7 +49,7 @@ export default function FilterBar({
               />
             </div>
           </div>
-          {isDesktop && (
+          {isTabletUp && (
             <div className="relative overflow-visible">
               <FilterModal>
                 <FilterButton count={activeFilterCount} />
@@ -62,24 +63,26 @@ export default function FilterBar({
           />
         </div>
         <div className="tablet:pt-5 flex items-center">
-          {!isDesktop && (
+          {!isTabletUp && (
             <FilterModal>
               <FilterButton count={activeFilterCount} />
             </FilterModal>
           )}
           {!isMobile && (
-            <SortOptions
+            <OptionDropdown
               value={filters.sort}
               onChange={(sort) => applyFilters({ ...filters, sort })}
+              options={SESSION_SORT_OPTIONS}
             />
           )}
         </div>
       </div>
       {isMobile && (
-        <div className="mt-4 mb-2 flex w-full shrink-0 justify-end">
-          <SortOptions
+        <div className="mt-2 flex w-full shrink-0 justify-end">
+          <OptionDropdown
             value={filters.sort}
             onChange={(sort) => applyFilters({ ...filters, sort })}
+            options={SESSION_SORT_OPTIONS}
           />
         </div>
       )}

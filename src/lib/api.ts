@@ -10,7 +10,7 @@ export async function handleRequest(
   requiresAuth: boolean = true
 ) {
   const searchParams = request.nextUrl.searchParams.toString();
-  let accessToken: string | undefined;
+  let accessToken = await getAccessToken();
 
   if (!process.env.NEXT_PUBLIC_API_URL) {
     return new Response(
@@ -19,38 +19,38 @@ export async function handleRequest(
     );
   }
 
-  if (requiresAuth) {
-    accessToken = await getAccessToken();
-    if (!accessToken) {
-      const refreshToken = await getRefreshToken();
-      if (!refreshToken) {
-        return NextResponse.redirect(new URL('/signin', request.url));
-      }
+  if (!accessToken && requiresAuth) {
+    const refreshToken = await getRefreshToken();
+    if (!refreshToken) {
+      return NextResponse.redirect(new URL('/signin', request.url));
+    }
 
-      try {
-        const refreshResponse = await fetch('/api/auth/refresh', {
+    try {
+      const refreshResponse = await fetch(
+        `${request.nextUrl.origin}/api/auth/refresh`,
+        {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json;charset=UTF-8',
             'Cookie': `refreshToken=${refreshToken}`,
           },
           cache: 'no-cache',
-        });
-
-        if (!refreshResponse.ok) {
-          return NextResponse.redirect(new URL('/signin', request.url));
         }
+      );
 
-        const { data } = await refreshResponse.json();
-        if (!data?.token) {
-          return NextResponse.redirect(new URL('/signin', request.url));
-        }
-
-        accessToken = data.token;
-      } catch (error) {
-        console.error('Token refresh failed:', error);
+      if (!refreshResponse.ok) {
         return NextResponse.redirect(new URL('/signin', request.url));
       }
+
+      const { data } = await refreshResponse.json();
+      if (!data?.token) {
+        return NextResponse.redirect(new URL('/signin', request.url));
+      }
+
+      accessToken = data.token;
+    } catch (error) {
+      console.error('Token refresh failed:', error);
+      return NextResponse.redirect(new URL('/signin', request.url));
     }
   }
 
@@ -68,11 +68,10 @@ export async function handleRequest(
       headers: {
         ...Object.fromEntries(request.headers),
         accept: 'application/json;charset=UTF-8',
-        ...(requiresAuth &&
-          accessToken && { Authorization: `Bearer ${accessToken}` }),
+        ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
       },
       body: hasBody ? request.body : undefined,
-      cache: requiresAuth ? 'no-cache' : 'default',
+      cache: requiresAuth || accessToken ? 'no-cache' : 'default',
       ...(hasBody && { duplex: 'half' }),
     });
 
