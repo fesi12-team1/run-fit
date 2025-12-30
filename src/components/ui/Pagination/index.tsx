@@ -26,7 +26,7 @@ function PaginationContent({
   return (
     <ul
       data-slot="pagination-content"
-      className={cn('flex flex-row items-center gap-1', className)}
+      className={cn('flex flex-row items-center gap-2', className)}
       {...props}
     />
   );
@@ -50,7 +50,13 @@ function PaginationLink({
       aria-current={isActive ? 'page' : undefined}
       data-slot="pagination-link"
       data-active={isActive}
-      className={cn(isActive ? 'text-gray-100' : 'text-gray-300', className)}
+      className={cn(
+        'flex items-center justify-center',
+        'text-body3 size-[34px] rounded-md',
+        'tablet:size-10 tablet:rounded-lg tablet:text-body2',
+        isActive ? 'font-semibold text-gray-100' : 'font-normal text-gray-300',
+        className
+      )}
       {...props}
     />
   );
@@ -63,7 +69,13 @@ function PaginationPrevious({
   return (
     <PaginationLink
       aria-label="Go to previous page"
-      className={cn('gap-1 px-2.5 sm:pl-2.5', className)}
+      data-slot="pagination-previous"
+      className={cn(
+        'flex items-center justify-center p-2.5',
+        'size-[34px] rounded-md',
+        'tablet:size-10 tablet:rounded-lg',
+        className
+      )}
       {...props}
     >
       <ArrowDown className="size-6 rotate-90" />
@@ -78,7 +90,13 @@ function PaginationNext({
   return (
     <PaginationLink
       aria-label="Go to next page"
-      className={cn('gap-1 px-2.5 sm:pr-2.5', className)}
+      data-slot="pagination-next"
+      className={cn(
+        'flex items-center justify-center p-2.5',
+        'size-[34px] rounded-md',
+        'tablet:size-10 tablet:rounded-lg',
+        className
+      )}
       {...props}
     >
       <ArrowDown className="size-6 -rotate-90" />
@@ -94,7 +112,12 @@ function PaginationEllipsis({
     <span
       aria-hidden
       data-slot="pagination-ellipsis"
-      className={cn('flex size-9 items-center justify-center', className)}
+      className={cn(
+        'flex items-center justify-center text-gray-300',
+        'size-[34px]',
+        'tablet:size-10',
+        className
+      )}
       {...props}
     >
       <MoreHorizontalIcon className="size-4" />

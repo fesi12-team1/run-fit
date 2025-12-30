@@ -332,7 +332,7 @@ export function createCrewHandlers(p: PathFn, authMode: AuthMode) {
     ),
 
     // 크루 탈퇴
-    http.post(
+    http.delete(
       p('/api/crews/:crewId/leave'),
       requireAuth(authMode, () => {
         const data = {
