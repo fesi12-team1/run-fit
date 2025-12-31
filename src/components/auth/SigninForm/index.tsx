@@ -1,6 +1,7 @@
 'use client';
 
 import { Eye, EyeOff } from 'lucide-react';
+import type { Route } from 'next';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -19,7 +20,7 @@ export default function SigninForm() {
   const { form, submit, isPending } = useSigninForm({
     onSuccess: () => {
       toast.success('로그인 성공!');
-      router.replace(redirect);
+      router.replace(redirect as Route);
     },
     onError: (message) => {
       toast.error(`로그인 실패: ${message}`);
