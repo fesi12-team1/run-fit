@@ -48,24 +48,24 @@ export default function PaceSlider({
           {formatTimeText(splitSecondsToMinutesAndSeconds(min))}
         </div>
         <SliderPrimitive.Root
-          data-slot="slider"
           aria-label="러닝 페이스 선택"
-          value={radixValue}
-          min={min}
-          max={max}
-          onValueChange={handleRadixValueChange}
           className={cn(
             'relative flex w-full touch-none items-center select-none data-disabled:opacity-50'
           )}
+          data-slot="slider"
+          max={max}
+          min={min}
           step={step}
+          value={radixValue}
+          onValueChange={handleRadixValueChange}
           {...props}
         >
           <SliderPrimitive.Track
-            data-slot="slider-track"
             className={cn(
               'relative grow overflow-hidden rounded-full bg-gray-800 data-[orientation=horizontal]:h-2 data-[orientation=horizontal]:w-full',
               className
             )}
+            data-slot="slider-track"
           >
             {Array.from({ length: CIRCLE_COUNT }, (_, index) => {
               return (
@@ -80,8 +80,8 @@ export default function PaceSlider({
             })}
           </SliderPrimitive.Track>
           <SliderPrimitive.Thumb
-            data-slot="slider-thumb"
             className="border-brand-400 ring-brand-400/50 block size-6 shrink-0 rounded-full border-2 bg-white shadow-sm transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50"
+            data-slot="slider-thumb"
           />
         </SliderPrimitive.Root>
         <div className="text-body3-regular shrink-0 text-gray-300">

@@ -47,7 +47,7 @@ export const FilterDropdown: Story = {
     const items = ['전체', '초급', '중급', '고급'];
 
     return (
-      <Dropdown size={args.size} hasSelected={selectedItem !== '난이도'}>
+      <Dropdown hasSelected={selectedItem !== '난이도'} size={args.size}>
         <Dropdown.Trigger>{selectedItem}</Dropdown.Trigger>
 
         <Dropdown.Content sideOffset={8}>

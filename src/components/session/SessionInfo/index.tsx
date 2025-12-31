@@ -18,10 +18,10 @@ export default function SessionInfo({ data: session }: SessionInfoProps) {
     <div className="flex w-full gap-2 rounded-xl bg-gray-700 p-2">
       <div className="relative aspect-video w-16 rounded-lg">
         <Image
-          src={session.image || '/assets/session-default.png'}
           alt="Crew"
-          fill
           className="object-cover"
+          fill
+          src={session.image || '/assets/session-default.png'}
         />
       </div>
       <div className="flex flex-col justify-end">

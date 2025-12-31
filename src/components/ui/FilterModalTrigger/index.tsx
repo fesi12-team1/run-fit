@@ -24,7 +24,6 @@ export default function FilterModalTrigger({
 
   return (
     <button
-      type="button"
       className={cn(
         isLarge
           ? 'text-body3-medium h-10 gap-2'
@@ -35,6 +34,7 @@ export default function FilterModalTrigger({
         hasSelected && 'border-brand-500 bg-brand-950 text-brand-200',
         className
       )}
+      type="button"
       {...props}
     >
       {children}

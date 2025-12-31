@@ -13,7 +13,7 @@ git fetch origin main || {
 }
 
 echo "🧪 변경된 파일 기준 테스트 실행 중..."
-pnpm jest --changedSince=origin/main || {
+pnpm test --changedSince=origin/main || {
     echo "⚠️  테스트에 실패했습니다. push가 중단됩니다."
     exit 1
 }

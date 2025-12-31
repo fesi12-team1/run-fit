@@ -22,9 +22,9 @@ export default function ReviewImageUploader({
     <div>
       <input
         ref={inputRef}
-        type="file"
         accept={acceptAttr}
         className="hidden"
+        type="file"
         onChange={(e) => {
           addFiles(e.target.files, 'replace');
           const f = e.target.files?.[0] ?? null;
@@ -37,9 +37,9 @@ export default function ReviewImageUploader({
           {has && (
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={items[0].previewUrl}
               alt="이미지 미리보기"
               className="h-full w-full object-cover"
+              src={items[0].previewUrl}
             />
           )}
         </div>
@@ -47,11 +47,11 @@ export default function ReviewImageUploader({
         <div className="transparent absolute inset-0 flex flex-col items-center justify-center gap-3">
           {has || (
             <button
-              type="button"
-              onClick={open}
               className={
                 'text-body3-semibold flex h-full w-full flex-col items-center justify-center gap-1 text-gray-300'
               }
+              type="button"
+              onClick={open}
             >
               <Camera className="size-6" />
               사진 추가
@@ -60,11 +60,11 @@ export default function ReviewImageUploader({
         </div>
         {has && (
           <button
-            type="button"
-            onClick={() => remove(items[0].id)}
             className={
               'absolute -top-2 -right-2 flex size-6 items-center justify-center rounded-full bg-gray-50 text-gray-700'
             }
+            type="button"
+            onClick={() => remove(items[0].id)}
           >
             <XIcon className="size-4" />
           </button>

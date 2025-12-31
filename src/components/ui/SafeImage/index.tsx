@@ -33,8 +33,8 @@ export default function SafeImage({
   return (
     <Image
       {...rest}
-      src={currentSrc}
       alt={alt}
+      src={currentSrc}
       onError={() => {
         // 무한루프 방지
         if (currentSrc !== fallbackSrc) setCurrentSrc(fallbackSrc);

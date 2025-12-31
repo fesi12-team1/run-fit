@@ -73,8 +73,8 @@ export default function RegionFilter({ value, onChange }: RegionFilterProps) {
             {SIDO_LIST.map((sido) => (
               <Chip
                 key={sido}
-                tone="secondary"
                 state={tempSelected.includes(sido) ? 'active' : 'default'}
+                tone="secondary"
                 onClick={() => handleToggle(sido, !tempSelected.includes(sido))}
               >
                 {sido}
@@ -116,8 +116,8 @@ export default function RegionFilter({ value, onChange }: RegionFilterProps) {
           {SIDO_LIST.map((sido) => (
             <Chip
               key={sido}
-              tone="secondary"
               state={tempSelected.includes(sido) ? 'active' : 'default'}
+              tone="secondary"
               onClick={() => handleToggle(sido, !tempSelected.includes(sido))}
             >
               {sido}

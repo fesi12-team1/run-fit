@@ -31,15 +31,15 @@ export default function MineCrewList() {
               {data?.content.map((crew) => (
                 <Link
                   key={crew.id}
-                  href={`/crews/${crew.id}`}
                   className="flex items-center gap-3"
+                  href={`/crews/${crew.id}`}
                 >
                   <div className="relative h-11 w-[66px] shrink-0 overflow-hidden rounded-xl">
                     <Image
-                      src={crew.image || '/assets/crew-default.png'}
                       alt={crew.name}
-                      fill
                       className="object-cover"
+                      fill
+                      src={crew.image || '/assets/crew-default.png'}
                     />
                   </div>
                   <div className="tablet:gap-0 flex min-w-0 flex-col gap-0.5">
@@ -52,8 +52,8 @@ export default function MineCrewList() {
               ))}
               {data?.hasNext && (
                 <Button
-                  variant="neutral"
                   size="sm"
+                  variant="neutral"
                   onClick={() => setOpen(true)}
                 >
                   더보기
@@ -81,8 +81,8 @@ export default function MineCrewList() {
             </Modal.Title>
           </Modal.Header>
           <Modal.CloseButton
-            onClick={() => setOpen(false)}
             className="tablet:block top-[26px] right-6 hidden"
+            onClick={() => setOpen(false)}
           />
           <hr className="tablet:block hidden w-full border-gray-700" />
           {isLoading && (
@@ -97,16 +97,16 @@ export default function MineCrewList() {
                 {allCrews.content.map((crew) => (
                   <Link
                     key={crew.id}
-                    href={`/crews/${crew.id}`}
                     className="flex items-center gap-3"
+                    href={`/crews/${crew.id}`}
                     onClick={() => setOpen(false)}
                   >
                     <div className="relative h-14 w-21 shrink-0 overflow-hidden rounded-xl">
                       <Image
-                        src={crew.image || '/assets/crew-default.png'}
                         alt={crew.name}
-                        fill
                         className="object-cover"
+                        fill
+                        src={crew.image || '/assets/crew-default.png'}
                       />
                     </div>
                     <div className="tablet:w-[231px] flex w-[60vw] min-w-0 flex-col gap-0.5">

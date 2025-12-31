@@ -66,8 +66,8 @@ export default function Chip({
 }: ChipProps) {
   return (
     <div
-      data-slot="chip"
       className={cn(chipVariants({ tone, state }), className)}
+      data-slot="chip"
       {...rest}
     >
       {children}

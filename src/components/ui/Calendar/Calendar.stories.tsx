@@ -105,8 +105,8 @@ export const HideOutsideDays: Story = {
         <Calendar.Single
           {...args}
           selected={date}
-          onSelect={setDate}
           showOutsideDays={false}
+          onSelect={setDate}
         />
         <span>{date?.toLocaleDateString()}</span>
       </div>

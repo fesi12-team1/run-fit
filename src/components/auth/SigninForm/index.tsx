@@ -29,7 +29,7 @@ export default function SigninForm() {
   const [show, setShow] = useState(false);
 
   return (
-    <form onSubmit={submit} className="flex flex-col gap-4">
+    <form className="flex flex-col gap-4" onSubmit={submit}>
       <Input
         label="이메일"
         {...register('email')}
@@ -39,14 +39,14 @@ export default function SigninForm() {
         label="비밀번호"
         type={show ? 'text' : 'password'}
         {...register('password')}
-        errorMessage={errors.password?.message}
         RightElement={
           <button type="button" onClick={() => setShow(!show)}>
             {show ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
           </button>
         }
+        errorMessage={errors.password?.message}
       />
-      <Button type="submit" disabled={isPending || !isValid}>
+      <Button disabled={isPending || !isValid} type="submit">
         로그인
       </Button>
     </form>

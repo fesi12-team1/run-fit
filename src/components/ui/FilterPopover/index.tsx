@@ -65,11 +65,11 @@ function PopoverContent({
     <PopoverPrimitive.Portal>
       <PopoverPrimitive.Content
         align={align}
-        sideOffset={sideOffset}
         className={cn(
           'z-50 overflow-hidden rounded-xl border border-gray-600 bg-gray-700 px-3 py-5',
           className
         )}
+        sideOffset={sideOffset}
         {...props}
       />
     </PopoverPrimitive.Portal>

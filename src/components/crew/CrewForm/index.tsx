@@ -52,18 +52,18 @@ export default function CrewCreateForm({
   const { errors, isSubmitting } = form.formState;
 
   return (
-    <form onSubmit={submit} className="flex w-full flex-col gap-4">
+    <form className="flex w-full flex-col gap-4" onSubmit={submit}>
       <CoverImageUploader
-        onFileChange={handleImageChange}
         className="bg-gray-750"
+        onFileChange={handleImageChange}
       />
 
       <Input
         label="크루 이름"
         {...form.register('name')}
-        placeholder="크루 이름을 작성해주세요"
-        errorMessage={errors.name?.message}
         className="bg-gray-750"
+        errorMessage={errors.name?.message}
+        placeholder="크루 이름을 작성해주세요"
       />
 
       <div className="flex flex-col gap-1">
@@ -71,13 +71,13 @@ export default function CrewCreateForm({
         <Textarea
           id="crew-description"
           {...form.register('description')}
-          placeholder="크루에 대한 상세 설명을 작성해주세요"
           className="bg-gray-750"
+          placeholder="크루에 대한 상세 설명을 작성해주세요"
         />
         {errors.description && (
           <p
-            id="crew-description-error"
             className="text-error-100 tablet:text-body3-semibold text-caption-semibold"
+            id="crew-description-error"
           >
             {errors.description.message}
           </p>
@@ -92,9 +92,9 @@ export default function CrewCreateForm({
           {SIDO_LIST.map((sido) => (
             <Chip
               key={sido}
-              tone={isPc ? 'secondary' : 'primary'}
-              state={selectedCity === sido ? 'active' : 'default'}
               aria-label={`${sido} ${selectedCity === sido ? '선택됨' : '선택'}`}
+              state={selectedCity === sido ? 'active' : 'default'}
+              tone={isPc ? 'secondary' : 'primary'}
               onClick={() => handleSelectCity(sido)}
             >
               {sido}

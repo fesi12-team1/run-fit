@@ -73,24 +73,24 @@ export default function SessionCard({
       <div className="tablet:aspect-video relative aspect-165/185 w-full cursor-pointer self-stretch overflow-hidden rounded-lg">
         <Link href={`/sessions/${sessionId}`}>
           <Image
-            src={image || '/assets/session-default.png'}
             alt="Session"
-            fill
             className={
               'rounded-xl object-cover transition-opacity duration-300 hover:opacity-80'
             }
+            fill
+            src={image || '/assets/session-default.png'}
           />
         </Link>
         <div className="pointer-events-none absolute top-3 left-3">
           <DdayBadge dday={ddayText} />
         </div>
         <button
+          className="absolute top-3 right-3"
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
             // TODO: 좋아요 기능 구현
           }}
-          className="absolute top-3 right-3"
         >
           <HeartFill className="stroke-offset-[-0.50px] size-6 fill-neutral-900/50 stroke-sky-100 stroke-1" />
         </button>

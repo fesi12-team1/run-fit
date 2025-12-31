@@ -19,9 +19,7 @@ export default function FilterButton({
 
   return (
     <button
-      onClick={onClick}
       aria-label={isActive ? `필터 ${count}개 적용됨` : '필터'}
-      type="button"
       className={cn(
         'relative flex items-center justify-center rounded-lg p-2 transition-colors',
         isActive
@@ -29,11 +27,13 @@ export default function FilterButton({
           : 'border border-transparent bg-transparent',
         className
       )}
+      type="button"
+      onClick={onClick}
     >
       <FilterIcon
-        width={20}
-        height={20}
         className={cn(isActive ? 'text-brand-600' : 'text-gray-200')}
+        height={20}
+        width={20}
       />
 
       {isActive && (

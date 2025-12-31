@@ -46,15 +46,15 @@ export default function CrewMemberList({
           return (
             <CrewMemberListItem
               key={member.userId}
-              member={member}
               editMode="view"
+              member={member}
             />
           );
         })}
       </div>
       <Modal>
         <Modal.Trigger aria-label="멤버 전체보기" asChild>
-          <Button variant="neutral" className="mt-8 w-full">
+          <Button className="mt-8 w-full" variant="neutral">
             멤버 전체보기
           </Button>
         </Modal.Trigger>
@@ -86,8 +86,8 @@ export default function CrewMemberList({
             {members.map((member) => (
               <CrewMemberListItem
                 key={member.userId}
-                member={member}
                 editMode={editMode}
+                member={member}
               />
             ))}
           </Modal.Description>
@@ -232,7 +232,7 @@ function CrewMemberListItem({
 
   return (
     <div className="mb-5 flex items-center gap-3">
-      <UserAvatar src={member.profileImage} className="size-10 shrink-0" />
+      <UserAvatar className="size-10 shrink-0" src={member.profileImage} />
       {editMode === 'view' && (
         <div className="flex flex-col gap-1">
           <div className="flex w-full items-center gap-1.5">

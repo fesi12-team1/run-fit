@@ -28,13 +28,13 @@ export default function Tag({
       {children}
       {selected && (
         <button
+          aria-label="태그 제거"
+          className="ml-1"
+          type="button"
           onClick={(e) => {
             e.stopPropagation();
             onClick?.();
           }}
-          type="button"
-          className="ml-1"
-          aria-label="태그 제거"
         >
           <XIcon
             className={cn(

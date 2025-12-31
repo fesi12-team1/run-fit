@@ -46,9 +46,7 @@ function CalendarRoot({
 
   return (
     <DayPicker
-      locale={ko}
       captionLayout="label"
-      disabled={disabled}
       className={cn(
         'group/calendar min-w-[calc(7_*_var(--cell-size)_+_34px)] grid-cols-7 bg-gray-700 px-[17.5px] [--cell-size:--spacing(9)] [[data-slot=card-content]_&]:bg-transparent [[data-slot=popover-content]_&]:bg-transparent',
         className
@@ -117,9 +115,9 @@ function CalendarRoot({
       components={{
         Root: ({ className, rootRef, ...rootProps }) => (
           <div
-            data-slot="calendar"
             ref={rootRef}
             className={cn(className)}
+            data-slot="calendar"
             {...rootProps}
           />
         ),
@@ -157,6 +155,8 @@ function CalendarRoot({
         ),
         ...components,
       }}
+      disabled={disabled}
+      locale={ko}
       {...props}
     />
   );
@@ -196,14 +196,6 @@ function CalendarDayButton({
     >
       <button
         ref={ref}
-        data-day={day.date.toLocaleDateString()}
-        data-selected-single={
-          modifiers.selected && !isStart && !isEnd && !isMiddle
-        }
-        data-range-start={isStart}
-        data-range-end={isEnd}
-        data-range-middle={isMiddle}
-        data-outside={modifiers.outside}
         className={cn(
           defaultClassNames.day,
           modifiers.disabled &&
@@ -221,6 +213,14 @@ function CalendarDayButton({
 
           className
         )}
+        data-day={day.date.toLocaleDateString()}
+        data-outside={modifiers.outside}
+        data-range-end={isEnd}
+        data-range-middle={isMiddle}
+        data-range-start={isStart}
+        data-selected-single={
+          modifiers.selected && !isStart && !isEnd && !isMiddle
+        }
         {...props}
       />
     </div>

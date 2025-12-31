@@ -54,7 +54,7 @@ export const Checked: Story = {
     return (
       <div className="flex flex-wrap gap-4">
         <Checkbox defaultChecked />
-        <Checkbox rounded defaultChecked />
+        <Checkbox defaultChecked rounded />
       </div>
     );
   },
@@ -70,7 +70,7 @@ export const Variants: Story = {
         <Checkbox />
         <Checkbox rounded />
         <Checkbox defaultChecked />
-        <Checkbox rounded defaultChecked />
+        <Checkbox defaultChecked rounded />
       </div>
     );
   },

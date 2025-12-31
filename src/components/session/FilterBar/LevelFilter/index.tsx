@@ -15,7 +15,7 @@ export default function LevelFilter({
   onChange,
 }: LevelFilterProps) {
   return (
-    <Dropdown size="lg" hasSelected={Boolean(optionValue)}>
+    <Dropdown hasSelected={Boolean(optionValue)} size="lg">
       <Dropdown.Trigger>
         {optionValue
           ? getOptionLabel(SESSION_LEVEL_OPTIONS, optionValue)

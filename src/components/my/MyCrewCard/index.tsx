@@ -20,14 +20,14 @@ export default function MyCrewCard({
   const { data: crewMembers } = useQuery(crewQueries.members(crew.id).list());
 
   return (
-    <Link href={`/crews/${crew.id}`} className="tablet:flex-row flex flex-col">
+    <Link className="tablet:flex-row flex flex-col" href={`/crews/${crew.id}`}>
       <div className="tablet:w-60 tablet:h-37 relative aspect-327/132 w-full shrink-0 overflow-hidden rounded-xl">
         <SafeImage
-          src={crew.image}
-          fallbackSrc="/assets/crew-default.png"
           alt="크루 이미지"
-          fill
           className="object-cover transition-opacity duration-300 hover:opacity-80"
+          fallbackSrc="/assets/crew-default.png"
+          fill
+          src={crew.image}
         />
         <div className="text-caption-regular tablet:hidden absolute right-3.5 bottom-[11px] flex items-center gap-1">
           <MemberIcon className="size-3 text-gray-100" />

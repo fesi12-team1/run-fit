@@ -19,11 +19,11 @@ export default function SessionPageInner() {
   const loadMoreRef = useInfiniteScroll(() => fetchNextPage(), hasNextPage);
 
   return (
-    <SessionFilterProvider initialFilters={filters} applyFilters={applyFilters}>
+    <SessionFilterProvider applyFilters={applyFilters} initialFilters={filters}>
       <FilterBar
-        filters={filters}
-        applyFilters={applyFilters}
         activeFilterCount={activeFilterCount}
+        applyFilters={applyFilters}
+        filters={filters}
       />
       <SessionList data={data?.sessions} loadMoreRef={loadMoreRef} />
     </SessionFilterProvider>

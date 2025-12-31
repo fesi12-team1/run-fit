@@ -29,8 +29,8 @@ export const Single: Story = {
     const [date, setDate] = useState<Date | undefined>(undefined);
     return (
       <DatePicker
-        mode="single"
         label="모임 날짜"
+        mode="single"
         placeholder="날짜를 선택하세요"
         value={date}
         onChange={setDate}
@@ -47,8 +47,8 @@ export const Range: Story = {
     const [range, setRange] = useState<DateRange | undefined>(undefined);
     return (
       <DatePicker
-        mode="range"
         label="기간"
+        mode="range"
         placeholder="기간을 선택하세요"
         value={range}
         onChange={setRange}

@@ -34,7 +34,7 @@ export default function Input({
   return (
     <div className="w-full">
       {label && (
-        <Label htmlFor={id} className="mb-1 block">
+        <Label className="mb-1 block" htmlFor={id}>
           {label}
         </Label>
       )}
@@ -55,15 +55,15 @@ export default function Input({
         <input
           {...props}
           ref={ref}
-          id={id}
+          aria-describedby={describedBy}
+          aria-invalid={hasError || undefined}
           className={cn(
             'flex-1 bg-transparent text-white outline-none placeholder:text-gray-300',
             'text-body3-medium placeholder:text-body3-medium',
             'tablet:text-body2-medium tablet:placeholder:text-body2-medium'
           )}
           disabled={disabled}
-          aria-invalid={hasError || undefined}
-          aria-describedby={describedBy}
+          id={id}
         />
 
         {RightElement && (
@@ -75,8 +75,8 @@ export default function Input({
 
       {errorMessage && (
         <p
-          id={errorId}
           className="text-error-100 tablet:text-body3-semibold text-caption-semibold mt-2"
+          id={errorId}
         >
           {errorMessage}
         </p>

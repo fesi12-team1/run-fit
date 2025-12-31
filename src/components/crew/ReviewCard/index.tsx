@@ -30,22 +30,22 @@ export default function ReviewCard({
     <li className="flex flex-col gap-2">
       {review.image && (
         <Image
-          src={review.image}
           alt="리뷰 이미지"
-          width={124}
-          height={80}
           className="rounded-xl"
+          height={80}
+          src={review.image}
+          width={124}
         />
       )}
-      <Rating value={review.ranks} disabled onChange={() => {}} />
+      <Rating disabled value={review.ranks} onChange={() => {}} />
       <div className="text-body3-regular">{review.description}</div>
       <div className="text-caption-regular flex items-center gap-2 text-gray-300">
         {showUser && (
           <>
             <UserAvatar
-              src={review.userImage}
               alt={review.userName}
               className="size-6"
+              src={review.userImage}
             />
             <div>{review.userName}</div>
             <div>|</div>

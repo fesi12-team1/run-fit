@@ -1,13 +1,23 @@
 import '@testing-library/jest-dom';
-import './src/mocks/nextNavigation';
 import { jest } from '@jest/globals';
+import { clearAllNavigationMocks } from '@/mocks/nextNavigation';
 
 globalThis.jest = jest;
 
-if (process.env.NEXT_PUBLIC_USE_MSW === 'true') {
-  const { server } = await import('@/mocks/jest');
+// 모든 mock 초기화
+afterEach(() => {
+  clearAllNavigationMocks();
+});
 
-  beforeAll(() => server.listen());
+if (process.env.NEXT_PUBLIC_USE_MSW === 'true') {
+  let server: Awaited<typeof import('@/mocks/jest')>['server'];
+
+  beforeAll(async () => {
+    const { server: mockServer } = await import('@/mocks/jest');
+    server = mockServer;
+    server.listen();
+  });
+
   afterEach(() => server.resetHandlers());
   afterAll(() => server.close());
 }

@@ -39,37 +39,37 @@ export default function TimeSlider({
         )}
       </div>
       <SliderPrimitive.Root
-        data-slot="slider"
         aria-label="러닝 시간 선택"
-        value={value}
-        min={0}
-        max={1440}
-        onValueChange={onValueChange}
-        step={step}
         className={cn(
           'relative flex w-full touch-none items-center select-none data-disabled:opacity-50',
           className
         )}
+        data-slot="slider"
+        max={1440}
+        min={0}
+        step={step}
+        value={value}
+        onValueChange={onValueChange}
         {...props}
       >
         <SliderPrimitive.Track
-          data-slot="slider-track"
           className={cn(
             'relative grow overflow-hidden rounded-full bg-gray-800 data-[orientation=horizontal]:h-2 data-[orientation=horizontal]:w-full'
           )}
+          data-slot="slider-track"
         >
           <SliderPrimitive.Range
-            data-slot="slider-range"
             className={cn(
               'bg-brand-400 absolute data-[orientation=horizontal]:h-full'
             )}
+            data-slot="slider-range"
           />
         </SliderPrimitive.Track>
         {Array.from({ length: value.length }, (_, index) => (
           <SliderPrimitive.Thumb
-            data-slot="slider-thumb"
             key={index}
             className="border-brand-400 block size-6 shrink-0 rounded-full border-2 bg-white shadow-sm ring-[#6C6BE2]/50 transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50"
+            data-slot="slider-thumb"
           />
         ))}
       </SliderPrimitive.Root>

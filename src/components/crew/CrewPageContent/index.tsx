@@ -19,7 +19,7 @@ export default function CrewPageContent() {
 
   return (
     <>
-      <FilterBar filters={filters} applyFilters={applyFilters} />
+      <FilterBar applyFilters={applyFilters} filters={filters} />
       <CrewList data={data?.crews} loadMoreRef={loadMoreRef} />
     </>
   );

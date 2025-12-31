@@ -67,8 +67,8 @@ export default function DateFilter({ value, onChange }: DateFilterProps) {
             </button>
             <Button
               className="flex-1"
-              onClick={handleApply}
               disabled={!tempValue?.from}
+              onClick={handleApply}
             >
               적용하기
             </Button>
