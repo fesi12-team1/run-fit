@@ -55,7 +55,20 @@ export default function SessionCard({
   );
 
   return (
-    <li className="flex w-full flex-col">
+    <li className="relative flex w-full flex-col">
+      <div className="absolute top-3 right-3 z-3">
+        <button
+          type="button"
+          onClick={() => onLikeButtonClick?.(sessionId, liked)}
+        >
+          {liked ? (
+            <HeartFill className="text-brand-500 block size-7" />
+          ) : (
+            <HeartOutline className="block size-7 text-[#9CA3AF]" />
+          )}
+        </button>
+      </div>
+
       <Link href={`/sessions/${sessionId}`}>
         <div className="tablet:aspect-video relative aspect-165/185 w-full cursor-pointer self-stretch overflow-hidden rounded-lg">
           <Image
@@ -69,18 +82,7 @@ export default function SessionCard({
           <div className="pointer-events-none absolute top-3 left-3">
             <DdayBadge dday={ddayText} />
           </div>
-          <div className="absolute top-3 right-3">
-            <button
-              type="button"
-              onClick={() => onLikeButtonClick?.(sessionId, liked)}
-            >
-              {liked ? (
-                <HeartFill className="text-brand-500 block size-7" />
-              ) : (
-                <HeartOutline className="block size-7 text-[#9CA3AF]" />
-              )}
-            </button>
-          </div>
+
           <div className="absolute bottom-3 left-3 flex items-center gap-0.5 md:gap-1">
             <Location className="size-4 fill-gray-200" />
             <div className="text-caption-medium laptop:text-body3-medium text-gray-200">

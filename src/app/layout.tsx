@@ -4,6 +4,7 @@ import './globals.css';
 import Header from '@/components/layout/Header';
 import MockProvider from '@/mocks/browser/Provider';
 import { KakaoMapProvider } from '@/provider/KakaoMapProvider';
+import SigninModalProvider from '@/provider/SigninModalProvider';
 import SuspensiveDefaultPropsProvider from '@/provider/SuspensiveDefaultPropsProvider';
 import ToastProvider from '@/provider/ToastProvider';
 
@@ -26,6 +27,7 @@ export default function RootLayout({
             <QueryProvider>
               <KakaoMapProvider>
                 <ToastProvider />
+                <SigninModalProvider />
                 <Header />
                 {children}
               </KakaoMapProvider>

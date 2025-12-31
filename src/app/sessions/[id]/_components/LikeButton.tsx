@@ -1,13 +1,10 @@
 'use client';
 
-import Link from 'next/link';
-import { useState } from 'react';
 import { toast } from 'sonner';
 import { useLikeSession } from '@/api/mutations/likeMutations';
 import HeartFill from '@/assets/icons/heart-fill.svg?react';
 import HeartOutline from '@/assets/icons/heart-outline.svg?react';
-import Button from '@/components/ui/Button';
-import Modal from '@/components/ui/Modal';
+import { signInModal } from '@/store/signinModal';
 
 interface LikeButtonProps {
   liked: boolean;
@@ -15,8 +12,7 @@ interface LikeButtonProps {
 }
 
 export default function LikeButton({ liked, sessionId }: LikeButtonProps) {
-  const { handleClick, isLoginModalOpen, setIsLoginModalOpen } =
-    useLikeButton();
+  const { handleClick } = useLikeButton();
 
   return (
     <>
@@ -27,15 +23,12 @@ export default function LikeButton({ liked, sessionId }: LikeButtonProps) {
           <HeartOutline className="block size-7 text-[#9CA3AF]" />
         )}
       </button>
-
-      <LoginModal isOpen={isLoginModalOpen} setIsOpen={setIsLoginModalOpen} />
     </>
   );
 }
 
 export const useLikeButton = () => {
   const mutation = useLikeSession();
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   const handleClick = (sessionId: number, liked: boolean) => {
     mutation.mutate(
@@ -55,7 +48,7 @@ export const useLikeButton = () => {
           const message = error.message;
 
           if (status === '401' || code === 'UNAUTHORIZED') {
-            setIsLoginModalOpen(true);
+            signInModal.open();
             return;
           }
 
@@ -77,32 +70,5 @@ export const useLikeButton = () => {
     );
   };
 
-  return { handleClick, isLoginModalOpen, setIsLoginModalOpen };
+  return { handleClick };
 };
-
-export function LoginModal({
-  isOpen,
-  setIsOpen,
-}: {
-  isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
-}) {
-  return (
-    <Modal open={isOpen}>
-      <Modal.Content className="flex h-[200px] w-[360px] flex-col gap-7">
-        <Modal.Title />
-        <Modal.CloseButton onClick={() => setIsOpen(false)} />
-        <Modal.Description>
-          세션을 찜하려면 로그인이 필요해요!
-        </Modal.Description>
-        <Modal.Footer>
-          <Modal.Close asChild>
-            <Button asChild>
-              <Link href={`/signin`}>로그인하러 가기</Link>
-            </Button>
-          </Modal.Close>
-        </Modal.Footer>
-      </Modal.Content>
-    </Modal>
-  );
-}
