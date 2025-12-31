@@ -64,7 +64,7 @@ export default function SessionCard({
           />
         </Link>
         <div className="pointer-events-none absolute top-3 left-3">
-          <DdayBadge className="tablet:hidden" dday={ddayText} />
+          <DdayBadge dday={ddayText} />
         </div>
         <button
           onClick={(e) => {

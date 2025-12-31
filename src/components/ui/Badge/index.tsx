@@ -71,7 +71,7 @@ export function LevelBadge({
     responsive: 'laptop:size-4 size-3',
   };
 
-  const baseStyle = 'bg-gray-800 flex gap-0.5 ';
+  const baseStyle = 'bg-gray-800 flex gap-0.5 items-center';
 
   const badgeSize = {
     sm: 'rounded-sm px-1 py-0.5',
