@@ -36,6 +36,14 @@ const eslintConfig = defineConfig([
           unnamedComponents: 'function-expression',
         },
       ],
+      'react/jsx-sort-props': [
+        'warn',
+        {
+          callbacksLast: true,
+          shorthandFirst: false,
+          reservedFirst: true,
+        },
+      ],
     },
   },
   {
@@ -58,6 +66,12 @@ const eslintConfig = defineConfig([
           destructuredArrayIgnorePattern: '^_',
           varsIgnorePattern: '^_',
           ignoreRestSiblings: true,
+        },
+      ],
+      '@typescript-eslint/member-ordering': [
+        'warn',
+        {
+          default: ['signature', 'field', 'method'],
         },
       ],
     },
