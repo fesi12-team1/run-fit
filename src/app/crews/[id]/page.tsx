@@ -158,7 +158,7 @@ export default function Page() {
               <div
                 className={cn(
                   'laptop:px-3 flex w-full flex-col px-6',
-                  'tablet:gap-y-8 laptop:gap-y-10 gap-y-6'
+                  'tablet:gap-y-8 laptop:gap-y-10 laptop:max-w-[720px] gap-y-6'
                 )}
               >
                 <Tabs
