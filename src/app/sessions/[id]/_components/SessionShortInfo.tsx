@@ -89,7 +89,7 @@ export default function SessionShortInfo({
       <SessionUpdateModal
         isUpdateModalOpen={isUpdateModalOpen}
         setIsUpdateModalOpen={setIsUpdateModalOpen}
-        sessionId={session.id}
+        session={session}
       />
 
       <SessionDeleteModal
