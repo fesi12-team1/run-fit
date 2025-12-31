@@ -9,6 +9,7 @@ import {
   useSearchParams,
 } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import { useJoinCrew, useLeaveCrew } from '@/api/mutations/crewMutations';
 import { crewQueries } from '@/api/queries/crewQueries';
 import { sessionQueries } from '@/api/queries/sessionQueries';
@@ -25,7 +26,7 @@ import Modal from '@/components/ui/Modal';
 import Tabs from '@/components/ui/Tabs';
 import { CrewDetailContext, useCrewRole } from '@/context/CrewDetailContext';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
-import { cn } from '@/lib/utils';
+import { cn, copyStringToClipboard } from '@/lib/utils';
 import { CrewMember } from '@/types';
 
 export default function Page() {
@@ -285,15 +286,8 @@ function PageAction({ className }: { className?: string }) {
   const leaveCrew = useLeaveCrew(crewId ?? 0);
 
   const handleShare = async () => {
-    if (typeof window !== 'undefined' && navigator) {
-      const pageUrl = `${new URL(pathname, process.env.NEXT_PUBLIC_APP_URL)}`;
-      try {
-        await navigator.clipboard.writeText(pageUrl);
-        setCurrentModal('share');
-      } catch (error) {
-        console.error('클립보드 복사 실패:', error);
-      }
-    }
+    await copyStringToClipboard(window.location.href);
+    toast.success('세션 크루 URL 주소가 복사되었어요!');
   };
 
   const handleCreateSession = () => {
@@ -315,11 +309,13 @@ function PageAction({ className }: { className?: string }) {
   return (
     <>
       <div className={cn('flex items-center gap-7', className)}>
-        <Share
-          className="size-6 cursor-pointer stroke-[#9CA3AF]"
+        <button
+          type="button"
           aria-label="크루 링크 공유하기"
           onClick={handleShare}
-        />
+        >
+          <Share className="size-6 text-[#9CA3AF]" />
+        </button>
 
         {!myRole ? (
           <Button
@@ -345,23 +341,6 @@ function PageAction({ className }: { className?: string }) {
           </Button>
         )}
       </div>
-
-      {/* Share Modal */}
-      <Modal
-        open={currentModal === 'share'}
-        onOpenChange={(open) => !open && setCurrentModal(null)}
-      >
-        <Modal.Content className="flex h-[200px] w-[360px] flex-col gap-7">
-          <Modal.Title />
-          <Modal.CloseButton />
-          <Modal.Description>크루 URL 주소가 복사되었어요!</Modal.Description>
-          <Modal.Footer>
-            <Modal.Close asChild>
-              <Button>닫기</Button>
-            </Modal.Close>
-          </Modal.Footer>
-        </Modal.Content>
-      </Modal>
 
       {/* Join Crew Modal (Login Required) */}
       <Modal
