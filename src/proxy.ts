@@ -16,10 +16,19 @@ const isLoggedIn = (request: NextRequest): boolean => {
   return request.cookies.has('refreshToken');
 };
 
+const isValidRedirectPath = (path: string): boolean => {
+  if (!path.startsWith('/')) return false;
+  if (path.startsWith('//')) return false;
+  if (path.match(/^[\w]+:/)) return false;
+  return true;
+};
+
 const createSigninRedirectUrl = (request: NextRequest) => {
   const { pathname, search } = request.nextUrl;
-  const redirect = encodeURIComponent(pathname + search);
+  const fullPath = pathname + search;
 
+  const safePath = isValidRedirectPath(fullPath) ? fullPath : '/';
+  const redirect = encodeURIComponent(safePath);
   const signinUrl = new URL('/signin', request.url);
   signinUrl.searchParams.set('redirect', redirect);
   signinUrl.searchParams.set('reason', 'auth');

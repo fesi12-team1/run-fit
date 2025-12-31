@@ -9,13 +9,24 @@ import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import { useSigninForm } from '@/hooks/auth/useSigninForm';
 
+const isValidRedirectPath = (path: string): boolean => {
+  if (!path.startsWith('/')) return false;
+  if (path.startsWith('//')) return false;
+  if (path.match(/^[\w]+:/)) return false;
+  return true;
+};
+
 export default function SigninForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
   const rawRedirect = searchParams.get('redirect');
 
-  const redirect = rawRedirect ? decodeURIComponent(rawRedirect) : '/';
+  let redirect = '/';
+  if (rawRedirect) {
+    const decoded = decodeURIComponent(rawRedirect);
+    redirect = isValidRedirectPath(decoded) ? decoded : '/';
+  }
 
   const { form, submit, isPending } = useSigninForm({
     onSuccess: () => {
