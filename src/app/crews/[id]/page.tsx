@@ -53,7 +53,7 @@ export default function Page() {
 
   // Redirect to /crews if there's no crew data or error
   useEffect(() => {
-    if (isError || (crew === null && !crew)) {
+    if (isError && !crew) {
       router.push('/crews');
     }
   }, [crew, isError, router]);
@@ -86,13 +86,14 @@ export default function Page() {
 
   return (
     <>
-      <CrewDetailContext value={{ crewId: crew?.id, myRole: myRoleData?.role }}>
+      <CrewDetailContext value={{ crewId: crew.id, myRole: myRoleData?.role }}>
         {crew && (
-          <div className="h-main flex flex-col items-center">
+          <div className="h-main laptop:bg-gray-850 flex flex-col items-center bg-gray-800 pb-20">
             {/* Crew Image */}
             <div
               className={cn(
-                'laptop:mt-10 laptop:mb-[52px] laptop:max-w-[1120px] relative w-full',
+                'relative w-full bg-gray-800',
+                'laptop:mt-10 laptop:mb-[52px] laptop:max-w-[1120px] laptop:bg-gray-850',
                 'laptop:h-[300px] tablet:h-60 h-[174px]'
               )}
             >
@@ -107,45 +108,65 @@ export default function Page() {
             <div className="laptop:max-w-[1120px] w-full">
               <div className="laptop:flex-row laptop:gap-10 flex w-full flex-col-reverse">
                 {/* Crew Crew Info */}
-                <div className="laptop:px-3 flex w-full flex-col gap-y-10 px-6">
+                <div
+                  className={cn(
+                    'laptop:px-3 flex w-full flex-col px-6',
+                    'tablet:gap-y-8 laptop:gap-y-10 gap-y-6'
+                  )}
+                >
                   <Tabs
                     defaultValue="1"
-                    className="tablet:top-15 sticky top-14 z-10"
+                    className="tablet:top-15 laptop:bg-gray-850 sticky top-14 z-10 bg-gray-800"
                   >
                     <Tabs.List>
                       <Tabs.Trigger
                         value="1"
                         onClick={() => router.push('#detail')}
-                        className="bg-gray-900"
+                        className="laptop:bg-gray-850 bg-gray-800"
                       >
                         상세 정보
                       </Tabs.Trigger>
                       <Tabs.Trigger
                         value="2"
                         onClick={() => router.push('#session')}
-                        className="bg-gray-900"
+                        className="laptop:bg-gray-850 bg-gray-800"
                       >
                         모집 중인 세션
                       </Tabs.Trigger>
                       <Tabs.Trigger
                         value="3"
                         onClick={() => router.push('#review')}
-                        className="bg-gray-900"
+                        className="laptop:bg-gray-850 bg-gray-800"
                       >
                         후기
                       </Tabs.Trigger>
                     </Tabs.List>
                   </Tabs>
                   <div id="detail" className="flex flex-col gap-2">
-                    <span className="text-title3-semibold text-gray-50">
+                    <span
+                      className={cn(
+                        'text-gray-50',
+                        'tablet:text-title3-semibold text-body2-semibold'
+                      )}
+                    >
                       크루 소개
                     </span>
-                    <div className="text-body2-regular text-gray-100">
+                    <div
+                      className={cn(
+                        'tablet:text-body2-regular tablet:text-gray-100',
+                        'text-body3-regular text-gray-200'
+                      )}
+                    >
                       {crew?.description}
                     </div>
                   </div>
                   <div id="session" className="flex flex-col gap-4">
-                    <span className="text-title3-semibold text-gray-50">
+                    <span
+                      className={cn(
+                        'text-gray-50',
+                        'tablet:text-title3-semibold text-body2-semibold'
+                      )}
+                    >
                       모집중인 세션
                     </span>
                     {crewSessions && crewSessions.content.length > 0 ? (
@@ -171,7 +192,12 @@ export default function Page() {
                     )}
                   </div>
                   <div className="flex flex-col gap-4">
-                    <span className="text-title3-semibold text-gray-50">
+                    <span
+                      className={cn(
+                        'text-gray-50',
+                        'tablet:text-title3-semibold text-body2-semibold'
+                      )}
+                    >
                       마감된 세션
                     </span>
                     {crewSessions && crewSessions.content.length > 0 ? (
@@ -200,7 +226,12 @@ export default function Page() {
                     className="flex flex-col gap-3 border-t border-t-gray-700 py-5"
                   >
                     <div className="flex gap-2">
-                      <span className="text-title3-semibold text-gray-50">
+                      <span
+                        className={cn(
+                          'text-gray-50',
+                          'tablet:text-title3-semibold text-body2-semibold'
+                        )}
+                      >
                         후기
                       </span>
                       <span className="text-title3-semibold text-brand-300">
@@ -209,7 +240,12 @@ export default function Page() {
                     </div>
                     {reviews && totalElements > 0 ? (
                       <>
-                        <div className="flex flex-col divide-y divide-dashed divide-gray-500 *:pb-2 not-first:*:pt-2">
+                        <div
+                          className={cn(
+                            'flex flex-col divide-y divide-dashed divide-gray-500',
+                            '*:pb-4 not-first:*:pt-4'
+                          )}
+                        >
                           {reviews.map((review) => (
                             <ReviewCard key={review.id} data={review} />
                           ))}
@@ -242,7 +278,7 @@ export default function Page() {
                 </div>
 
                 {/* Crew Title */}
-                <div className="laptop:bg-gray-750 laptop:w-[360px] laptop:shrink-0 w-full flex-col self-start rounded-[20px] px-6 py-7 shadow-[0px_10px_30px_-5px_rgba(0,0,0,0.20)]">
+                <div className="laptop:w-[360px] laptop:shrink-0 laptop:bg-gray-850 z-1 -mt-8 w-full flex-col self-start rounded-[20px] bg-gray-800 px-6 py-7 shadow-[0px_10px_30px_-5px_rgba(0,0,0,0.20)]">
                   <CrewMemberList crew={crew} members={members}>
                     <div className="laptop:flex hidden flex-col">
                       <PageAction className="my-8" />
