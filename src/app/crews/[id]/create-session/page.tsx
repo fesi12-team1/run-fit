@@ -1,12 +1,16 @@
+import { ErrorBoundary, Suspense } from '@suspensive/react';
+import Spinner from '@/components/ui/Spinner';
+import AuthErrorFallback from './_components/AuthFallback';
 import BackButton from './_components/BackButton';
 import SessionCreateForm from './_components/SessionCreateForm';
+import RoleGuard from './_others/RoleGuard';
 
 export default async function Page({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const { id } = await params;
+  const crewId = Number((await params).id);
 
   return (
     <main className="h-main laptop:my-[50px] laptop:py-0 laptop:px-8 mx-auto flex max-w-[1120px] flex-col items-center p-6">
@@ -16,7 +20,13 @@ export default async function Page({
           세션 생성하기
         </h1>
       </div>
-      <SessionCreateForm crewId={Number(id)} />
+      <ErrorBoundary fallback={<AuthErrorFallback />}>
+        <Suspense fallback={<Spinner />}>
+          <RoleGuard crewId={crewId}>
+            <SessionCreateForm crewId={crewId} />
+          </RoleGuard>
+        </Suspense>
+      </ErrorBoundary>
     </main>
   );
 }
