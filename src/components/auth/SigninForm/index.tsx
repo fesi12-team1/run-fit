@@ -1,20 +1,37 @@
 'use client';
 
 import { Eye, EyeOff } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import type { Route } from 'next';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import { useSigninForm } from '@/hooks/auth/useSigninForm';
 
+const isValidRedirectPath = (path: string): boolean => {
+  if (!path.startsWith('/')) return false;
+  if (path.startsWith('//')) return false;
+  if (path.match(/^[\w]+:/)) return false;
+  return true;
+};
+
 export default function SigninForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const rawRedirect = searchParams.get('redirect');
+
+  let redirect = '/';
+  if (rawRedirect) {
+    const decoded = decodeURIComponent(rawRedirect);
+    redirect = isValidRedirectPath(decoded) ? decoded : '/';
+  }
 
   const { form, submit, isPending } = useSigninForm({
     onSuccess: () => {
       toast.success('로그인 성공!');
-      router.push('/');
+      router.replace(redirect as Route);
     },
     onError: (message) => {
       toast.error(`로그인 실패: ${message}`);
