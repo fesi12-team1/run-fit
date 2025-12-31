@@ -126,8 +126,9 @@ function CrewCardMembers({
 }
 
 function CrewCardRight({ sessions }: { sessions?: Session[] }) {
+  if (!sessions || sessions.length === 0) return null;
   return (
-    <div className="tablet:flex hidden w-[300px] shrink-0 flex-col p-3">
+    <div className="laptop:flex hidden w-[300px] shrink-0 flex-col p-3">
       <div className="text-body3-semibold mb-2 text-gray-300">최근 세션</div>
       <CrewCardSessions sessions={sessions} />
     </div>
