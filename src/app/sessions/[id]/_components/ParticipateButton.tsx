@@ -26,17 +26,19 @@ interface ParticipateButtonProps {
   - 세션이 시간이 마감된 경우 버튼 비활성화
   - 세션 인원이 가득 찬 경우에도 버튼 비활성화
 
+  버튼 클릭 시 로그인하지 않은 경우 로그인부터 유도하는 모달이 뜨도록 함
   버튼 클릭 시 크루에 가입하지 않았으면(API 응답으로 제공됨) 크루 가입부터 유도하는 모달이 뜨도록 함
  */
 
 export function useSessionAction(sessionId: number) {
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isCrewModalOpen, setIsCrewModalOpen] = useState(false);
 
   const { data: user } = useQuery({ ...userQueries.me.info() });
   const { data: detail } = useQuery({ ...sessionQueries.detail(sessionId) });
   const { data: participantsData } = useQuery({
     ...sessionQueries.participants(sessionId),
-    enabled: !!user,
+    enabled: !!user, // 로그인 정보가 있을 때만 참여자 목록 조회
   });
 
   const isParticipating = !!participantsData?.participants.find(
@@ -53,8 +55,16 @@ export function useSessionAction(sessionId: number) {
       const status = error.status;
       const errorCode = error.code;
 
+      // 1. 비로그인 처리 (401)
+      if (status === '401' || errorCode === 'UNAUTHORIZED') {
+        setIsLoginModalOpen(true);
+        return;
+      }
+
+      // 2. 미가입 크루 처리 (403)
       if (status === '403' || errorCode === 'NOT_CREW_MEMBER') {
         setIsCrewModalOpen(true);
+        return;
       }
     },
   });
@@ -66,13 +76,15 @@ export function useSessionAction(sessionId: number) {
       isParticipating,
       isClosed,
       isFull,
-      isLoading: !detail || !participantsData,
-      isCrewModalOpen, // 모달 상태 반환
+      isLoading: !detail || (!!user && !participantsData), // 유저가 있는데 데이터가 없으면 로딩
+      isLoginModalOpen,
+      isCrewModalOpen,
     },
     actions: {
       register: registerMutation.mutate,
       unregister: unregisterMutation.mutate,
-      setIsOpen: (open: boolean) => setIsCrewModalOpen(open), // 모달 닫기 기능 반환
+      setIsLoginModalOpen,
+      setIsCrewModalOpen,
     },
     detail: detail!,
   };
@@ -121,12 +133,46 @@ export default function ParticipateButton({
         {buttonText}
       </Button>
 
+      {/* 로그인 유도 모달 */}
+      <LoginModal
+        isOpen={states.isLoginModalOpen}
+        setIsOpen={actions.setIsLoginModalOpen}
+      />
+
+      {/* 크루 가입 유도 모달 */}
       <JoinCrewModal
         isOpen={states.isCrewModalOpen}
-        setIsOpen={actions.setIsOpen}
+        setIsOpen={actions.setIsCrewModalOpen}
         crewId={detail?.crewId}
       />
     </>
+  );
+}
+
+export function LoginModal({
+  isOpen,
+  setIsOpen,
+}: {
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
+}) {
+  return (
+    <Modal open={isOpen}>
+      <Modal.Content className="flex h-[200px] w-[360px] flex-col gap-7">
+        <Modal.Title />
+        <Modal.CloseButton onClick={() => setIsOpen(false)} />
+        <Modal.Description>
+          세션에 참여하려면 로그인이 필요해요!
+        </Modal.Description>
+        <Modal.Footer>
+          <Modal.Close asChild>
+            <Button asChild>
+              <Link href={`/signin`}>로그인하러 가기</Link>
+            </Button>
+          </Modal.Close>
+        </Modal.Footer>
+      </Modal.Content>
+    </Modal>
   );
 }
 
@@ -152,7 +198,7 @@ export function JoinCrewModal({
 
         <Modal.Footer>
           <Modal.Close asChild>
-            <Button>
+            <Button asChild>
               <Link href={`/crews/${crewId}`}>가입하러 가기</Link>
             </Button>
           </Modal.Close>
