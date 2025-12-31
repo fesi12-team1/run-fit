@@ -7,7 +7,7 @@ import { crewQueries } from '@/api/queries/crewQueries';
 import HeartFill from '@/assets/icons/heart-fill.svg?react';
 import Location from '@/assets/icons/location.svg?react';
 import { DdayBadge, LevelBadge, PaceBadge } from '@/components/ui/Badge';
-import { formatTimeToKorean } from '@/lib/time';
+import { formatDDay, formatTimeToKorean } from '@/lib/time';
 import type { Session } from '@/types';
 import ProfileList from '../../user/ProfileList';
 
@@ -36,13 +36,6 @@ export default function SessionCard({
   } = session;
   const { data: crewData } = useQuery(crewQueries.detail(crewId));
 
-  const today = new Date();
-  const registerByDate = new Date(registerBy);
-  const timeDiff = registerByDate.getTime() - today.getTime();
-  const dayDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-  const ddayText =
-    timeDiff < 0 ? '마감됨' : dayDiff > 0 ? `마감 D-${dayDiff}` : '마감 D-Day';
-
   const sessionAtDate = new Date(sessionAt);
   const sessionDate = `${sessionAtDate.getMonth() + 1}월 ${sessionAtDate.getDate()}일`;
   const sessionTime = formatTimeToKorean(
@@ -64,7 +57,7 @@ export default function SessionCard({
           />
         </Link>
         <div className="pointer-events-none absolute top-3 left-3">
-          <DdayBadge dday={ddayText} />
+          <DdayBadge dday={formatDDay(registerBy)} />
         </div>
         <button
           onClick={(e) => {
