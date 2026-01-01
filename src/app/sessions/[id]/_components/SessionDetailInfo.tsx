@@ -13,7 +13,7 @@ export default function SessionDetailInfo({ session }: { session: Session }) {
         <h2 className="text-body2-semibold tablet:text-title3-semibold text-gray-50">
           세션 소개
         </h2>
-        <p className="text-body3-regular tablet:text-body2-regular text-gray-200">
+        <p className="text-body3-regular tablet:text-body2-regular whitespace-pre-line text-gray-200">
           {description}
         </p>
         <div className="text-body3-regular text-gray-300">

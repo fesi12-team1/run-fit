@@ -31,15 +31,15 @@ export default function Profile() {
           <div className="flex items-center justify-between">
             <div className="relative size-20 overflow-hidden rounded-full border-[1.5px] border-gray-700">
               <Image
-                src={data?.image || '/assets/profile-default.png'}
                 alt="profile"
-                fill
                 className="object-cover"
+                fill
+                src={data?.image || '/assets/profile-default.png'}
               />
             </div>
             <Button
-              variant="neutral"
               className="text-caption-semibold tablet:text-body3-semibold tablet:h-9 tablet:px-3 h-8 px-3.5 py-2"
+              variant="neutral"
               onClick={() => setOpen(true)}
             >
               내 정보 수정

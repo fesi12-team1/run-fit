@@ -53,18 +53,18 @@ export default function ReviewPagination({
           {/* Previous */}
           <Pagination.Item>
             <Pagination.Previous
-              href="#review"
-              scroll={false}
-              onClick={(e) => {
-                e.preventDefault();
-                if (!isLoading) goToPrevious();
-              }}
               className={cn(
                 !canGoPrevious || isLoading
                   ? 'pointer-events-none cursor-not-allowed opacity-50'
                   : ''
               )}
+              href="#review"
               isActive={canGoPrevious}
+              scroll={false}
+              onClick={(e) => {
+                e.preventDefault();
+                if (!isLoading) goToPrevious();
+              }}
             />
           </Pagination.Item>
 
@@ -77,17 +77,17 @@ export default function ReviewPagination({
             ) : (
               <Pagination.Item key={pageNum}>
                 <Pagination.Link
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    if (!isLoading) goToPage(pageNum);
-                  }}
-                  isActive={pageNum === currentPage}
                   className={cn(
                     isLoading
                       ? 'pointer-events-none cursor-not-allowed opacity-50'
                       : ''
                   )}
+                  href="#"
+                  isActive={pageNum === currentPage}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (!isLoading) goToPage(pageNum);
+                  }}
                 >
                   {pageNum + 1}
                 </Pagination.Link>
@@ -98,15 +98,15 @@ export default function ReviewPagination({
           {/* Next */}
           <Pagination.Item>
             <Pagination.Next
+              className={cn(
+                !canGoNext || isLoading ? 'pointer-events-none opacity-50' : ''
+              )}
               href="#"
+              isActive={canGoNext}
               onClick={(e) => {
                 e.preventDefault();
                 if (!isLoading) goToNext();
               }}
-              className={cn(
-                !canGoNext || isLoading ? 'pointer-events-none opacity-50' : ''
-              )}
-              isActive={canGoNext}
             />
           </Pagination.Item>
         </Pagination.Content>

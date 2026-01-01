@@ -36,18 +36,18 @@ export default function ProgressBar({
         </div>
       </div>
       <ProgressPrimitive.Root
-        data-slot="progress"
         className={cn(
           'relative h-2.5 w-full overflow-hidden rounded-md bg-gray-500',
           className
         )}
-        value={clampedValue}
+        data-slot="progress"
         max={safeMax}
+        value={clampedValue}
         {...props}
       >
         <ProgressPrimitive.Indicator
-          data-slot="progress-indicator"
           className="from-brand-200 via-brand-400 to-brand-500 h-full w-full flex-1 rounded-md bg-linear-to-r transition-transform duration-500 ease-out will-change-transform"
+          data-slot="progress-indicator"
           style={{
             transform: `translateX(-${animatedTranslateX}%)`,
           }}

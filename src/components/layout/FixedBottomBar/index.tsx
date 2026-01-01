@@ -35,14 +35,13 @@ export default function FixedBottomBar({
   return (
     <>
       <div
-        className="laptop:hidden"
         aria-hidden="true"
+        className="laptop:hidden"
         style={{ height: barHeight }}
       />
 
       <nav
         ref={barRef}
-        role="navigation"
         aria-label="하단 고정 메뉴"
         className={cn(
           'laptop:hidden fixed inset-x-0 bottom-0 z-10',
@@ -50,6 +49,7 @@ export default function FixedBottomBar({
           'pb-[calc(1.5rem+env(safe-area-inset-bottom))]',
           className
         )}
+        role="navigation"
       >
         {children}
       </nav>

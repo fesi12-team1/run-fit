@@ -7,11 +7,11 @@ export default function Textarea({
 }: React.ComponentProps<'textarea'>) {
   return (
     <textarea
-      data-slot="textarea"
       className={cn(
         'scrollbar-hidden focus-visible:border-brand-400 aria-invalid:border-error-100 tablet:rounded-xl tablet:px-4 tablet:py-3 tablet:text-body2-medium h-30 w-full resize-none rounded-lg border border-transparent bg-gray-800 px-3 py-2 text-sm text-white transition-all outline-none placeholder:text-gray-300 disabled:cursor-not-allowed',
         className
       )}
+      data-slot="textarea"
       {...props}
     />
   );

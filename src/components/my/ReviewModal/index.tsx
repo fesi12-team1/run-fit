@@ -109,8 +109,8 @@ export default function ReviewModal({
           <Modal.Title className="laptop:m-0 ml-7">리뷰 작성하기</Modal.Title>
         </Modal.Header>
         <Modal.CloseButton
-          onClick={() => setOpen(false)}
           className="laptop:block top-[26px] right-6 hidden"
+          onClick={() => setOpen(false)}
         />
         <div className="tablet:flex-none tablet:mb-4 laptop:mb-0 w-full flex-1 overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-500 [&::-webkit-scrollbar-track]:bg-transparent">
           <div className="flex flex-col gap-6">
@@ -132,9 +132,9 @@ export default function ReviewModal({
               </label>
               <div className="flex items-center justify-center">
                 <Rating
+                  size={isMobile ? 32 : 40}
                   value={ranks}
                   onChange={setRanks}
-                  size={isMobile ? 32 : 40}
                 />
               </div>
             </div>
@@ -143,12 +143,12 @@ export default function ReviewModal({
                 상세 내용
               </label>
               <Textarea
+                className="bg-gray-750 tablet:min-h-[296px] laptop:min-h-[276px] min-h-[260px]"
+                placeholder="남겨주신 리뷰는 프로그램 운영 및 다른 회원 분들께 큰 도움이 됩니다"
                 value={description}
                 onChange={(e) => {
                   setDescription(e.target.value);
                 }}
-                placeholder="남겨주신 리뷰는 프로그램 운영 및 다른 회원 분들께 큰 도움이 됩니다"
-                className="bg-gray-750 tablet:min-h-[296px] laptop:min-h-[276px] min-h-[260px]"
               />
             </div>
             <ReviewImageUploader onChange={setImage} />
@@ -157,16 +157,16 @@ export default function ReviewModal({
         <Modal.Footer className="laptop:pb-2 w-full pb-4">
           <div className="flex w-full items-center justify-center gap-2">
             <Button
+              className="flex-1"
               variant={'neutral'}
               onClick={() => setOpen(false)}
-              className="flex-1"
             >
               취소
             </Button>
             <Button
-              onClick={handleSubmit}
-              disabled={isDisabled}
               className="flex-1 has-[>svg]:px-6"
+              disabled={isDisabled}
+              onClick={handleSubmit}
             >
               {isSubmitting ? '등록하는 중..' : '등록하기'}
               {isSubmitting && <Spinner className="ml-3" />}

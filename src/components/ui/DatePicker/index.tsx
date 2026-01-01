@@ -61,25 +61,13 @@ export default function DatePicker({
     <div className={cn('flex flex-col gap-1', className)}>
       <Label htmlFor={inputId}>{label}</Label>
       <Input
-        id={inputId}
-        value={displayValue}
-        placeholder={placeholder}
-        readOnly
-        onFocus={() => setOpen(true)}
-        onMouseDown={() => setOpen(true)}
-        onKeyDown={(e) => {
-          if (e.key === 'ArrowDown') {
-            e.preventDefault();
-            setOpen(true);
-          }
-        }}
         RightElement={
           <Popover.Root open={open} onOpenChange={setOpen}>
             <Popover.Trigger asChild>
               <button
+                className="flex size-5 items-center justify-center"
                 type="button"
                 onMouseDown={(e) => e.preventDefault()}
-                className="flex size-5 items-center justify-center"
               >
                 <CalendarIcon />
               </button>
@@ -109,6 +97,18 @@ export default function DatePicker({
             </Popover.Content>
           </Popover.Root>
         }
+        id={inputId}
+        placeholder={placeholder}
+        readOnly
+        value={displayValue}
+        onFocus={() => setOpen(true)}
+        onKeyDown={(e) => {
+          if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            setOpen(true);
+          }
+        }}
+        onMouseDown={() => setOpen(true)}
       />
     </div>
   );

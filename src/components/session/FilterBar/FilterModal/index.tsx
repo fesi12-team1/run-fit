@@ -107,12 +107,12 @@ export default function FilterModal({ children }: FilterModalProps) {
           <Modal.Title>필터</Modal.Title>
         </Modal.Header>
 
-        <Modal.Description className="min-h-[120px] w-full" asChild>
+        <Modal.Description asChild className="min-h-[120px] w-full">
           <div className="min-h-[120px] w-full">
-            <Tabs defaultValue="region" className="w-full">
+            <Tabs className="w-full" defaultValue="region">
               <Tabs.List className="mb-3">
                 {SESSION_FILTER_TABS.map((tab) => (
-                  <Tabs.Trigger key={tab.key} value={tab.key} size="sm">
+                  <Tabs.Trigger key={tab.key} size="sm" value={tab.key}>
                     {tab.label}
                   </Tabs.Trigger>
                 ))}
@@ -120,15 +120,15 @@ export default function FilterModal({ children }: FilterModalProps) {
 
               <div className="flex min-h-[120px] w-full flex-col items-center">
                 {/* 지역 필터 */}
-                <Tabs.Content value="region" className="w-full">
+                <Tabs.Content className="w-full" value="region">
                   <div className="grid h-[310px] w-full grid-cols-[160px_1fr]">
                     {/* 시/도 리스트 */}
                     <ul className="w-40 overflow-y-auto rounded-lg bg-gray-600 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-400 [&::-webkit-scrollbar-track]:bg-transparent">
                       {SIDO_LIST.map((sido) => (
                         <li key={sido}>
                           <button
-                            onClick={() => setActiveSido(sido)}
                             className="text-body3-regular w-full px-4 py-3 text-left text-gray-100 hover:bg-gray-800"
+                            onClick={() => setActiveSido(sido)}
                           >
                             {sido}
                             {tempRegion && tempRegion[sido]?.length > 0 && (
@@ -179,7 +179,7 @@ export default function FilterModal({ children }: FilterModalProps) {
                 </Tabs.Content>
 
                 {/* 시간 필터 */}
-                <Tabs.Content value="time" className="w-full px-[78px]">
+                <Tabs.Content className="w-full px-[78px]" value="time">
                   <TimeSlider
                     value={tempTime || [0, 720]}
                     onValueChange={setTempTime}
@@ -187,12 +187,12 @@ export default function FilterModal({ children }: FilterModalProps) {
                 </Tabs.Content>
 
                 {/* 난이도 필터 */}
-                <Tabs.Content value="level" className="flex w-full gap-2">
+                <Tabs.Content className="flex w-full gap-2" value="level">
                   {SESSION_LEVEL_OPTIONS.map(({ label, value }) => (
                     <Chip
                       key={value ?? 'all'}
-                      tone="secondary"
                       state={tempLevel === value ? 'active' : 'default'}
+                      tone="secondary"
                       onClick={() => setTempLevel(value)}
                     >
                       {label}

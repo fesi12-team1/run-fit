@@ -11,13 +11,13 @@ export default function Label({
 }: React.ComponentProps<typeof LabelPrimitive.Root>) {
   return (
     <LabelPrimitive.Root
-      data-slot="label"
-      htmlFor={htmlFor}
       className={cn(
         'text-caption-semibold text-gray-50',
         'tablet:text-body3-semibold',
         className
       )}
+      data-slot="label"
+      htmlFor={htmlFor}
       {...props}
     >
       {props.children}

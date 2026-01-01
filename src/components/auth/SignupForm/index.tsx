@@ -30,7 +30,7 @@ export default function SignupForm() {
   const [showConfirm, setShowConfirm] = useState(false);
 
   return (
-    <form onSubmit={submit} className="flex flex-col gap-4">
+    <form className="flex flex-col gap-4" onSubmit={submit}>
       <Input
         label="이름"
         {...register('name')}
@@ -45,18 +45,17 @@ export default function SignupForm() {
         label="비밀번호"
         type={show ? 'text' : 'password'}
         {...register('password')}
-        errorMessage={errors.password?.message}
         RightElement={
           <button type="button" onClick={() => setShow(!show)}>
             {show ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
           </button>
         }
+        errorMessage={errors.password?.message}
       />
       <Input
         label="비밀번호 확인"
         type={showConfirm ? 'text' : 'password'}
         {...register('passwordConfirm')}
-        errorMessage={errors.passwordConfirm?.message}
         RightElement={
           <button type="button" onClick={() => setShowConfirm(!showConfirm)}>
             {showConfirm ? (
@@ -66,8 +65,9 @@ export default function SignupForm() {
             )}
           </button>
         }
+        errorMessage={errors.passwordConfirm?.message}
       />
-      <Button type="submit" disabled={isPending || !isValid}>
+      <Button disabled={isPending || !isValid} type="submit">
         회원가입
       </Button>
     </form>

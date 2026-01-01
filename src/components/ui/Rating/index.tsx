@@ -30,32 +30,30 @@ export default function Rating({
 
   return (
     <div
+      aria-disabled={disabled}
+      aria-label="별점 선택"
+      aria-valuemax={max}
+      aria-valuemin={0}
+      aria-valuenow={value}
       className={cn('flex items-center', className)}
       role="slider"
-      aria-label="별점 선택"
-      aria-valuenow={value}
-      aria-valuemin={0}
-      aria-valuemax={max}
-      aria-disabled={disabled}
     >
       {Array.from({ length: max }).map((_, i) => {
         const index = i + 1;
         return (
           <button
             key={i}
-            disabled={disabled}
             aria-label={`${index}점`}
-            onMouseEnter={() => !disabled && setHoveredRating(index)}
-            onMouseLeave={() => !disabled && setHoveredRating(0)}
-            onClick={() => handleClick(index)}
             className={cn(
               index < max ? 'pr-0.5' : '',
               'rounded-sm focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2'
             )}
+            disabled={disabled}
+            onClick={() => handleClick(index)}
+            onMouseEnter={() => !disabled && setHoveredRating(index)}
+            onMouseLeave={() => !disabled && setHoveredRating(0)}
           >
             <Star
-              width={size}
-              height={size}
               fill={
                 index <= value
                   ? 'var(--color-gray-100)'
@@ -63,6 +61,8 @@ export default function Rating({
                     ? 'var(--color-gray-300)'
                     : 'var(--color-gray-600)'
               }
+              height={size}
+              width={size}
             />
           </button>
         );

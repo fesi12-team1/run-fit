@@ -45,9 +45,9 @@ export default function SessionLevelCard({
 }: SessionLevelCardProps) {
   return (
     <RadioGroupItem
-      value={value}
-      disabled={disabled}
       className={cn(sessionLevelCardVariants({ checked, disabled }))}
+      disabled={disabled}
+      value={value}
     >
       <div className="flex w-full items-start justify-between gap-2">
         <div className="flex flex-1 flex-col gap-1.5 text-left">

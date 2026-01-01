@@ -11,9 +11,9 @@ export default function ProfileList({ members }: ProfileListProps) {
       {members?.map((member: CrewMember) => (
         <UserAvatar
           key={member.userId}
-          src={member.profileImage || '/assets/profile-default.png'}
           alt={member.name}
           className="tablet:size-6 size-4 data-[slot=avatar]:ring-1 data-[slot=avatar]:ring-gray-900"
+          src={member.profileImage || '/assets/profile-default.png'}
         />
       ))}
     </div>

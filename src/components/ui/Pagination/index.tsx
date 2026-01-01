@@ -10,10 +10,10 @@ export default function Pagination({
 }: React.ComponentProps<'nav'>) {
   return (
     <nav
-      role="navigation"
       aria-label="pagination"
-      data-slot="pagination"
       className={cn('mx-auto flex w-full justify-center', className)}
+      data-slot="pagination"
+      role="navigation"
       {...props}
     />
   );
@@ -25,8 +25,8 @@ function PaginationContent({
 }: React.ComponentProps<'ul'>) {
   return (
     <ul
-      data-slot="pagination-content"
       className={cn('flex flex-row items-center gap-2', className)}
+      data-slot="pagination-content"
       {...props}
     />
   );
@@ -48,8 +48,6 @@ function PaginationLink({
   return (
     <Link
       aria-current={isActive ? 'page' : undefined}
-      data-slot="pagination-link"
-      data-active={isActive}
       className={cn(
         'flex items-center justify-center',
         'text-body3 size-[34px] rounded-md',
@@ -57,6 +55,8 @@ function PaginationLink({
         isActive ? 'font-semibold text-gray-100' : 'font-normal text-gray-300',
         className
       )}
+      data-active={isActive}
+      data-slot="pagination-link"
       {...props}
     />
   );
@@ -69,13 +69,13 @@ function PaginationPrevious({
   return (
     <PaginationLink
       aria-label="Go to previous page"
-      data-slot="pagination-previous"
       className={cn(
         'flex items-center justify-center p-2.5',
         'size-[34px] rounded-md',
         'tablet:size-10 tablet:rounded-lg',
         className
       )}
+      data-slot="pagination-previous"
       {...props}
     >
       <ArrowDown className="size-6 rotate-90" />
@@ -90,13 +90,13 @@ function PaginationNext({
   return (
     <PaginationLink
       aria-label="Go to next page"
-      data-slot="pagination-next"
       className={cn(
         'flex items-center justify-center p-2.5',
         'size-[34px] rounded-md',
         'tablet:size-10 tablet:rounded-lg',
         className
       )}
+      data-slot="pagination-next"
       {...props}
     >
       <ArrowDown className="size-6 -rotate-90" />
@@ -111,13 +111,13 @@ function PaginationEllipsis({
   return (
     <span
       aria-hidden
-      data-slot="pagination-ellipsis"
       className={cn(
         'flex items-center justify-center text-gray-300',
         'size-[34px]',
         'tablet:size-10',
         className
       )}
+      data-slot="pagination-ellipsis"
       {...props}
     >
       <MoreHorizontalIcon className="size-4" />

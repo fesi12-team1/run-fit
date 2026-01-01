@@ -37,10 +37,10 @@ function EmptyState() {
   return (
     <div className="flex w-full flex-1 flex-col items-center justify-center gap-10">
       <Image
-        src="/assets/crew-default.png"
         alt="No Crews"
-        width={300}
         height={150}
+        src="/assets/crew-default.png"
+        width={300}
       />
       <span className="text-body2-medium text-center text-gray-300">
         아직 생성된 크루가 없어요 <br /> 나와 FIT한 러닝 크루를 직접

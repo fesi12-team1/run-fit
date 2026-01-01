@@ -47,7 +47,6 @@ function DropdownTrigger({
 
   return (
     <DropdownMenuPrimitive.Trigger
-      data-slot="dropdown-menu-trigger"
       className={cn(
         isLarge
           ? 'text-body3-medium h-10 gap-2'
@@ -60,6 +59,7 @@ function DropdownTrigger({
         hasSelected && 'border-brand-500 bg-brand-950 text-brand-200',
         className
       )}
+      data-slot="dropdown-menu-trigger"
       {...props}
     >
       {children}
@@ -81,7 +81,7 @@ function DropdownTriggerNoArrow({
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Trigger>) {
   return (
     <DropdownMenuPrimitive.Trigger asChild {...props}>
-      <button type="button" className={cn('outline-none', className)}>
+      <button className={cn('outline-none', className)} type="button">
         {children}
       </button>
     </DropdownMenuPrimitive.Trigger>
@@ -97,15 +97,15 @@ function DropdownContent({
   return (
     <DropdownMenuPrimitive.Portal>
       <DropdownMenuPrimitive.Content
-        data-slot="dropdown-menu-content"
         align={align}
-        sideOffset={sideOffset}
         className={cn(
           'overflow-hidden rounded-xl border border-gray-500',
           'min-w-(--radix-dropdown-menu-trigger-width)',
           'max-h-[300px] overflow-y-auto',
           className
         )}
+        data-slot="dropdown-menu-content"
+        sideOffset={sideOffset}
         {...props}
       />
     </DropdownMenuPrimitive.Portal>
@@ -125,7 +125,6 @@ function DropdownItem({
 
   return (
     <DropdownMenuPrimitive.Item
-      data-slot="dropdown-menu-item"
       className={cn(
         isLarge ? 'text-body2-regular' : 'text-body3-regular',
         'cursor-pointer bg-gray-600 px-4 py-3 text-gray-100 outline-none',
@@ -133,6 +132,7 @@ function DropdownItem({
         selected && 'bg-gray-800 text-white',
         className
       )}
+      data-slot="dropdown-menu-item"
       {...props}
     >
       {children}

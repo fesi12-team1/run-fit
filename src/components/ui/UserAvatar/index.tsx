@@ -16,15 +16,15 @@ export default function UserAvatar({
 }: UserAvatarProps) {
   return (
     <div
-      data-slot="avatar"
       className={cn('relative size-10 overflow-hidden rounded-full', className)}
+      data-slot="avatar"
     >
       <SafeImage
-        src={src}
         alt={alt}
+        className="object-cover"
         fallbackSrc={'/assets/profile-default.png'}
         fill
-        className="object-cover"
+        src={src}
       />
     </div>
   );

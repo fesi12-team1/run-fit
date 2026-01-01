@@ -43,14 +43,14 @@ export default function CompletedSessionCard({
             )}
           >
             <SafeImage
-              src={session.image}
-              fallbackSrc="/assets/session-default.png"
               alt="Session"
-              fill
               className={cn(
                 'rounded-xl object-cover transition-opacity duration-300 hover:opacity-80',
                 session.image ? 'shadow-sm' : 'border border-gray-500'
               )}
+              fallbackSrc="/assets/session-default.png"
+              fill
+              src={session.image}
             />
             <div className="absolute bottom-2.5 left-2.5 flex items-center gap-0.5">
               <Location className="size-3 fill-gray-200" />

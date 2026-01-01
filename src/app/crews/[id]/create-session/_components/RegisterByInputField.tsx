@@ -17,12 +17,15 @@ function parseIsoToDateAndMinutes(iso: string) {
   return { dateOnly, minutes };
 }
 
-function combineDateAndMinutesToIso(dateOnly: Date, minutes: number) {
-  const d = new Date(dateOnly);
-  const h = Math.floor(minutes / 60);
-  const m = minutes % 60;
-  d.setHours(h, m, 0, 0);
-  return d.toISOString();
+function combineDateAndMinutesToLocalIso(dateOnly: Date, minutes: number) {
+  const y = dateOnly.getFullYear();
+  const m = String(dateOnly.getMonth() + 1).padStart(2, '0');
+  const d = String(dateOnly.getDate()).padStart(2, '0');
+
+  const h = String(Math.floor(minutes / 60)).padStart(2, '0');
+  const min = String(minutes % 60).padStart(2, '0');
+
+  return `${y}-${m}-${d}T${h}:${min}:00`;
 }
 
 export default function DateInputField({ className }: DateInputFieldProps) {
@@ -47,7 +50,9 @@ export default function DateInputField({ className }: DateInputFieldProps) {
               value={dateOnly}
               onChange={(nextDate) => {
                 if (!nextDate) return;
-                field.onChange(combineDateAndMinutesToIso(nextDate, minutes));
+                field.onChange(
+                  combineDateAndMinutesToLocalIso(nextDate, minutes)
+                );
               }}
               className="flex-1"
             />
@@ -60,7 +65,7 @@ export default function DateInputField({ className }: DateInputFieldProps) {
                 value={minutes}
                 onChange={(nextMinutes) => {
                   field.onChange(
-                    combineDateAndMinutesToIso(dateOnly, nextMinutes)
+                    combineDateAndMinutesToLocalIso(dateOnly, nextMinutes)
                   );
                 }}
                 className="tablet:w-[240px] laptop:w-[120px] w-[110px]"

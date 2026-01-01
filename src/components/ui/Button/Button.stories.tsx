@@ -53,13 +53,13 @@ export const Variants: Story = {
       <div className="flex flex-col gap-4">
         <h3 className="text-body2-semibold">Small Size</h3>
         <div className="flex flex-wrap gap-4">
-          <Button variant="default" size="sm">
+          <Button size="sm" variant="default">
             Default
           </Button>
-          <Button variant="outlined" size="sm">
+          <Button size="sm" variant="outlined">
             Outlined
           </Button>
-          <Button variant="neutral" size="sm">
+          <Button size="sm" variant="neutral">
             Neutral
           </Button>
         </div>
@@ -92,7 +92,7 @@ export const States: Story = {
           <h3 className="text-body2-semibold capitalize">{variant}</h3>
           <div className="flex flex-wrap gap-4">
             <Button variant={variant}>Normal</Button>
-            <Button variant={variant} disabled>
+            <Button disabled variant={variant}>
               Disabled
             </Button>
           </div>
@@ -111,32 +111,32 @@ export const WithIcons: Story = {
       <div className="flex flex-wrap gap-4">
         <Button>
           <svg
-            xmlns="http://www.w3.org/2000/svg"
             fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
             stroke="currentColor"
+            strokeWidth={1.5}
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
           >
             <path
+              d="M12 4.5v15m7.5-7.5h-15"
               strokeLinecap="round"
               strokeLinejoin="round"
-              d="M12 4.5v15m7.5-7.5h-15"
             />
           </svg>
           With Icon
         </Button>
         <Button size="sm">
           <svg
-            xmlns="http://www.w3.org/2000/svg"
             fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
             stroke="currentColor"
+            strokeWidth={1.5}
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
           >
             <path
+              d="M12 4.5v15m7.5-7.5h-15"
               strokeLinecap="round"
               strokeLinejoin="round"
-              d="M12 4.5v15m7.5-7.5h-15"
             />
           </svg>
           Small Icon
@@ -145,31 +145,31 @@ export const WithIcons: Story = {
       <div className="flex flex-wrap gap-4">
         <Button>
           <svg
-            xmlns="http://www.w3.org/2000/svg"
             fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
             stroke="currentColor"
+            strokeWidth={1.5}
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
           >
             <path
+              d="M12 4.5v15m7.5-7.5h-15"
               strokeLinecap="round"
               strokeLinejoin="round"
-              d="M12 4.5v15m7.5-7.5h-15"
             />
           </svg>
         </Button>
         <Button size="sm">
           <svg
-            xmlns="http://www.w3.org/2000/svg"
             fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
             stroke="currentColor"
+            strokeWidth={1.5}
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
           >
             <path
+              d="M12 4.5v15m7.5-7.5h-15"
               strokeLinecap="round"
               strokeLinejoin="round"
-              d="M12 4.5v15m7.5-7.5h-15"
             />
           </svg>
         </Button>

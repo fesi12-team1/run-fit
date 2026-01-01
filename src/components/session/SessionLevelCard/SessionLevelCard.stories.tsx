@@ -87,11 +87,11 @@ export const LevelList: Story = {
 
     return (
       <RadioGroup
+        className="flex w-[327px] flex-col gap-4"
         value={selected}
         onValueChange={(val) => {
           setSelected(val as SessionLevel);
         }}
-        className="flex w-[327px] flex-col gap-4"
       >
         <SessionLevelCard
           {...args}

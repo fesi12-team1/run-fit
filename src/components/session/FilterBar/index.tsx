@@ -70,9 +70,9 @@ export default function FilterBar({
           )}
           {!isMobile && (
             <OptionDropdown
+              options={SESSION_SORT_OPTIONS}
               value={filters.sort}
               onChange={(sort) => applyFilters({ ...filters, sort })}
-              options={SESSION_SORT_OPTIONS}
             />
           )}
         </div>
@@ -80,9 +80,9 @@ export default function FilterBar({
       {isMobile && (
         <div className="mt-2 flex w-full shrink-0 justify-end">
           <OptionDropdown
+            options={SESSION_SORT_OPTIONS}
             value={filters.sort}
             onChange={(sort) => applyFilters({ ...filters, sort })}
-            options={SESSION_SORT_OPTIONS}
           />
         </div>
       )}

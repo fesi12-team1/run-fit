@@ -37,12 +37,12 @@ function CrewCardLeft({
     <div className="tablet:flex-row flex w-full flex-col gap-3 rounded-xl">
       <CrewCardImage id={id} image={image} />
       <CrewCardInfo
-        id={id}
-        name={name}
-        description={description}
         city={city}
+        description={description}
+        id={id}
         memberCount={memberCount}
         members={members}
+        name={name}
       />
     </div>
   );
@@ -51,14 +51,14 @@ function CrewCardLeft({
 function CrewCardImage({ id, image }: { id: number; image?: string | null }) {
   return (
     <Link
-      href={`/crews/${id}`}
       className="tablet:w-60 tablet:aspect-video relative aspect-327/75 shrink-0 overflow-hidden rounded-xl"
+      href={`/crews/${id}`}
     >
       <Image
-        src={image || '/assets/crew-default.png'}
         alt="Crew"
-        fill
         className="rounded-xl object-cover transition-opacity duration-300 hover:opacity-80"
+        fill
+        src={image || '/assets/crew-default.png'}
       />
     </Link>
   );
@@ -82,8 +82,8 @@ function CrewCardInfo({
   return (
     <div className="tablet:w-[500px] flex flex-col justify-evenly gap-2 p-3">
       <Link
-        href={`/crews/${id}`}
         className="tablet:text-title3-semibold text-body2-semibold line-clamp-1 text-gray-50"
+        href={`/crews/${id}`}
       >
         {name}
       </Link>
@@ -146,7 +146,7 @@ function CrewCardSessions({ sessions }: { sessions?: Session[] }) {
             key={session.id}
             className="text-body2-regular flex justify-between text-gray-100"
           >
-            <Link href={`/sessions/${session.id}`} className="truncate">
+            <Link className="truncate" href={`/sessions/${session.id}`}>
               {session.name}
             </Link>
             <span className="text-body3-regular text-nowrap text-gray-200">

@@ -95,8 +95,8 @@ export default function RegionFilter({ value, onChange }: RegionFilterProps) {
             {SIDO_LIST.map((sido) => (
               <li key={sido}>
                 <button
-                  onClick={() => setActiveSido(sido)}
                   className="text-body3-regular w-full px-4 py-3 text-left text-gray-100 transition-colors hover:bg-gray-800"
+                  onClick={() => setActiveSido(sido)}
                 >
                   {sido}
                   {tempValue[sido]?.length > 0 && (
@@ -120,10 +120,10 @@ export default function RegionFilter({ value, onChange }: RegionFilterProps) {
                   >
                     <Checkbox
                       checked={isChecked}
+                      className="transition-colors"
                       onCheckedChange={(checked) =>
                         handleToggle(activeSido, sigungu, checked === true)
                       }
-                      className="transition-colors"
                     />
                     <span
                       className={cn(

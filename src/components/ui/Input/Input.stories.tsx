@@ -36,12 +36,12 @@ export const States: Story = {
   render: () => (
     <div className="flex flex-col gap-4">
       <Input label="normal" placeholder="Normal" />
-      <Input label="disabled" placeholder="Disabled" disabled />
+      <Input disabled label="disabled" placeholder="Disabled" />
       <Input
-        label="invalid"
-        placeholder="Invalid"
         aria-invalid
         errorMessage="에러 메시지입니다"
+        label="invalid"
+        placeholder="Invalid"
       />
     </div>
   ),
@@ -55,15 +55,15 @@ export const Password: Story = {
 
     return (
       <Input
-        type={show ? 'text' : 'password'}
-        placeholder="비밀번호 입력"
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
         RightElement={
           <button type="button" onClick={() => setShow(!show)}>
             {show ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
           </button>
         }
+        placeholder="비밀번호 입력"
+        type={show ? 'text' : 'password'}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
       />
     );
   },

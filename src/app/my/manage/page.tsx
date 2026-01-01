@@ -41,7 +41,7 @@ export default function MyCreatedSessionsPage() {
         <Image
           width={isMobile ? 240 : 300}
           height={isMobile ? 218 : 272}
-          src={'/assets/empty-session.png'}
+          src={'/assets/session-default.png'}
           alt="세션 없음"
         />
         <p className="tablet:text-body2-medium text-body3-regular text-center text-gray-300">

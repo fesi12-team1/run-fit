@@ -40,7 +40,6 @@ export default function MyTabs({ isSmallDevice }: MyTabsProps) {
         return (
           <Link
             key={tab.href}
-            href={tab.href}
             aria-current={isActive ? 'page' : undefined}
             className={cn(
               'flex-1 border-b py-2.5 text-center',
@@ -48,6 +47,7 @@ export default function MyTabs({ isSmallDevice }: MyTabsProps) {
                 ? 'text-body3-semibold border-white text-white'
                 : 'text-body3-medium border-gray-400 text-gray-300'
             )}
+            href={tab.href}
           >
             {tab.label}
           </Link>

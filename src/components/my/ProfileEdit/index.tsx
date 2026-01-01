@@ -119,8 +119,8 @@ export default function ProfileEdit({ open, setOpen, user }: ProfileEditProps) {
           <Modal.Title className="laptop:m-0 ml-7">프로필 편집하기</Modal.Title>
         </Modal.Header>
         <Modal.CloseButton
-          onClick={() => setOpen(false)}
           className="laptop:block top-[26px] right-6 hidden"
+          onClick={() => setOpen(false)}
         />
         <div className="overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-500 [&::-webkit-scrollbar-track]:bg-transparent">
           <div className="tablet:gap-5 laptop:gap-3 flex flex-col gap-3">
@@ -133,14 +133,14 @@ export default function ProfileEdit({ open, setOpen, user }: ProfileEditProps) {
             <div className="laptop:gap-5 mb-4 flex flex-col gap-6">
               <div>
                 <Input
-                  value={name}
-                  placeholder="이름을 입력해주세요"
+                  className={isPc ? 'bg-gray-750' : 'bg-gray-800'}
                   errorMessage={
                     name.length === 0 ? '이름은 필수 입력값입니다.' : ''
                   }
                   label="이름"
+                  placeholder="이름을 입력해주세요"
+                  value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className={isPc ? 'bg-gray-750' : 'bg-gray-800'}
                 />
               </div>
               <div className="flex flex-col gap-1">
@@ -148,10 +148,10 @@ export default function ProfileEdit({ open, setOpen, user }: ProfileEditProps) {
                   자기소개
                 </label>
                 <Textarea
+                  className={isPc ? 'bg-gray-750' : 'bg-gray-800'}
+                  placeholder="러닝을 하게 된 이유나 평소 러닝에 대한 생각을 적어주세요"
                   value={introduction || ''}
                   onChange={(e) => setIntroduction(e.target.value)}
-                  placeholder="러닝을 하게 된 이유나 평소 러닝에 대한 생각을 적어주세요"
-                  className={isPc ? 'bg-gray-750' : 'bg-gray-800'}
                 />
               </div>
               {/* 페이스 */}
@@ -160,9 +160,9 @@ export default function ProfileEdit({ open, setOpen, user }: ProfileEditProps) {
                   페이스 (분/km)
                 </label>
                 <PaceSlider
+                  className={isPc ? 'bg-gray-750' : 'bg-gray-800'}
                   value={pace}
                   onValueChange={setPace}
-                  className={isPc ? 'bg-gray-750' : 'bg-gray-800'}
                 />
               </div>
               <div className="laptop:my-5 my-6">
@@ -179,8 +179,8 @@ export default function ProfileEdit({ open, setOpen, user }: ProfileEditProps) {
                       }
                     >
                       <Chip
-                        tone={isPc ? 'secondary' : 'primary'}
                         state={city === sido ? 'active' : 'default'}
+                        tone={isPc ? 'secondary' : 'primary'}
                       >
                         {sido}
                       </Chip>
@@ -193,12 +193,12 @@ export default function ProfileEdit({ open, setOpen, user }: ProfileEditProps) {
                   러닝 스타일 (최대 3개)
                 </label>
                 <TagInput
+                  isPc={isPc}
+                  max={3}
+                  options={RUNNING_STYLE_OPTIONS}
+                  placeholder="태그를 선택해주세요"
                   value={styles}
                   onChange={setStyles}
-                  options={RUNNING_STYLE_OPTIONS}
-                  max={3}
-                  placeholder="태그를 선택해주세요"
-                  isPc={isPc}
                 />
               </div>
             </div>
@@ -207,8 +207,8 @@ export default function ProfileEdit({ open, setOpen, user }: ProfileEditProps) {
         <Modal.Footer className="w-full">
           <Button
             className="w-full"
-            onClick={handleSubmit}
             disabled={isDisabled}
+            onClick={handleSubmit}
           >
             {isSubmitting ? '저장하는 중..' : '완료'}
             {isSubmitting && <Spinner className="ml-3" />}

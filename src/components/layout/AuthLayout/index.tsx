@@ -23,32 +23,32 @@ export default function AuthLayout({
       <div className="desktop:w-1/2 relative flex h-[calc(100vh-56px)] w-full items-center justify-center overflow-hidden">
         {/* 배경 이미지 */}
         <Image
-          src="/assets/bg/pc.png"
           alt="Background"
+          className="desktop:block hidden object-cover"
           fill
           priority
-          className="desktop:block hidden object-cover"
+          src="/assets/bg/pc.png"
         />
         <Image
-          src="/assets/bg/tb.png"
           alt="Background"
-          fill
           className="tablet:block desktop:hidden hidden object-cover"
+          fill
+          src="/assets/bg/tb.png"
         />
         <Image
-          src="/assets/bg/mo.png"
           alt="Background"
-          fill
           className="tablet:hidden object-cover"
+          fill
+          src="/assets/bg/mo.png"
         />
 
         {/* 배너 이미지 */}
         <Image
-          src="/assets/banner.png"
           alt="Banner"
-          width={600}
-          height={400}
           className="tablet:scale-90 desktop:top-1/2 desktop:scale-100 absolute top-[30%] left-1/2 -translate-x-1/2 -translate-y-1/2 scale-75"
+          height={400}
+          src="/assets/banner.png"
+          width={600}
         />
 
         {/* mobile + tablet 폼 */}
@@ -59,7 +59,7 @@ export default function AuthLayout({
           {form}
           <p className="text-body3-medium mt-6 text-center text-white">
             {footerText}
-            <Link href={footerLinkHref} className="text-brand-300 ml-1">
+            <Link className="text-brand-300 ml-1" href={footerLinkHref}>
               {footerLinkText}
             </Link>
           </p>
@@ -73,7 +73,7 @@ export default function AuthLayout({
           {form}
           <p className="text-body3-medium mt-6 text-center">
             {footerText}
-            <Link href={footerLinkHref} className="text-brand-300 ml-1">
+            <Link className="text-brand-300 ml-1" href={footerLinkHref}>
               {footerLinkText}
             </Link>
           </p>

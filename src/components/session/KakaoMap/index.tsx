@@ -53,12 +53,12 @@ export default function KakaoMap({
   return (
     <div
       ref={containerRef}
+      aria-label="지도 보기"
+      className={cn('cursor-pointer', className)}
+      role="link"
+      tabIndex={0}
       onClick={handleMapClick}
       onKeyDown={(e) => e.key === 'Enter' && handleMapClick()}
-      tabIndex={0}
-      className={cn('cursor-pointer', className)}
-      aria-label="지도 보기"
-      role="link"
     />
   );
 }

@@ -41,7 +41,7 @@ export const Default: Story = {
 
     return (
       <div className="w-[200px]">
-        <ProgressBar value={value} max={max} />
+        <ProgressBar max={max} value={value} />
       </div>
     );
   },

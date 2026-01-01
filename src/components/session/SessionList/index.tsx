@@ -31,10 +31,10 @@ function EmptyState() {
   return (
     <div className="flex w-full flex-1 flex-col items-center justify-center gap-10">
       <Image
-        src="/assets/session-default.png"
         alt="No Sessions"
-        width={300}
         height={150}
+        src="/assets/session-default.png"
+        width={300}
       />
       <span className="text-body2-medium text-center text-gray-300">
         아직 생성된 세션이 없어요 <br /> 세션은 크루를 개설하거나 <br />

@@ -36,12 +36,12 @@ export const Default: Story = {
         </div>
         <FixedBottomBar>
           <div className="flex gap-7">
-            <button type="button" aria-label="크루 링크 공유하기">
+            <button aria-label="크루 링크 공유하기" type="button">
               <Share className="size-6 stroke-[#9CA3AF]" />
             </button>
             <Button
-              type="button"
               className="bg-brand-500 text-body2-semibold flex-1 px-6 py-3"
+              type="button"
             >
               가입하기
             </Button>
@@ -65,8 +65,8 @@ export const SessionJoin: Story = {
         </div>
         <FixedBottomBar>
           <Button
-            type="button"
             className="bg-brand-500 text-body2-semibold w-full px-6 py-3"
+            type="button"
           >
             세션 참여하기
           </Button>

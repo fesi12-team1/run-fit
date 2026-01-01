@@ -18,7 +18,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: () => (
-    <Tabs defaultValue="1" className="w-30">
+    <Tabs className="w-30" defaultValue="1">
       <Tabs.List>
         <Tabs.Trigger value="1">탭</Tabs.Trigger>
       </Tabs.List>
@@ -28,7 +28,7 @@ export const Default: Story = {
 
 export const MultipleTabs: Story = {
   render: () => (
-    <Tabs defaultValue="1" className="w-full">
+    <Tabs className="w-full" defaultValue="1">
       <Tabs.List>
         <Tabs.Trigger value="1">My 홈</Tabs.Trigger>
         <Tabs.Trigger value="2">참여 세션</Tabs.Trigger>
@@ -42,13 +42,13 @@ export const MultipleTabs: Story = {
 
 export const WithContents: Story = {
   render: () => (
-    <Tabs defaultValue="1" className="w-full">
+    <Tabs className="w-full" defaultValue="1">
       <Tabs.List>
         <Tabs.Trigger value="1">상세정보</Tabs.Trigger>
         <Tabs.Trigger value="2">모집중인 세션</Tabs.Trigger>
         <Tabs.Trigger value="3">후기</Tabs.Trigger>
       </Tabs.List>
-      <Tabs.Content value="1" className="text-white">
+      <Tabs.Content className="text-white" value="1">
         <h2>크루 소개</h2>
         <p>
           모임에 대한 상세 설명입니다. 1000자 이내로 작성해주세요. 모임에 대한
@@ -58,11 +58,11 @@ export const WithContents: Story = {
           작성해주세요. 모임에 대한 상세 설명입니다. 1000자 이내로 작성해주세요.
         </p>
       </Tabs.Content>
-      <Tabs.Content value="2" className="text-white">
+      <Tabs.Content className="text-white" value="2">
         <h2>모집중인 세션</h2>
         <p>모집중인 세션</p>
       </Tabs.Content>
-      <Tabs.Content value="3" className="text-white">
+      <Tabs.Content className="text-white" value="3">
         <h2>후기</h2>
         <p>후기</p>
       </Tabs.Content>

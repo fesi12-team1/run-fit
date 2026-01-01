@@ -7,8 +7,7 @@ import { crewQueries } from '@/api/queries/crewQueries';
 import HeartFill from '@/assets/icons/heart-fill.svg?react';
 import Location from '@/assets/icons/location.svg?react';
 import { DdayBadge, LevelBadge, PaceBadge } from '@/components/ui/Badge';
-import { formatTimeToKorean } from '@/lib/time';
-import { cn } from '@/lib/utils';
+import { formatDDay, formatTimeToKorean } from '@/lib/time';
 import type { Session } from '@/types';
 import ProfileList from '../../user/ProfileList';
 
@@ -37,13 +36,6 @@ export default function SessionCard({
   } = session;
   const { data: crewData } = useQuery(crewQueries.detail(crewId));
 
-  const today = new Date();
-  const registerByDate = new Date(registerBy);
-  const timeDiff = registerByDate.getTime() - today.getTime();
-  const dayDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-  const ddayText =
-    timeDiff < 0 ? '마감됨' : dayDiff > 0 ? `마감 D-${dayDiff}` : '마감 D-Day';
-
   const sessionAtDate = new Date(sessionAt);
   const sessionDate = `${sessionAtDate.getMonth() + 1}월 ${sessionAtDate.getDate()}일`;
   const sessionTime = formatTimeToKorean(
@@ -56,25 +48,24 @@ export default function SessionCard({
       <div className="tablet:aspect-video relative aspect-165/185 w-full cursor-pointer self-stretch overflow-hidden rounded-lg">
         <Link href={`/sessions/${sessionId}`}>
           <Image
-            src={image || '/assets/session-default.png'}
             alt="Session"
+            className={
+              'rounded-xl object-cover transition-opacity duration-300 hover:opacity-80'
+            }
             fill
-            className={cn(
-              'rounded-xl object-cover transition-opacity duration-300 hover:opacity-80',
-              session.image ? 'shadow-sm' : 'border border-gray-500'
-            )}
+            src={image || '/assets/session-default.png'}
           />
         </Link>
         <div className="pointer-events-none absolute top-3 left-3">
-          <DdayBadge dday={ddayText} />
+          <DdayBadge dday={formatDDay(registerBy)} />
         </div>
         <button
+          className="absolute top-3 right-3"
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
             // TODO: 좋아요 기능 구현
           }}
-          className="absolute top-3 right-3"
         >
           <HeartFill className="stroke-offset-[-0.50px] size-6 fill-neutral-900/50 stroke-sky-100 stroke-1" />
         </button>
