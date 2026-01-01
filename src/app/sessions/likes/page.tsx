@@ -4,7 +4,7 @@ import SessionList from './_components/SessionList';
 
 export default function Page() {
   return (
-    <main className="h-main tablet:px-8 laptop:px-0 mx-auto w-full max-w-[1120px] px-4">
+    <main className="h-main tablet:px-8 laptop:px-0 tablet:pb-10 tablet:pt-0 mx-auto w-full max-w-[1120px] px-4 pt-5 pb-5">
       <div className="tablet:block mt-[45px] mb-[43px] ml-1 hidden">
         <h1 className="text-title2-semibold text-gray-50">찜한 세션</h1>
         <p className="text-body3-regular text-gray-300">
