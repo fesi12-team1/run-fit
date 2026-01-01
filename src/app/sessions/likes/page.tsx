@@ -1,14 +1,20 @@
 'use client';
 
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { userQueries } from '@/api/queries/userQueries';
-
-// import SessionCard from '@/components/session/SessionCard';
+import SessionCard from '@/components/session/SessionCard';
+import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 
 export default function Page() {
-  const query = useInfiniteQuery(userQueries.me.likes());
+  const query = useSuspenseInfiniteQuery(userQueries.me.likes());
+  const loadMoreRef = useInfiniteScroll(
+    () => query.fetchNextPage(),
+    query.hasNextPage
+  );
+
   if (query.isLoading) return <div>Loading...</div>;
   if (query.isError) return <div>Failed</div>;
+
   return (
     <main className="h-main mx-auto max-w-[1120px]">
       <div className="tablet:block mt-[45px] mb-[43px] ml-1 hidden">
@@ -18,23 +24,17 @@ export default function Page() {
         </p>
       </div>
 
-      <ul className="laptop:grid-rows-3 grid grid-flow-col grid-rows-2 gap-4">
-        {query.data?.pages
-          .flatMap((page) => page.content)
-          .map((session) => (
-            <li key={session.sessionId}>
-              {/* <SessionCard session={session}>{session.name}</SessionCard> */}
-            </li>
-          ))}
+      <ul className="laptop:grid-cols-3 grid w-full grid-cols-2 gap-6">
+        {query.data?.sessions.map((session) => (
+          <SessionCard
+            key={session.id}
+            session={session}
+            displayParticipants={true}
+          />
+        ))}
       </ul>
 
-      <button
-        type="button"
-        disabled={!query.hasNextPage || query.isFetchingNextPage}
-        onClick={() => query.fetchNextPage()}
-      >
-        {query.isFetchingNextPage ? '불러오는 중...' : '더 보기'}
-      </button>
+      <div ref={loadMoreRef} className="h-1" />
     </main>
   );
 }

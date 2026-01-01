@@ -13,7 +13,6 @@ import { normalizeParams } from '@/lib/utils';
 import {
   Crew,
   InfiniteQueryPageParam,
-  LikeSessions,
   PageData,
   PaginationQueryParams,
   ParticipatingSession,
@@ -73,8 +72,8 @@ export const userQueries = {
             size: 18,
           }),
         getNextPageParam: (
-          lastPage: SliceData<LikeSessions>,
-          allPages: SliceData<LikeSessions>[]
+          lastPage: SliceData<Session>,
+          allPages: SliceData<Session>[]
         ) => {
           if (!lastPage.hasNext) return undefined;
           return allPages.length;
@@ -82,7 +81,7 @@ export const userQueries = {
         initialPageParam: 0,
         staleTime: 1000 * 60,
 
-        select: (data: InfiniteData<SliceData<LikeSessions>>) => {
+        select: (data: InfiniteData<SliceData<Session>>) => {
           return {
             ...data,
             sessions: data.pages.flatMap((p) => p.content),

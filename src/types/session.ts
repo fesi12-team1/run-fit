@@ -55,20 +55,6 @@ export type SessionFilterState = {
   level: SessionLevel | undefined;
 };
 
-export type LikeSessions = Pick<
-  Session,
-  | 'crewId'
-  | 'name'
-  | 'image'
-  | 'city'
-  | 'district'
-  | 'location'
-  | 'coords'
-  | 'sessionAt'
-  | 'level'
-  | 'status'
-> & { sessionId: number };
-
 export type ParticipatingSession = Omit<Session, 'description'> & {
   reviewed?: boolean;
 };

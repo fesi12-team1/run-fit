@@ -1,6 +1,5 @@
 import {
   Crew,
-  LikeSessions,
   PageData,
   PaginationQueryParams,
   Profile,
@@ -51,7 +50,7 @@ export async function getMyReviews(queryParams?: PaginationQueryParams) {
 }
 
 // 내가 찜한 세션 목록 조회
-export type GetMyLikedSessionsResponse = SliceData<LikeSessions>;
+export type GetMyLikedSessionsResponse = SliceData<Session>;
 export async function getMyLikedSessions(queryParams?: PaginationQueryParams) {
   const searchParams = new URLSearchParams();
 
