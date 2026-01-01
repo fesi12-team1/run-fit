@@ -157,8 +157,8 @@ export function RoleBadge({ role, className, ...props }: RoleBadgeProps) {
   const baseStyle = 'px-2 py-1 rounded-md';
 
   const roleStyles = {
-    LEADER: 'bg-brand-900 text-brand-200 text-[10px]/[100%] font-bold',
-    STAFF: 'bg-gray-700 text-gray-200 text-[10px]/[100%] font-semibold',
+    LEADER: 'bg-brand-900 text-brand-200 text-[10px]/normal font-bold',
+    STAFF: 'bg-gray-700 text-gray-200 text-[10px]/normal font-semibold',
     MEMBER: 'hidden',
   };
 

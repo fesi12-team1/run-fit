@@ -67,11 +67,11 @@ export default function ParticipantsList({ sessionId }: { sessionId: number }) {
           fullscreenWhenMobile
         >
           <Modal.Title className="relative flex w-full items-start gap-2 self-start">
-            <Modal.EmptyCloseButton className="laptop:hidden my-0.5 flex">
+            <Modal.EmptyCloseButton className="tablet:hidden my-0.5 flex">
               <ChevronLeft className="size-6" />
             </Modal.EmptyCloseButton>
             <span className="text-body1-semibold text-white">참여 멤버</span>
-            <Modal.CloseButton className="laptop:flex absolute top-0 right-0 my-0.5 hidden" />
+            <Modal.CloseButton className="tablet:flex absolute top-0 right-0 my-0.5 hidden" />
           </Modal.Title>
           <hr className="w-full text-gray-700" />
           <ul className="flex h-full flex-col gap-4">

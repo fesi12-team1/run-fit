@@ -61,13 +61,13 @@ export default function CrewMemberList({
           </Button>
         </Modal.Trigger>
         <Modal.Content
-          className="tablet:h-[620px] tablet:w-[400px] flex flex-col bg-gray-800"
+          className="tablet:h-[620px] tablet:w-[400px] tablet:gap-4 flex flex-col gap-5 bg-gray-800"
           fullscreenWhenMobile
           onCloseAutoFocus={() => setEditMode('view')}
         >
           <Modal.Title className="relative flex w-full items-start gap-2 self-start">
             <Modal.EmptyCloseButton
-              className="laptop:hidden my-0.5 flex"
+              className="tablet:hidden my-0.5 flex"
               onClick={() => setEditMode('view')}
             >
               <ChevronLeft className="size-6" />
@@ -78,18 +78,17 @@ export default function CrewMemberList({
                   {crew.name}
                 </span>
                 {myRole === 'LEADER' && (
-                  <Settings
-                    className="size-5 fill-gray-200"
-                    onClick={() => setEditMode('edit')}
-                  />
+                  <button onClick={() => setEditMode('edit')}>
+                    <Settings className="size-5 fill-gray-200" />
+                  </button>
                 )}
               </div>
-              <span className="text-body3-regular laptop:pb-0 pb-4 text-gray-200">
+              <span className="text-body3-regular tablet:pb-0 pb-1 text-gray-200">
                 {crew.city} • 멤버 {members.length}명
               </span>
             </div>
             <Modal.CloseButton
-              className="laptop:flex absolute top-0 right-0 my-0.5 hidden"
+              className="tablet:flex absolute top-0 right-0 my-0.5 hidden"
               onClick={() => setEditMode('view')}
             />
           </Modal.Title>
@@ -258,12 +257,14 @@ function CrewMemberListItem({
       )}
       {editMode === 'edit' && (
         <div className="flex w-full items-center justify-between">
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-2">
             <span className="text-body3-semibold">{member.name}</span>
             {member.role === 'LEADER' && <RoleBadge role="LEADER" />}
             {member.role !== 'LEADER' && (
-              <Dropdown size="lg">
-                <Dropdown.Trigger>{ROLE_LABEL[member.role]}</Dropdown.Trigger>
+              <Dropdown size="sm">
+                <Dropdown.Trigger className="bg-gray-700">
+                  {ROLE_LABEL[member.role]}
+                </Dropdown.Trigger>
                 <Dropdown.Content className="z-60">
                   <Dropdown.Item onSelect={() => handleSelect('STAFF')}>
                     {ROLE_LABEL['STAFF']}
@@ -278,9 +279,9 @@ function CrewMemberListItem({
           {member.role !== 'LEADER' && (
             <Modal>
               <Modal.Trigger aria-label="멤버 추방" asChild>
-                <span className="text-body3-medium text-error-100 shrink-0 px-3 py-2">
+                <button className="text-body3-medium text-error-100 shrink-0 px-3 py-2">
                   삭제하기
-                </span>
+                </button>
               </Modal.Trigger>
               <Modal.Content className="flex h-[200px] w-[360px] flex-col gap-7">
                 <Modal.Title />
