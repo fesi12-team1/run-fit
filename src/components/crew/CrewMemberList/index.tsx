@@ -7,6 +7,7 @@ import {
 } from '@/api/mutations/crewMutations';
 import Settings from '@/assets/icons/settings.svg?react';
 import VerticalEllipsis from '@/assets/icons/vertical-ellipsis.svg?react';
+import CrewModal from '@/components/crew/CrewModal';
 import { RoleBadge } from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
 import Dropdown from '@/components/ui/Dropdown';
@@ -34,7 +35,7 @@ export default function CrewMemberList({
           <span className="text-title3-semibold line-clamp-1 text-gray-50">
             {crew.name}
           </span>
-          {myRole && <CrewMenuActions />}
+          {myRole && <CrewMenuActions crew={crew} />}
         </div>
         <span className="text-body3-regular laptop:pb-0 pb-4 text-gray-200">
           {crew.city} • 멤버 {members.length}명
@@ -104,7 +105,7 @@ export default function CrewMemberList({
   );
 }
 
-function CrewMenuActions() {
+function CrewMenuActions({ crew: crewData }: { crew?: Crew }) {
   const { crewId, myRole } = useCrewRole();
   const [currentModal, setCurrentModal] = useState<
     'leave' | 'delete' | 'edit' | 'delegate' | null
@@ -151,6 +152,15 @@ function CrewMenuActions() {
           )}
         </Dropdown.Content>
       </Dropdown>
+
+      {/** Edit Crew Modal */}
+      <CrewModal
+        crewData={crewData}
+        mode="edit"
+        open={currentModal === 'edit'}
+        onOpenChange={(open) => !open && setCurrentModal(null)}
+        onSuccess={() => setCurrentModal(null)}
+      />
 
       {/* Leave Crew Modal */}
       <Modal

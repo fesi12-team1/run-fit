@@ -9,52 +9,85 @@ import Input from '@/components/ui/Input';
 import Label from '@/components/ui/Label';
 import Spinner from '@/components/ui/Spinner';
 import Textarea from '@/components/ui/Textarea';
-import { useCreateCrewForm } from '@/hooks/crew/useCreateCrewForm';
+import { useCrewForm } from '@/hooks/crew/useCrewForm';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { SIDO_LIST } from '@/types/region';
+import { CrewFormValues } from './_schema';
 
-interface CrewCreateFormProps {
-  onSuccessHandler?: () => void;
-}
+type CrewFormCreateProps = {
+  mode: 'create';
+  defaultValues: CrewFormValues;
+  onSuccess?: () => void;
+};
 
-export default function CrewCreateForm({
-  onSuccessHandler,
-}: CrewCreateFormProps) {
-  const [selectedCity, setSelectedCity] = useState<string>('서울');
+type CrewFormEditProps = {
+  mode: 'edit';
+  crewId: number;
+  defaultValues: CrewFormValues;
+  onSuccess?: () => void;
+};
+
+type CrewFormProps = CrewFormCreateProps | CrewFormEditProps;
+
+export default function CrewForm(props: CrewFormProps) {
+  const { mode, defaultValues, onSuccess } = props;
+  const [selectedCity, setSelectedCity] = useState(defaultValues.city);
   const isPc = useMediaQuery({ min: 'laptop' });
 
-  const { form, submit } = useCreateCrewForm({
-    onSuccess() {
-      toast.success('크루가 생성되었습니다!');
-      if (onSuccessHandler) {
-        onSuccessHandler();
-      }
-    },
-    onError: (message) => {
-      toast.error(`크루 생성 실패: ${message}`);
-    },
-  });
+  const handleSuccess = () => {
+    toast.success(
+      mode === 'create'
+        ? '크루가 생성되었습니다!'
+        : '크루 정보가 수정되었습니다!'
+    );
+    onSuccess?.();
+  };
+
+  const handleError = (message: string) => {
+    toast.error(message);
+  };
+
+  const { form, submit, isPending } = useCrewForm(
+    mode === 'create'
+      ? {
+          mode: 'create',
+          defaultValues,
+          onSuccess: handleSuccess,
+          onError: handleError,
+        }
+      : {
+          mode: 'edit',
+          crewId: props.crewId,
+          defaultValues,
+          onSuccess: handleSuccess,
+          onError: handleError,
+        }
+  );
 
   const handleSelectCity = (city: string) => {
-    const newCity = selectedCity === city ? '' : city;
-    setSelectedCity(newCity);
-    form.setValue('city', newCity);
+    setSelectedCity(city);
+    form.setValue('city', city);
   };
 
   const handleImageChange = (file: File | null) => {
     if (!file) {
       form.setValue('image', undefined);
-      return;
+    } else {
+      form.setValue('image', file);
     }
-    form.setValue('image', file);
   };
 
-  const { errors, isSubmitting } = form.formState;
+  const { errors } = form.formState;
 
   return (
     <form className="flex w-full flex-col gap-4" onSubmit={submit}>
       <CoverImageUploader
         className="bg-gray-750"
+        initialUrl={
+          typeof defaultValues.image === 'string'
+            ? defaultValues.image
+            : undefined
+        }
         onFileChange={handleImageChange}
       />
 
@@ -67,9 +100,8 @@ export default function CrewCreateForm({
       />
 
       <div className="flex flex-col gap-1">
-        <Label htmlFor="crew-description">크루 소개</Label>
+        <Label>크루 소개</Label>
         <Textarea
-          id="crew-description"
           {...form.register('description')}
           className="bg-gray-750"
           placeholder="크루에 대한 상세 설명을 작성해주세요"
@@ -84,11 +116,9 @@ export default function CrewCreateForm({
         )}
       </div>
 
-      <div className="tablet:gap-2 flex flex-col gap-3">
-        <Label className="text-caption-semibold tablet:text-body3-semibold text-gray-50">
-          지역
-        </Label>
-        <div className="tablet:grid-cols-7 tablet:gap-2 mt-1 grid w-full grid-cols-5 place-items-center gap-3">
+      <div className="flex flex-col gap-1">
+        <Label>지역</Label>
+        <div className="tablet:grid-cols-7 grid grid-cols-5 gap-2">
           {SIDO_LIST.map((sido) => (
             <Chip
               key={sido}
@@ -101,16 +131,12 @@ export default function CrewCreateForm({
             </Chip>
           ))}
         </div>
-        {errors.city && (
-          <p className="text-error-100 tablet:text-body3-semibold text-caption-semibold mt-1">
-            {errors.city.message}
-          </p>
-        )}
+        {errors.city && <p className="text-error-100">{errors.city.message}</p>}
       </div>
 
       <Button type="submit">
-        {isSubmitting ? '생성 중...' : '완료'}
-        {isSubmitting && <Spinner className="ml-3" />}
+        {isPending ? (mode === 'create' ? '생성 중...' : '수정 중...') : '완료'}
+        {isPending && <Spinner className="ml-3" />}
       </Button>
     </form>
   );

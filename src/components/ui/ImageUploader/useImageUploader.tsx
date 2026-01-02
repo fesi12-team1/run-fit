@@ -12,6 +12,7 @@ type UseImagePickerOptions = {
   maxFiles: number;
   maxSizeMB: number;
   acceptMime?: string[]; // 예: ['image/jpeg','image/png','image/webp']
+  initialUrl?: string | null;
 };
 
 const uid = () => crypto.randomUUID?.() ?? `${Date.now()}-${Math.random()}`;
@@ -20,12 +21,16 @@ export default function useImageUploader({
   maxFiles,
   maxSizeMB,
   acceptMime = ['image/jpeg', 'image/png', 'image/webp'],
+  initialUrl,
 }: UseImagePickerOptions) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [items, setItems] = useState<ImageItem[]>([]);
   const [errors, setErrors] = useState<string[]>([]);
 
-  // preview url 정리
+  const preview = items[0]?.previewUrl ?? initialUrl ?? '';
+  const hasPreview = items.length > 0 || !!initialUrl;
+
+  // preview url 정리 - blob URL 메모리 누수 방지
   useEffect(() => {
     return () => items.forEach((it) => URL.revokeObjectURL(it.previewUrl));
   }, [items]);
@@ -88,6 +93,8 @@ export default function useImageUploader({
   return {
     inputRef,
     items,
+    preview,
+    hasPreview,
     setItems,
     errors,
     open,
