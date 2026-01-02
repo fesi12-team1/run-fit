@@ -17,7 +17,11 @@ import RegisterAtInputField from './RegisterByInputField';
 import SessionAtInputField from './SessionAtInputField';
 import SubmitButton from './SubmitButton';
 
-export default function SessionCreateForm({ crewId }: { crewId?: number }) {
+interface SessionCreateFormProps {
+  crewId: number;
+}
+
+export default function SessionCreateForm({ crewId }: SessionCreateFormProps) {
   const isLaptopUp = useMediaQuery({ min: 'laptop' });
   const mutation = useCreateSession();
   const form = useForm<SessionCreateFormValues>({

@@ -4,24 +4,25 @@ import { SessionCreateFormValues } from '../_others/schema';
 
 interface DetailInputFieldProps {
   className?: string;
+  errorMessage?: string;
+  disabled?: boolean;
 }
 
-export default function DetailInputField({ className }: DetailInputFieldProps) {
+export default function DetailInputField({
+  className,
+  errorMessage,
+  disabled,
+}: DetailInputFieldProps) {
   const { register } = useFormContext<SessionCreateFormValues>();
 
   return (
-    <div className={className}>
-      <label
-        htmlFor="detail"
-        className="text-caption-semibold tablet:text-body3-semibold text-gray-50"
-      >
-        상세 내용
-      </label>
-      <Textarea
-        id="detail"
-        placeholder="세션에 대한 상세 설명을 작성해주세요"
-        {...register('description')}
-      />
-    </div>
+    <Textarea
+      placeholder="세션에 대한 상세 설명을 작성해주세요"
+      {...register('description')}
+      label="세션 설명"
+      disabled={disabled}
+      errorMessage={errorMessage}
+      className={className}
+    />
   );
 }
