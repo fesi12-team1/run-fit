@@ -146,6 +146,7 @@ export default function Page() {
                           key={session.id}
                           session={session}
                           displayParticipants={false}
+                          textSize="sm"
                         />
                       ))}
                     </div>

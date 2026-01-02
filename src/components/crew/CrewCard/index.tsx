@@ -19,7 +19,7 @@ export default function CrewCard({ crew }: { crew: Crew }) {
   );
 
   return (
-    <div className="tablet:border-t tablet:border-gray-700 tablet:py-5 flex justify-between">
+    <div className="tablet:py-5 flex justify-between">
       <CrewCardLeft crew={crew} members={crewMembers?.members} />
       <CrewCardRight sessions={crewSessionData?.content} />
     </div>
@@ -80,7 +80,7 @@ function CrewCardInfo({
   members?: CrewMember[];
 }) {
   return (
-    <div className="tablet:w-[500px] flex flex-col justify-evenly gap-2 p-3">
+    <div className="tablet:w-[500px] flex flex-col justify-evenly gap-2 p-3 pb-1">
       <Link
         className="tablet:text-title3-semibold text-body2-semibold line-clamp-1 text-gray-50"
         href={`/crews/${id}`}
@@ -112,7 +112,7 @@ function CrewCardMembers({
 }) {
   return (
     <div className="flex items-center gap-1">
-      <span className="text-caption-medium tablet:text-body3-medium pointer-events-none rounded-lg bg-gray-500 px-2 py-1 text-gray-100">
+      <span className="text-caption-medium tablet:text-body3-medium pointer-events-none rounded-lg bg-gray-500 px-2 py-1 text-gray-100 select-none">
         {city}
       </span>
 
@@ -126,9 +126,12 @@ function CrewCardMembers({
 }
 
 function CrewCardRight({ sessions }: { sessions?: Session[] }) {
+  if (!sessions || sessions.length === 0) return null;
   return (
-    <div className="tablet:flex hidden w-[300px] shrink-0 flex-col p-3">
-      <div className="text-body3-semibold mb-2 text-gray-300">최근 세션</div>
+    <div className="laptop:flex hidden w-[300px] shrink-0 flex-col p-3">
+      <div className="text-body3-semibold mb-2 text-gray-300 select-none">
+        최근 세션
+      </div>
       <CrewCardSessions sessions={sessions} />
     </div>
   );
@@ -136,25 +139,24 @@ function CrewCardRight({ sessions }: { sessions?: Session[] }) {
 
 function CrewCardSessions({ sessions }: { sessions?: Session[] }) {
   return (
-    <ul className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2">
       {sessions?.map((session) => {
         const date = new Date(session.sessionAt);
         const formatted = `${date.getMonth() + 1}월 ${date.getDate()}일`;
 
         return (
-          <li
+          <Link
             key={session.id}
-            className="text-body2-regular flex justify-between text-gray-100"
+            href={`/sessions/${session.id}`}
+            className="text-body2-regular flex justify-between text-gray-100 transition-colors hover:opacity-80"
           >
-            <Link className="truncate" href={`/sessions/${session.id}`}>
-              {session.name}
-            </Link>
+            {session.name}
             <span className="text-body3-regular text-nowrap text-gray-200">
               {formatted}
             </span>
-          </li>
+          </Link>
         );
       })}
-    </ul>
+    </div>
   );
 }
