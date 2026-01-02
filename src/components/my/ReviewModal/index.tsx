@@ -51,7 +51,9 @@ export default function ReviewModal({
 
   const isDisabled = isSubmitting || ranks === 0 || description.trim() === '';
 
-  const { mutateAsync: createReview } = useCreateSessionReview(session?.id);
+  const { mutateAsync: createReview } = useCreateSessionReview(
+    session?.id ?? 0
+  );
   const { mutateAsync: uploadImage } = useUploadImage();
 
   if (!open || !session) {
