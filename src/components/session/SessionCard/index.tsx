@@ -115,7 +115,7 @@ export default function SessionCard({
         {displayParticipants && crewData && (
           <div className="laptop:gap-2 flex items-center gap-1">
             <ProfileList
-              memberCount={crewData.memberCount}
+              memberCount={participants.length}
               members={participants}
             />
             <div className="text-caption-regular laptop:text-body3-regular pointer-events-none text-gray-300">
