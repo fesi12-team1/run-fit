@@ -1,4 +1,5 @@
 import UserAvatar from '@/components/ui/UserAvatar';
+import { generateNextImageSizes } from '@/lib/Image';
 import type { CrewMember } from '@/types';
 
 interface ProfileListProps {
@@ -11,9 +12,13 @@ export default function ProfileList({ members }: ProfileListProps) {
       {members?.map((member: CrewMember) => (
         <UserAvatar
           key={member.userId}
-          alt={member.name}
+          alt={`${member.name} 프로필 이미지`}
           className="tablet:size-6 size-4 data-[slot=avatar]:ring-1 data-[slot=avatar]:ring-gray-900"
-          src={member.profileImage || '/assets/profile-default.png'}
+          sizes={generateNextImageSizes({
+            mobile: '16px',
+            tablet: '24px',
+          })}
+          src={member.profileImage}
         />
       ))}
     </div>

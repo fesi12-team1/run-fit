@@ -7,12 +7,14 @@ interface UserAvatarProps {
   src?: string | null;
   alt?: string;
   className?: string;
+  sizes?: string;
 }
 
 export default function UserAvatar({
   src,
   alt = '사용자 프로필',
   className,
+  sizes,
 }: UserAvatarProps) {
   return (
     <div
@@ -24,6 +26,7 @@ export default function UserAvatar({
         className="object-cover"
         fallbackSrc={'/assets/profile-default.png'}
         fill
+        sizes={sizes}
         src={src}
       />
     </div>
