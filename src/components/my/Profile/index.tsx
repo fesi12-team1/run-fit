@@ -1,6 +1,6 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useState } from 'react';
 import { userQueries } from '@/api/queries/userQueries';
@@ -10,7 +10,7 @@ import type { Profile as ProfileType } from '@/types';
 import ProfileEdit from '../ProfileEdit';
 
 export default function Profile() {
-  const { data } = useQuery(userQueries.me.info());
+  const { data } = useSuspenseQuery(userQueries.me.info());
   const [open, setOpen] = useState(false);
 
   function isEmptyProfile(profile: ProfileType) {
