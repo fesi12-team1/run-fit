@@ -3,17 +3,12 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod/v4';
-import {
-  useSignup,
-  type UseAuthFormOptions,
-} from '@/api/mutations/authMutations';
 
 const signupSchema = z
   .object({
     email: z
-      .string()
-      .min(1, '이메일을 입력해주세요.')
-      .email('올바른 이메일 형식이 아닙니다.'),
+      .email('올바른 이메일 형식이 아닙니다.')
+      .min(1, '이메일을 입력해주세요.'),
     password: z
       .string()
       .min(8, '비밀번호는 최소 8자 이상이어야 합니다.')
@@ -34,27 +29,11 @@ const signupSchema = z
     message: '비밀번호가 일치하지 않습니다.',
   });
 
-export function useSignupForm(options: UseAuthFormOptions) {
+export function useSignupForm() {
   const form = useForm<z.infer<typeof signupSchema>>({
     resolver: zodResolver(signupSchema),
     mode: 'onChange',
   });
 
-  const mutation = useSignup({
-    onSuccess: options?.onSuccess,
-    onError: (message) => {
-      options?.onError?.(message);
-      form.setError('root', { message });
-    },
-  });
-
-  const submit = form.handleSubmit((values) => {
-    mutation.mutate(values);
-  });
-
-  return {
-    form,
-    submit,
-    isPending: mutation.isPending,
-  };
+  return form;
 }

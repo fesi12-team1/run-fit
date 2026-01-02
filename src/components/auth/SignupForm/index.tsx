@@ -4,6 +4,7 @@ import { Eye, EyeOff } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { useSignup } from '@/api/mutations/authMutations';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import { useSignupForm } from '@/hooks/auth/useSignupForm';
@@ -11,16 +12,21 @@ import { useSignupForm } from '@/hooks/auth/useSignupForm';
 export default function SignupForm() {
   const router = useRouter();
 
-  const { form, submit, isPending } = useSignupForm({
+  const form = useSignupForm();
+  const { mutate, isPending } = useSignup({
     onSuccess: () => {
       toast.success('회원가입 성공!');
       router.push('/signin');
     },
-    onError: (message) => {
-      toast.error(`회원가입 실패: ${message}`);
+    onError: (error, _variables, _onMutateResult, _context) => {
+      toast.error(`회원가입 실패: ${error.message}`);
+      form.setError('root', {});
     },
   });
 
+  const submit = form.handleSubmit((values) => {
+    mutate(values);
+  });
   const {
     register,
     formState: { errors, isValid },
