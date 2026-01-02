@@ -15,7 +15,6 @@ import Spinner from '@/components/ui/Spinner';
 import Textarea from '@/components/ui/Textarea';
 import { CrewFormValues, useCrewForm } from '@/hooks/crew/useCrewForm';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
-import { ApiError } from '@/lib/error';
 import { SIDO_LIST } from '@/types/region';
 
 type CreateCrewFormProps = {
@@ -63,7 +62,7 @@ export default function CrewForm({
           toast.success('크루가 생성되었습니다!');
         },
         onError: () => {
-          toast.success('크루 생성에 실패했습니다.');
+          toast.error('크루 생성에 실패했습니다.');
         },
       });
     } else {
@@ -73,7 +72,7 @@ export default function CrewForm({
           toast.success('크루 정보가 수정되었습니다!');
         },
         onError: () => {
-          toast.success('크루 정보 수정에 실패했습니다.');
+          toast.error('크루 정보 수정에 실패했습니다.');
         },
       });
     }
@@ -167,8 +166,8 @@ export default function CrewForm({
       </div>
 
       <Button type="submit">
-        {createMutation.isPending ? '생성 중...' : '완료'}
-        {updateMutation.isPending ? '수정 중...' : '완료'}
+        {mode === 'create' && createMutation.isPending ? '생성 중...' : '완료'}
+        {mode === 'edit' && updateMutation.isPending ? '수정 중...' : '완료'}
         {(createMutation.isPending || updateMutation.isPending) && (
           <Spinner className="ml-3" />
         )}
