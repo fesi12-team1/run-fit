@@ -1,4 +1,7 @@
+'use client';
+
 import { useQuery } from '@tanstack/react-query';
+import Link from 'next/link';
 import { useState } from 'react';
 import { sessionQueries } from '@/api/queries/sessionQueries';
 import ChevronLeft from '@/assets/icons/chevron-left.svg?react';
@@ -12,44 +15,53 @@ export default function ParticipantsList({ sessionId }: { sessionId: number }) {
   const participants = participantsQuery.data?.participants || [];
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  if (participantsQuery.isLoading) return <h1>Loading...</h1>;
+  if (participantsQuery.isLoading) return null;
 
-  return (
-    <div className="tablet:gap-2 flex flex-col gap-1">
-      <h2 className="text-body2-semibold tablet:text-title3-semibold tablet:gap-2 flex gap-1">
-        <span className="text-gray-50">참여 멤버</span>
-        <span className="text-brand-300">{participants.length}</span>
-      </h2>
+  if (participantsQuery.isError) {
+    const isUnauthorized =
+      participantsQuery.error?.message === '인증이 필요합니다.';
 
-      {participantsQuery.isError ? (
-        <div className="h-10">
-          {participantsQuery.error?.message === 'UNAUTHORIZED'
+    return (
+      <div className="flex flex-col gap-3">
+        <p className="text-body3-regular tablet:text-body2-regular text-gray-300">
+          {isUnauthorized
             ? '참가자 목록을 보려면 로그인이 필요합니다.'
             : '참가자 목록을 불러올 수 없습니다.'}
-        </div>
-      ) : (
-        <ul className="tablet:gap-5 mb-3 flex flex-col gap-2">
-          {participants.slice(0, 4).map((participant) => (
-            <li key={participant.userId} className="flex items-center gap-3">
-              <UserAvatar
-                src={participant.profileImage}
-                className="size-12 shrink-0"
-              />
-              <div className="flex flex-col gap-1">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-body3-semibold tablet:text-body2-semibold">
-                    {participant.name}
-                  </span>
-                  <RoleBadge role={participant.role} />
-                </div>
-                <p className="text-caption-regular tablet:text-body3-regular line-clamp-1 text-gray-200">
-                  {participant.introduction}
-                </p>
+        </p>
+        {isUnauthorized && (
+          <Link href="/signin">
+            <Button variant="default" size="sm" className="w-full">
+              로그인하기
+            </Button>
+          </Link>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <ul className="tablet:gap-5 mb-3 flex flex-col gap-2">
+        {participants.slice(0, 4).map((participant) => (
+          <li key={participant.userId} className="flex items-center gap-3">
+            <UserAvatar
+              src={participant.profileImage}
+              className="size-12 shrink-0"
+            />
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-1.5">
+                <span className="text-body3-semibold tablet:text-body2-semibold">
+                  {participant.name}
+                </span>
+                <RoleBadge role={participant.role} />
               </div>
-            </li>
-          ))}
-        </ul>
-      )}
+              <p className="text-caption-regular tablet:text-body3-regular line-clamp-1 text-gray-200">
+                {participant.introduction}
+              </p>
+            </div>
+          </li>
+        ))}
+      </ul>
 
       <Button
         variant="neutral"
@@ -96,6 +108,6 @@ export default function ParticipantsList({ sessionId }: { sessionId: number }) {
           </ul>
         </Modal.Content>
       </Modal>
-    </div>
+    </>
   );
 }

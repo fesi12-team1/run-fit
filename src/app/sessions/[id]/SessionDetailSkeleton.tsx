@@ -113,22 +113,6 @@ export default function SessionDetailSkeleton() {
                 <div className="h-6 w-16 animate-pulse rounded bg-gray-600" />
                 <div className="tablet:h-[312px] h-[218px] w-full animate-pulse rounded-[20px] bg-gray-600" />
               </div>
-
-              {/* 참가자 목록 */}
-              <div className="flex flex-col gap-2">
-                <div className="h-6 w-24 animate-pulse rounded bg-gray-600" />
-                <div className="flex flex-col gap-3">
-                  {[1, 2, 3].map((i) => (
-                    <div key={i} className="flex items-center gap-3">
-                      <div className="size-10 shrink-0 animate-pulse rounded-full bg-gray-600" />
-                      <div className="flex flex-col gap-1">
-                        <div className="h-4 w-24 animate-pulse rounded bg-gray-600" />
-                        <div className="h-3 w-16 animate-pulse rounded bg-gray-600" />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
             </div>
           </div>
 
