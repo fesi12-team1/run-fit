@@ -67,7 +67,7 @@ export default function CrewMemberList({
         <Modal.Content
           className={cn(
             'tablet:h-[620px] tablet:w-[400px] tablet:gap-4 flex flex-col gap-5 bg-gray-800',
-            isProfileDisplayed && 'hidden'
+            isProfileDisplayed && 'tablet:hidden'
           )}
           fullscreenWhenMobile
           onCloseAutoFocus={() => setEditMode('view')}
