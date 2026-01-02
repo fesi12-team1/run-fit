@@ -1,7 +1,7 @@
 import { BREAKPOINTS } from '@/constants/breakpoints';
 
 export interface ImageSizeConfig {
-  [key: string]: number;
+  [key: string]: string;
 }
 
 /**
@@ -19,12 +19,12 @@ export function generateNextImageSizes(config: ImageSizeConfig): string {
     .map(([bp, px]) => {
       const size = config[bp];
       if (size === undefined) return null;
-      return `(min-width: ${px}px) ${size}px`;
+      return `(min-width: ${px}px) ${size}`;
     })
     .filter((s) => s !== null)
     .join(', ');
 
   // 기본값 (가장 작은 breakpoint)
   const defaultSize = config.mobile;
-  return sizes ? `${sizes}, ${defaultSize}px` : `${defaultSize}px`;
+  return sizes ? `${sizes}, ${defaultSize}` : `${defaultSize}`;
 }

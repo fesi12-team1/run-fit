@@ -9,6 +9,7 @@ import HeartFill from '@/assets/icons/heart-fill.svg?react';
 import HeartOutline from '@/assets/icons/heart-outline.svg?react';
 import Location from '@/assets/icons/location.svg?react';
 import { DdayBadge, LevelBadge, PaceBadge } from '@/components/ui/Badge';
+import { generateNextImageSizes } from '@/lib/Image';
 import { formatDDay, formatTimeToKorean } from '@/lib/time';
 import type { Session } from '@/types';
 import ProfileList from '../../user/ProfileList';
@@ -67,7 +68,7 @@ export default function SessionCard({
 
   return (
     <li className="relative flex w-full flex-col">
-      <div className="absolute top-3 right-3 z-3">
+      <div className="absolute top-3 right-3 z-1">
         <button
           type="button"
           onClick={() => onLikeButtonClick?.(sessionId, liked)}
@@ -81,18 +82,23 @@ export default function SessionCard({
       </div>
 
       <Link href={`/sessions/${sessionId}`}>
-        <div className="tablet:aspect-video relative aspect-165/185 w-full cursor-pointer self-stretch overflow-hidden rounded-lg">
+        <div className="tablet:aspect-171/100 relative aspect-165/185 w-full cursor-pointer self-stretch overflow-hidden rounded-lg">
           <Image
-            alt="Session"
-            className={
-              'rounded-xl object-cover transition-opacity duration-300 hover:opacity-80'
-            }
+            alt={`${name} 세션 이미지`}
+            className="object-cover transition-opacity duration-300 hover:opacity-80"
             fill
+            sizes={generateNextImageSizes({
+              mobile: '50vw',
+              tablet: '50vw',
+              laptop: '33vw',
+            })}
             src={image || '/assets/session-default.png'}
           />
-          <div className="pointer-events-none absolute top-3 left-3">
-            <DdayBadge dday={formatDDay(registerBy)} />
-          </div>
+
+          <DdayBadge
+            className="absolute top-3 left-3"
+            dday={formatDDay(registerBy)}
+          />
 
           <div className="absolute bottom-3 left-3 flex items-center gap-0.5 md:gap-1">
             <Location className="size-4 fill-gray-200" />

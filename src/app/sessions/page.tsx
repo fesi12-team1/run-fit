@@ -69,8 +69,8 @@ function Header() {
           fill
           priority
           sizes={generateNextImageSizes({
-            tablet: 302,
-            laptop: 417,
+            tablet: '302px',
+            laptop: '417px',
           })}
           className="object-contain"
         />
