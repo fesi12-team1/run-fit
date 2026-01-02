@@ -1,3 +1,5 @@
+'use client';
+
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { crewQueries } from '@/api/queries/crewQueries';
@@ -8,9 +10,7 @@ import Dropdown from '@/components/ui/Dropdown';
 import ProgressBar from '@/components/ui/ProgressBar';
 import { formatDDay, formatKoYYMDMeridiemTime } from '@/lib/time';
 import { Session } from '@/types/session';
-import CopyUrlButton from './CopyUrlButton';
-import LikeButton from './LikeButton';
-import ParticipateButton from './ParticipateButton';
+import SessionActionGroup from './SessionActionGroup';
 import SessionDeleteModal from './SessionDeleteModal';
 import SessionUpdateModal from './SessionUpdateModal';
 
@@ -78,13 +78,7 @@ export default function SessionShortInfo({
       </div>
       <ProgressBar value={currentParticipantCount} max={maxParticipantCount} />
       <hr className="text-gray-500" />
-      <div className="laptop:flex hidden items-center gap-7">
-        <div className="flex items-center gap-4">
-          <LikeButton sessionId={session.id} />
-          <CopyUrlButton />
-        </div>
-        <ParticipateButton className="flex-1" sessionId={session.id} />
-      </div>
+      <SessionActionGroup className="laptop:flex hidden" session={session} />
 
       <SessionUpdateModal
         isUpdateModalOpen={isUpdateModalOpen}

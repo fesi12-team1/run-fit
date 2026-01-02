@@ -1,3 +1,5 @@
+'use client';
+
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { useRouter } from 'next/navigation';
 import { useDeleteSession } from '@/api/mutations/sessionMutations';
