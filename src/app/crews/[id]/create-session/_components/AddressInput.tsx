@@ -26,12 +26,15 @@ export default function AddressInput({ className }: AddressInputProps) {
         location={watch('location')}
         onClick={() => {
           openAddressSearch((data) => {
-            setValue('location', data.address, {
+            const location = data.address;
+            const cityParsed = citySchema.safeParse(data.sido);
+            const district = districtSchema.safeParse(data.sigungu);
+
+            setValue('location', location, {
               shouldDirty: true,
               shouldValidate: true,
             });
 
-            const cityParsed = citySchema.safeParse(data.sido);
             if (cityParsed.success) {
               setValue('city', cityParsed.data, {
                 shouldDirty: true,
@@ -41,9 +44,8 @@ export default function AddressInput({ className }: AddressInputProps) {
               setValue('city', '', { shouldDirty: true, shouldValidate: true });
             }
 
-            const districtParsed = districtSchema.safeParse(data.sigungu);
-            if (districtParsed.success) {
-              setValue('district', districtParsed.data, {
+            if (district.success) {
+              setValue('district', district.data, {
                 shouldDirty: true,
                 shouldValidate: true,
               });
