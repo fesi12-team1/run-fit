@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useLikeButton } from '@/app/sessions/[id]/_components/LikeButton';
+import { useLikeButton } from '@/app/sessions/[id]/_components/SessionActionGroup/LikeButton';
 import { Session } from '@/types';
 import SessionCard from '../SessionCard';
 

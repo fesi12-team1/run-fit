@@ -10,7 +10,7 @@ import Dropdown from '@/components/ui/Dropdown';
 import ProgressBar from '@/components/ui/ProgressBar';
 import { formatDDay, formatKoYYMDMeridiemTime } from '@/lib/time';
 import { Session } from '@/types/session';
-import SessionActionGroup from './SessionActionGroup';
+import SessionActionGroup from '../SessionActionGroup';
 import SessionDeleteModal from './SessionDeleteModal';
 import SessionUpdateModal from './SessionUpdateModal';
 
