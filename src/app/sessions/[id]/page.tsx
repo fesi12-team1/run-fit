@@ -10,7 +10,7 @@ export default async function Page({
 
   return (
     <>
-      <main className="h-main laptop:bg-gray-900 bg-gray-800">
+      <main className="h-main laptop:bg-gray-900 tablet:h-[calc(100vh-60px)] h-[calc(100vh-56px)] bg-gray-800">
         <SessionDetailContainer sessionId={sessionId} />
       </main>
       <BottomBar sessionId={sessionId} />
