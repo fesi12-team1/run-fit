@@ -1,5 +1,5 @@
 // api/mutations/reviewMutations.ts
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, UseMutationOptions } from '@tanstack/react-query';
 import {
   createSessionReview,
   deleteSessionReview,
@@ -10,7 +10,10 @@ import { sessionQueries } from '../queries/sessionQueries';
 import { userQueries } from '../queries/userQueries';
 
 // 세션 리뷰 작성
-export const useCreateSessionReview = (sessionId?: number) => {
+export const useCreateSessionReview = (
+  sessionId?: number,
+  options?: UseMutationOptions
+) => {
   return useMutation({
     mutationFn: (body: CreateSessionReviewRequestBody) => {
       if (!sessionId) {
@@ -18,6 +21,7 @@ export const useCreateSessionReview = (sessionId?: number) => {
       }
       return createSessionReview(sessionId, body);
     },
+    ...options,
     onSuccess: (data, variables, onMutateResult, context) => {
       if (!sessionId) return;
 
@@ -35,9 +39,13 @@ export const useCreateSessionReview = (sessionId?: number) => {
 };
 
 // 세션 리뷰 삭제
-export const useDeleteReview = (sessionId?: number) => {
+export const useDeleteReview = (
+  sessionId?: number,
+  options?: UseMutationOptions
+) => {
   return useMutation({
     mutationFn: (reviewId: number) => deleteSessionReview(reviewId),
+    ...options,
     onSuccess: (data, variables, onMutateResult, context) => {
       context.client.invalidateQueries({
         queryKey: userQueries.me.all(), // 내 정보 캐시 무효화

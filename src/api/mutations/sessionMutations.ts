@@ -10,22 +10,28 @@ import {
 import { sessionQueries } from '@/api/queries/sessionQueries';
 
 // 세션 생성
-export function useCreateSession() {
+export function useCreateSession(options?: UseMutationOptions) {
   return useMutation({
     mutationFn: createSession,
+    ...options,
     onSuccess: (data, variables, onMutateResult, context) => {
       context.client.invalidateQueries({
         queryKey: sessionQueries.lists(), // 세션 목록 캐시 무효화
       });
+      options?.onSuccess?.(data, variables, onMutateResult, context);
     },
   });
 }
 
 // 세션 정보 수정
-export function useUpdateSession(sessionId: number) {
+export function useUpdateSession(
+  sessionId: number,
+  options?: UseMutationOptions
+) {
   return useMutation({
     mutationFn: (body: UpdateSessionDetailRequestBody) =>
       updateSessionDetail(sessionId, body),
+    ...options,
     onSuccess: (data, variables, onMutateResult, context) => {
       context.client.invalidateQueries({
         queryKey: sessionQueries.detail(sessionId).queryKey, // 세션 상세 캐시 무효화
@@ -33,6 +39,7 @@ export function useUpdateSession(sessionId: number) {
       context.client.invalidateQueries({
         queryKey: sessionQueries.lists(), // 세션 목록 캐시 무효화
       });
+      options?.onSuccess?.(data, variables, onMutateResult, context);
     },
   });
 }
@@ -44,7 +51,7 @@ export function useRegisterSession(
 ) {
   return useMutation({
     mutationFn: () => registerForSession(sessionId),
-    ...options, // 외부에서 전달한 onError, onSuccess 등을 전개
+    ...options,
     onSuccess: (data, variables, onMutateResult, context) => {
       // 1. 내부 로직: 캐시 무효화
       context.client.invalidateQueries({
@@ -59,10 +66,15 @@ export function useRegisterSession(
     },
   });
 }
+
 // 세션 참여 취소
-export function useUnregisterSession(sessionId: number) {
+export function useUnregisterSession(
+  sessionId: number,
+  options?: UseMutationOptions
+) {
   return useMutation({
     mutationFn: () => unregisterFromSession(sessionId),
+    ...options,
     onSuccess: (data, variables, onMutateResult, context) => {
       context.client.invalidateQueries({
         queryKey: sessionQueries.participants(sessionId).queryKey, // 세션 참여자 목록 캐시 무효화
@@ -70,16 +82,22 @@ export function useUnregisterSession(sessionId: number) {
       context.client.invalidateQueries({
         queryKey: sessionQueries.detail(sessionId).queryKey, // 세션 상세 캐시 무효화
       });
+      options?.onSuccess?.(data, variables, onMutateResult, context);
     },
   });
 }
 
 // 세션 삭제
-export function useDeleteSession(sessionId: number) {
+export function useDeleteSession(
+  sessionId: number,
+  options?: UseMutationOptions
+) {
   return useMutation({
     mutationFn: () => deleteSession(sessionId),
+    ...options,
     onSuccess: (data, variables, onMutateResult, context) => {
       context.client.invalidateQueries({ queryKey: sessionQueries.lists() });
+      options?.onSuccess?.(data, variables, onMutateResult, context);
     },
   });
 }
