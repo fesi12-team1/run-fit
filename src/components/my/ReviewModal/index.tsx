@@ -34,9 +34,7 @@ export default function ReviewModal({
 }: ReviewModalProps) {
   const isMobile = useMediaQuery({ max: 'tablet' });
 
-  const { form, submit } = useReviewForm(session?.id ?? 0, () =>
-    setOpen(false)
-  );
+  const { form, submit } = useReviewForm(session?.id, () => setOpen(false));
 
   const {
     register,

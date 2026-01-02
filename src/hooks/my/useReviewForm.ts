@@ -13,7 +13,10 @@ const reviewSchema = z.object({
 
 export type ReviewFormValues = z.infer<typeof reviewSchema>;
 
-export function useReviewForm(sessionId: number, onSuccess: () => void) {
+export function useReviewForm(
+  sessionId: number | undefined,
+  onSuccess: () => void
+) {
   const form = useForm<ReviewFormValues>({
     resolver: zodResolver(reviewSchema),
     mode: 'onSubmit',
@@ -24,10 +27,15 @@ export function useReviewForm(sessionId: number, onSuccess: () => void) {
     },
   });
 
-  const { mutateAsync: createReview } = useCreateSessionReview(sessionId);
+  const { mutateAsync: createReview } = useCreateSessionReview(sessionId ?? 0);
   const { mutateAsync: uploadImage } = useUploadImage();
 
   const onValid = async (values: ReviewFormValues) => {
+    if (!sessionId) {
+      toast.error('잘못된 접근입니다.');
+      return;
+    }
+
     try {
       let imageUrl: string | undefined;
 
