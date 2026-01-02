@@ -85,6 +85,7 @@
 /* 헤더를 고려한 페이지의 높이 스타일 */
 @utility h-main {
   min-height: calc(100vh - 56px); /* min-h-[calc(100vh-56px)] */
+  height: calc(100vh - 56px);
 
   @variant tablet {
     min-height: calc(100vh - 60px); /* tablet:min-h-[calc(100vh-60px)] */
