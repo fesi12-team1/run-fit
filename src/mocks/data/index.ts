@@ -159,34 +159,131 @@ export const crews: Crew[] = Array.from({ length: 95 }, (_, i) => ({
 }));
 
 type Session = z.infer<typeof _sessionSchema>;
-export const sessions: Session[] = Array.from({ length: 101 }, (_, i) => {
-  const city = faker.helpers.arrayElement(SIDO_LIST);
-  const districts = SIGUNGU_MAP[city] || [];
-  const district = faker.helpers.arrayElement(districts);
+export const sessions: Session[] = [
+  // Scenario 1: both soon for sessionAt and registerBy
+  ...Array.from({ length: 100 }, (_, i) => {
+    const city = faker.helpers.arrayElement(SIDO_LIST);
+    const districts = SIGUNGU_MAP[city] || [];
+    const district = faker.helpers.arrayElement(districts);
+    const status = 'OPEN' as const;
 
-  return {
-    id: i + 1,
-    crewId: faker.number.int({ min: 1, max: crews.length }),
-    hostUserId: faker.number.int({ min: 1, max: users.length }),
-    name: faker.lorem.words(3),
-    description: faker.lorem.sentence(),
-    image: faker.image.urlPicsumPhotos({ width: 640, height: 480 }),
-    city: city,
-    district: district,
-    location: faker.location.streetAddress(),
-    coords: {
-      lat: faker.location.latitude(),
-      lng: faker.location.longitude(),
-    },
-    sessionAt: faker.date.future().toISOString(),
-    registerBy: faker.date.soon().toISOString(),
-    level: faker.helpers.arrayElement(['BEGINNER', 'INTERMEDIATE', 'ADVANCED']),
-    status: faker.helpers.arrayElement(['OPEN', 'CLOSED']),
-    pace: faker.number.int({ min: 300, max: 480 }),
-    maxParticipantCount: faker.number.int({ min: 10, max: 30 }),
-    createdAt: faker.date.past().toISOString(),
-  };
-});
+    const sessionAt = faker.date.soon({ days: 10 });
+    const registerBy = faker.date.soon({ days: 5, refDate: new Date() });
+
+    // Ensure registerBy is always earlier than sessionAt
+    const finalRegisterBy =
+      registerBy >= sessionAt
+        ? new Date(sessionAt.getTime() - 24 * 60 * 60 * 1000)
+        : registerBy;
+
+    return {
+      id: i + 1,
+      crewId: faker.number.int({ min: 1, max: crews.length }),
+      hostUserId: faker.number.int({ min: 1, max: users.length }),
+      name: faker.lorem.words(3),
+      description: faker.lorem.sentence(),
+      image: faker.image.urlPicsumPhotos({ width: 640, height: 480 }),
+      city: city,
+      district: district,
+      location: faker.location.streetAddress(),
+      coords: {
+        lat: faker.location.latitude(),
+        lng: faker.location.longitude(),
+      },
+      sessionAt: sessionAt.toISOString(),
+      registerBy: finalRegisterBy.toISOString(),
+      level: faker.helpers.arrayElement([
+        'BEGINNER',
+        'INTERMEDIATE',
+        'ADVANCED',
+      ]),
+      status: status,
+      pace: faker.number.int({ min: 300, max: 480 }),
+      maxParticipantCount: faker.number.int({ min: 10, max: 30 }),
+      createdAt: faker.date.past().toISOString(),
+    };
+  }),
+  // Scenario 2: soon for sessionAt, recent for registerBy
+  ...Array.from({ length: 100 }, (_, i) => {
+    const city = faker.helpers.arrayElement(SIDO_LIST);
+    const districts = SIGUNGU_MAP[city] || [];
+    const district = faker.helpers.arrayElement(districts);
+    const status = 'CLOSED' as const;
+
+    const sessionAt = faker.date.soon();
+    const registerBy = faker.date.recent();
+
+    return {
+      id: i + 101,
+      crewId: faker.number.int({ min: 1, max: crews.length }),
+      hostUserId: faker.number.int({ min: 1, max: users.length }),
+      name: faker.lorem.words(3),
+      description: faker.lorem.sentence(),
+      image: faker.image.urlPicsumPhotos({ width: 640, height: 480 }),
+      city: city,
+      district: district,
+      location: faker.location.streetAddress(),
+      coords: {
+        lat: faker.location.latitude(),
+        lng: faker.location.longitude(),
+      },
+      sessionAt: sessionAt.toISOString(),
+      registerBy: registerBy.toISOString(),
+      level: faker.helpers.arrayElement([
+        'BEGINNER',
+        'INTERMEDIATE',
+        'ADVANCED',
+      ]),
+      status: status,
+      pace: faker.number.int({ min: 300, max: 480 }),
+      maxParticipantCount: faker.number.int({ min: 10, max: 30 }),
+      createdAt: faker.date.past().toISOString(),
+    };
+  }),
+  // Scenario 3: both recent for sessionAt and registerBy
+  ...Array.from({ length: 100 }, (_, i) => {
+    const city = faker.helpers.arrayElement(SIDO_LIST);
+    const districts = SIGUNGU_MAP[city] || [];
+    const district = faker.helpers.arrayElement(districts);
+    const status = 'CLOSED' as const;
+
+    const sessionAt = faker.date.recent();
+    const registerBy = faker.date.recent();
+
+    // Ensure registerBy is always earlier than sessionAt
+    const finalRegisterBy =
+      registerBy >= sessionAt
+        ? new Date(sessionAt.getTime() - 24 * 60 * 60 * 1000)
+        : registerBy;
+
+    return {
+      id: i + 201,
+      crewId: faker.number.int({ min: 1, max: crews.length }),
+      hostUserId: faker.number.int({ min: 1, max: users.length }),
+      name: faker.lorem.words(3),
+      description: faker.lorem.sentence(),
+      image: faker.image.urlPicsumPhotos({ width: 640, height: 480 }),
+      city: city,
+      district: district,
+      location: faker.location.streetAddress(),
+      coords: {
+        lat: faker.location.latitude(),
+        lng: faker.location.longitude(),
+      },
+      sessionAt: sessionAt.toISOString(),
+      registerBy: finalRegisterBy.toISOString(),
+      level: faker.helpers.arrayElement([
+        'BEGINNER',
+        'INTERMEDIATE',
+        'ADVANCED',
+      ]),
+      status: status,
+      pace: faker.number.int({ min: 300, max: 480 }),
+      maxParticipantCount: faker.number.int({ min: 10, max: 30 }),
+      createdAt: faker.date.past().toISOString(),
+    };
+  }),
+];
 
 type Review = z.infer<typeof _reviewSchema>;
 export const reviews: Review[] = Array.from({ length: 30 }, (_, i) => ({
