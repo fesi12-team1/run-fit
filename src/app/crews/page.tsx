@@ -70,15 +70,8 @@ function CreateCrewButton() {
   const { data: user } = useQuery({ ...userQueries.me.info() });
 
   const handleOpen = () => {
-    if (!user) {
-      setCurrentModal('login');
-      return;
-    }
-
-    setCurrentModal('create');
+    setCurrentModal(!user ? 'login' : 'create');
   };
-
-  const closeModal = () => setCurrentModal(null);
 
   return (
     <>
@@ -93,12 +86,13 @@ function CreateCrewButton() {
       <CrewModal
         mode="create"
         open={currentModal === 'create'}
-        onOpenChange={(open) => !open && closeModal()}
+        handleCloseModal={() => setCurrentModal(null)}
+        handleSuccess={() => setCurrentModal(null)}
       />
       {/* 로그인 유도 모달 */}
       <Modal
         open={currentModal === 'login'}
-        onOpenChange={(open) => !open && closeModal()}
+        onOpenChange={() => setCurrentModal(null)}
       >
         <Modal.Content className="flex h-[200px] w-[360px] flex-col gap-7">
           <Modal.Title />

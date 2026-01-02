@@ -1,4 +1,6 @@
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { toast } from 'sonner';
 import {
   useDeleteCrew,
   useExpelMember,
@@ -119,11 +121,12 @@ export default function CrewMemberList({
   );
 }
 
-function CrewMenuActions({ crew: crewData }: { crew?: Crew }) {
+function CrewMenuActions({ crew: crewData }: { crew: Crew }) {
   const { crewId, myRole } = useCrewRole();
   const [currentModal, setCurrentModal] = useState<
     'leave' | 'delete' | 'edit' | 'delegate' | null
   >(null);
+  const router = useRouter();
 
   const leaveCrew = useLeaveCrew(crewId ?? 0);
   // TODO: updateCrewDetail: 크루 생성 추가 후 구현 예정
@@ -170,10 +173,12 @@ function CrewMenuActions({ crew: crewData }: { crew?: Crew }) {
       {/** Edit Crew Modal */}
       <CrewModal
         crewData={crewData}
+        handleCloseModal={() => setCurrentModal(null)}
+        handleSuccess={
+          () => setCurrentModal(null)
+        }
         mode="edit"
         open={currentModal === 'edit'}
-        onOpenChange={(open) => !open && setCurrentModal(null)}
-        onSuccess={() => setCurrentModal(null)}
       />
 
       {/* Leave Crew Modal */}
@@ -222,7 +227,17 @@ function CrewMenuActions({ crew: crewData }: { crew?: Crew }) {
                 </Button>
               </Modal.Close>
               <Modal.Close asChild>
-                <Button className="w-full" onClick={() => deleteCrew.mutate()}>
+                <Button
+                  className="w-full"
+                  onClick={() =>
+                    deleteCrew.mutate(undefined, {
+                      onSuccess: () => {
+                        router.push('/crews');
+                        toast.success('크루가 삭제되었습니다!');
+                      },
+                    })
+                  }
+                >
                   삭제
                 </Button>
               </Modal.Close>
@@ -250,7 +265,6 @@ function CrewMemberListItem({
   const updateMemberRole = useUpdateMemberRole(crewId ?? 0);
   const handleSelect = (roleTo: 'STAFF' | 'MEMBER') => {
     if (updateMemberRole.isPending || roleTo === member.role) return;
-
     updateMemberRole.mutate({ userId: member.userId, body: { role: roleTo } });
   };
 
