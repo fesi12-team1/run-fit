@@ -31,6 +31,17 @@ export default async function request<T>(
   url: string | URL,
   options?: RequestInit
 ): Promise<T> {
-  const response = await fetch(url, options);
+  // 서버 환경에서만 상대 경로를 절대 경로로 변환
+  let absoluteUrl = url;
+  if (
+    typeof url === 'string' &&
+    !url.startsWith('http') &&
+    typeof window === 'undefined'
+  ) {
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    absoluteUrl = new URL(url, baseUrl).toString();
+  }
+
+  const response = await fetch(absoluteUrl, options);
   return handleResponse<T>(response);
 }
