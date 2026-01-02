@@ -256,7 +256,11 @@ function CrewMemberListItem({
 
   return (
     <div className="mb-5 flex items-center gap-3">
-      <UserAvatar className="size-10 shrink-0" src={member.profileImage} />
+      <UserAvatar
+        className="size-10 shrink-0"
+        sizes="40px"
+        src={member.profileImage}
+      />
       {editMode === 'view' && (
         <div className="flex flex-col gap-1">
           <div className="flex w-full items-center gap-1.5">

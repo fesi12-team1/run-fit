@@ -27,6 +27,7 @@ import Spinner from '@/components/ui/Spinner';
 import Tabs from '@/components/ui/Tabs';
 import { CrewDetailContext, useCrewRole } from '@/context/CrewDetailContext';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { generateNextImageSizes } from '@/lib/Image';
 import { cn, copyStringToClipboard } from '@/lib/utils';
 import { CrewMember } from '@/types';
 
@@ -152,7 +153,13 @@ export default function Page() {
                 src={crew?.image || '/assets/crew-default.png'}
                 alt="Crew"
                 fill
+                preload
                 className="laptop:rounded-[20px] overflow-hidden object-cover"
+                sizes={generateNextImageSizes({
+                  mobile: '100vw',
+                  tablet: '100vw',
+                  laptop: '1120px',
+                })}
               />
             </div>
             {/* Crew Page Main */}
