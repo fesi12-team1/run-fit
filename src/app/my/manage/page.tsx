@@ -60,7 +60,7 @@ export default function MyCreatedSessionsPage() {
       <h2 className="text-body2-semibold tablet:text-body1-semibold text-gray-50">
         내가 만든 세션
       </h2>
-      <div className="tablet:gap-x-4 tablet:gap-y-8 laptop:gap-y-10 laptop:grid-cols-3 grid grid-cols-2 gap-x-3 gap-y-2">
+      <div className="tablet:gap-x-4 tablet:gap-y-10 laptop:grid-cols-3 grid grid-cols-2 gap-x-3 gap-y-8">
         {sessions.map((session) => (
           <SessionCard key={session.id} session={normalizeSession(session)} />
         ))}
