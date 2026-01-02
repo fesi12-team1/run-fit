@@ -76,7 +76,14 @@ export default function Page() {
   const totalElements = crewReviewsData?.totalElements ?? 0;
   const totalPages = crewReviewsData?.totalPages ?? 0;
 
-  const sections = ['detail', 'session', 'review'];
+  const sections = [
+    {
+      id: 'detail',
+      name: '크루 소개',
+    },
+    { id: 'session', name: '세션' },
+    { id: 'review', name: '후기' },
+  ];
 
   return (
     <>

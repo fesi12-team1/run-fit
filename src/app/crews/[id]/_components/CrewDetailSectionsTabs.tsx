@@ -2,7 +2,10 @@ import { useRouter } from 'next/navigation';
 import Tabs from '@/components/ui/Tabs';
 
 interface CrewDetailSectionsTabsProps {
-  sections: string[];
+  sections: {
+    id: string;
+    name: string;
+  }[];
 }
 
 export default function CrewDetailSectionsTabs({
@@ -11,16 +14,16 @@ export default function CrewDetailSectionsTabs({
   const router = useRouter();
 
   return (
-    <Tabs defaultValue={sections[0]} className="tablet:top-15 sticky top-14">
+    <Tabs defaultValue={sections[0].id} className="tablet:top-15 sticky top-14">
       <Tabs.List>
         {sections.map((section) => (
           <Tabs.Trigger
-            key={section}
-            value={section}
-            onClick={() => router.push(`#${section}`)}
+            key={section.id}
+            value={section.id}
+            onClick={() => router.push(`#${section.id}`)}
             className="bg-gray-900"
           >
-            {section}
+            {section.name}
           </Tabs.Trigger>
         ))}
       </Tabs.List>
