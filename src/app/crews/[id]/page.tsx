@@ -192,15 +192,15 @@ export default function Page() {
                     </Tabs.Trigger>
                   </Tabs.List>
                 </Tabs>
-                <div id="detail" className="flex flex-col gap-2">
-                  <span
+                <section id="detail" className="flex flex-col gap-2">
+                  <h2
                     className={cn(
                       'text-gray-50',
                       'tablet:text-title3-semibold text-body2-semibold'
                     )}
                   >
                     크루 소개
-                  </span>
+                  </h2>
                   <div
                     className={cn(
                       'tablet:text-body2-regular tablet:text-gray-100',
@@ -209,16 +209,16 @@ export default function Page() {
                   >
                     {crew?.description}
                   </div>
-                </div>
-                <div id="session" className="flex flex-col gap-4">
-                  <span
+                </section>
+                <section id="session" className="flex flex-col gap-4">
+                  <h2
                     className={cn(
                       'text-gray-50',
                       'tablet:text-title3-semibold text-body2-semibold'
                     )}
                   >
                     모집중인 세션
-                  </span>
+                  </h2>
                   {recruitingSessions &&
                   recruitingSessions.sessions.length > 0 ? (
                     <>
@@ -256,16 +256,16 @@ export default function Page() {
                       현재 모집중인 세션이 없어요
                     </span>
                   )}
-                </div>
-                <div className="flex flex-col gap-4">
-                  <span
+                </section>
+                <section className="flex flex-col gap-4">
+                  <h2
                     className={cn(
                       'text-gray-50',
                       'tablet:text-title3-semibold text-body2-semibold'
                     )}
                   >
                     마감된 세션
-                  </span>
+                  </h2>
                   {completedSessions && completedSessions.content.length > 0 ? (
                     <>
                       <div className="flex flex-col divide-y divide-gray-700 *:py-2">
@@ -299,20 +299,20 @@ export default function Page() {
                       아직 마감된 세션이 없어요
                     </span>
                   )}
-                </div>
-                <div
+                </section>
+                <section
                   id="review"
                   className="flex flex-col gap-3 border-t border-t-gray-700 py-5"
                 >
                   <div className="flex gap-2">
-                    <span
+                    <h2
                       className={cn(
                         'text-gray-50',
                         'tablet:text-title3-semibold text-body2-semibold'
                       )}
                     >
                       후기
-                    </span>
+                    </h2>
                     <span className="text-title3-semibold text-brand-300">
                       {totalElements}
                     </span>
@@ -353,7 +353,7 @@ export default function Page() {
                       아직 작성된 후기가 없어요
                     </span>
                   )}
-                </div>
+                </section>
               </div>
 
               {/* Crew Title */}
