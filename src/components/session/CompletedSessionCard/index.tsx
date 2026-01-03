@@ -55,7 +55,7 @@ export default function CompletedSessionCard({
             <div className="absolute bottom-2.5 left-2.5 flex items-center gap-0.5">
               <Location className="size-3 fill-gray-200" />
               <div className="text-caption-medium line-clamp-1 text-gray-200">
-                {session.location || session.city}
+                {session.city}
               </div>
             </div>
           </div>

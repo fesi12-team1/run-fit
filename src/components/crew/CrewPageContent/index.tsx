@@ -15,7 +15,7 @@ export default function CrewPageContent() {
     crewQueries.list({ ...filters })
   );
 
-  const loadMoreRef = useInfiniteScroll(() => fetchNextPage(), hasNextPage);
+  const loadMoreRef = useInfiniteScroll(fetchNextPage, hasNextPage);
 
   return (
     <>

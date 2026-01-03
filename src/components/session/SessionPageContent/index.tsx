@@ -16,7 +16,7 @@ export default function SessionPageInner() {
     sessionQueries.infiniteList({ ...queryFilters })
   );
 
-  const loadMoreRef = useInfiniteScroll(() => fetchNextPage(), hasNextPage);
+  const loadMoreRef = useInfiniteScroll(fetchNextPage, hasNextPage);
 
   return (
     <SessionFilterProvider applyFilters={applyFilters} initialFilters={filters}>

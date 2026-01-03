@@ -20,7 +20,7 @@ export default function LikeButton({ liked, sessionId }: LikeButtonProps) {
         {liked ? (
           <HeartFill className="text-brand-500 block size-7" />
         ) : (
-          <HeartOutline className="block size-7 text-[#9CA3AF]" />
+          <HeartOutline className="block size-7 fill-[#0F101480] stroke-[#9CA3AF]" />
         )}
       </button>
     </>

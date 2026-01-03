@@ -5,11 +5,10 @@ import * as React from 'react';
 import { formatTimeText, splitSecondsToMinutesAndSeconds } from '@/lib/pace';
 import { cn } from '@/lib/utils';
 
-const CIRCLE_COUNT = 9;
+const CIRCLE_COUNT = 11;
 const GAP_COUNT = CIRCLE_COUNT + 1;
 const CIRCLE_SIZE = 6;
-const PERCENT_PER_STEP = 100 / GAP_COUNT;
-const OFFSET_PX = CIRCLE_SIZE - (CIRCLE_COUNT * CIRCLE_SIZE) / GAP_COUNT;
+const THUMB_SIZE = 32;
 
 interface PaceSliderProps
   extends Omit<
@@ -67,17 +66,29 @@ export default function PaceSlider({
             )}
             data-slot="slider-track"
           >
+            <div
+              className="absolute top-1/2 size-1.5 -translate-y-1/2 rounded-full bg-gray-600"
+              style={{
+                left: `calc(${THUMB_SIZE / 2}px - ${CIRCLE_SIZE / 2}px)`,
+              }}
+            />
             {Array.from({ length: CIRCLE_COUNT }, (_, index) => {
               return (
                 <div
                   key={index}
                   className="absolute top-1/2 size-1.5 -translate-y-1/2 rounded-full bg-gray-600"
                   style={{
-                    left: `calc(${(index + 1) * PERCENT_PER_STEP}% + ${(index + 1) * OFFSET_PX}px - ${CIRCLE_SIZE}px)`,
+                    left: `calc(${THUMB_SIZE / 2}px + (${index + 1}) * ((100% - ${THUMB_SIZE}px) / ${GAP_COUNT}) - ${CIRCLE_SIZE / 2}px)`,
                   }}
                 />
               );
             })}
+            <div
+              className="absolute top-1/2 size-1.5 -translate-y-1/2 rounded-full bg-gray-600"
+              style={{
+                left: `calc(100% - ${THUMB_SIZE / 2}px - ${CIRCLE_SIZE / 2}px)`,
+              }}
+            />
           </SliderPrimitive.Track>
           <SliderPrimitive.Thumb
             className="border-brand-400 ring-brand-400/50 block size-6 shrink-0 rounded-full border-2 bg-white shadow-sm transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50"

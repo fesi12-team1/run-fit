@@ -78,7 +78,11 @@ export default function CrewMemberList({
                   {crew.name}
                 </span>
                 {myRole === 'LEADER' && (
-                  <button onClick={() => setEditMode('edit')}>
+                  <button
+                    onClick={() =>
+                      setEditMode((prev) => (prev === 'view' ? 'edit' : 'view'))
+                    }
+                  >
                     <Settings className="size-5 fill-gray-200" />
                   </button>
                 )}
@@ -93,7 +97,7 @@ export default function CrewMemberList({
             />
           </Modal.Title>
           <div className="h-0 self-stretch outline-1 outline-offset-[-0.50px] outline-gray-700" />
-          <Modal.Description className="flex w-full flex-col overflow-y-scroll [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-400 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-800">
+          <Modal.Description className="flex w-full flex-1 flex-col overflow-y-scroll [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-400 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-800">
             {members.map((member) => (
               <CrewMemberListItem
                 key={member.userId}
@@ -245,7 +249,7 @@ function CrewMemberListItem({
   const expelMember = useExpelMember(crewId ?? 0);
   const updateMemberRole = useUpdateMemberRole(crewId ?? 0);
   const handleSelect = (roleTo: 'STAFF' | 'MEMBER') => {
-    if (roleTo === member.role) return;
+    if (updateMemberRole.isPending || roleTo === member.role) return;
 
     updateMemberRole.mutate({ userId: member.userId, body: { role: roleTo } });
   };

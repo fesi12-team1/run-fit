@@ -39,6 +39,7 @@ export type SessionListFilters = PaginationQueryParams & {
   dateTo?: string;
   timeFrom?: string;
   timeTo?: string;
+  status?: 'OPEN' | 'CLOSED';
   sort: SessionSortKey;
 };
 
