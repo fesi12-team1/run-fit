@@ -18,7 +18,7 @@ export default function SignupForm() {
       toast.success('회원가입 성공!');
       router.push('/signin');
     },
-    onError: (error, _variables, _onMutateResult, _context) => {
+    onError: (error) => {
       toast.error(`회원가입 실패: ${error.message}`);
       form.setError('root', {});
     },
@@ -39,18 +39,18 @@ export default function SignupForm() {
     <form className="flex flex-col gap-4" onSubmit={submit}>
       <Input
         label="이름"
-        {...register('name')}
+        {...register('name', { required: '이름을 입력해주세요.' })}
         errorMessage={errors.name?.message}
       />
       <Input
         label="이메일"
-        {...register('email')}
+        {...register('email', { required: '이메일을 입력해주세요.' })}
         errorMessage={errors.email?.message}
       />
       <Input
         label="비밀번호"
         type={show ? 'text' : 'password'}
-        {...register('password')}
+        {...register('password', { required: '비밀번호를 입력해주세요.' })}
         RightElement={
           <button type="button" onClick={() => setShow(!show)}>
             {show ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
@@ -61,7 +61,9 @@ export default function SignupForm() {
       <Input
         label="비밀번호 확인"
         type={showConfirm ? 'text' : 'password'}
-        {...register('passwordConfirm')}
+        {...register('passwordConfirm', {
+          required: '비밀번호 확인을 입력해주세요.',
+        })}
         RightElement={
           <button type="button" onClick={() => setShowConfirm(!showConfirm)}>
             {showConfirm ? (

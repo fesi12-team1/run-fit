@@ -125,7 +125,7 @@ export default function CrewForm({
 
       <Input
         label="크루 이름"
-        {...form.register('name', { required: '크루 이름을 입력해주세요.' })}
+        {...form.register('name')}
         className="bg-gray-750"
         errorMessage={errors.name?.message}
         placeholder="크루 이름을 작성해주세요"
@@ -134,9 +134,7 @@ export default function CrewForm({
       <div className="flex flex-col gap-1">
         <Label>크루 소개</Label>
         <Textarea
-          {...form.register('description', {
-            required: '크루 소개를 입력해주세요.',
-          })}
+          {...form.register('description')}
           className="bg-gray-750"
           placeholder="크루에 대한 상세 설명을 작성해주세요"
         />
