@@ -37,7 +37,7 @@ function ScheduledSkeleton() {
 function CompletedSkeleton() {
   return (
     <div className="tablet:gap-3 flex flex-col gap-2">
-      {[1, 2, 3].map((i) => (
+      {[1, 2].map((i) => (
         <div key={i} className="flex flex-col gap-3">
           {/* CompletedSessionCard */}
           <div className="flex w-full items-center">

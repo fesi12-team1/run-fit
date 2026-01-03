@@ -125,7 +125,6 @@ function ScheduledSessionsContent() {
 }
 
 function CompletedSessionsContent() {
-  const router = useRouter();
   const isMobile = useMediaQuery({ max: 'tablet' });
 
   const [open, setOpen] = useState(false);

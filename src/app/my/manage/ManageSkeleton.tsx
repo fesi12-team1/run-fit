@@ -3,7 +3,7 @@ export default function ManageSkeleton() {
     <section className="tablet:gap-3 flex flex-col gap-2">
       {/* 세션 그리드 */}
       <div className="tablet:gap-x-4 tablet:gap-y-8 laptop:gap-y-10 laptop:grid-cols-3 grid grid-cols-2 gap-x-3 gap-y-2">
-        {[1, 2, 3, 4, 5, 6].map((i) => (
+        {[1, 2, 3].map((i) => (
           <div key={i} className="flex w-full flex-col">
             {/* 세션 이미지 - aspect-165/185 (모바일), tablet:aspect-video */}
             <div className="tablet:aspect-video relative aspect-165/185 w-full overflow-hidden rounded-lg bg-gray-600">
