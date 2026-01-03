@@ -17,10 +17,8 @@ export async function getMyProfile() {
 export type UpdateMyProfileRequestBody = Partial<
   Pick<Profile, 'name' | 'image' | 'introduction' | 'city' | 'pace' | 'styles'>
 >;
-
-export type UpdateMyProfileResponse = Profile;
 export async function updateMyProfile(body: UpdateMyProfileRequestBody) {
-  return request<UpdateMyProfileResponse>('/api/user', {
+  return request<Profile>('/api/user', {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',

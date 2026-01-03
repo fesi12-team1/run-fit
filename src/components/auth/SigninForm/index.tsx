@@ -5,6 +5,7 @@ import type { Route } from 'next';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { useSignin } from '@/api/mutations/authMutations';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import { useSigninForm } from '@/hooks/auth/useSigninForm';
@@ -28,14 +29,19 @@ export default function SigninForm() {
     redirect = isValidRedirectPath(decoded) ? decoded : '/';
   }
 
-  const { form, submit, isPending } = useSigninForm({
+  const form = useSigninForm();
+  const { mutate, isPending } = useSignin({
     onSuccess: () => {
       toast.success('로그인 성공!');
       router.replace(redirect as Route);
     },
-    onError: (message) => {
-      toast.error(`로그인 실패: ${message}`);
+    onError: (error) => {
+      toast.error(`로그인 실패: ${error.message}`);
+      form.setError('root', {});
     },
+  });
+  const submit = form.handleSubmit((values) => {
+    mutate(values);
   });
 
   const {

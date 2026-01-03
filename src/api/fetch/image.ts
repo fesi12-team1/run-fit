@@ -9,9 +9,8 @@ export type GetPresignedUrlResponse = {
   imageUrl: string; // 이미지 업로드 이후 이미지 사용을 위한 public URL
 };
 
-export type GetPresignedUrlResult = GetPresignedUrlResponse;
 export async function getPresignedUrl(body: GetPresignedUrlRequest) {
-  return request<GetPresignedUrlResult>(`/api/images/presigned-url`, {
+  return request<GetPresignedUrlResponse>(`/api/images/presigned-url`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

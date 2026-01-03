@@ -1,176 +1,186 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
+import { useMutation, UseMutationOptions } from '@tanstack/react-query';
 import {
   createCrew,
   CrewRequestBody,
   delegateCrewLeader,
+  DelegateCrewLeaderRequestBody,
+  DelegateCrewLeaderResponse,
   deleteCrew,
   expelMember,
+  ExpelMemberResponse,
   joinCrew,
   leaveCrew,
   updateCrewDetail,
+  UpdateCrewDetailRequestBody,
+  UpdateCrewDetailResponse,
   updateMemberRole,
   UpdateMemberRoleRequestBody,
+  UpdateMemberRoleResponse,
 } from '@/api/fetch/crews';
 import { crewQueries } from '@/api/queries/crewQueries';
-
-export interface UseCrewMutationOptions {
-  onSuccess?: () => void;
-  onError?: (message: string) => void;
-}
+import { ApiError } from '@/lib/error';
+import { Crew } from '@/types';
 
 // 크루 생성
-export function useCreateCrew(options?: UseCrewMutationOptions) {
-  const queryClient = useQueryClient();
-
+export function useCreateCrew(
+  options?: UseMutationOptions<
+    Crew, // TData = unknown,
+    ApiError, // TError = DefaultError,
+    CrewRequestBody // TVariables = void,
+    // TOnMutateResult = unknown
+  >
+) {
   return useMutation({
     mutationFn: createCrew,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: crewQueries.all() }); // 크루 목록 캐시 무효화 (새 크루 목록에 반영)
-      options?.onSuccess?.();
+    ...options,
+    onSuccess: (data, variables, onMutateResult, context) => {
+      context.client.invalidateQueries({ queryKey: crewQueries.all() }); // 크루 목록 캐시 무효화 (새 크루 목록에 반영)
+      options?.onSuccess?.(data, variables, onMutateResult, context);
     },
-    onError: (error: Error) => {
-      options?.onError?.(error.message ?? '크루 생성에 실패했습니다.');
+    onError: (error, variables, onMutateResult, context) => {
+      options?.onError?.(error, variables, onMutateResult, context);
     },
   });
 }
 
 // 크루 리더 위임
-export function useDelegateCrewLeader(crewId: number) {
-  const queryClient = useQueryClient();
-
+export function useDelegateCrewLeader(
+  crewId: number,
+  options?: UseMutationOptions<
+    DelegateCrewLeaderResponse, // TData = unknown,
+    ApiError, // TError = DefaultError,
+    DelegateCrewLeaderRequestBody // TVariables = void,
+    // TOnMutateResult = unknown
+  >
+) {
   return useMutation({
     mutationFn: (body: { newLeaderId: number }) =>
       delegateCrewLeader(crewId, body),
-
-    onSuccess: () => {
-      queryClient.invalidateQueries({
+    ...options,
+    onSuccess: (data, variables, onMutateResult, context) => {
+      context.client.invalidateQueries({
         queryKey: crewQueries.detail(crewId).queryKey, // 크루 상세 정보 캐시 무효화
       });
+      options?.onSuccess?.(data, variables, onMutateResult, context);
     },
   });
 }
 
 // 크루 삭제
-export function useDeleteCrew(crewId: number) {
-  const queryClient = useQueryClient();
-  const router = useRouter();
-
+export function useDeleteCrew(crewId: number, options?: UseMutationOptions) {
   return useMutation({
     mutationFn: () => deleteCrew(crewId),
-
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: crewQueries.all() }); // 크루 목록 캐시 무효화
-      router.push('/crews');
-      toast.success('크루가 삭제되었습니다!');
+    ...options,
+    onSuccess: (data, variables, onMutateResult, context) => {
+      context.client.invalidateQueries({ queryKey: crewQueries.all() }); // 크루 목록 캐시 무효화
+      options?.onSuccess?.(data, variables, onMutateResult, context);
     },
-    onError: (error) => {
+    onError: (error, variables, onMutateResult, context) => {
       console.error('크루 삭제 실패:', error);
-      router.refresh(); // 현재 페이지 새로 고침
+      options?.onError?.(error, variables, onMutateResult, context);
     },
   });
 }
 
 // 크루 멤버 추방
-export function useExpelMember(crewId: number) {
-  const queryClient = useQueryClient();
-
+export function useExpelMember(
+  crewId: number,
+  options?: UseMutationOptions<
+    ExpelMemberResponse, // TData = unknown,
+    ApiError, // TError = DefaultError,
+    number // TVariables = userId,
+    // TOnMutateResult = unknown
+  >
+) {
   return useMutation({
     mutationFn: (userId: number) => expelMember(crewId, userId),
-
-    onSuccess: () => {
-      queryClient.invalidateQueries({
+    ...options,
+    onSuccess: (data, variables, onMutateResult, context) => {
+      context.client.invalidateQueries({
         queryKey: crewQueries.members(crewId).all(), // 크루 멤버 목록 캐시 무효화
       });
+      options?.onSuccess?.(data, variables, onMutateResult, context);
     },
   });
 }
 
 // 크루 가입
-export function useJoinCrew(crewId: number) {
-  const queryClient = useQueryClient();
-
+export function useJoinCrew(crewId: number, options?: UseMutationOptions) {
   return useMutation({
     mutationFn: () => joinCrew(crewId),
-
-    onSuccess: () => {
-      queryClient.invalidateQueries({
+    ...options,
+    onSuccess: (data, variables, onMutateResult, context) => {
+      context.client.invalidateQueries({
         queryKey: crewQueries.members(crewId).all(), // 크루 멤버 목록 캐시 무효화
       });
+      options?.onSuccess?.(data, variables, onMutateResult, context);
     },
   });
 }
 
 // 크루 탈퇴
-export function useLeaveCrew(crewId: number) {
-  const queryClient = useQueryClient();
-  const router = useRouter();
-
+export function useLeaveCrew(crewId: number, options?: UseMutationOptions) {
   return useMutation({
     mutationFn: () => leaveCrew(crewId),
-
-    onSuccess: () => {
-      queryClient.invalidateQueries({
+    ...options,
+    onSuccess: (data, variables, onMutateResult, context) => {
+      context.client.invalidateQueries({
         queryKey: crewQueries.members(crewId).all(), // 크루 멤버 목록 캐시 무효화
       });
-      router.push('/crews');
+      options?.onSuccess?.(data, variables, onMutateResult, context);
     },
-    onError: (error) => {
+    onError: (error, variables, onMutateResult, context) => {
       console.error('크루 탈퇴 실패:', error);
-      router.refresh(); // 현재 페이지 새로 고침
+      options?.onError?.(error, variables, onMutateResult, context);
     },
   });
 }
 
 // 크루 상세 정보 수정
 export function useUpdateCrewDetail(
-  crewId?: number,
-  options?: UseCrewMutationOptions
+  crewId: number,
+  options?: UseMutationOptions<
+    UpdateCrewDetailResponse, // TData = unknown,
+    ApiError, // TError = DefaultError,
+    UpdateCrewDetailRequestBody // TVariables = void,
+    // TOnMutateResult = unknown
+  >
 ) {
-  const queryClient = useQueryClient();
-
   return useMutation({
-    mutationFn: (body: CrewRequestBody & { id?: number }) => {
-      const id = body.id ?? crewId;
-      if (!id) {
-        throw new Error('크루 ID가 필요합니다.');
-      }
-      return updateCrewDetail(id, body);
-    },
-
-    onSuccess: () => {
+    mutationFn: (body) => updateCrewDetail(crewId, body),
+    ...options,
+    onSuccess: (data, variables, onMutateResult, context) => {
       if (crewId) {
-        queryClient.invalidateQueries({
+        context.client.invalidateQueries({
           queryKey: crewQueries.detail(crewId).queryKey,
         });
       }
-      queryClient.invalidateQueries({ queryKey: crewQueries.lists() });
-      options?.onSuccess?.();
+      context.client.invalidateQueries({ queryKey: crewQueries.lists() });
+      options?.onSuccess?.(data, variables, onMutateResult, context);
     },
-    onError: (error: Error) => {
-      options?.onError?.(error.message ?? '크루 수정에 실패했습니다.');
+    onError: (error, variables, onMutateResult, context) => {
+      options?.onError?.(error, variables, onMutateResult, context);
     },
   });
 }
 
 // 멤버 역할 변경 (운영진 <-> 멤버)
-export function useUpdateMemberRole(crewId: number) {
-  const queryClient = useQueryClient();
-
+export function useUpdateMemberRole(
+  crewId: number,
+  options?: UseMutationOptions<
+    UpdateMemberRoleResponse,
+    ApiError,
+    { userId: number; body: UpdateMemberRoleRequestBody }
+  >
+) {
   return useMutation({
-    mutationFn: ({
-      userId,
-      body,
-    }: {
-      userId: number;
-      body: UpdateMemberRoleRequestBody;
-    }) => updateMemberRole(crewId, userId, body),
-
-    onSuccess: () => {
-      queryClient.invalidateQueries({
+    mutationFn: ({ userId, body }) => updateMemberRole(crewId, userId, body),
+    ...options,
+    onSuccess: (data, variables, onMutateResult, context) => {
+      context.client.invalidateQueries({
         queryKey: crewQueries.members(crewId).all(), // 크루 멤버 관련 캐시 초기화
       });
+      options?.onSuccess?.(data, variables, onMutateResult, context);
     },
   });
 }

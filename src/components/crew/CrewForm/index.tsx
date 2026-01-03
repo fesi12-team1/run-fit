@@ -2,6 +2,11 @@
 
 import { useState } from 'react';
 import { toast } from 'sonner';
+import {
+  useCreateCrew,
+  useUpdateCrewDetail,
+} from '@/api/mutations/crewMutations';
+import { useUploadImage } from '@/api/mutations/imageMutations';
 import Button from '@/components/ui/Button';
 import Chip from '@/components/ui/Chip';
 import { CoverImageUploader } from '@/components/ui/ImageUploader';
@@ -9,71 +14,97 @@ import Input from '@/components/ui/Input';
 import Label from '@/components/ui/Label';
 import Spinner from '@/components/ui/Spinner';
 import Textarea from '@/components/ui/Textarea';
-import { useCrewForm } from '@/hooks/crew/useCrewForm';
+import { CrewFormValues, useCrewForm } from '@/hooks/crew/useCrewForm';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { SIDO_LIST } from '@/types/region';
-import { CrewFormValues } from './_schema';
 
-type CrewFormCreateProps = {
+type CreateCrewFormProps = {
   mode: 'create';
+  crewId?: undefined;
   defaultValues: CrewFormValues;
-  onSuccess?: () => void;
+  handleSuccess: () => void;
 };
 
-type CrewFormEditProps = {
+type EditCrewFormProps = {
   mode: 'edit';
   crewId: number;
   defaultValues: CrewFormValues;
-  onSuccess?: () => void;
+  handleSuccess: () => void;
 };
 
-type CrewFormProps = CrewFormCreateProps | CrewFormEditProps;
+type CrewFormProps = CreateCrewFormProps | EditCrewFormProps;
 
-export default function CrewForm(props: CrewFormProps) {
-  const { mode, defaultValues, onSuccess } = props;
+export default function CrewForm({
+  mode,
+  defaultValues,
+  crewId,
+  handleSuccess,
+}: CrewFormProps) {
   const [selectedCity, setSelectedCity] = useState(defaultValues.city);
   const isPc = useMediaQuery({ min: 'laptop' });
 
-  const handleSuccess = () => {
-    toast.success(
-      mode === 'create'
-        ? '크루가 생성되었습니다!'
-        : '크루 정보가 수정되었습니다!'
-    );
-    onSuccess?.();
-  };
+  const form = useCrewForm(defaultValues);
 
-  const handleError = (message: string) => {
-    toast.error(message);
-  };
+  const uploadImageMutation = useUploadImage({
+    onError: (error) => {
+      toast.error(error.message || '이미지 업로드에 실패했습니다.');
+    },
+  });
 
-  const { form, submit, isPending } = useCrewForm(
-    mode === 'create'
-      ? {
-          mode: 'create',
-          defaultValues,
-          onSuccess: handleSuccess,
-          onError: handleError,
-        }
-      : {
-          mode: 'edit',
-          crewId: props.crewId,
-          defaultValues,
-          onSuccess: handleSuccess,
-          onError: handleError,
-        }
-  );
+  const createMutation = useCreateCrew({
+    onSuccess: () => {
+      handleSuccess();
+      toast.success('크루가 생성되었습니다!');
+    },
+    onError: (error) => {
+      toast.error(error.message || '크루 생성에 실패했습니다.');
+    },
+  });
+
+  const updateMutation = useUpdateCrewDetail(crewId ?? 0, {
+    onSuccess: () => {
+      handleSuccess();
+      toast.success('크루 정보가 수정되었습니다!');
+    },
+    onError: (error) => {
+      toast.error(error.message || '크루 정보 수정에 실패했습니다.');
+    },
+  });
+
+  const submit = form.handleSubmit(async (values) => {
+    const payload = {
+      name: values.name,
+      description: values.description,
+      city: values.city,
+      image: values.image,
+    };
+
+    if (mode === 'create') {
+      createMutation.mutate(payload);
+    } else {
+      updateMutation.mutate(payload);
+    }
+  });
 
   const handleSelectCity = (city: string) => {
     setSelectedCity(city);
     form.setValue('city', city);
   };
 
-  const handleImageChange = (file: File | null) => {
+  const handleImageChange = async (file: File | null) => {
     if (!file) {
       form.setValue('image', undefined);
-    } else {
-      form.setValue('image', file);
+      return;
+    }
+
+    try {
+      const { url } = await uploadImageMutation.mutateAsync({ file });
+      form.setValue('image', url);
+      toast.success('이미지가 업로드되었습니다.');
+    } catch (error) {
+      // useMutation onError 이미 핸들링 되고
+      // 핸들 안된 promise rejection 막기만
+      console.error('Image upload failed:', error);
     }
   };
 
@@ -83,6 +114,7 @@ export default function CrewForm(props: CrewFormProps) {
     <form className="flex w-full flex-col gap-4" onSubmit={submit}>
       <CoverImageUploader
         className="bg-gray-750"
+        disabled={uploadImageMutation.isPending}
         initialUrl={
           typeof defaultValues.image === 'string'
             ? defaultValues.image
@@ -135,8 +167,11 @@ export default function CrewForm(props: CrewFormProps) {
       </div>
 
       <Button type="submit">
-        {isPending ? (mode === 'create' ? '생성 중...' : '수정 중...') : '완료'}
-        {isPending && <Spinner className="ml-3" />}
+        {mode === 'create' && createMutation.isPending ? '생성 중...' : '완료'}
+        {mode === 'edit' && updateMutation.isPending ? '수정 중...' : '완료'}
+        {(createMutation.isPending || updateMutation.isPending) && (
+          <Spinner className="ml-3" />
+        )}
       </Button>
     </form>
   );

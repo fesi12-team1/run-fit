@@ -7,7 +7,7 @@ import {
 } from '@/types';
 import request from './request';
 
-export type GetSessionsResponse = SliceData<Session>;
+type GetSessionsResponse = SliceData<Session>;
 export async function getSessions(queryParams?: SessionListFilters) {
   const searchParams = new URLSearchParams();
 
@@ -44,7 +44,6 @@ export type CreateSessionRequestBody = Pick<
   | 'maxParticipantCount'
   | 'pace'
 >;
-
 export type CreateSessionResponse = Omit<Session, 'liked'>;
 export async function createSession(body: CreateSessionRequestBody) {
   return request<CreateSessionResponse>('/api/sessions', {
@@ -109,7 +108,6 @@ export type UpdateSessionDetailRequestBody = Pick<
   Session,
   'name' | 'description' | 'image'
 >;
-
 export type UpdateSessionDetailResponse = Session;
 export async function updateSessionDetail(
   sessionId: number,

@@ -1,91 +1,32 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import {
-  useCreateCrew,
-  useUpdateCrewDetail,
-} from '@/api/mutations/crewMutations';
-import { useUploadImage } from '@/api/mutations/imageMutations';
-import {
-  crewFormSchema,
-  CrewFormValues,
-} from '@/components/crew/CrewForm/_schema';
+import * as z from 'zod/v4';
 
-type CreateModeOptions = {
-  mode: 'create';
-  defaultValues: CrewFormValues;
-  onSuccess?: () => void;
-  onError?: (message: string) => void;
-};
+export const crewFormSchema = z.object({
+  name: z
+    .string()
+    .min(1, '크루 이름을 입력해주세요.')
+    .min(2, '크루 이름은 최소 2자 이상이어야 합니다.'),
 
-type EditModeOptions = {
-  mode: 'edit';
-  crewId: number;
-  defaultValues: CrewFormValues;
-  onSuccess?: () => void;
-  onError?: (message: string) => void;
-};
+  description: z
+    .string()
+    .min(1, '크루 소개를 입력해주세요.')
+    .min(2, '크루 소개는 최소 2자 이상이어야 합니다.')
+    .max(300, '크루 소개는 300자 이하로 작성해주세요.'),
 
-type UseCrewFormOptions = CreateModeOptions | EditModeOptions;
+  city: z.string().min(1, '활동 지역을 선택해주세요.'),
 
-export function useCrewForm(options: UseCrewFormOptions) {
-  const { mode, defaultValues, onSuccess, onError } = options;
+  image: z.string().optional(),
+});
 
+export type CrewFormValues = z.infer<typeof crewFormSchema>;
+
+export function useCrewForm(defaultValues: CrewFormValues) {
   const form = useForm<CrewFormValues>({
     resolver: zodResolver(crewFormSchema),
     mode: 'onSubmit',
     defaultValues,
   });
 
-  const uploadImage = useUploadImage();
-
-  const createMutation = useCreateCrew({ onSuccess, onError });
-  const updateMutation = useUpdateCrewDetail(
-    mode === 'edit' ? options.crewId : undefined,
-    { onSuccess, onError }
-  );
-
-  const submit = form.handleSubmit(async (values) => {
-    let imageUrl: string | undefined = undefined;
-
-    /** 이미지 처리 로직 */
-    if (values.image instanceof File) {
-      try {
-        const res = await uploadImage.mutateAsync({ file: values.image });
-        imageUrl = res.url;
-      } catch (e) {
-        const msg = e instanceof Error ? e.message : '이미지 업로드 실패';
-        onError?.(msg);
-        form.setError('root', { message: msg });
-        return;
-      }
-    } else if (typeof values.image === 'string') {
-      // 기존 이미지 URL 그대로 사용
-      imageUrl = values.image;
-    }
-
-    const payload = {
-      name: values.name,
-      description: values.description,
-      city: values.city,
-      image: imageUrl,
-    };
-
-    try {
-      if (mode === 'create') {
-        await createMutation.mutateAsync(payload);
-      } else {
-        await updateMutation.mutateAsync({
-          id: options.crewId,
-          ...payload,
-        });
-      }
-    } catch (_) {}
-  });
-
-  return {
-    form,
-    submit,
-    isPending:
-      mode === 'create' ? createMutation.isPending : updateMutation.isPending,
-  };
+  return form;
 }
