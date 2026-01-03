@@ -2,17 +2,16 @@
 
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
-import { useUploadImage } from '@/api/mutations/imageMutations';
-import { useCreateSessionReview } from '@/api/mutations/reviewMutations';
-import ChevronLeft from '@/assets/icons/chevron-left.svg';
+import { useEffect } from 'react';
+import { Controller } from 'react-hook-form';
+import ChevronLeft from '@/assets/icons/chevron-left.svg?react';
 import Button from '@/components/ui/Button';
 import ReviewImageUploader from '@/components/ui/ImageUploader/ReviewImageUploader';
 import Modal from '@/components/ui/Modal';
 import Rating from '@/components/ui/Rating';
 import Spinner from '@/components/ui/Spinner';
 import Textarea from '@/components/ui/Textarea';
+import { useReviewForm } from '@/hooks/my/useReviewForm';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { Session } from '@/types';
 
@@ -35,70 +34,33 @@ export default function ReviewModal({
 }: ReviewModalProps) {
   const isMobile = useMediaQuery({ max: 'tablet' });
 
-  const [ranks, setRanks] = useState<number>(0);
-  const [description, setDescription] = useState<string>('');
-  const [image, setImage] = useState<File | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { form, submit } = useReviewForm(session?.id, () => setOpen(false));
+
+  const {
+    register,
+    control,
+    setValue,
+    reset,
+    formState: { isSubmitting },
+  } = form;
 
   useEffect(() => {
     if (!open) {
-      setRanks(0);
-      setDescription('');
-      setImage(null);
-      setIsSubmitting(false);
+      reset({
+        ranks: 0,
+        description: '',
+        image: undefined,
+      });
     }
-  }, [open]);
-
-  const isDisabled = isSubmitting || ranks === 0 || description.trim() === '';
-
-  const { mutateAsync: createReview } = useCreateSessionReview(session?.id);
-  const { mutateAsync: uploadImage } = useUploadImage();
+  }, [open, reset]);
 
   if (!open || !session) {
     return null;
   }
-  const handleSubmit = async () => {
-    if (isSubmitting) return;
-
-    if (ranks < 1 || ranks > 5 || description.trim() === '') {
-      toast.error('별점과 내용을 입력해주세요.');
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    try {
-      let imageUrl;
-
-      if (image) {
-        try {
-          const { url } = await uploadImage({ file: image });
-          imageUrl = url;
-        } catch {
-          toast.error('이미지 업로드 실패!');
-          setIsSubmitting(false);
-          return;
-        }
-      }
-
-      await createReview({
-        description: description.trim(),
-        ranks: ranks as 1 | 2 | 3 | 4 | 5,
-        image: imageUrl,
-      });
-
-      toast.success('리뷰 작성 완료!');
-      setOpen(false);
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : '리뷰 작성 실패!');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   return (
     <Modal open={open} onOpenChange={setOpen}>
-      <Modal.Content className="laptop:max-w-[480px] laptop:rounded-xl laptop:h-auto laptop:max-h-[85dvh] flex h-dvh w-full flex-col bg-gray-800">
+      <Modal.Content className="laptop:max-w-[480px] laptop:rounded-xl laptop:h-fit laptop:max-h-[85dvh] flex h-dvh w-full flex-col overflow-y-auto bg-gray-800">
         <Modal.Header className="relative flex items-center justify-center">
           <button
             className="laptop:hidden absolute left-0"
@@ -126,15 +88,22 @@ export default function ReviewModal({
               </p>
             </div>
             <hr className="w-full border-gray-700" />
+
             <div className="flex flex-col">
               <label className="text-caption-semibold tablet:text-body3-semibold text-gray-50">
                 별점
               </label>
               <div className="flex items-center justify-center">
-                <Rating
-                  size={isMobile ? 32 : 40}
-                  value={ranks}
-                  onChange={setRanks}
+                <Controller
+                  control={control}
+                  name="ranks"
+                  render={({ field }) => (
+                    <Rating
+                      size={isMobile ? 32 : 40}
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
+                  )}
                 />
               </div>
             </div>
@@ -145,13 +114,13 @@ export default function ReviewModal({
               <Textarea
                 className="bg-gray-750 tablet:min-h-[296px] laptop:min-h-[276px] min-h-[260px]"
                 placeholder="남겨주신 리뷰는 프로그램 운영 및 다른 회원 분들께 큰 도움이 됩니다"
-                value={description}
-                onChange={(e) => {
-                  setDescription(e.target.value);
-                }}
+                {...register('description')}
               />
             </div>
-            <ReviewImageUploader onChange={setImage} />
+
+            <ReviewImageUploader
+              onChange={(file) => setValue('image', file ?? undefined)}
+            />
           </div>
         </div>
         <Modal.Footer className="laptop:pb-2 w-full pb-4">
@@ -165,8 +134,8 @@ export default function ReviewModal({
             </Button>
             <Button
               className="flex-1 has-[>svg]:px-6"
-              disabled={isDisabled}
-              onClick={handleSubmit}
+              disabled={isSubmitting}
+              onClick={submit}
             >
               {isSubmitting ? '등록하는 중..' : '등록하기'}
               {isSubmitting && <Spinner className="ml-3" />}

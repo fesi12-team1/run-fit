@@ -43,7 +43,7 @@ export default function MineCrewList() {
                     />
                   </div>
                   <div className="tablet:gap-0 flex min-w-0 flex-col gap-0.5">
-                    <p className="text-caption-semibold tablet:text-body2-semibold truncate text-gray-50">
+                    <p className="text-caption-semibold tablet:text-body2-semibold laptop:text-caption-semibold truncate text-gray-50">
                       {crew.name}
                     </p>
                     <p className="text-caption-regular tablet:text-body3-regular text-gray-300">{`${crew.city} • 멤버 ${crew.memberCount}명`}</p>
