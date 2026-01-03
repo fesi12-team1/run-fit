@@ -42,7 +42,7 @@ export default function SessionCardSkeleton() {
       {/* 참가자 정보 */}
       <div className="laptop:gap-2 flex items-center gap-1">
         {/* 프로필 리스트 */}
-        <div className="flex gap-1">
+        <div className="flex gap-1 -space-x-2">
           {[1, 2, 3].map((j) => (
             <Skeleton key={j} className="size-6 rounded-full" />
           ))}

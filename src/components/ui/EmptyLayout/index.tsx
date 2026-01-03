@@ -1,4 +1,5 @@
 import React from 'react';
+import { cn } from '@/lib/utils';
 import Button from '../Button';
 
 interface EmptyLayoutProps {
@@ -9,7 +10,10 @@ interface EmptyLayoutProps {
 function EmptyLayout({ children, className = 'flex-1' }: EmptyLayoutProps) {
   return (
     <div
-      className={`flex w-full flex-col items-center justify-center gap-10 ${className}`}
+      className={cn(
+        'flex w-full flex-col items-center justify-center gap-10',
+        className
+      )}
     >
       {children}
     </div>
