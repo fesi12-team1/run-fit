@@ -63,12 +63,14 @@ function MyCreatedSessionsContent() {
   }
 
   return (
-    <div className="tablet:gap-x-4 tablet:gap-y-8 laptop:gap-y-10 laptop:grid-cols-3 grid grid-cols-2 gap-x-3 gap-y-2">
-      {sessions.map((session) => (
-        <SessionCard key={session.id} session={normalizeSession(session)} />
-      ))}
+    <>
+      <div className="tablet:gap-x-4 tablet:gap-y-8 laptop:gap-y-10 laptop:grid-cols-3 grid grid-cols-2 gap-x-3 gap-y-2">
+        {sessions.map((session) => (
+          <SessionCard key={session.id} session={normalizeSession(session)} />
+        ))}
+      </div>
       <div ref={bottomRef} className="h-5" />
       {isFetchingNextPage && <Spinner.Scroll />}
-    </div>
+    </>
   );
 }
