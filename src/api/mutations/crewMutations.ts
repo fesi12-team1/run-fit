@@ -57,10 +57,11 @@ export function useDelegateCrewLeader(
     mutationFn: (body: { newLeaderId: number }) =>
       delegateCrewLeader(crewId, body),
     ...options,
-    onSuccess: (_data, _variables, _onMutateResult, context) => {
+    onSuccess: (data, variables, onMutateResult, context) => {
       context.client.invalidateQueries({
         queryKey: crewQueries.detail(crewId).queryKey, // 크루 상세 정보 캐시 무효화
       });
+      options?.onSuccess?.(data, variables, onMutateResult, context);
     },
   });
 }

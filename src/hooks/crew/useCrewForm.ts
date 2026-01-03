@@ -1,86 +1,32 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { UseMutationOptions } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
-import {
-  CrewRequestBody,
-  UpdateCrewDetailRequestBody,
-  UpdateCrewDetailResponse,
-} from '@/api/fetch/crews';
-import {
-  useCreateCrew,
-  useUpdateCrewDetail,
-} from '@/api/mutations/crewMutations';
-import {
-  crewFormSchema,
-  CrewFormValues,
-} from '@/components/crew/CrewForm/_schema';
-import { ApiError } from '@/lib/error';
-import { Crew } from '@/types';
+import * as z from 'zod/v4';
 
-type CreateModeOptions = {
-  mode: 'create';
-  crewId?: undefined;
-  defaultValues: CrewFormValues;
-  mutationOptions: UseMutationOptions<
-    Crew, // TData = unknown,
-    ApiError, // TError = DefaultError,
-    CrewRequestBody // TVariables = void,
-    // TOnMutateResult = unknown
-  >;
-};
+export const crewFormSchema = z.object({
+  name: z
+    .string()
+    .min(1, '크루 이름을 입력해주세요.')
+    .min(2, '크루 이름은 최소 2자 이상이어야 합니다.'),
 
-type EditModeOptions = {
-  mode: 'edit';
-  crewId: number;
-  defaultValues: CrewFormValues;
-  mutationOptions: UseMutationOptions<
-    UpdateCrewDetailResponse, // TData = unknown,
-    ApiError, // TError = DefaultError,
-    UpdateCrewDetailRequestBody // TVariables = void,
-    // TOnMutateResult = unknown
-  >;
-};
+  description: z
+    .string()
+    .min(1, '크루 소개를 입력해주세요.')
+    .min(2, '크루 소개는 최소 2자 이상이어야 합니다.')
+    .max(300, '크루 소개는 300자 이하로 작성해주세요.'),
 
-type UseCrewFormOptions = CreateModeOptions | EditModeOptions;
+  city: z.string().min(1, '활동 지역을 선택해주세요.'),
 
-export function useCrewForm({
-  mode,
-  crewId,
-  defaultValues,
-  mutationOptions,
-}: UseCrewFormOptions) {
+  image: z.string().optional(),
+});
+
+export type CrewFormValues = z.infer<typeof crewFormSchema>;
+
+export function useCrewForm(defaultValues: CrewFormValues) {
   const form = useForm<CrewFormValues>({
     resolver: zodResolver(crewFormSchema),
     mode: 'onSubmit',
     defaultValues,
   });
 
-  const createMutation = useCreateCrew();
-  const updateMutation = useUpdateCrewDetail(crewId ?? 0);
-
-  const submit = form.handleSubmit(async (values) => {
-    const payload = {
-      name: values.name,
-      description: values.description,
-      city: values.city,
-      image: values.image,
-    };
-
-    if (mode === 'create') {
-      createMutation.mutate(payload, {
-        onSuccess: mutationOptions.onSuccess,
-      });
-    } else {
-      updateMutation.mutate(payload, {
-        onSuccess: mutationOptions.onSuccess,
-      });
-    }
-  });
-
-  return {
-    form,
-    submit,
-    isPending:
-      mode === 'create' ? createMutation.isPending : updateMutation.isPending,
-  };
+  return form;
 }
