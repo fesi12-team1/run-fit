@@ -1,25 +1,17 @@
 import { useRouter } from 'next/navigation';
 import Tabs from '@/components/ui/Tabs';
+import { CREW_DETAIL_SECTIONS } from '@/constants/crew';
 
-interface CrewDetailSectionsTabsProps {
-  sections: {
-    id: string;
-    name: string;
-  }[];
-}
-
-export default function CrewDetailSectionsTabs({
-  sections,
-}: CrewDetailSectionsTabsProps) {
+export default function CrewDetailSectionsTabs() {
   const router = useRouter();
 
   return (
     <Tabs
-      defaultValue={sections[0].id}
+      defaultValue={CREW_DETAIL_SECTIONS[0].id}
       className="tablet:top-15 laptop:bg-gray-850 sticky top-14 z-10 bg-gray-800"
     >
       <Tabs.List>
-        {sections.map((section) => (
+        {CREW_DETAIL_SECTIONS.map((section) => (
           <Tabs.Trigger
             key={section.id}
             value={section.id}

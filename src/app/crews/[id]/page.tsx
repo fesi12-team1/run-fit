@@ -26,6 +26,7 @@ import SessionCard from '@/components/session/SessionCard';
 import Button from '@/components/ui/Button';
 import Modal from '@/components/ui/Modal';
 import Spinner from '@/components/ui/Spinner';
+import { CREW_DETAIL_SECTIONS } from '@/constants/crew';
 import { CrewDetailContext, useCrewRole } from '@/context/CrewDetailContext';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { cn, copyStringToClipboard } from '@/lib/utils';
@@ -133,15 +134,6 @@ export default function Page() {
   const totalElements = crewReviewsData?.totalElements ?? 0;
   const totalPages = crewReviewsData?.totalPages ?? 0;
 
-  const sections = [
-    {
-      id: 'detail',
-      name: '크루 소개',
-    },
-    { id: 'session', name: '세션' },
-    { id: 'review', name: '후기' },
-  ];
-
   if (isNaN(crewId)) {
     return notFound();
   }
@@ -198,15 +190,18 @@ export default function Page() {
                   'tablet:gap-y-8 laptop:gap-y-10 laptop:max-w-[720px] gap-y-6'
                 )}
               >
-                <CrewDetailSectionsTabs sections={sections} />
-                <div id={sections[0].id} className="flex flex-col gap-2">
+                <CrewDetailSectionsTabs />
+                <div
+                  id={CREW_DETAIL_SECTIONS[0].id}
+                  className="flex flex-col gap-2"
+                >
                   <span
                     className={cn(
                       'text-gray-50',
                       'tablet:text-title3-semibold text-body2-semibold'
                     )}
                   >
-                    {sections[0].name}
+                    {CREW_DETAIL_SECTIONS[0].name}
                   </span>
                   <div
                     className={cn(
@@ -217,7 +212,10 @@ export default function Page() {
                     {crew?.description}
                   </div>
                 </div>
-                <div id={sections[1].id} className="flex flex-col gap-4">
+                <div
+                  id={CREW_DETAIL_SECTIONS[1].id}
+                  className="flex flex-col gap-4"
+                >
                   <span
                     className={cn(
                       'text-gray-50',
@@ -308,7 +306,7 @@ export default function Page() {
                   )}
                 </div>
                 <div
-                  id={sections[2].id}
+                  id={CREW_DETAIL_SECTIONS[2].id}
                   className="flex flex-col gap-3 border-t border-t-gray-700 py-5"
                 >
                   <div className="flex gap-2">
@@ -318,7 +316,7 @@ export default function Page() {
                         'tablet:text-title3-semibold text-body2-semibold'
                       )}
                     >
-                      {sections[2].name}
+                      {CREW_DETAIL_SECTIONS[2].name}
                     </span>
                     <span className="text-title3-semibold text-brand-300">
                       {totalElements}
