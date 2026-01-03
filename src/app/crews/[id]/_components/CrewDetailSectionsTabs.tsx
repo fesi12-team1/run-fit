@@ -1,9 +1,13 @@
-import { useRouter } from 'next/navigation';
+'use client';
+
 import Tabs from '@/components/ui/Tabs';
 import { CREW_DETAIL_SECTIONS } from '@/constants/crew';
 
 export default function CrewDetailSectionsTabs() {
-  const router = useRouter();
+  const handleTabChange = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    element?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
     <Tabs
@@ -15,7 +19,7 @@ export default function CrewDetailSectionsTabs() {
           <Tabs.Trigger
             key={section.id}
             value={section.id}
-            onClick={() => router.push(`#${section.id}`)}
+            onClick={() => handleTabChange(section.id)}
             className="laptop:bg-gray-850 bg-gray-800"
           >
             {section.name}
