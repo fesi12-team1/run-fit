@@ -4,12 +4,17 @@ import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { userQueries } from '@/api/queries/userQueries';
 import SessionCard from '@/components/session/SessionCard';
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
+import LikedSessionsEmptyState from './LikedSessionsEmptyState';
 
 export default function SessionList() {
   const { data, fetchNextPage, hasNextPage } = useSuspenseInfiniteQuery(
     userQueries.me.likes()
   );
   const loadMoreRef = useInfiniteScroll(fetchNextPage, hasNextPage);
+
+  if (!data?.sessions.length) {
+    return <LikedSessionsEmptyState />;
+  }
 
   return (
     <>
