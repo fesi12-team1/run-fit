@@ -28,6 +28,12 @@ export default function ParticipantsList({ sessionId }: ParticipantsListProps) {
         <span className="text-brand-300">{participants.length}</span>
       </h2>
 
+      {participants.length === 0 && (
+        <div className="text-caption-regular tablet:text-body3-regular text-gray-300">
+          참여자가 없습니다.
+        </div>
+      )}
+
       <ul className="tablet:gap-5 mb-3 flex flex-col gap-2">
         {participants.slice(0, 4).map((participant) => (
           <li key={participant.userId} className="flex items-center gap-3">
@@ -50,14 +56,16 @@ export default function ParticipantsList({ sessionId }: ParticipantsListProps) {
         ))}
       </ul>
 
-      <Button
-        variant="neutral"
-        size="sm"
-        className="w-full"
-        onClick={() => setIsModalOpen(true)}
-      >
-        더보기
-      </Button>
+      {participants.length > 4 && (
+        <Button
+          variant="neutral"
+          size="sm"
+          className="w-full"
+          onClick={() => setIsModalOpen(true)}
+        >
+          더보기
+        </Button>
+      )}
 
       <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
         <Modal.Content
