@@ -2,7 +2,9 @@
 
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
+import Link from 'next/link';
 import {
+  notFound,
   useParams,
   usePathname,
   useRouter,
@@ -24,11 +26,12 @@ import SessionCard from '@/components/session/SessionCard';
 import Button from '@/components/ui/Button';
 import Modal from '@/components/ui/Modal';
 import Spinner from '@/components/ui/Spinner';
-import Tabs from '@/components/ui/Tabs';
+import { CREW_DETAIL_SECTIONS } from '@/constants/crew';
 import { CrewDetailContext, useCrewRole } from '@/context/CrewDetailContext';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { cn, copyStringToClipboard } from '@/lib/utils';
 import { CrewMember } from '@/types';
+import CrewDetailSectionsTabs from './_components/CrewDetailSectionsTabs';
 
 export default function Page() {
   const params = useParams<{ id: string }>();
@@ -50,16 +53,14 @@ export default function Page() {
   const isMobile = useMediaQuery({ max: 'tablet' });
 
   // fetch queries
-  const { data: crew, isError: isCrewQueriesError } = useQuery(
-    crewQueries.detail(crewId)
-  );
+  const { data: crew } = useQuery(crewQueries.detail(crewId));
 
-  // Redirect to /crews if there's no crew data or error
-  useEffect(() => {
-    if (isCrewQueriesError) {
-      router.push('/crews');
-    }
-  }, [isCrewQueriesError, router]);
+  // // Redirect to /crews if there's no crew data or error
+  // useEffect(() => {
+  //   if (isCrewQueriesError) {
+  //     router.push('/crews');
+  //   }
+  // }, [isCrewQueriesError, router]);
 
   const { data: crewMembers } = useQuery(
     crewQueries.members(crewId).list({
@@ -133,7 +134,32 @@ export default function Page() {
   const totalElements = crewReviewsData?.totalElements ?? 0;
   const totalPages = crewReviewsData?.totalPages ?? 0;
 
-  if (!crew) return null;
+  if (isNaN(crewId)) {
+    return notFound();
+  }
+
+  if (!crew)
+    return (
+      <main className="tablet:h-[calc(100vh-60px)] mx-auto flex h-[calc(100vh-56px)] max-w-[1120px] flex-1 flex-col items-center justify-center gap-10 bg-gray-900 py-10">
+        <section className="flex h-[60vh] flex-col items-center justify-center gap-6">
+          <div className="relative h-54 w-60 md:h-72 md:w-80">
+            <Image
+              fill
+              className="object-contain"
+              src={'/assets/session-default.png'}
+              alt="세션 없음"
+              sizes="(max-width: 768px) 240px, 300px"
+            />
+          </div>
+          <p className="tablet:text-body2-medium text-body3-regular text-center text-gray-300">
+            {'크루 정보를 불러오는 중 오류가 발생했습니다.'}
+          </p>
+          <Button asChild>
+            <Link href="/crews">크루 목록으로 돌아가기</Link>
+          </Button>
+        </section>
+      </main>
+    );
 
   return (
     <>
@@ -164,42 +190,18 @@ export default function Page() {
                   'tablet:gap-y-8 laptop:gap-y-10 laptop:max-w-[720px] gap-y-6'
                 )}
               >
-                <Tabs
-                  defaultValue="1"
-                  className="tablet:top-15 laptop:bg-gray-850 sticky top-14 z-10 bg-gray-800"
+                <CrewDetailSectionsTabs />
+                <div
+                  id={CREW_DETAIL_SECTIONS[0].id}
+                  className="flex flex-col gap-2"
                 >
-                  <Tabs.List>
-                    <Tabs.Trigger
-                      value="1"
-                      onClick={() => router.push('#detail')}
-                      className="laptop:bg-gray-850 bg-gray-800"
-                    >
-                      상세 정보
-                    </Tabs.Trigger>
-                    <Tabs.Trigger
-                      value="2"
-                      onClick={() => router.push('#session')}
-                      className="laptop:bg-gray-850 bg-gray-800"
-                    >
-                      모집 중인 세션
-                    </Tabs.Trigger>
-                    <Tabs.Trigger
-                      value="3"
-                      onClick={() => router.push('#review')}
-                      className="laptop:bg-gray-850 bg-gray-800"
-                    >
-                      후기
-                    </Tabs.Trigger>
-                  </Tabs.List>
-                </Tabs>
-                <div id="detail" className="flex flex-col gap-2">
                   <span
                     className={cn(
                       'text-gray-50',
                       'tablet:text-title3-semibold text-body2-semibold'
                     )}
                   >
-                    크루 소개
+                    {CREW_DETAIL_SECTIONS[0].name}
                   </span>
                   <div
                     className={cn(
@@ -210,7 +212,10 @@ export default function Page() {
                     {crew?.description}
                   </div>
                 </div>
-                <div id="session" className="flex flex-col gap-4">
+                <div
+                  id={CREW_DETAIL_SECTIONS[1].id}
+                  className="flex flex-col gap-4"
+                >
                   <span
                     className={cn(
                       'text-gray-50',
@@ -301,7 +306,7 @@ export default function Page() {
                   )}
                 </div>
                 <div
-                  id="review"
+                  id={CREW_DETAIL_SECTIONS[2].id}
                   className="flex flex-col gap-3 border-t border-t-gray-700 py-5"
                 >
                   <div className="flex gap-2">
@@ -311,7 +316,7 @@ export default function Page() {
                         'tablet:text-title3-semibold text-body2-semibold'
                       )}
                     >
-                      후기
+                      {CREW_DETAIL_SECTIONS[2].name}
                     </span>
                     <span className="text-title3-semibold text-brand-300">
                       {totalElements}
