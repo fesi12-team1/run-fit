@@ -1,8 +1,8 @@
 'use client';
 
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import Link from 'next/dist/client/link';
 import Image from 'next/image';
+import Link from 'next/link';
 import {
   notFound,
   useParams,
