@@ -7,6 +7,7 @@ interface CoverImageUploaderProps {
   label?: string;
   maxSizeMB?: number;
   className?: string;
+  disabled?: boolean;
 }
 
 export default function CoverImageUploader({
@@ -15,6 +16,7 @@ export default function CoverImageUploader({
   label = '크루의 대표 이미지를 설정해주세요',
   maxSizeMB = 5,
   className,
+  disabled = false,
 }: CoverImageUploaderProps) {
   const { inputRef, preview, hasPreview, open, addFiles, acceptAttr } =
     useImageUploader({
@@ -29,6 +31,7 @@ export default function CoverImageUploader({
         ref={inputRef}
         accept={acceptAttr}
         className="hidden"
+        disabled={disabled}
         type="file"
         onChange={(e) => {
           addFiles(e.target.files, 'replace');
@@ -74,12 +77,14 @@ export default function CoverImageUploader({
           <button
             className={cn(
               'text-body3-semibold rounded-xl bg-gray-500 px-6 py-2 text-white transition-colors',
-              'group-hover:bg-gray-600 group-hover:text-gray-200' // div의 호버 상태를 button에 전달
+              'group-hover:bg-gray-600 group-hover:text-gray-200', // div의 호버 상태를 button에 전달
+              disabled && 'cursor-not-allowed opacity-50'
             )}
+            disabled={disabled}
             type="button"
             onClick={open}
           >
-            파일 찾기
+            {disabled ? '업로드 중...' : '파일 찾기'}
           </button>
         </div>
       </div>

@@ -129,8 +129,6 @@ function CrewMenuActions({ crew: crewData }: { crew: Crew }) {
   const router = useRouter();
 
   const leaveCrew = useLeaveCrew(crewId ?? 0);
-  // TODO: updateCrewDetail: 크루 생성 추가 후 구현 예정
-  // const updateCrewDetail = useUpdateCrewDetail(crewId ?? 0);
   // TODO: delegateCrewLeader: 현재 - 디자인 없음, API 있음; 추후 구현
   // const delegateCrewLeader = useDelegateCrewLeader(crewId ?? 0);
   const deleteCrew = useDeleteCrew(crewId ?? 0);
@@ -149,16 +147,16 @@ function CrewMenuActions({ crew: crewData }: { crew: Crew }) {
           )}
           {myRole === 'LEADER' && (
             <>
-              {/* TODO: 수정 및 변경은 Modal이 떠야함 */}
               <Dropdown.Item onSelect={() => setCurrentModal('edit')}>
                 수정하기
               </Dropdown.Item>
-              <Dropdown.Item
+              {/* TODO: 크루장 변경은 Modal이 떠야함 */}
+              {/* <Dropdown.Item
                 className="text-error-100"
                 onSelect={() => setCurrentModal('delegate')}
               >
                 크루장 변경
-              </Dropdown.Item>
+              </Dropdown.Item> */}
               <Dropdown.Item
                 className="text-error-100"
                 onSelect={() => setCurrentModal('delete')}
@@ -174,9 +172,7 @@ function CrewMenuActions({ crew: crewData }: { crew: Crew }) {
       <CrewModal
         crewData={crewData}
         handleCloseModal={() => setCurrentModal(null)}
-        handleSuccess={
-          () => setCurrentModal(null)
-        }
+        handleSuccess={() => setCurrentModal(null)}
         mode="edit"
         open={currentModal === 'edit'}
       />
@@ -198,7 +194,19 @@ function CrewMenuActions({ crew: crewData }: { crew: Crew }) {
                 </Button>
               </Modal.Close>
               <Modal.Close asChild>
-                <Button className="w-full" onClick={() => leaveCrew.mutate()}>
+                <Button
+                  className="w-full"
+                  onClick={() =>
+                    leaveCrew.mutate(undefined, {
+                      onSuccess: () => {
+                        router.push('/crews');
+                      },
+                      onError: () => {
+                        router.refresh(); // 현재 페이지 새로 고침
+                      },
+                    })
+                  }
+                >
                   탈퇴
                 </Button>
               </Modal.Close>
@@ -246,7 +254,6 @@ function CrewMenuActions({ crew: crewData }: { crew: Crew }) {
         </Modal.Content>
       </Modal>
 
-      {/* TODO: Edit Crew Modal - 크루 생성 추가 후 구현 예정 */}
       {/* TODO: Delegate Leader Modal - 디자인 없음, API 있음; 추후 구현 */}
     </>
   );

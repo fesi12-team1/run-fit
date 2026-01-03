@@ -40,7 +40,8 @@ export default function CrewModal({
           </button>
 
           <Modal.Title className="tablet:m-0 ml-7">
-            {mode === 'create' ? '크루 생성하기' : '크루 수정하기'}
+            {mode === 'create' && '크루 생성하기'}
+            {mode === 'edit' && '크루 수정하기'}
           </Modal.Title>
         </Modal.Header>
 

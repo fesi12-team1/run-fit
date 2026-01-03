@@ -128,11 +128,9 @@ export function useLeaveCrew(crewId: number, options?: UseMutationOptions) {
         queryKey: crewQueries.members(crewId).all(), // 크루 멤버 목록 캐시 무효화
       });
       options?.onSuccess?.(data, variables, onMutateResult, context);
-      // router.push('/crews');
     },
     onError: (error, variables, onMutateResult, context) => {
       console.error('크루 탈퇴 실패:', error);
-      // router.refresh(); // 현재 페이지 새로 고침
       options?.onError?.(error, variables, onMutateResult, context);
     },
   });
@@ -162,7 +160,6 @@ export function useUpdateCrewDetail(
     },
     onError: (error, variables, onMutateResult, context) => {
       options?.onError?.(error, variables, onMutateResult, context);
-      // options?.onError?.(error.message ?? '크루 수정에 실패했습니다.');
     },
   });
 }

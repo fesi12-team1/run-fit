@@ -6,6 +6,7 @@ import {
   useCreateCrew,
   useUpdateCrewDetail,
 } from '@/api/mutations/crewMutations';
+import { useUploadImage } from '@/api/mutations/imageMutations';
 import Button from '@/components/ui/Button';
 import Chip from '@/components/ui/Chip';
 import { CoverImageUploader } from '@/components/ui/ImageUploader';
@@ -44,8 +45,31 @@ export default function CrewForm({
 
   const form = useCrewForm(defaultValues);
 
-  const createMutation = useCreateCrew();
-  const updateMutation = useUpdateCrewDetail(crewId ?? 0);
+  const uploadImageMutation = useUploadImage({
+    onError: (error) => {
+      toast.error(error.message || '이미지 업로드에 실패했습니다.');
+    },
+  });
+
+  const createMutation = useCreateCrew({
+    onSuccess: () => {
+      handleSuccess();
+      toast.success('크루가 생성되었습니다!');
+    },
+    onError: (error) => {
+      toast.error(error.message || '크루 생성에 실패했습니다.');
+    },
+  });
+
+  const updateMutation = useUpdateCrewDetail(crewId ?? 0, {
+    onSuccess: () => {
+      handleSuccess();
+      toast.success('크루 정보가 수정되었습니다!');
+    },
+    onError: (error) => {
+      toast.error(error.message || '크루 정보 수정에 실패했습니다.');
+    },
+  });
 
   const submit = form.handleSubmit(async (values) => {
     const payload = {
@@ -56,25 +80,9 @@ export default function CrewForm({
     };
 
     if (mode === 'create') {
-      createMutation.mutate(payload, {
-        onSuccess: () => {
-          handleSuccess();
-          toast.success('크루가 생성되었습니다!');
-        },
-        onError: () => {
-          toast.error('크루 생성에 실패했습니다.');
-        },
-      });
+      createMutation.mutate(payload);
     } else {
-      updateMutation.mutate(payload, {
-        onSuccess: () => {
-          handleSuccess();
-          toast.success('크루 정보가 수정되었습니다!');
-        },
-        onError: () => {
-          toast.error('크루 정보 수정에 실패했습니다.');
-        },
-      });
+      updateMutation.mutate(payload);
     }
   });
 
@@ -83,48 +91,41 @@ export default function CrewForm({
     form.setValue('city', city);
   };
 
-  // const handleImageChange = (file: File | null) => {
-  //   if (!file) {
-  //     form.setValue('image', undefined);
-  //   } else {
-  //     form.setValue('image', file);
-  //   }
-  // };
-  //  let imageUrl: string | undefined = undefined;
+  const handleImageChange = async (file: File | null) => {
+    if (!file) {
+      form.setValue('image', undefined);
+      return;
+    }
 
-  //   /** 이미지 처리 로직 */
-  //   if (values.image instanceof File) {
-  //     try {
-  //       const res = await uploadImage.mutateAsync({ file: values.image });
-  //       imageUrl = res.url;
-  //     } catch (e) {
-  //       const msg = e instanceof Error ? e.message : '이미지 업로드 실패';
-  //       onError?.(msg);
-  //       form.setError('root', { message: msg });
-  //       return;
-  //     }
-  //   } else if (typeof values.image === 'string') {
-  //     // 기존 이미지 URL 그대로 사용
-  //     imageUrl = values.image;
-  //   }
+    try {
+      const { url } = await uploadImageMutation.mutateAsync({ file });
+      form.setValue('image', url);
+      toast.success('이미지가 업로드되었습니다.');
+    } catch (error) {
+      // useMutation onError 이미 핸들링 되고
+      // 핸들 안된 promise rejection 막기만
+      console.error('Image upload failed:', error);
+    }
+  };
 
   const { errors } = form.formState;
 
   return (
     <form className="flex w-full flex-col gap-4" onSubmit={submit}>
-      {/* <CoverImageUploader
+      <CoverImageUploader
         className="bg-gray-750"
+        disabled={uploadImageMutation.isPending}
         initialUrl={
           typeof defaultValues.image === 'string'
             ? defaultValues.image
             : undefined
         }
         onFileChange={handleImageChange}
-      /> */}
+      />
 
       <Input
         label="크루 이름"
-        {...form.register('name')}
+        {...form.register('name', { required: '크루 이름을 입력해주세요.' })}
         className="bg-gray-750"
         errorMessage={errors.name?.message}
         placeholder="크루 이름을 작성해주세요"
@@ -133,7 +134,9 @@ export default function CrewForm({
       <div className="flex flex-col gap-1">
         <Label>크루 소개</Label>
         <Textarea
-          {...form.register('description')}
+          {...form.register('description', {
+            required: '크루 소개를 입력해주세요.',
+          })}
           className="bg-gray-750"
           placeholder="크루에 대한 상세 설명을 작성해주세요"
         />
