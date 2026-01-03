@@ -1,6 +1,7 @@
 'use client';
 
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { Suspense } from '@suspensive/react';
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import { userQueries } from '@/api/queries/userQueries';
 import SessionCard from '@/components/session/SessionCard';
@@ -8,15 +9,31 @@ import Spinner from '@/components/ui/Spinner';
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { Session } from '@/types';
+import ManageSkeleton from './ManageSkeleton';
+
+export const dynamic = 'force-dynamic';
 
 export default function MyCreatedSessionsPage() {
+  return (
+    <section className="tablet:gap-3 flex flex-col gap-2">
+      <h2 className="text-body2-semibold tablet:text-body1-semibold text-gray-50">
+        내가 만든 세션
+      </h2>
+      <Suspense fallback={<ManageSkeleton />}>
+        <MyCreatedSessionsContent />
+      </Suspense>
+    </section>
+  );
+}
+
+function MyCreatedSessionsContent() {
   const isMobile = useMediaQuery({ max: 'tablet' });
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-    useInfiniteQuery(userQueries.me.sessions.created());
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useSuspenseInfiniteQuery(userQueries.me.sessions.created());
 
   const sessions = data?.sessions ?? [];
-  const hasNoSessions = !isLoading && sessions.length === 0;
+  const hasNoSessions = sessions.length === 0;
 
   const bottomRef = useInfiniteScroll(fetchNextPage, hasNextPage);
 
@@ -26,14 +43,6 @@ export default function MyCreatedSessionsPage() {
     ...session,
     description: '',
   });
-
-  if (isLoading) {
-    return (
-      <section className="flex h-[60vh] items-center justify-center">
-        <Spinner className="text-brand-500 size-8" />
-      </section>
-    );
-  }
 
   if (hasNoSessions) {
     return (
@@ -56,21 +65,14 @@ export default function MyCreatedSessionsPage() {
   }
 
   return (
-    <section className="tablet:gap-3 flex flex-col gap-2">
-      <h2 className="text-body2-semibold tablet:text-body1-semibold text-gray-50">
-        내가 만든 세션
-      </h2>
+    <>
       <div className="tablet:gap-x-4 tablet:gap-y-8 laptop:gap-y-10 laptop:grid-cols-3 grid grid-cols-2 gap-x-3 gap-y-2">
         {sessions.map((session) => (
           <SessionCard key={session.id} session={normalizeSession(session)} />
         ))}
-        <div ref={bottomRef} className="h-5" />
-        {isFetchingNextPage && (
-          <div className="flex justify-center">
-            <Spinner className="text-brand-500 size-5" />
-          </div>
-        )}
       </div>
-    </section>
+      <div ref={bottomRef} className="h-5" />
+      {isFetchingNextPage && <Spinner.Scroll />}
+    </>
   );
 }

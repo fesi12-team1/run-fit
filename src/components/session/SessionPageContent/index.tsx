@@ -2,6 +2,7 @@
 
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { sessionQueries } from '@/api/queries/sessionQueries';
+import Spinner from '@/components/ui/Spinner';
 import { useSessionFilters } from '@/hooks/session/useSessionFilters';
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 import { SessionFilterProvider } from '@/provider/SessionFilterProvider';
@@ -12,9 +13,8 @@ export default function SessionPageInner() {
   const { filters, queryFilters, applyFilters, activeFilterCount } =
     useSessionFilters();
 
-  const { data, fetchNextPage, hasNextPage } = useSuspenseInfiniteQuery(
-    sessionQueries.infiniteList({ ...queryFilters })
-  );
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useSuspenseInfiniteQuery(sessionQueries.infiniteList({ ...queryFilters }));
 
   const loadMoreRef = useInfiniteScroll(() => fetchNextPage(), hasNextPage);
 
@@ -26,6 +26,7 @@ export default function SessionPageInner() {
         filters={filters}
       />
       <SessionList data={data?.sessions} loadMoreRef={loadMoreRef} />
+      {isFetchingNextPage && <Spinner.Scroll />}
     </SessionFilterProvider>
   );
 }

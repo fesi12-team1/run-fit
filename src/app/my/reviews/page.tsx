@@ -1,27 +1,31 @@
 'use client';
 
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { Suspense } from '@suspensive/react';
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { userQueries } from '@/api/queries/userQueries';
 import ReviewCard from '@/components/crew/ReviewCard';
 import Spinner from '@/components/ui/Spinner';
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
+import ReviewsSkeleton from './ReviewsSkeleton';
+
+export const dynamic = 'force-dynamic';
 
 export default function MyReviewsPage() {
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-    useInfiniteQuery(userQueries.me.reviews());
+  return (
+    <Suspense fallback={<ReviewsSkeleton />}>
+      <MyReviewsContent />
+    </Suspense>
+  );
+}
+
+function MyReviewsContent() {
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useSuspenseInfiniteQuery(userQueries.me.reviews());
 
   const reviews = data?.reviews ?? [];
-  const hasNoReviews = !isLoading && reviews.length === 0;
+  const hasNoReviews = reviews.length === 0;
 
   const bottomRef = useInfiniteScroll(fetchNextPage, hasNextPage);
-
-  if (isLoading) {
-    return (
-      <section className="flex h-[60vh] items-center justify-center">
-        <Spinner className="text-brand-500 size-8" />
-      </section>
-    );
-  }
 
   if (hasNoReviews) {
     return (
@@ -50,11 +54,7 @@ export default function MyReviewsPage() {
 
       <div ref={bottomRef} className="h-5" />
 
-      {isFetchingNextPage && (
-        <div className="flex justify-center">
-          <Spinner className="text-brand-500 size-5" />
-        </div>
-      )}
+      {isFetchingNextPage && <Spinner.Scroll />}
     </section>
   );
 }

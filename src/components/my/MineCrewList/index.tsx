@@ -1,6 +1,6 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -13,7 +13,9 @@ import Spinner from '@/components/ui/Spinner';
 export default function MineCrewList() {
   const [open, setOpen] = useState(false);
 
-  const { data } = useQuery(userQueries.me.crews.owned({ page: 0, size: 4 }));
+  const { data } = useSuspenseQuery(
+    userQueries.me.crews.owned({ page: 0, size: 4 })
+  );
   const { data: allCrews, isLoading } = useQuery({
     ...userQueries.me.crews.owned({ page: 0, size: 100 }),
     enabled: open,

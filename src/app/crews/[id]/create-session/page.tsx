@@ -1,5 +1,4 @@
 import { ErrorBoundary, Suspense } from '@suspensive/react';
-import Spinner from '@/components/ui/Spinner';
 import AuthErrorFallback from './_components/AuthFallback';
 import BackButton from './_components/BackButton';
 import SessionCreateForm from './_components/SessionCreateForm';
@@ -21,7 +20,7 @@ export default async function Page({
         </h1>
       </div>
       <ErrorBoundary fallback={<AuthErrorFallback />}>
-        <Suspense fallback={<Spinner />}>
+        <Suspense>
           <RoleGuard crewId={crewId}>
             <SessionCreateForm crewId={crewId} />
           </RoleGuard>

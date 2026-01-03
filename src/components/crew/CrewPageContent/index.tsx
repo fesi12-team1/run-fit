@@ -3,6 +3,7 @@ import { crewQueries } from '@/api/queries/crewQueries';
 import CrewList from '@/components/crew/CrewList';
 import RegionFilter from '@/components/crew/RegionFilter';
 import OptionDropdown from '@/components/ui/OptionDropdown';
+import Spinner from '@/components/ui/Spinner';
 import { CREW_SORT_OPTIONS } from '@/constants/crew';
 import { useCrewFilters } from '@/hooks/crew/useCrewFilters';
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
@@ -11,9 +12,8 @@ import { CrewListFilters } from '@/types';
 export default function CrewPageContent() {
   const { filters, applyFilters } = useCrewFilters();
 
-  const { data, fetchNextPage, hasNextPage } = useSuspenseInfiniteQuery(
-    crewQueries.list({ ...filters })
-  );
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useSuspenseInfiniteQuery(crewQueries.list({ ...filters }));
 
   const loadMoreRef = useInfiniteScroll(() => fetchNextPage(), hasNextPage);
 
@@ -21,6 +21,7 @@ export default function CrewPageContent() {
     <>
       <FilterBar applyFilters={applyFilters} filters={filters} />
       <CrewList data={data?.crews} loadMoreRef={loadMoreRef} />
+      {isFetchingNextPage && <Spinner.Scroll />}
     </>
   );
 }

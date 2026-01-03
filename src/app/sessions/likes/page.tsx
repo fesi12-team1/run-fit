@@ -1,6 +1,6 @@
 import { ErrorBoundary, Suspense } from '@suspensive/react';
-import Spinner from '@/components/ui/Spinner';
 import SessionList from './_components/SessionList';
+import LikedSessionsSkeleton from './LikedSessionsSkeleton';
 
 export default function Page() {
   return (
@@ -12,7 +12,7 @@ export default function Page() {
         </p>
       </div>
       <ErrorBoundary fallback={<div>세션 목록을 불러오는데 실패했습니다.</div>}>
-        <Suspense fallback={<Spinner />} clientOnly>
+        <Suspense fallback={<LikedSessionsSkeleton />} clientOnly>
           <SessionList />
         </Suspense>
       </ErrorBoundary>

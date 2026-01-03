@@ -10,6 +10,7 @@ import CrewModal from '@/components/crew/CrewModal';
 import CrewPageContent from '@/components/crew/CrewPageContent';
 import Button from '@/components/ui/Button';
 import Modal from '@/components/ui/Modal';
+import CrewPageSkeleton from './CrewPageSkeleton';
 
 export default function Page() {
   return (
@@ -21,13 +22,7 @@ export default function Page() {
           </div>
         }
       >
-        <Suspense
-          fallback={
-            <div className="h-main flex items-center justify-center text-gray-300">
-              로딩 중...
-            </div>
-          }
-        >
+        <Suspense fallback={<CrewPageSkeleton />}>
           <CrewPageContent />
         </Suspense>
       </ErrorBoundary>
@@ -39,8 +34,8 @@ function Layout({ children }: { children: React.ReactNode }) {
   return (
     <main className="h-main mx-auto flex max-w-[1120px] flex-col items-center justify-start px-6">
       <Header />
-      {children}
-      <CreateCrewButton />
+      <div className="flex w-full flex-col">{children}</div>
+      <CrewCreateModal />
     </main>
   );
 }
@@ -60,7 +55,7 @@ function Header() {
   );
 }
 
-function CreateCrewButton() {
+function CrewCreateModal() {
   const [currentModal, setCurrentModal] = useState<null | 'create' | 'login'>(
     null
   );
@@ -104,7 +99,7 @@ function CreateCrewButton() {
           <Modal.Title />
           <Modal.CloseButton />
           <Modal.Description>
-            크루에 가입하려면 로그인이 필요해요!
+            크루를 생성하려면 로그인이 필요해요!
           </Modal.Description>
           <Modal.Footer>
             <Modal.Close asChild>

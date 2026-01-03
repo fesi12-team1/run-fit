@@ -1,6 +1,7 @@
 'use client';
 
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { Suspense } from '@suspensive/react';
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { userQueries } from '@/api/queries/userQueries';
@@ -9,26 +10,29 @@ import Button from '@/components/ui/Button';
 import Spinner from '@/components/ui/Spinner';
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
+import CrewsSkeleton from './CrewsSkeleton';
+
+export const dynamic = 'force-dynamic';
 
 export default function MyCrewsPage() {
+  return (
+    <Suspense fallback={<CrewsSkeleton />}>
+      <MyCrewsContent />
+    </Suspense>
+  );
+}
+
+function MyCrewsContent() {
   const isMobile = useMediaQuery({ max: 'tablet' });
   const router = useRouter();
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-    useInfiniteQuery(userQueries.me.crews.joined());
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useSuspenseInfiniteQuery(userQueries.me.crews.joined());
 
   const crews = data?.crews ?? [];
-  const hasNoCrews = !isLoading && crews.length === 0;
+  const hasNoCrews = crews.length === 0;
 
   const bottomRef = useInfiniteScroll(fetchNextPage, !!hasNextPage);
-
-  if (isLoading) {
-    return (
-      <section className="flex h-[60vh] items-center justify-center">
-        <Spinner className="text-brand-500 size-8" />
-      </section>
-    );
-  }
 
   if (hasNoCrews) {
     return (
@@ -71,11 +75,7 @@ export default function MyCrewsPage() {
 
       <div ref={bottomRef} className="h-5" />
 
-      {isFetchingNextPage && (
-        <div className="flex justify-center">
-          <Spinner className="text-brand-500 size-5" />
-        </div>
-      )}
+      {isFetchingNextPage && <Spinner.Scroll />}
     </section>
   );
 }
