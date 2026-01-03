@@ -99,7 +99,7 @@ function DropdownContent({
       <DropdownMenuPrimitive.Content
         align={align}
         className={cn(
-          'overflow-hidden rounded-xl border border-gray-500',
+          'z-100 overflow-hidden rounded-xl border border-gray-500',
           'min-w-(--radix-dropdown-menu-trigger-width)',
           'max-h-[300px] overflow-y-auto',
           className
