@@ -55,7 +55,7 @@ export async function createSession(body: CreateSessionRequestBody) {
   });
 }
 
-type GetSessionDetailResponse = Session;
+export type GetSessionDetailResponse = Session;
 export async function getSessionDetail(sessionId: number) {
   return request<GetSessionDetailResponse>(`/api/sessions/${sessionId}`);
 }
@@ -87,7 +87,7 @@ export async function unregisterFromSession(sessionId: number) {
   );
 }
 
-type GetSessionParticipantsResponse = {
+export type GetSessionParticipantsResponse = {
   participants: CrewMember[];
   totalCount: number;
 };
