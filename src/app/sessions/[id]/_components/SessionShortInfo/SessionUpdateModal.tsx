@@ -45,7 +45,11 @@ export default function SessionUpdateModal({
   const onSubmit = (data: z.infer<typeof schema>) => {
     mutation.mutate(data, {
       onSuccess: () => {
+        toast.success('세션 정보가 수정되었습니다!');
         setIsUpdateModalOpen(false);
+      },
+      onError: (error) => {
+        toast.error(error.message || '세션 정보 수정에 실패했습니다.');
       },
     });
   };
