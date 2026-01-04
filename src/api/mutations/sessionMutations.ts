@@ -48,11 +48,9 @@ export function useUpdateSession(
     mutationFn: (body) => updateSessionDetail(sessionId, body),
     ...options,
     onSuccess: (data, variables, onMutateResult, context) => {
-      if (sessionId) {
-        context.client.invalidateQueries({
-          queryKey: sessionQueries.detail(sessionId).queryKey, // 세션 상세 캐시 무효화
-        });
-      }
+      context.client.invalidateQueries({
+        queryKey: sessionQueries.detail(sessionId).queryKey, // 세션 상세 캐시 무효화
+      });
       context.client.invalidateQueries({
         queryKey: sessionQueries.lists(), // 세션 목록 캐시 무효화
       });
