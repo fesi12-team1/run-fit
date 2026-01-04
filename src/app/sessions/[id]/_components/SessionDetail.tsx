@@ -1,10 +1,12 @@
 'use client';
 
+import { Suspense } from '@suspensive/react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { sessionQueries } from '@/api/queries/sessionQueries';
 import { cn } from '@/lib/utils';
 import { Session } from '@/types';
 import CrewShortInfo from './CrewShortInfo';
+import CrewShortInfoSkeleton from './CrewShortInfo/CrewShortInfoSkeleton';
 import SessionDetailInfo from './SessionDetailInfo';
 import SessionImage from './SessionImage';
 import SessionShortInfo from './SessionShortInfo';
@@ -22,13 +24,17 @@ export default function SessionDetail({ sessionId }: SessionDetailProps) {
 
   return (
     <>
+      {/* Mobile & Tablet Layout */}
       <div className={cn('laptop:hidden flex', 'flex-col bg-gray-800 py-10')}>
         <SessionImage image={session.image} name={session.name} />
         <SessionShortInfo session={session} crewId={crewId} />
         <SessionDetailInfo session={session} />
-        <CrewShortInfo crewId={crewId} />
+        <Suspense fallback={<CrewShortInfoSkeleton />}>
+          <CrewShortInfo crewId={crewId} />
+        </Suspense>
       </div>
 
+      {/* Desktop Layout */}
       <div
         className={cn(
           'laptop:flex hidden',
@@ -41,7 +47,9 @@ export default function SessionDetail({ sessionId }: SessionDetailProps) {
         </div>
         <div className="laptop:w-[360px] flex flex-col gap-10">
           <SessionShortInfo session={session} crewId={crewId} />
-          <CrewShortInfo crewId={crewId} />
+          <Suspense fallback={<CrewShortInfoSkeleton />}>
+            <CrewShortInfo crewId={crewId} />
+          </Suspense>
         </div>
       </div>
     </>

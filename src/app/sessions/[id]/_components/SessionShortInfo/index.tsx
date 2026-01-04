@@ -1,6 +1,6 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { crewQueries } from '@/api/queries/crewQueries';
 import { userQueries } from '@/api/queries/userQueries';
@@ -30,7 +30,7 @@ export default function SessionShortInfo({
     currentParticipantCount,
     maxParticipantCount,
   } = session;
-  const { data: profile } = useQuery(userQueries.me.info());
+  const { data: profile } = useSuspenseQuery(userQueries.me.info());
   const profileId = profile?.id;
 
   const { data: memberRole } = useQuery({
