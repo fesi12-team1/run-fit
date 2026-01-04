@@ -3,7 +3,6 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import z from 'zod';
 import { useUpdateSession } from '@/api/mutations/sessionMutations';
-import { sessionQueries } from '@/api/queries/sessionQueries';
 import ChevronLeft from '@/assets/icons/chevron-left.svg?react';
 import Button from '@/components/ui/Button';
 import Modal from '@/components/ui/Modal';

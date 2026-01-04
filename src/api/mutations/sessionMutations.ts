@@ -90,15 +90,12 @@ export function useUnregisterSession(
   return useMutation({
     mutationFn: () => unregisterFromSession(sessionId),
     ...options,
-    onSuccess: async (data, variables, onMutateResult, context) => {
-      // 세션 상세 캐시 무효화 및 리페치
-      await context.client.invalidateQueries({
-        queryKey: sessionQueries.detail(sessionId).queryKey,
-        refetchType: 'active',
-      });
-      // 세션 목록 캐시 무효화
+    onSuccess: (data, variables, onMutateResult, context) => {
       context.client.invalidateQueries({
-        queryKey: sessionQueries.lists(),
+        queryKey: sessionQueries.participants(sessionId).queryKey, // 세션 참여자 목록 캐시 무효화
+      });
+      context.client.invalidateQueries({
+        queryKey: sessionQueries.detail(sessionId).queryKey, // 세션 상세 캐시 무효화
       });
       options?.onSuccess?.(data, variables, onMutateResult, context);
     },
