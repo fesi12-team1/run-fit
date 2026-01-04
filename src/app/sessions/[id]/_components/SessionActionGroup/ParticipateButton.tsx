@@ -1,6 +1,6 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -10,9 +10,11 @@ import {
 } from '@/api/mutations/sessionMutations';
 import { sessionQueries } from '@/api/queries/sessionQueries';
 import { userQueries } from '@/api/queries/userQueries';
+import ReviewModal from '@/components/my/ReviewModal';
 import Button from '@/components/ui/Button';
 import Modal from '@/components/ui/Modal';
 import { signInModal } from '@/store/signinModal';
+import { Session } from '@/types';
 
 interface ParticipateButtonProps {
   className?: string;
@@ -36,6 +38,7 @@ interface ParticipateButtonProps {
 
 export function useSessionAction(sessionId: number) {
   const [isCrewModalOpen, setIsCrewModalOpen] = useState(false);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
 
   const { data: user } = useQuery({ ...userQueries.me.info() });
   const { data: detail } = useQuery({ ...sessionQueries.detail(sessionId) });
@@ -43,16 +46,23 @@ export function useSessionAction(sessionId: number) {
     ...sessionQueries.participants(sessionId),
     enabled: !!user, // 로그인 정보가 있을 때만 참여자 목록 조회
   });
-
+  const { data: myReviews } = useInfiniteQuery({
+    ...userQueries.me.reviews(),
+    enabled: !!user,
+  });
   const isParticipating = !!participantsData?.participants.find(
     (p) => p.userId === user?.id
   );
 
   const isClosed = detail ? new Date(detail.registerBy) < new Date() : false;
+  const isFinished = detail ? new Date(detail.sessionAt) < new Date() : false;
   const isFull = detail
     ? detail.currentParticipantCount >= detail.maxParticipantCount
     : false;
   const isHost = detail?.hostUserId === user?.id;
+  const isReviewed = !!myReviews?.reviews.find(
+    (review) => review.sessionId === sessionId
+  );
 
   const registerMutation = useRegisterSession(sessionId, {
     onError: (error) => {
@@ -90,15 +100,19 @@ export function useSessionAction(sessionId: number) {
     states: {
       isParticipating,
       isClosed,
+      isFinished,
       isFull,
       isHost,
+      isReviewed,
       isLoading: !detail || (!!user && !participantsData), // 유저가 있는데 데이터가 없으면 로딩
       isCrewModalOpen,
+      isReviewModalOpen,
     },
     actions: {
       register: registerMutation.mutate,
       unregister: unregisterMutation.mutate,
       setIsCrewModalOpen,
+      setIsReviewModalOpen,
     },
     detail,
   };
@@ -116,6 +130,28 @@ export default function ParticipateButton({
         확인 중...
       </Button>
     );
+
+  if (states.isParticipating && states.isFinished) {
+    return (
+      <>
+        <Button
+          variant="default"
+          className={className}
+          onClick={() => actions.setIsReviewModalOpen(true)}
+          disabled={states.isReviewed || states.isHost}
+        >
+          리뷰 작성하기
+        </Button>
+        {detail && (
+          <ReviewModal
+            open={states.isReviewModalOpen}
+            setOpen={actions.setIsReviewModalOpen}
+            session={detail as Session}
+          />
+        )}
+      </>
+    );
+  }
 
   if (states.isParticipating) {
     return (
