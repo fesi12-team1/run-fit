@@ -15,11 +15,7 @@ export default function ImageInputField({ className }: ImageInputFieldProps) {
     formState: { errors },
   } = useFormContext<SessionCreateFormValues>();
 
-  const uploadImageMutation = useUploadImage({
-    onError: (error) => {
-      toast.error(error.message || '이미지 업로드에 실패했습니다.');
-    },
-  });
+  const uploadImageMutation = useUploadImage();
 
   const handleFileChange = async (file: File | null) => {
     if (!file) {
@@ -27,7 +23,14 @@ export default function ImageInputField({ className }: ImageInputFieldProps) {
       return;
     }
     try {
-      const { url } = await uploadImageMutation.mutateAsync({ file });
+      const { url } = await uploadImageMutation.mutateAsync(
+        { file },
+        {
+          onError: (error) => {
+            toast.error(error.message || '이미지 업로드에 실패했습니다.');
+          },
+        }
+      );
       setValue('image', url, { shouldDirty: true, shouldValidate: true });
       toast.success('이미지가 업로드되었습니다.');
     } catch (error) {

@@ -94,13 +94,8 @@ export function HeaderView({
 }
 
 function UserMenu({ user }: { user: Profile }) {
-  const signout = useSignout({
-    onSuccess: () => {
-      router.push('/');
-    },
-  });
-
   const router = useRouter();
+  const signout = useSignout();
 
   return (
     <Dropdown>
@@ -125,7 +120,11 @@ function UserMenu({ user }: { user: Profile }) {
         <Dropdown.Item asChild>
           <button
             onClick={() => {
-              signout.mutate();
+              signout.mutate(undefined, {
+                onSuccess: () => {
+                  router.push('/');
+                },
+              });
             }}
           >
             로그아웃

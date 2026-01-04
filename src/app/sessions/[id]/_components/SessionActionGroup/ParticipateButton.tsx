@@ -64,37 +64,40 @@ export function useSessionAction(sessionId: number) {
     (review) => review.sessionId === sessionId
   );
 
-  const registerMutation = useRegisterSession(sessionId, {
-    onError: (error) => {
-      const status = error.status;
-      const errorCode = error.code;
-      const errorMessage = error.message;
-
-      if (errorCode === 'SESSION_FULL') {
-        toast.error(errorMessage || '세션 정원이 모두 찼습니다.');
-        return;
-      }
-
-      if (errorCode === 'SESSION_CLOSED') {
-        toast.error(errorMessage || '세션 신청이 마감되었습니다.');
-        return;
-      }
-
-      // 1. 비로그인 처리 (401)
-      if (status === '401' || errorCode === 'UNAUTHORIZED') {
-        signInModal.open();
-        return;
-      }
-
-      // 2. 미가입 크루 처리 (403)
-      if (status === '403' || errorCode === 'NOT_CREW_MEMBER') {
-        setIsCrewModalOpen(true);
-        return;
-      }
-    },
-  });
-
+  const registerMutation = useRegisterSession(sessionId);
   const unregisterMutation = useUnregisterSession(sessionId);
+
+  const handleRegister = () => {
+    registerMutation.mutate(undefined, {
+      onError: (error) => {
+        const status = error.status;
+        const errorCode = error.code;
+        const errorMessage = error.message;
+
+        if (errorCode === 'SESSION_FULL') {
+          toast.error(errorMessage || '세션 정원이 모두 찼습니다.');
+          return;
+        }
+
+        if (errorCode === 'SESSION_CLOSED') {
+          toast.error(errorMessage || '세션 신청이 마감되었습니다.');
+          return;
+        }
+
+        // 1. 비로그인 처리 (401)
+        if (status === '401' || errorCode === 'UNAUTHORIZED') {
+          signInModal.open();
+          return;
+        }
+
+        // 2. 미가입 크루 처리 (403)
+        if (status === '403' || errorCode === 'NOT_CREW_MEMBER') {
+          setIsCrewModalOpen(true);
+          return;
+        }
+      },
+    });
+  };
 
   return {
     states: {
@@ -109,7 +112,7 @@ export function useSessionAction(sessionId: number) {
       isReviewModalOpen,
     },
     actions: {
-      register: registerMutation.mutate,
+      register: handleRegister,
       unregister: unregisterMutation.mutate,
       setIsCrewModalOpen,
       setIsReviewModalOpen,

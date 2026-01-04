@@ -13,19 +13,19 @@ export default function SignupForm() {
   const router = useRouter();
 
   const form = useSignupForm();
-  const { mutate, isPending } = useSignup({
-    onSuccess: () => {
-      toast.success('회원가입 성공!');
-      router.push('/signin');
-    },
-    onError: (error) => {
-      toast.error(`회원가입 실패: ${error.message}`);
-      form.setError('root', {});
-    },
-  });
+  const { mutate, isPending } = useSignup();
 
   const submit = form.handleSubmit((values) => {
-    mutate(values);
+    mutate(values, {
+      onSuccess: () => {
+        toast.success('회원가입 성공!');
+        router.push('/signin');
+      },
+      onError: (error) => {
+        toast.error(`회원가입 실패: ${error.message}`);
+        form.setError('root', {});
+      },
+    });
   });
   const {
     register,

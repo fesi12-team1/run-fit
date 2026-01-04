@@ -30,18 +30,18 @@ export default function SigninForm() {
   }
 
   const form = useSigninForm();
-  const { mutate, isPending } = useSignin({
-    onSuccess: () => {
-      toast.success('로그인 성공!');
-      router.replace(redirect as Route);
-    },
-    onError: (error) => {
-      toast.error(`로그인 실패: ${error.message}`);
-      form.setError('root', {});
-    },
-  });
+  const { mutate, isPending } = useSignin();
   const submit = form.handleSubmit((values) => {
-    mutate(values);
+    mutate(values, {
+      onSuccess: () => {
+        toast.success('로그인 성공!');
+        router.replace(redirect as Route);
+      },
+      onError: (error) => {
+        toast.error(`로그인 실패: ${error.message}`);
+        form.setError('root', {});
+      },
+    });
   });
 
   const {

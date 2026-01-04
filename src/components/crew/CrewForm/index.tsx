@@ -45,31 +45,10 @@ export default function CrewForm({
 
   const form = useCrewForm(defaultValues);
 
-  const uploadImageMutation = useUploadImage({
-    onError: (error) => {
-      toast.error(error.message || '이미지 업로드에 실패했습니다.');
-    },
-  });
+  const uploadImageMutation = useUploadImage();
 
-  const createMutation = useCreateCrew({
-    onSuccess: () => {
-      handleSuccess();
-      toast.success('크루가 생성되었습니다!');
-    },
-    onError: (error) => {
-      toast.error(error.message || '크루 생성에 실패했습니다.');
-    },
-  });
-
-  const updateMutation = useUpdateCrewDetail(crewId ?? 0, {
-    onSuccess: () => {
-      handleSuccess();
-      toast.success('크루 정보가 수정되었습니다!');
-    },
-    onError: (error) => {
-      toast.error(error.message || '크루 정보 수정에 실패했습니다.');
-    },
-  });
+  const createMutation = useCreateCrew();
+  const updateMutation = useUpdateCrewDetail(crewId ?? 0);
 
   const submit = form.handleSubmit(async (values) => {
     const payload = {
@@ -80,9 +59,25 @@ export default function CrewForm({
     };
 
     if (mode === 'create') {
-      createMutation.mutate(payload);
+      createMutation.mutate(payload, {
+        onSuccess: () => {
+          handleSuccess();
+          toast.success('크루가 생성되었습니다!');
+        },
+        onError: (error) => {
+          toast.error(error.message || '크루 생성에 실패했습니다.');
+        },
+      });
     } else {
-      updateMutation.mutate(payload);
+      updateMutation.mutate(payload, {
+        onSuccess: () => {
+          handleSuccess();
+          toast.success('크루 정보가 수정되었습니다!');
+        },
+        onError: (error) => {
+          toast.error(error.message || '크루 정보 수정에 실패했습니다.');
+        },
+      });
     }
   });
 
@@ -98,7 +93,14 @@ export default function CrewForm({
     }
 
     try {
-      const { url } = await uploadImageMutation.mutateAsync({ file });
+      const { url } = await uploadImageMutation.mutateAsync(
+        { file },
+        {
+          onError: (error) => {
+            toast.error(error.message || '이미지 업로드에 실패했습니다.');
+          },
+        }
+      );
       form.setValue('image', url);
       toast.success('이미지가 업로드되었습니다.');
     } catch (error) {
