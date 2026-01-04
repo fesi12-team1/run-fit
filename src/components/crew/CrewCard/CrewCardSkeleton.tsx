@@ -26,7 +26,7 @@ export default function CrewCardSkeleton() {
             {/* City Badge */}
             <Skeleton className="tablet:h-7 h-6 w-12 rounded-lg" />
             {/* Member Count */}
-            <Skeleton className="tablet:h-5 h-4 w-20" />
+            <Skeleton className="tablet:h-5 h-4 w-14" />
             {/* Profile List */}
             <div className="flex gap-1 -space-x-1">
               {[1, 2, 3].map((i) => (
