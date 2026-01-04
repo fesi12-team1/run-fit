@@ -58,7 +58,7 @@ responsive design
 2. 팀원별로 맡은 역할 (주요 내용만 O, 세세하게는 X) / 기술 스택 / 폴더 구조 X /
 3. 프로젝트 수행 절차 및 구조 / 프로세스 간단하게 언급 / 구현한 요구사항
 4. 수행 결과 데모 - 플로우 정하기
-5. 코드 작성하면서 고민한 점, 트러블 슈팅
+5. 고민한 점, 트러블 슈팅
 6. 회고
 7. QnA
 
@@ -305,6 +305,112 @@ run-fit/
 - 크루 목록 - 러닝 크루 찾기
 - 마이페이지 - 개인 대시보드
 - 세션 생성 - 새로운 모임 만들기
+
+---
+
+<!-- _class: lead -->
+
+# 5. 고민한 점, 트러블 슈팅
+
+---
+
+## SignIn Modal 개선기
+
+프로젝트에서 사용자 인증이 필요한 동작(찜하기, 리뷰 보기 등) 시
+로그인이 되지 않았을 경우 로그인을 유도하는 모달을 보여줍니다.
+
+---
+
+### 🤔 기존 방식의 문제점
+
+```tsx
+// 모달의 동작을 관리하는 곳
+const { open, close, ... } = useSigninModal();
+signInModal.open();
+
+// UI를 리턴하는 곳
+return <SigninModal open={open} ... />
+```
+
+- 📌 코드의 **흐름을 따라가기 어려움**
+  - 훅과 UI가 분리되어 있어 동작 흐름 파악 어려움
+- 📌 **코드 응집도 낮음**
+  - `useLikeButton` 훅에 모달 로직, `LikeButton` 컴포넌트에 UI 리턴
+  - 하나의 기능이 여러 곳에 분산됨
+
+---
+
+## ✨ 개선안
+
+### sonner toast 사용 예시
+
+```tsx
+import { toast } from 'sonner';
+
+// Provider 설정 (Root layout)
+<Toaster />;
+
+// 어디서든 호출
+toast.success('성공했어요!');
+```
+
+### 사용 방식 (함수 호출만으로 해결)
+
+```tsx
+// 어디서든 이렇게만 호출
+signInModal.open();
+signInModal.close();
+```
+
+---
+
+## 구현 코드
+
+```tsx
+// 스토어 생성
+// src/store/signinModal.ts
+type Listener = (isOpen: boolean) => void;
+let isOpen = false;
+const listeners = new Set<Listener>();
+
+export const signInModal = {
+  // 상태 구독 (Provider에서 사용)
+  subscribe: (listener: Listener) => {
+    listeners.add(listener);
+    return () => listeners.delete(listener);
+  },
+  open: () => {
+    isOpen = true;
+    listeners.forEach((l) => l(isOpen));
+  },
+  close: () => {
+    isOpen = false;
+    listeners.forEach((l) => l(isOpen));
+  },
+  getState: () => isOpen,
+};
+```
+
+---
+
+## Provider에서 구독
+
+```tsx
+// src/provider/SigninModalProvider.tsx
+export default function SigninModalProvider() {
+  const isOpen = useSyncExternalStore(
+    signInModal.subscribe, // 구독 함수
+    signInModal.getState, // 스냅샷 가져오기
+    () => false // SSR 기본값
+  );
+
+  return (
+    <Modal open={isOpen} onOpenChange={(open) => !open && signInModal.close()}>
+      {/* Modal Content */}
+    </Modal>
+  );
+}
+```
 
 ---
 
