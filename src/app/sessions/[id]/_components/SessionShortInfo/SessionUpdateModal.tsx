@@ -46,18 +46,9 @@ export default function SessionUpdateModal({
   const { mutate, isPending } = useUpdateSession(session.id);
   const onSubmit = (data: values) => {
     mutate(data, {
-      onSuccess: async (_data, _variables, _onMutateResult, context) => {
+      onSuccess: () => {
         toast.success('세션 정보가 수정되었습니다!');
         setIsUpdateModalOpen(false);
-        // 세션 상세 캐시 무효화 및 리페치
-        await context.client.invalidateQueries({
-          queryKey: sessionQueries.detail(session.id).queryKey,
-          refetchType: 'active',
-        });
-        // 세션 목록 캐시 무효화
-        context.client.invalidateQueries({
-          queryKey: sessionQueries.lists(),
-        });
       },
       onError: (error) => {
         toast.error(error.message || '세션 정보 수정에 실패했습니다.');
