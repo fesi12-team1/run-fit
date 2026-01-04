@@ -167,8 +167,13 @@ export default function CrewForm({
       </div>
 
       <Button type="submit">
-        {mode === 'create' && createMutation.isPending ? '생성 중...' : '완료'}
-        {mode === 'edit' && updateMutation.isPending ? '수정 중...' : '완료'}
+        {mode === 'create'
+          ? createMutation.isPending
+            ? '생성 중...'
+            : '완료'
+          : updateMutation.isPending
+            ? '수정 중...'
+            : '완료'}
         {(createMutation.isPending || updateMutation.isPending) && (
           <Spinner className="ml-3" />
         )}

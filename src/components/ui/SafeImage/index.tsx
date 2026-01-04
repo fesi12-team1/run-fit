@@ -1,7 +1,7 @@
 'use client';
 
 import Image, { type ImageProps } from 'next/image';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 type SafeImageProps = Omit<ImageProps, 'src'> & {
   src?: string | null;
@@ -26,11 +26,14 @@ export default function SafeImage({
   alt,
   ...rest
 }: SafeImageProps) {
-  const initial = useMemo(
-    () => (isValidImageUrl(src) ? src! : fallbackSrc),
-    [src, fallbackSrc]
-  );
-  const [currentSrc, setCurrentSrc] = useState<string>(initial);
+  const validSrc = isValidImageUrl(src) ? src! : fallbackSrc;
+  const [currentSrc, setCurrentSrc] = useState<string>(validSrc);
+  const [prevSrc, setPrevSrc] = useState<string | null | undefined>(src);
+
+  if (src !== prevSrc) {
+    setPrevSrc(src);
+    setCurrentSrc(validSrc);
+  }
 
   return (
     <Image
