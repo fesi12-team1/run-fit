@@ -414,11 +414,84 @@ export default function SigninModalProvider() {
 
 ---
 
+## Suspense + ErrorBoundary 사용
+
+### 🤔 기존 방식의 문제점
+
+**로딩, 에러 처리가 컴포넌트에 섞여 있음**
+
+```tsx
+export default function SessionDetail({ sessionId }: SessionDetailProps) {
+  // 로딩, 에러 상태 관리
+  const {
+    data: session,
+    isLoading,
+    error,
+  } = useQuery(sessionQueries.detail(sessionId));
+
+  if (isLoading) return <Spinner />;
+  if (error) return <ErrorFallback error={error} />;
+
+  // 로직과 UI를 모두 처리
+  return <div>{/* 세션 상세 정보 렌더링 */}</div>;
+}
+```
+
+---
+
+## 문제점
+
+- 📌 **컴포넌트의 책임이 명확하지 않음**
+  - 데이터 페칭 + 로딩 UI + 에러 UI 모두 처리
+- 📌 **조건부 렌더링으로 인한 복잡성**
+
+---
+
+## Suspense + ErrorBoundary
+
+### ✨ 개선된 방식
+
+```tsx
+// Container: 로딩, 에러 처리만 담당
+export default function SessionDetailContainer({ sessionId }: Props) {
+  return (
+    <ErrorBoundary fallback={({ error }) => <ErrorFallback error={error} />}>
+      <Suspense fallback={<Spinner />} clientOnly>
+        <SessionDetail sessionId={sessionId} /> {/* 데이터만 처리 */}
+      </Suspense>
+    </ErrorBoundary>
+  );
+}
+```
+
+---
+
+```tsx
+// 데이터 로직과 UI만 담당
+export default function SessionDetail({ sessionId }: Props) {
+  const session = useSuspenseQuery(sessionQueries.detail(sessionId)).data;
+
+  return <div>{/* 세션 상세 정보 렌더링 */}</div>;
+}
+```
+
+---
+
+## 개선의 이점
+
+| 항목               | 기존 방식    | 개선 방식         |
+| ------------------ | ------------ | ----------------- |
+| **로딩 상태 관리** | 컴포넌트에서 | Suspense에서      |
+| **에러 처리**      | 컴포넌트에서 | ErrorBoundary에서 |
+| **컴포넌트 책임**  | 다중 책임    | 단일 책임         |
+| **코드 가독성**    | 복잡함       | 명확함            |
+| **조건부 렌더링**  | 많음         | 거의 없음         |
+
+---
+
 <!-- _class: lead -->
 
 # Q&A
-
-### 질문해주세요! 🙋‍♂️
 
 ---
 
@@ -426,7 +499,3 @@ export default function SigninModalProvider() {
 <!-- _paginate: false -->
 
 # 감사합니다! 🎉
-
-**RunFit** - 함께 달리면 더 즐겁습니다
-
----
