@@ -12,9 +12,8 @@ export default function SessionPageInner() {
   const { filters, queryFilters, applyFilters, activeFilterCount } =
     useSessionFilters();
 
-  const { data, fetchNextPage, hasNextPage } = useSuspenseInfiniteQuery(
-    sessionQueries.infiniteList({ ...queryFilters })
-  );
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useSuspenseInfiniteQuery(sessionQueries.infiniteList({ ...queryFilters }));
 
   const loadMoreRef = useInfiniteScroll(fetchNextPage, hasNextPage);
 
@@ -25,7 +24,11 @@ export default function SessionPageInner() {
         applyFilters={applyFilters}
         filters={filters}
       />
-      <SessionList data={data?.sessions} loadMoreRef={loadMoreRef} />
+      <SessionList
+        data={data?.sessions}
+        isFetchingNextPage={isFetchingNextPage}
+        loadMoreRef={loadMoreRef}
+      />
     </SessionFilterProvider>
   );
 }

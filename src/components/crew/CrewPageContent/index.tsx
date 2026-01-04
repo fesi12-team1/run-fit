@@ -11,16 +11,19 @@ import { CrewListFilters } from '@/types';
 export default function CrewPageContent() {
   const { filters, applyFilters } = useCrewFilters();
 
-  const { data, fetchNextPage, hasNextPage } = useSuspenseInfiniteQuery(
-    crewQueries.list({ ...filters })
-  );
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useSuspenseInfiniteQuery(crewQueries.list({ ...filters }));
 
   const loadMoreRef = useInfiniteScroll(fetchNextPage, hasNextPage);
 
   return (
     <>
       <FilterBar applyFilters={applyFilters} filters={filters} />
-      <CrewList data={data?.crews} loadMoreRef={loadMoreRef} />
+      <CrewList
+        data={data?.crews}
+        isFetchingNextPage={isFetchingNextPage}
+        loadMoreRef={loadMoreRef}
+      />
     </>
   );
 }
