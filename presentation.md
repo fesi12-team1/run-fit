@@ -40,19 +40,20 @@ section {
 }
 
 h1 {
-  color: oklch(55.7% 0.250499 280.3); /* color-brand-500 */
+  color: oklch(35.3% 0.094275 279.4); /* color-brand-800 */
   border-bottom: 3px solid oklch(39.5% 0.123308 278.1); /* color-brand-700 */
   padding-bottom: 10px;
+  font-weight: 700
 }
 h2 {
-  color: #1e40af;
+  color: oklch(47.3% 0.197796 277.1); /* color-brand-600 */
 }
 strong {
   color: oklch(66.1% 0.149225 281.1); /* color-brand-300 */
 }
 
-code {
-  font-size: 0.85em;
+section pre, section code {
+  font-size: 0.75em;
 }
 </style>
 
@@ -62,7 +63,7 @@ code {
 
 # RunFit 🏃‍♂️
 
-### 내 러닝 조건에 꼭 맞는 모임을 한 번에 찾는 러닝 매칭 서비스
+## 내 러닝 조건에 꼭 맞는 모임을 한 번에 찾는 러닝 매칭 서비스
 
 ---
 
@@ -120,10 +121,13 @@ code {
 ---
 
 - 진우:
-  - Husky로 협업 환경 구축, Tanstack Query 전반 구조 설계 및 초기 세팅, Proxy 기반 로그인 상태에 따른 페이지 접근 제어,
+  - Husky로 협업 환경 구축
+  - Tanstack Query 전반 구조 설계 및 초기 세팅
+  - Proxy 기반 로그인 상태에 따른 페이지 접근 제어
   - 마이페이지 기능 구현
 - 준영:
-  - Tanstack Query 연동을 고려한 API 및 인증 전반적 구조 설계, 무한 스크롤과 페이지네이션을 이용한 크루 상세 페이지 구현
+  - Tanstack Query 연동을 고려한 API 및 인증 전반적 구조 설계
+  - 무한 스크롤과 페이지네이션을 이용한 크루 상세 페이지 구현
 
 ---
 
@@ -208,6 +212,12 @@ code {
 
 ### 🤔 기존 방식의 문제점
 
+- 📌 코드의 **흐름을 따라가기 어려움**
+  - 훅과 UI가 분리되어 있어 동작 흐름 파악 어려움
+- 📌 **코드 응집도 낮음**
+  - `useLikeButton` 훅에 모달 로직, `LikeButton` 컴포넌트에 UI 리턴
+  - 하나의 기능이 여러 곳에 분산됨
+
 ```tsx
 // 모달의 동작을 관리하는 곳
 const { open, close, ... } = useSigninModal();
@@ -216,12 +226,6 @@ signInModal.open();
 // UI를 리턴하는 곳
 return <SigninModal open={open} ... />
 ```
-
-- 📌 코드의 **흐름을 따라가기 어려움**
-  - 훅과 UI가 분리되어 있어 동작 흐름 파악 어려움
-- 📌 **코드 응집도 낮음**
-  - `useLikeButton` 훅에 모달 로직, `LikeButton` 컴포넌트에 UI 리턴
-  - 하나의 기능이 여러 곳에 분산됨
 
 ---
 
@@ -341,12 +345,12 @@ export default function SessionDetail({ sessionId }: SessionDetailProps) {
 ### ✨ 개선된 방식
 
 ```tsx
-// Container: 로딩, 에러 처리만 담당
-export default function SessionDetailContainer({ sessionId }: Props) {
+// Container: 초기 로딩만 Suspense로 처리
+export default function SessionListContainer() {
   return (
-    <ErrorBoundary fallback={({ error }) => <ErrorFallback error={error} />}>
+    <ErrorBoundary fallback={<ErrorFallback />}>
       <Suspense fallback={<Spinner />} clientOnly>
-        <SessionDetail sessionId={sessionId} /> {/* 데이터만 처리 */}
+        <SessionList />
       </Suspense>
     </ErrorBoundary>
   );
@@ -355,18 +359,36 @@ export default function SessionDetailContainer({ sessionId }: Props) {
 
 ---
 
-```tsx
-// 데이터 로직과 UI만 담당
-export default function SessionDetail({ sessionId }: Props) {
-  const session = useSuspenseQuery(sessionQueries.detail(sessionId)).data;
+## Suspense + ErrorBoundary
 
-  return <div>{/* 세션 상세 정보 렌더링 */}</div>;
+```tsx
+// 컴포넌트: 추가 로딩만 처리
+export default function SessionList() {
+  const { data, isFetchingNextPage, fetchNextPage } = useInfiniteQuery(
+    sessionQueries.infinite(),
+    {
+      // select로 페이지별 응답을 리스트로 변환
+      select: (data) => data.pages.flatMap((page) => page.data),
+    }
+  );
+
+  // 쿼리 구조를 알 필요 없음 - 바로 리스트로 사용
+  return (
+    <div>
+      {data.map((session) => (
+        <SessionCard key={session.id} session={session} />
+      ))}
+      {isFetchingNextPage && <ScrollSpinner />}
+    </div>
+  );
 }
 ```
 
 ---
 
-## 개선의 이점
+## Suspense + ErrorBoundary 사용
+
+### 개선의 이점
 
 | 항목               | 기존 방식    | 개선 방식         |
 | ------------------ | ------------ | ----------------- |
@@ -475,6 +497,8 @@ export default function SessionList() {
 
 ---
 
+## Suspense 심화: 초기 로딩과 추가 로딩 분리
+
 ### 개선의 이점
 
 | 항목               | 기존 방식           | 개선 방식                      |
@@ -496,6 +520,9 @@ export default function SessionList() {
 ### 🤔 기존 방식의 문제점
 
 **각 페이지에서 반복되는 조건 분기**
+  
+- 📌 **중복 코드**: 모든 보호 페이지마다 동일한 체크 반복
+- 📌 **관심사 혼재**: 페이지의 책임이 명확하지 않음
 
 ```tsx
 // src/app/my/page.tsx
@@ -509,9 +536,6 @@ export default async function MyPage() {
   // 페이지 로직...
 }
 ```
-
-- 📌 **중복 코드**: 모든 보호 페이지마다 동일한 체크 반복
-- 📌 **관심사 혼재**: 페이지의 책임이 명확하지 않음
 
 ---
 
@@ -534,6 +558,18 @@ export function middleware(request: NextRequest) {
     pathname.startsWith(route.replace('[id]', ''))
   );
 
+  // ...
+```
+
+---
+
+## ✨ 개선된 방식
+
+### Middleware를 이용한 중앙 관리
+
+```tsx
+// src/middleware.ts
+  // ...
   if (isProtectedRoute && !token) {
     // 로그인 페이지로 리다이렉트하며 원래 경로 저장
     const signInUrl = new URL('/signin', request.url);
@@ -573,7 +609,9 @@ export default function SignInPage() {
 
 ---
 
-## 개선의 이점
+## Next.js Proxy를 이용한 페이지 접근 제어
+
+### 개선의 이점
 
 | 항목            | 기존 방식        | 개선 방식               |
 | --------------- | ---------------- | ----------------------- |
@@ -594,6 +632,9 @@ export default function SignInPage() {
 ### 🤔 기존 방식의 문제점
 
 **useQueryClient로 클라이언트를 주입받는 방식**
+  
+- 📌 **리팩토링의 걸림돌**: useQueryClient 호출로 인한 의존성
+- 📌 **재사용성 제한**: Query Factory와 달리 일관된 관리 불가능
 
 ```tsx
 // src/hooks/useLikeMutation.ts
@@ -610,9 +651,6 @@ export function useLikeMutation() {
   });
 }
 ```
-
-- 📌 **리팩토링의 걸림돌**: useQueryClient 호출로 인한 의존성
-- 📌 **재사용성 제한**: Query Factory와 달리 일관된 관리 불가능
 
 ---
 
@@ -667,7 +705,7 @@ export const sessionMutations = {
 
 ### 🤔 문제점
 
-**Mutation의 onSuccess/onError 내에서 UI 액션을 모두 처리**
+Mutation의 onSuccess/onError 내에서 UI 액션을 모두 처리
 
 ```tsx
 export function useLikeMutation() {
@@ -714,7 +752,9 @@ export function LikeButton({ sessionId }: Props) {
 
 ---
 
-## 개선의 이점
+## Mutation 리팩토링: Hook → Factory 방식 전환
+
+### 개선의 이점
 
 | 항목             | 기존 방식         | 개선 방식             |
 | ---------------- | ----------------- | --------------------- |
@@ -732,15 +772,15 @@ export function LikeButton({ sessionId }: Props) {
 
 ---
 
-### **👍 협업하며 좋았던 점**
+## **👍 협업하며 좋았던 점**
 
-- Discord를 통한 실시간 소통으로 이슈 대응 속도가 빨랐다.
-- Figma 코멘트를 활용해 디자인 의도를 명확히 공유할 수 있었다.
-- 텍스트 설명보다 시각적 맥락을 함께 전달할 수 있어 오해가 줄었다.
+- Discord를 통한 **실시간 소통**으로 **이슈 대응 속도**가 빨랐다.
+- Figma 코멘트를 활용해 **디자인 의도를 명확히 공유**할 수 있었다.
+- 텍스트 설명보다 **시각적 맥락**을 함께 전달할 수 있어 오해가 줄었다.
 
 ---
 
-### **👍 컨벤션을 사전에 정한 효과**
+## **👍 컨벤션을 사전에 정한 효과**
 
 - 코드 리뷰 시 형식보다 **로직과 핵심 구현에 집중**할 수 있었다.
 - PR 템플릿에 필수 정보를 구조화해 두어 변경 맥락을 빠르게 이해할 수 있었다.
@@ -748,17 +788,18 @@ export function LikeButton({ sessionId }: Props) {
 
 ---
 
-### **⚠️ 협업 과정에서 느낀 어려움**
+## **⚠️ 협업 과정에서 느낀 어려움**
 
 - 내가 이해한 내용을 **다른 직군도 이해할 수 있는 언어로 설명하는 것**이 쉽지 않았다.
-- 기술적 선택에 대해 상대를 설득할 때, 근거를 구조적으로 전달하는 데 어려움을 느꼈다.
+- **기술적 선택**에 대해 상대를 설득할 때, 근거를 **구조적으로 전달**하는 데 어려움을 느꼈다.
 
 ---
 
-### **🔍 스스로 인식한 부족한 점**
+## **🔍 스스로 인식한 부족한 점**
 
-- 웹 브라우저 동작 원리 등 **낮은 추상화 단계의 기초 지식이 부족함**을 인지했다.
-- 프레임워크 사용에는 익숙했지만, 브라우저·네트워크·렌더링 단계에 대한 이해가 더 필요하다고 느꼈다.
+- **각 추상화 단계의 기초 지식이 부족함**을 인지했다.
+  - 프레임워크 (React/Next.js) 사용에는 익숙했지만, **추상화된 실제 동작 원리**
+  - 브라우저·네트워크·렌더링 단계를 포함한 **웹 브라우저 동작 원리**에 대한 이해
 
 ---
 
