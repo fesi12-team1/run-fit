@@ -1,14 +1,21 @@
 import { ErrorBoundary, Suspense } from '@suspensive/react';
 import KakaoMap from '@/components/session/KakaoMap';
-import Spinner from '@/components/ui/Spinner';
 import { formatKoYMD, formatKoYYMDMeridiemTime } from '@/lib/time';
 import { Session } from '@/types';
 import ParticipantsList from './ParticipantsList';
 import ParticipantsListErrorFallback from './ParticipantsListErrorFallback';
+import ParticipantsListSkeleton from './ParticipantsListSkeleton';
 
 export default function SessionDetailInfo({ session }: { session: Session }) {
-  const { description, createdAt, sessionAt, registerBy, location, coords } =
-    session;
+  const {
+    description,
+    createdAt,
+    sessionAt,
+    registerBy,
+    location,
+    coords,
+    currentParticipantCount,
+  } = session;
 
   return (
     <div className="tablet:px-12 laptop:px-3 laptop:py-0 tablet:py-8 tablet:gap-8 laptop:bg-gray-900 flex flex-col gap-6 bg-gray-800 px-6 py-6">
@@ -56,15 +63,30 @@ export default function SessionDetailInfo({ session }: { session: Session }) {
         </div>
       </div>
 
-      <ErrorBoundary
-        fallback={({ error }) => (
-          <ParticipantsListErrorFallback error={error} />
+      <div className="flex flex-col gap-5">
+        <h2 className="text-body2-semibold tablet:text-title3-semibold tablet:gap-2 flex gap-1">
+          <span className="text-gray-50">참여 멤버</span>
+          <span className="text-brand-300">{currentParticipantCount}</span>
+        </h2>
+
+        {currentParticipantCount === 0 && (
+          <div className="text-caption-regular tablet:text-body3-regular text-gray-300">
+            참여자가 없습니다.
+          </div>
         )}
-      >
-        <Suspense fallback={<Spinner />}>
-          <ParticipantsList sessionId={session.id} />
-        </Suspense>
-      </ErrorBoundary>
+
+        {currentParticipantCount > 0 && (
+          <ErrorBoundary
+            fallback={({ error }) => (
+              <ParticipantsListErrorFallback error={error} />
+            )}
+          >
+            <Suspense fallback={<ParticipantsListSkeleton />}>
+              <ParticipantsList sessionId={session.id} />
+            </Suspense>
+          </ErrorBoundary>
+        )}
+      </div>
     </div>
   );
 }

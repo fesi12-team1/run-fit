@@ -1,59 +1,66 @@
 'use client';
 
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { ErrorBoundary, Suspense } from '@suspensive/react';
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { userQueries } from '@/api/queries/userQueries';
 import MyCrewCard from '@/components/my/MyCrewCard';
-import Button from '@/components/ui/Button';
+import EmptyLayout from '@/components/ui/EmptyLayout';
+import ErrorFallback from '@/components/ui/ErrorFallback';
 import Spinner from '@/components/ui/Spinner';
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
+import MyCrewsPageSkeleton from './_components/MyCrewsPageSkeleton';
 
 export default function MyCrewsPage() {
+  return (
+    <ErrorBoundary
+      fallback={
+        <ErrorFallback message="크루 목록을 불러오는데 실패했습니다." />
+      }
+    >
+      <Suspense fallback={<MyCrewsPageSkeleton />}>
+        <MyCrewsContent />
+      </Suspense>
+    </ErrorBoundary>
+  );
+}
+
+function MyCrewsContent() {
   const isMobile = useMediaQuery({ max: 'tablet' });
   const router = useRouter();
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-    useInfiniteQuery(userQueries.me.crews.joined());
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useSuspenseInfiniteQuery(userQueries.me.crews.joined());
 
   const crews = data?.crews ?? [];
-  const hasNoCrews = !isLoading && crews.length === 0;
+  const hasNoCrews = crews.length === 0;
 
   const bottomRef = useInfiniteScroll(fetchNextPage, !!hasNextPage);
 
-  if (isLoading) {
-    return (
-      <section className="flex h-[60vh] items-center justify-center">
-        <Spinner className="text-brand-500 size-8" />
-      </section>
-    );
-  }
-
   if (hasNoCrews) {
     return (
-      <section className="flex h-[60vh] flex-col items-center justify-center gap-6">
+      <EmptyLayout className="h-[60vh]">
         <Image
           width={isMobile ? 240 : 300}
           height={isMobile ? 118 : 147}
           src={'/assets/crew-default.png'}
           alt="크루 없음"
         />
-        <p className="tablet:text-body2-medium text-body3-regular text-center text-gray-300">
+        <EmptyLayout.Message>
           아직 소속된 크루가 없어요
           <br />
           맘에 드는 크루를 찾으러 가볼까요?
-        </p>
-
-        <Button
-          variant="default"
+        </EmptyLayout.Message>
+        <EmptyLayout.Button
           onClick={() => {
             router.push('/crews');
           }}
         >
           크루 구경하러 가기
-        </Button>
-      </section>
+        </EmptyLayout.Button>
+      </EmptyLayout>
     );
   }
 
@@ -71,11 +78,7 @@ export default function MyCrewsPage() {
 
       <div ref={bottomRef} className="h-5" />
 
-      {isFetchingNextPage && (
-        <div className="flex justify-center">
-          <Spinner className="text-brand-500 size-5" />
-        </div>
-      )}
+      {isFetchingNextPage && <Spinner.Scroll />}
     </section>
   );
 }

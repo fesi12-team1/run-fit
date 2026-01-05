@@ -1,5 +1,6 @@
 import { ErrorBoundary, Suspense } from '@suspensive/react';
-import Spinner from '@/components/ui/Spinner';
+import ErrorFallback from '@/components/ui/ErrorFallback';
+import LikedSessionsPageSkeleton from './_components/LikedSessionsPageSkeleton';
 import SessionList from './_components/SessionList';
 
 export default function Page() {
@@ -11,9 +12,18 @@ export default function Page() {
           마감되기 전에 지금 바로 참여해보세요!
         </p>
       </div>
-      <ErrorBoundary fallback={<div>세션 목록을 불러오는데 실패했습니다.</div>}>
-        <Suspense fallback={<Spinner />} clientOnly>
-          <SessionList />
+      <ErrorBoundary
+        fallback={
+          <ErrorFallback
+            imageSrc="/assets/session-default.png"
+            message="세션 목록을 불러오는데 실패했습니다."
+          />
+        }
+      >
+        <Suspense fallback={<LikedSessionsPageSkeleton />} clientOnly>
+          <div className="flex w-full flex-1">
+            <SessionList />
+          </div>
         </Suspense>
       </ErrorBoundary>
     </main>

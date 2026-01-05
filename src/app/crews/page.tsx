@@ -8,26 +8,16 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { userQueries } from '@/api/queries/userQueries';
 import CrewModal from '@/components/crew/CrewModal';
 import CrewPageContent from '@/components/crew/CrewPageContent';
+import CrewPageContentErrorFallback from '@/components/crew/CrewPageContent/CrewPageContentErrorFallback';
+import CrewPageContentSkeleton from '@/components/crew/CrewPageContent/CrewPageContentSkeleton';
 import Button from '@/components/ui/Button';
 import Modal from '@/components/ui/Modal';
 
 export default function Page() {
   return (
     <Layout>
-      <ErrorBoundary
-        fallback={
-          <div className="h-main flex items-center justify-center text-red-500">
-            크루 목록을 불러오는데 실패했습니다.
-          </div>
-        }
-      >
-        <Suspense
-          fallback={
-            <div className="h-main flex items-center justify-center text-gray-300">
-              로딩 중...
-            </div>
-          }
-        >
+      <ErrorBoundary fallback={<CrewPageContentErrorFallback />}>
+        <Suspense fallback={<CrewPageContentSkeleton />}>
           <CrewPageContent />
         </Suspense>
       </ErrorBoundary>

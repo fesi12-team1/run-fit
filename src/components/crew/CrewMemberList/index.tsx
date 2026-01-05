@@ -210,8 +210,10 @@ function CrewMenuActions({ crew: crewData }: { crew: Crew }) {
                       onSuccess: () => {
                         router.push('/crews');
                       },
-                      onError: () => {
-                        router.refresh(); // 현재 페이지 새로 고침
+                      onError: (error) => {
+                        toast.error(
+                          error.message || '크루 탈퇴에 실패했습니다.'
+                        );
                       },
                     })
                   }

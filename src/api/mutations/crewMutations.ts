@@ -150,11 +150,9 @@ export function useUpdateCrewDetail(
     mutationFn: (body) => updateCrewDetail(crewId, body),
     ...options,
     onSuccess: (data, variables, onMutateResult, context) => {
-      if (crewId) {
-        context.client.invalidateQueries({
-          queryKey: crewQueries.detail(crewId).queryKey,
-        });
-      }
+      context.client.invalidateQueries({
+        queryKey: crewQueries.detail(crewId).queryKey,
+      });
       context.client.invalidateQueries({ queryKey: crewQueries.lists() });
       options?.onSuccess?.(data, variables, onMutateResult, context);
     },

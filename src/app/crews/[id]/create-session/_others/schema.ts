@@ -49,9 +49,8 @@ export const formSchema = z
       .min(1, '세션 설명을 입력해주세요')
       .max(500, '세션 설명은 최대 500자입니다'),
     image: z
-      .string()
-      .min(1, '이미지를 업로드해주세요')
-      .url('유효한 이미지 URL을 입력해주세요'),
+      .url('유효한 이미지 URL을 입력해주세요')
+      .min(1, '이미지를 업로드해주세요'),
     location: z.string().min(1, '주소를 입력해주세요'),
     district: districtSchema,
     city: citySchema,

@@ -4,25 +4,15 @@ import Image from 'next/image';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import SessionPageContent from '@/components/session/SessionPageContent';
+import SessionPageContentErrorFallback from '@/components/session/SessionPageContent/SessionPageContentErrorFallback';
+import SessionPageContentSkeleton from '@/components/session/SessionPageContent/SessionPageContentSkeleton';
 import { generateNextImageSizes } from '@/lib/Image';
 
 export default function Page() {
   return (
     <Layout>
-      <ErrorBoundary
-        fallback={
-          <div className="h-main text-error-100 flex items-center justify-center">
-            세션 목록을 불러오는데 실패했습니다.
-          </div>
-        }
-      >
-        <Suspense
-          fallback={
-            <div className="h-main flex items-center justify-center text-gray-300">
-              로딩 중...
-            </div>
-          }
-        >
+      <ErrorBoundary fallback={<SessionPageContentErrorFallback />}>
+        <Suspense fallback={<SessionPageContentSkeleton />}>
           <SessionPageContent />
         </Suspense>
       </ErrorBoundary>

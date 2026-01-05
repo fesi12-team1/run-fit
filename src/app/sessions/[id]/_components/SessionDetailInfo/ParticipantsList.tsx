@@ -22,18 +22,7 @@ export default function ParticipantsList({ sessionId }: ParticipantsListProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <div className="tablet:gap-2 flex flex-col gap-1">
-      <h2 className="text-body2-semibold tablet:text-title3-semibold tablet:gap-2 flex gap-1">
-        <span className="text-gray-50">참여 멤버</span>
-        <span className="text-brand-300">{participants.length}</span>
-      </h2>
-
-      {participants.length === 0 && (
-        <div className="text-caption-regular tablet:text-body3-regular text-gray-300">
-          참여자가 없습니다.
-        </div>
-      )}
-
+    <div>
       <ul className="tablet:gap-5 mb-3 flex flex-col gap-2">
         {participants.slice(0, 4).map((participant) => (
           <li key={participant.userId} className="flex items-center gap-3">

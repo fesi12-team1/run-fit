@@ -1,9 +1,9 @@
 'use client';
 
 import { ErrorBoundary, Suspense } from '@suspensive/react';
-import Spinner from '@/components/ui/Spinner';
 import SessionDetail from './SessionDetail';
 import SessionDetailErrorFallback from './SessionDetailErrorFallback';
+import SessionDetailSkeleton from './SessionDetailSkeleton';
 
 export default function SessionDetailContainer({
   sessionId,
@@ -14,7 +14,7 @@ export default function SessionDetailContainer({
     <ErrorBoundary
       fallback={({ error }) => <SessionDetailErrorFallback error={error} />}
     >
-      <Suspense fallback={<Spinner />} clientOnly>
+      <Suspense fallback={<SessionDetailSkeleton />} clientOnly>
         <SessionDetail sessionId={sessionId} />
       </Suspense>
     </ErrorBoundary>

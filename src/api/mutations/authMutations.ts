@@ -23,12 +23,6 @@ export function useSignup(
   return useMutation({
     mutationFn: postSignup,
     ...options,
-    onSuccess: (data, variables, onMutateResult, context) => {
-      options?.onSuccess?.(data, variables, onMutateResult, context);
-    },
-    onError: (error, variables, onMutateResult, context) => {
-      options?.onError?.(error, variables, onMutateResult, context);
-    },
   });
 }
 
