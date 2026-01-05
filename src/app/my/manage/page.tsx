@@ -2,7 +2,6 @@
 
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { Suspense } from 'react';
 import { userQueries } from '@/api/queries/userQueries';
 import SessionCard from '@/components/session/SessionCard';
@@ -27,7 +26,6 @@ export default function MyCreatedSessionsPage() {
 }
 
 function MyCreatedSessionsContent() {
-  const router = useRouter();
   const isMobile = useMediaQuery({ max: 'tablet' });
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =

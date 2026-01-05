@@ -16,8 +16,6 @@ export default function ReviewImageUploader({
       maxSizeMB,
     });
 
-  const has = items.length > 0;
-
   const handleRemove = () => {
     if (items[0]) {
       remove(items[0].id);

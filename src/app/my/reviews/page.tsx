@@ -2,7 +2,6 @@
 
 import { Suspense } from '@suspensive/react';
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
 import { userQueries } from '@/api/queries/userQueries';
 import ReviewCard from '@/components/crew/ReviewCard';
 import EmptyLayout from '@/components/ui/EmptyLayout';
