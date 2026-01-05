@@ -65,7 +65,7 @@ export default function CrewDetailContent({ crewId }: CrewDetailContentProps) {
         <div
           className={cn(
             'relative w-full bg-gray-800',
-            'laptop:mt-10 laptop:mb-[52px] laptop:max-w-[1120px] laptop:bg-gray-850',
+            'laptop:mt-10 laptop:mb-[52px] laptop:max-w-[1120px] laptop:bg-gray-750',
             'laptop:h-[300px] tablet:h-60 h-[174px]'
           )}
         >
@@ -110,7 +110,7 @@ export default function CrewDetailContent({ crewId }: CrewDetailContentProps) {
               <div
                 className={cn(
                   'tablet:text-body2-regular tablet:text-gray-100',
-                  'text-body3-regular text-gray-200'
+                  'text-body3-regular whitespace-pre-line text-gray-200'
                 )}
               >
                 {crew.description}
@@ -167,10 +167,10 @@ export default function CrewDetailContent({ crewId }: CrewDetailContentProps) {
           </div>
 
           {/* Right Sidebar */}
-          <div className="laptop:w-[360px] laptop:shrink-0 laptop:bg-gray-850 z-1 -mt-8 w-full flex-col self-start rounded-[20px] bg-gray-800 px-6 py-7 shadow-[0px_10px_30px_-5px_rgba(0,0,0,0.20)]">
+          <div className="laptop:w-[360px] laptop:shrink-0 laptop:bg-gray-750 laptop:border laptop:border-gray-600 z-1 -mt-8 w-full flex-col self-start rounded-[20px] bg-gray-800 px-6 py-7">
             <CrewMemberList crew={crew} members={members}>
               <div className="laptop:flex hidden flex-col">
-                <PageAction className="my-8" />
+                <PageAction />
                 <div className="tablet:border-t-0 flex items-center gap-1 border-t border-t-gray-500">
                   <span className="text-body2-semibold my-4 text-gray-50">
                     멤버

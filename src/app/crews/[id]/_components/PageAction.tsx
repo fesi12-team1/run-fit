@@ -10,11 +10,7 @@ import Modal from '@/components/ui/Modal';
 import { useCrewRole } from '@/context/CrewDetailContext';
 import { cn, copyStringToClipboard } from '@/lib/utils';
 
-interface PageActionProps {
-  className?: string;
-}
-
-export default function PageAction({ className }: PageActionProps) {
+export default function PageAction() {
   const router = useRouter();
   const pathname = usePathname();
 
@@ -51,7 +47,7 @@ export default function PageAction({ className }: PageActionProps) {
 
   return (
     <>
-      <div className={cn('flex items-center gap-7', className)}>
+      <div className="mt-10 mb-8 flex items-center gap-7">
         <button
           type="button"
           aria-label="크루 링크 공유하기"
@@ -84,6 +80,8 @@ export default function PageAction({ className }: PageActionProps) {
           </Button>
         )}
       </div>
+
+      <hr className="border-t border-t-gray-500" />
 
       {/* Join Crew Modal (Login Required) */}
       <Modal

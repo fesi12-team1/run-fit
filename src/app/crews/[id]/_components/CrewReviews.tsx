@@ -30,20 +30,6 @@ export default function CrewReviews({
   const totalElements = crewReviewsData?.totalElements ?? 0;
   const totalPages = crewReviewsData?.totalPages ?? 0;
 
-  if (!reviews || totalElements === 0) {
-    return (
-      <span
-        className={cn(
-          'self-center justify-self-center text-gray-300',
-          'text-body3-regular py-2.5',
-          'tablet:text-body2-medium tablet:py-5 tablet:mb-4'
-        )}
-      >
-        아직 작성된 후기가 없어요
-      </span>
-    );
-  }
-
   return (
     <>
       <div className="flex gap-2">
@@ -59,28 +45,42 @@ export default function CrewReviews({
           {totalElements}
         </span>
       </div>
-      <div
-        className={cn(
-          'flex flex-col divide-y divide-dashed divide-gray-500',
-          '*:pb-4 not-first:*:pt-4'
-        )}
-      >
-        {reviews.map((review) => (
-          <ReviewCard key={review.id} data={review} />
-        ))}
-      </div>
-      <ReviewPagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={(page) => {
-          onPageChange(page);
-          router.push(`/crews/${crewId}?page=${page + 1}`, {
-            scroll: false,
-          });
-        }}
-        isMobile={isMobile}
-        isLoading={false}
-      />
+      {!reviews || totalElements === 0 ? (
+        <span
+          className={cn(
+            'self-center justify-self-center text-gray-300',
+            'text-body3-regular py-2.5',
+            'tablet:text-body2-medium tablet:py-5 tablet:mb-4'
+          )}
+        >
+          아직 작성된 후기가 없어요
+        </span>
+      ) : (
+        <>
+          <div
+            className={cn(
+              'flex flex-col divide-y divide-dashed divide-gray-500',
+              '*:pb-4 not-first:*:pt-4'
+            )}
+          >
+            {reviews.map((review) => (
+              <ReviewCard key={review.id} data={review} />
+            ))}
+          </div>
+          <ReviewPagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={(page) => {
+              onPageChange(page);
+              router.push(`/crews/${crewId}?page=${page + 1}`, {
+                scroll: false,
+              });
+            }}
+            isMobile={isMobile}
+            isLoading={false}
+          />
+        </>
+      )}
     </>
   );
 }
