@@ -7,20 +7,48 @@ header: 'RunFit - 러닝 매칭 서비스'
 ---
 
 <style>
+@font-face {
+  font-family: 'Pretendard';
+  font-weight: 400;
+  font-display: swap;
+  src: url(public/fonts/Pretendard-Regular.woff2) format('woff2');
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  font-weight: 500;
+  font-display: swap;
+  src: url(public/fonts/Pretendard-Medium.woff2) format('woff2');
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  font-weight: 600;
+  font-display: swap;
+  src: url(public/fonts/Pretendard-SemiBold.woff2) format('woff2');
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  font-weight: 700;
+  font-display: swap;
+  src: url(public/fonts/Pretendard-Bold.woff2) format('woff2');
+}
+
 section {
-  font-family: 'Pretendard'
+  font-family: 'Pretendard', sans-serif;
 }
 
 h1 {
-  color: #634CFF;
-  border-bottom: 3px solid #2563eb;
+  color: oklch(55.7% 0.250499 280.3); /* color-brand-500 */
+  border-bottom: 3px solid oklch(39.5% 0.123308 278.1); /* color-brand-700 */
   padding-bottom: 10px;
 }
 h2 {
   color: #1e40af;
 }
 strong {
-  color: #dc2626;
+  color: oklch(66.1% 0.149225 281.1); /* color-brand-300 */
 }
 
 code {
@@ -126,17 +154,17 @@ code {
 
 ### ✅ 핵심 기능
 
-- [x] 회원가입 및 로그인
-- [x] 세션 목록 조회, 세션 상세 정보 및 참가 신청
-- [x] 크루 목록 조회, 크루 생성 및 관리
-- [x] 리뷰 작성 및 조회
-- [x] 찜하기
-- [x] 마이페이지 (내 세션/크루/리뷰)
+- ✅ 회원가입 및 로그인
+- ✅ 세션 목록 조회, 세션 상세 정보 및 참가 신청
+- ✅ 크루 목록 조회, 크루 생성 및 관리
+- ✅ 리뷰 작성 및 조회
+- ✅ 찜하기
+- ✅ 마이페이지 (내 세션/크루/리뷰)
 
 ### ✅ 부가 기능
 
-- [x] 반응형 디자인 (모바일/태블릿/데스크톱)
-- [x] 무한 스크롤 구현
+- ✅ 반응형 디자인 (모바일/태블릿/데스크톱)
+- ✅ 무한 스크롤 구현
 
 ---
 
@@ -351,7 +379,20 @@ export default function SessionList() {
   );
 
   if (isLoading) return <Spinner />; // 초기 로딩
+  // ...
+```
 
+---
+
+## Suspense 심화: 초기 로딩과 추가 로딩 분리
+
+### 🤔 초기 문제점
+
+**컴포넌트에서 모든 로딩 상태를 직접 관리**
+
+```tsx
+export default function SessionList() {
+  // ...
   return (
     <div>
       {data?.pages.map((page) =>
@@ -364,6 +405,14 @@ export default function SessionList() {
   );
 }
 ```
+
+---
+
+## Suspense 심화: 초기 로딩과 추가 로딩 분리
+
+### 🤔 초기 문제점
+
+**컴포넌트에서 모든 로딩 상태를 직접 관리**
 
 - 📌 **초기 로딩과 추가 로딩 구분 필요**: 무한스크롤에서는 두 가지 로딩이 섞여 있음
 - 📌 **쿼리 구조 노출**: 컴포넌트가 page 단위 응답 구조를 직접 처리
@@ -383,7 +432,13 @@ export default function SessionListContainer() {
     </ErrorBoundary>
   );
 }
+```
 
+---
+
+### ✨ 개선 방식: 로딩 상태 분리 + 데이터 변환
+
+```tsx
 // 컴포넌트: 추가 로딩만 처리
 export default function SessionList() {
   const { data, isFetchingNextPage, fetchNextPage } = useInfiniteQuery(
@@ -624,36 +679,24 @@ export function useLikeMutation() {
 **Hook 파일**: Query Invalidation만 처리  
 **사용처**: 비즈니스 로직에 맞는 UI 액션 처리
 
-### 구현 예시
+---
+
+## ✨ 개선안: 사용처에서 UI 액션 처리
+
+### 구현 예시 `src/components/LikeButton.tsx`
 
 ```tsx
-// src/components/LikeButton.tsx
 export function LikeButton({ sessionId }: Props) {
   const { mutate: like } = sessionMutations.like();
-
-  const handleLike = async () => {
-    try {
-      await like(
-        { sessionId, liked },
-        {
-          onSuccess: () => {
-            toast.success(
-              liked
-                ? '찜한 세션에서 제외되었습니다.'
-                : '찜한 세션에 추가되었습니다.'
-            );
-          },
-          // ...
-        }
-      );
-      // 이 페이지/컴포넌트의 맥락에 맞는 UI 액션
-      toast.success('찜했어요!');
-    } catch (error) {
-      toast.error('찜하기에 실패했어요.');
-    }
-  };
-
-  return <button onClick={handleLike}>❤️ 찜하기</button>;
+    // 이 페이지/컴포넌트의 맥락에 맞는 UI 액션
+    await like(
+      { sessionId, liked },
+      {
+        onSuccess: () => {
+          toast.success(liked ? '찜한 세션에서 제외되었습니다.' : '찜한 세션에 추가되었습니다.');
+        },
+        onError: () => { toast.error('찜하기에 실패했어요.') }
+        // ...
 }
 ```
 
