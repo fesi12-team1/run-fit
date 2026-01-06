@@ -1,15 +1,15 @@
 'use client';
 
+import DateFilter from '@/components/session/DateFilter';
+import LevelFilter from '@/components/session/LevelFilter';
+import RegionFilter from '@/components/session/RegionFilter';
+import TimeFilter from '@/components/session/TimeFilter';
 import FilterButton from '@/components/ui/FilterButton';
 import OptionDropdown from '@/components/ui/OptionDropdown';
 import { SESSION_SORT_OPTIONS } from '@/constants/session';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { SessionFilterState } from '@/types';
-import DateFilter from './DateFilter';
-import LevelFilter from './LevelFilter';
-import RegionFilter from './RegionFilter';
 import SessionFilterModal from './SessionFilterModal';
-import TimeFilter from './TimeFilter';
 
 interface SessionFilterBarProps {
   filters: SessionFilterState;
