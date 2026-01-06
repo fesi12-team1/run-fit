@@ -5,12 +5,12 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { sessionQueries } from '@/api/queries/sessionQueries';
 import { cn } from '@/lib/utils';
 import { Session } from '@/types';
-import CrewShortInfo from './CrewShortInfo';
-import CrewShortInfoSkeleton from './CrewShortInfo/CrewShortInfoSkeleton';
-import SessionDetailInfo from './SessionDetailInfo';
-import SessionImage from './SessionImage';
-import SessionShortInfo from './SessionShortInfo';
-import SessionShortInfoSkeleton from './SessionShortInfo/SessionShortInfoSkeleton';
+import CrewShortInfo from '../CrewShortInfo';
+import CrewShortInfoSkeleton from '../CrewShortInfo/CrewShortInfoSkeleton';
+import SessionDetailInfo from '../SessionDetailInfo';
+import SessionImage from '../SessionImage';
+import SessionShortInfo from '../SessionShortInfo';
+import SessionShortInfoSkeleton from '../SessionShortInfo/SessionShortInfoSkeleton';
 
 interface SessionDetailProps {
   sessionId: Session['id'];

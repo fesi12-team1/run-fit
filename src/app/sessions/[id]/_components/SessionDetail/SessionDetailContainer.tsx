@@ -1,7 +1,7 @@
 'use client';
 
 import { ErrorBoundary, Suspense } from '@suspensive/react';
-import SessionDetail from './SessionDetail';
+import SessionDetail from '.';
 import SessionDetailErrorFallback from './SessionDetailErrorFallback';
 import SessionDetailSkeleton from './SessionDetailSkeleton';
 

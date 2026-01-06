@@ -1,9 +1,9 @@
 import Skeleton from '@/components/ui/Skeleton';
 import { cn } from '@/lib/utils';
-import CrewShortInfoSkeleton from './CrewShortInfo/CrewShortInfoSkeleton';
-import ParticipantsListSkeleton from './SessionDetailInfo/ParticipantsListSkeleton';
-import SessionDetailInfoSkeleton from './SessionDetailInfo/SessionDetailInfoSkeleton';
-import SessionShortInfoSkeleton from './SessionShortInfo/SessionShortInfoSkeleton';
+import CrewShortInfoSkeleton from '../CrewShortInfo/CrewShortInfoSkeleton';
+import ParticipantsListSkeleton from '../SessionDetailInfo/ParticipantsListSkeleton';
+import SessionDetailInfoSkeleton from '../SessionDetailInfo/SessionDetailInfoSkeleton';
+import SessionShortInfoSkeleton from '../SessionShortInfo/SessionShortInfoSkeleton';
 
 export default function SessionDetailSkeleton() {
   return (
