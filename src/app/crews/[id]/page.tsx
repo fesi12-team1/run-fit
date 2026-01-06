@@ -4,7 +4,7 @@ import { ErrorBoundary, Suspense } from '@suspensive/react';
 import { notFound, useParams } from 'next/navigation';
 import ErrorFallback from '@/components/ui/ErrorFallback';
 import CrewDetailContent from './_components/CrewDetailContent';
-import CrewDetailContentSkeleton from './_components/CrewDetailContentSkeleton';
+import CrewDetailContentSkeleton from './_components/CrewDetailContent/CrewDetailContentSkeleton';
 
 export default function Page() {
   const params = useParams<{ id: string }>();

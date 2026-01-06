@@ -15,14 +15,14 @@ import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { generateNextImageSizes } from '@/lib/Image';
 import { cn } from '@/lib/utils';
 import { CrewMember } from '@/types';
-import CompletedSessions from './CompletedSessions';
-import CompletedSessionsSkeleton from './CompletedSessionsSkeleton';
-import CrewDetailSectionsTabs from './CrewDetailSectionsTabs';
-import CrewReviews from './CrewReviews';
-import CrewReviewsSkeleton from './CrewReviewsSkeleton';
-import PageAction from './PageAction';
-import RecruitingSessions from './RecruitingSessions';
-import RecruitingSessionsSkeleton from './RecruitingSessionsSkeleton';
+import CompletedSessions from '../CompletedSessions';
+import CompletedSessionsSkeleton from '../CompletedSessions/CompletedSessionsSkeleton';
+import CrewDetailSectionsTabs from '../CrewDetailSectionsTabs';
+import CrewReviews from '../CrewReviews';
+import CrewReviewsSkeleton from '../CrewReviews/CrewReviewsSkeleton';
+import PageAction from '../PageAction';
+import RecruitingSessions from '../RecruitingSessions';
+import RecruitingSessionsSkeleton from '../RecruitingSessions/RecruitingSessionsSkeleton';
 
 interface CrewDetailContentProps {
   crewId: number;

@@ -1,9 +1,9 @@
 import Skeleton from '@/components/ui/Skeleton';
 import { CREW_DETAIL_SECTIONS } from '@/constants/crew';
 import { cn } from '@/lib/utils';
-import CompletedSessionsSkeleton from './CompletedSessionsSkeleton';
-import CrewReviewsSkeleton from './CrewReviewsSkeleton';
-import RecruitingSessionsSkeleton from './RecruitingSessionsSkeleton';
+import CompletedSessionsSkeleton from '../CompletedSessions/CompletedSessionsSkeleton';
+import CrewReviewsSkeleton from '../CrewReviews/CrewReviewsSkeleton';
+import RecruitingSessionsSkeleton from '../RecruitingSessions/RecruitingSessionsSkeleton';
 
 export default function CrewDetailContentSkeleton() {
   return (
