@@ -1,5 +1,5 @@
 import { ErrorBoundary, Suspense } from '@suspensive/react';
-import KakaoMap from '@/components/session/KakaoMap';
+import KakaoMap from '@/components/ui/KakaoMap';
 import { formatKoYMD, formatKoYYMDMeridiemTime } from '@/lib/time';
 import { Session } from '@/types';
 import ParticipantsList from './ParticipantsList';

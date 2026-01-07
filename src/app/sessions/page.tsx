@@ -3,10 +3,10 @@
 import Image from 'next/image';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import SessionPageContent from '@/components/session/SessionPageContent';
-import SessionPageContentErrorFallback from '@/components/session/SessionPageContent/SessionPageContentErrorFallback';
-import SessionPageContentSkeleton from '@/components/session/SessionPageContent/SessionPageContentSkeleton';
 import { generateNextImageSizes } from '@/lib/Image';
+import SessionPageContent from './_components/SessionPageContent';
+import SessionPageContentErrorFallback from './_components/SessionPageContent/SessionPageContentErrorFallback';
+import SessionPageContentSkeleton from './_components/SessionPageContent/SessionPageContentSkeleton';
 
 export default function Page() {
   return (

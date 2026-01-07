@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import BottomBar from './_components/BottomBar';
-import SessionDetailContainer from './_components/SessionDetailContainer';
+import SessionDetailContainer from './_components/SessionDetail/SessionDetailContainer';
 
 export default async function Page({
   params,

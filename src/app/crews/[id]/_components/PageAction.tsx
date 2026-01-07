@@ -8,7 +8,7 @@ import Share from '@/assets/icons/share.svg';
 import Button from '@/components/ui/Button';
 import Modal from '@/components/ui/Modal';
 import { useCrewRole } from '@/context/CrewDetailContext';
-import { cn, copyStringToClipboard } from '@/lib/utils';
+import { copyStringToClipboard } from '@/lib/utils';
 
 export default function PageAction() {
   const router = useRouter();
