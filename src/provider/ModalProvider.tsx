@@ -2,6 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import { cn } from '@/lib/utils';
 
 type Modal = {
   id: string;
@@ -20,9 +21,7 @@ type Action = { type: 'OPEN'; modal: Modal } | { type: 'CLOSE' };
 function reducer(state: Modal[], action: Action): Modal[] {
   switch (action.type) {
     case 'OPEN': {
-      // 같은 id 중복 방지(정책): 있으면 제거하고 top으로 올리기
-      const withoutSame = state.filter((m) => m.id !== action.modal.id);
-      return [...withoutSame, action.modal];
+      return [...state, action.modal];
     }
     case 'CLOSE':
       return state.length ? state.slice(0, -1) : state;
@@ -61,8 +60,12 @@ export function useModal() {
 
 const MODAL_CONTAINER_ID = 'modal-container';
 
+const getModalZIndex = (index: number) => {
+  return 50 + index * 10;
+};
+
 function ModalContainer({ modals }: { modals: Modal[] }) {
-  const { close } = useModal(); // overlay 클릭으로 닫을 거면
+  const { close } = useModal();
 
   useEffect(() => {
     if (document.getElementById(MODAL_CONTAINER_ID)) return;
@@ -83,29 +86,27 @@ function ModalContainer({ modals }: { modals: Modal[] }) {
 
   if (!el || modals.length === 0) return null;
 
-  const topModalIndex = modals.length - 1; // 최상단 모달의 인덱스
+  const topModalIndex = modals.length - 1;
 
   return createPortal(
     <>
-      {/* overlay 1개 */}
       <div
-        className="fixed inset-0 z-50 bg-black/50"
-        onClick={close} // top 닫기
-        style={{ zIndex: 51 + topModalIndex }}
+        className="fixed inset-0 bg-black/50"
+        style={{ zIndex: getModalZIndex(topModalIndex) }}
+        onClick={close}
       />
-
-      {/* 모달들 */}
       {modals.map((m, idx) => {
-        const isTop = idx === modals.length - 1;
+        const isTop = idx === topModalIndex;
         return (
           <div
             key={m.id}
-            className="fixed inset-0 z-50 flex items-center justify-center"
-            style={{ zIndex: 51 + idx }}
+            className={cn(
+              'fixed inset-0 flex items-center justify-center',
+              isTop || 'pointer-events-none'
+            )}
+            style={{ zIndex: getModalZIndex(idx) }}
           >
-            <div className={isTop ? '' : 'pointer-events-none opacity-95'}>
-              {m.render()}
-            </div>
+            {m.render()}
           </div>
         );
       })}
