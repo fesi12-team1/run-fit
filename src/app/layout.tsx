@@ -3,7 +3,7 @@ import { QueryProvider } from '@/provider/QueryProvider';
 import './globals.css';
 import Header from '@/components/layout/Header';
 import MockProvider from '@/mocks/browser/Provider';
-import { ModalProvider } from '@/provider/ModalProvider';
+import { ModalControllerProvider } from '@/provider/ModalProvider';
 import SigninModalProvider from '@/provider/SigninModalProvider';
 import SuspensiveDefaultPropsProvider from '@/provider/SuspensiveDefaultPropsProvider';
 import ToastProvider from '@/provider/ToastProvider';
@@ -25,12 +25,12 @@ export default function RootLayout({
         <MockProvider>
           <SuspensiveDefaultPropsProvider>
             <QueryProvider>
-              <ModalProvider>
+              <ModalControllerProvider>
                 <ToastProvider />
                 <SigninModalProvider />
                 <Header />
                 {children}
-              </ModalProvider>
+              </ModalControllerProvider>
             </QueryProvider>
           </SuspensiveDefaultPropsProvider>
         </MockProvider>

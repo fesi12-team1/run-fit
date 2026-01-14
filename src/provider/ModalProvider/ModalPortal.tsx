@@ -1,23 +1,33 @@
 'use client';
 
-import { useEffect, useId, useRef } from 'react';
+import React, { useEffect, useId, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { cn } from '@/lib/utils';
 import { ModalContext } from './ModalContext';
-import type { Modal, ModalContextValue } from './types';
 
 const MODAL_CONTAINER_ID = 'modal-container';
+
+/** 모달 스택에 저장되는 모달 정보 */
+export type Modal = {
+  id: string;
+  render: () => React.ReactNode;
+};
+
+/** 개별 모달 내부에서 사용하는 Context 값 */
+export interface ModalContextValue {
+  /** aria-labelledby 연결용 ID */
+  labelId: string;
+  /** aria-describedby 연결용 ID */
+  descriptionId: string;
+  /** 현재 모달 닫기 */
+  close: () => void;
+}
 
 interface ModalPortalProps {
   modals: Modal[];
   close: () => void;
 }
 
-/**
- * 모달을 DOM에 렌더링하는 Portal 컴포넌트
- * - Portal을 통해 body에 모달 렌더링
- * - 각 모달을 <dialog>로 감싸서 접근성 제공
- */
 export default function ModalPortal({ modals, close }: ModalPortalProps) {
   useEffect(() => {
     if (document.getElementById(MODAL_CONTAINER_ID)) return;
@@ -31,19 +41,19 @@ export default function ModalPortal({ modals, close }: ModalPortalProps) {
     };
   }, []);
 
-  const el =
+  const modalContainer =
     typeof window !== 'undefined'
       ? document.getElementById(MODAL_CONTAINER_ID)
       : null;
 
-  if (!el || modals.length === 0) return null;
+  if (!modalContainer || modals.length === 0) return null;
 
   const topModalIndex = modals.length - 1;
 
   return createPortal(
     <>
       {modals.map((modal, idx) => (
-        <ModalWrapper
+        <ModalDialog
           key={modal.id}
           modal={modal}
           isTop={idx === topModalIndex}
@@ -51,11 +61,11 @@ export default function ModalPortal({ modals, close }: ModalPortalProps) {
         />
       ))}
     </>,
-    el
+    modalContainer
   );
 }
 
-interface ModalWrapperProps {
+interface ModalDialogProps {
   modal: Modal;
   isTop: boolean;
   close: () => void;
@@ -67,7 +77,7 @@ interface ModalWrapperProps {
  * - 접근성 속성 (aria-modal, aria-labelledby, aria-describedby) 제공
  * - ESC 키, backdrop 클릭 처리
  */
-function ModalWrapper({ modal, isTop, close }: ModalWrapperProps) {
+function ModalDialog({ modal, isTop, close }: ModalDialogProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const labelId = useId();
   const descriptionId = useId();
@@ -107,7 +117,7 @@ function ModalWrapper({ modal, isTop, close }: ModalWrapperProps) {
         isTop
           ? 'backdrop:animate-in backdrop:fade-in-0 backdrop:bg-black/50'
           : 'backdrop:bg-transparent',
-        !isTop && 'pointer-events-none [&>*]:pointer-events-auto'
+        !isTop && 'pointer-events-none *:pointer-events-auto'
       )}
       aria-modal="true"
       aria-labelledby={labelId}
