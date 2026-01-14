@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import IndividualModalContextProvider from './IndividualModalContext';
 import ModalWrapper from './ModalWrapper';
 import { Modal } from './types';
 
@@ -40,12 +41,13 @@ export default function ModalPortal({
   return createPortal(
     <>
       {modals.map((modal) => (
-        <ModalWrapper
-          key={modal.id}
-          modal={modal}
-          isTop={modal.id === topModalId}
-          close={close}
-        />
+        <IndividualModalContextProvider key={modal.id}>
+          <ModalWrapper
+            modal={modal}
+            isTop={modal.id === topModalId}
+            close={close}
+          />
+        </IndividualModalContextProvider>
       ))}
     </>,
     modalContainer

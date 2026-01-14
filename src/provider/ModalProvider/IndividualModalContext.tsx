@@ -1,32 +1,36 @@
 'use client';
 
-import { createContext, useContext, useId } from 'react';
+import { createContext, useContext, useId, type ReactNode } from 'react';
 
 /**
  * 개별 모달 내부에서 사용하는 Context
  * - labelId: ModalTitle에서 사용 (aria-labelledby 연결)
  * - descriptionId: ModalDescription에서 사용 (aria-describedby 연결)
- * - close: 현재 모달 닫기
  */
-export const ModalContext = createContext<ModalContextValue | null>(null);
 
 /** 개별 모달 내부에서 사용하는 Context 값 */
-export interface ModalContextValue {
+export interface IndividualModalContext {
   /** aria-labelledby 연결용 ID */
   labelId: string;
   /** aria-describedby 연결용 ID */
   descriptionId: string;
-  /** 현재 모달 닫기 */
 }
 
-export default function ModalContextProvider() {
+export const IndividualModalContext =
+  createContext<IndividualModalContext | null>(null);
+
+export default function IndividualModalContextProvider({
+  children,
+}: {
+  children: ReactNode;
+}) {
   const labelId = useId();
   const descriptionId = useId();
 
   return (
-    <ModalContext.Provider
-      value={{ labelId, descriptionId }}
-    ></ModalContext.Provider>
+    <IndividualModalContext.Provider value={{ labelId, descriptionId }}>
+      {children}
+    </IndividualModalContext.Provider>
   );
 }
 
@@ -35,7 +39,7 @@ export default function ModalContextProvider() {
  * ModalContent, ModalTitle, ModalDescription, ModalCloseButton에서 사용
  */
 export function useModalContext() {
-  const ctx = useContext(ModalContext);
+  const ctx = useContext(IndividualModalContext);
   if (!ctx) throw new Error('useModalContext must be used within a Modal');
   return ctx;
 }

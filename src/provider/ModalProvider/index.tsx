@@ -1,6 +1,6 @@
 'use client';
 
 // Re-exports
-export { useModalContext } from './ModalContext';
-export { ModalControllerProvider } from './ModalControllerProvider';
-export { useModalController } from './ModalControllerProvider';
+export { useModalContext } from './IndividualModalContext';
+export { ModalControllerProvider } from './ModalController';
+export { useModalController } from './ModalController';

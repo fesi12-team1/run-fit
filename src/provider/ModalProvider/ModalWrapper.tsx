@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
-import { useModalContext } from './ModalContext';
+import { useModalContext } from './IndividualModalContext';
 import { Modal } from './types';
 
 interface ModalWrapperProps {
