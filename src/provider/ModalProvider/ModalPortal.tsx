@@ -25,10 +25,15 @@ export interface ModalContextValue {
 
 interface ModalPortalProps {
   modals: Modal[];
+  topModalId: string | null;
   close: () => void;
 }
 
-export default function ModalPortal({ modals, close }: ModalPortalProps) {
+export default function ModalPortal({
+  modals,
+  close,
+  topModalId,
+}: ModalPortalProps) {
   useEffect(() => {
     if (document.getElementById(MODAL_CONTAINER_ID)) return;
 
@@ -46,17 +51,15 @@ export default function ModalPortal({ modals, close }: ModalPortalProps) {
       ? document.getElementById(MODAL_CONTAINER_ID)
       : null;
 
-  if (!modalContainer || modals.length === 0) return null;
-
-  const topModalIndex = modals.length - 1;
+  if (!modalContainer) return null;
 
   return createPortal(
     <>
-      {modals.map((modal, idx) => (
-        <ModalDialog
+      {modals.map((modal) => (
+        <ModalWrapper
           key={modal.id}
           modal={modal}
-          isTop={idx === topModalIndex}
+          isTop={modal.id === topModalId}
           close={close}
         />
       ))}
@@ -65,7 +68,7 @@ export default function ModalPortal({ modals, close }: ModalPortalProps) {
   );
 }
 
-interface ModalDialogProps {
+interface ModalWrapperProps {
   modal: Modal;
   isTop: boolean;
   close: () => void;
@@ -77,7 +80,7 @@ interface ModalDialogProps {
  * - 접근성 속성 (aria-modal, aria-labelledby, aria-describedby) 제공
  * - ESC 키, backdrop 클릭 처리
  */
-function ModalDialog({ modal, isTop, close }: ModalDialogProps) {
+function ModalWrapper({ modal, isTop, close }: ModalWrapperProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const labelId = useId();
   const descriptionId = useId();

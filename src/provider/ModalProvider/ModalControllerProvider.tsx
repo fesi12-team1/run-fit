@@ -13,6 +13,7 @@ export type Modal = {
 interface ModalActions {
   open: (id: string, render: () => React.ReactNode) => void;
   close: () => void;
+  topModalId: string | null;
 }
 
 const ModalActionsContext = React.createContext<ModalActions | null>(null);
@@ -35,12 +36,14 @@ export function ModalControllerProvider({
     dispatch({ type: 'POP' });
   }, []);
 
+  const topModalId = modals.at(-1)?.id ?? null;
+
   useBodyScrollLock(modals.length > 0);
 
   return (
-    <ModalActionsContext.Provider value={{ open, close }}>
+    <ModalActionsContext.Provider value={{ open, close, topModalId }}>
       {children}
-      <ModalPortal modals={modals} close={close} />
+      <ModalPortal modals={modals} close={close} topModalId={topModalId} />
     </ModalActionsContext.Provider>
   );
 }
