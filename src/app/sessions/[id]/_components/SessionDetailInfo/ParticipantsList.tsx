@@ -4,14 +4,9 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { sessionQueries } from '@/api/queries/sessionQueries';
 import { RoleBadge } from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
-import {
-  ModalContent,
-  ModalHeader,
-  ModalTitle,
-  ModalCloseButton,
-} from '@/components/ui/ModalContent';
+import ModalContent from '@/components/ui/ModalContent';
 import UserAvatar from '@/components/ui/UserAvatar';
-import { useModal } from '@/provider/ModalProvider';
+import { useModalController } from '@/provider/ModalProvider';
 import { Session, type CrewMember } from '@/types';
 
 interface ParticipantsListProps {
@@ -24,10 +19,10 @@ export default function ParticipantsList({ sessionId }: ParticipantsListProps) {
   );
   const participants = participantsQuery.data?.participants || [];
 
-  const modal = useModal();
+  const modalController = useModalController();
   const handleClickMore = () => {
-    modal.open('participants-modal', () => (
-      <ParticipantsModalContent participants={participants} />
+    modalController.open('participants-modal', () => (
+      <ParticipantsModal participants={participants} />
     ));
   };
 
@@ -69,20 +64,18 @@ export default function ParticipantsList({ sessionId }: ParticipantsListProps) {
   );
 }
 
-function ParticipantsModalContent({
-  participants,
-}: {
-  participants: CrewMember[];
-}) {
+function ParticipantsModal({ participants }: { participants: CrewMember[] }) {
   return (
     <ModalContent
       className="tablet:h-[620px] tablet:w-[400px] bg-gray-800"
       fullscreenWhenMobile
     >
-      <ModalCloseButton className="tablet:flex top-6 right-6 hidden" />
-      <ModalHeader className="relative flex w-full items-start gap-2 self-start">
-        <ModalTitle className="text-body1-semibold">참여 멤버</ModalTitle>
-      </ModalHeader>
+      <ModalContent.CloseButton className="tablet:flex top-6 right-6 hidden" />
+      <ModalContent.Header className="relative flex w-full items-start gap-2 self-start">
+        <ModalContent.Title className="text-body1-semibold">
+          참여 멤버
+        </ModalContent.Title>
+      </ModalContent.Header>
       <hr className="w-full text-gray-700" />
       <ul className="flex h-full w-full flex-col gap-4">
         {participants.map((participant) => (
@@ -93,7 +86,7 @@ function ParticipantsModalContent({
             />
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-1.5">
-                <span className="text-body3-semibold tablet:text-body2-semibold">
+                <span className="text-body3-semibold tablet:text-body2-semibold text-gray-50">
                   {participant.name}
                 </span>
                 <RoleBadge role={participant.role} />

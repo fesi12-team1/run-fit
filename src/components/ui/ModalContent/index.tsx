@@ -103,7 +103,7 @@ export function ModalCloseButton({
   return (
     <button
       aria-label="닫기"
-      className={cn('absolute top-4 right-4 outline-none', className)}
+      className={cn('absolute top-4 right-4 z-10 outline-none', className)}
       data-slot="modal-close-button"
       type="button"
       onClick={close}
