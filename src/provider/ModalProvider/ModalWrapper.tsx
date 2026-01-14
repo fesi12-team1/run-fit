@@ -47,7 +47,7 @@ export default function ModalWrapper({
     <dialog
       ref={dialogRef}
       className={cn(
-        'fixed inset-0 m-0 h-dvh w-dvw bg-transparent p-0',
+        'fixed inset-0 m-0 h-dvh max-h-none w-dvw max-w-none bg-transparent p-0',
         'flex items-center justify-center outline-none',
         isTop
           ? 'backdrop:animate-in backdrop:fade-in-0 backdrop:bg-black/50'

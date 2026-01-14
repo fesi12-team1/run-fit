@@ -7,8 +7,7 @@
 export type StackAction<T> =
   | { type: 'PUSH'; item: T }
   | { type: 'POP' }
-  | { type: 'CLEAR' }
-  | { type: 'GET_TOP' };
+  | { type: 'CLEAR' };
 
 export default function stackReducer<T>(
   state: T[],
