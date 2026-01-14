@@ -4,11 +4,7 @@ import React from 'react';
 import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
 import stackReducer from '@/lib/stackReducer';
 import ModalPortal from './ModalPortal';
-
-export type Modal = {
-  id: string;
-  render: () => React.ReactNode;
-};
+import { Modal } from './types';
 
 interface ModalActions {
   open: (id: string, render: () => React.ReactNode) => void;

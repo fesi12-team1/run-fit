@@ -1,23 +1,6 @@
 'use client';
 
-import { createContext, useContext } from 'react';
-import type React from 'react';
-
-/** 모달 스택에 저장되는 모달 정보 */
-export type Modal = {
-  id: string;
-  render: () => React.ReactNode;
-};
-
-/** 개별 모달 내부에서 사용하는 Context 값 */
-export interface ModalContextValue {
-  /** aria-labelledby 연결용 ID */
-  labelId: string;
-  /** aria-describedby 연결용 ID */
-  descriptionId: string;
-  /** 현재 모달 닫기 */
-  close: () => void;
-}
+import { createContext, useContext, useId } from 'react';
 
 /**
  * 개별 모달 내부에서 사용하는 Context
@@ -26,6 +9,26 @@ export interface ModalContextValue {
  * - close: 현재 모달 닫기
  */
 export const ModalContext = createContext<ModalContextValue | null>(null);
+
+/** 개별 모달 내부에서 사용하는 Context 값 */
+export interface ModalContextValue {
+  /** aria-labelledby 연결용 ID */
+  labelId: string;
+  /** aria-describedby 연결용 ID */
+  descriptionId: string;
+  /** 현재 모달 닫기 */
+}
+
+export default function ModalContextProvider() {
+  const labelId = useId();
+  const descriptionId = useId();
+
+  return (
+    <ModalContext.Provider
+      value={{ labelId, descriptionId }}
+    ></ModalContext.Provider>
+  );
+}
 
 /**
  * 모달 내부 컴포넌트에서 접근성 ID와 close 함수를 가져오는 훅
