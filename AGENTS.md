@@ -107,36 +107,7 @@ if (condition) doSomething();
 
 ## Git Conventions
 
-### Commits
-Conventional Commits (enforced by husky + commitlint):
-```bash
-feat(session): add infinite scroll   # ✓
-fix(auth): correct redirect logic    # ✓
-Fix(auth): Correct redirect logic    # ✗ uppercase
-```
-- Types: `build, chore, ci, docs, feat, fix, perf, refactor, revert, style, test`
-- Type/scope: lowercase only
-- Subject: no sentence-case, start-case, pascal-case, upper-case
-- Max length: 100 chars (subject, body, footer)
-- Body/footer: blank line required before
-
-### Issues
-- Title: `[TYPE] issue name`
-- Types: BUILD, CHORE, CI, DOCS, FEATURE, FIX, PERF, REFACTOR, REVERT, STYLE, TEST
-- Required: Assignees, Labels, Type, Projects
-
-### Branches
-Format: `type/kebab-case-domain`
-```
-feature/session-filters
-fix/auth-redirect
-```
-
-### PRs
-- Title: `type: PR name`
-- Body: follow template, link issues
-- UI changes: screenshots or Storybook link required
-- Required: Reviewers, Assignees, Labels
+See `.agents/skills/` for `commit-convention` and `git-workflow` skills.
 
 ## Environment Variables
 
