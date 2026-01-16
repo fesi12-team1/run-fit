@@ -13,17 +13,16 @@ export async function POST(request: NextRequest) {
       cache: 'no-cache',
     });
 
+    const responseData = await proxyResponse.json();
+
     if (!proxyResponse.ok) {
-      const errorData = await proxyResponse.json();
-      const response = NextResponse.json(
-        { ...errorData },
+      return NextResponse.json(
+        { ...responseData },
         { status: proxyResponse.status }
       );
-
-      return response;
     }
 
-    const { success, data, error } = await proxyResponse.json();
+    const { success, data, error } = responseData;
     if (!data?.token) {
       return NextResponse.json(
         { code: 'INVALID_RESPONSE', message: '서버 응답에 토큰이 없습니다.' },

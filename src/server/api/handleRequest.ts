@@ -20,8 +20,10 @@ export default async function handleRequest(
   }
 
   const url = getBackendUrl(request.nextUrl);
-  const accessToken = await getAccessToken();
-  const refreshToken = await getRefreshToken();
+  const [accessToken, refreshToken] = await Promise.all([
+    getAccessToken(),
+    getRefreshToken(),
+  ]);
 
   if (requiresAuth && !refreshToken) {
     return NextResponse.json(
@@ -54,10 +56,9 @@ export default async function handleRequest(
     if (requiresAuth && refreshToken && response.status === 401) {
       console.log('Access token expired, attempting to refresh token...');
 
-      const isRefreshed = await refreshAccessToken();
+      const newAccessToken = await refreshAccessToken();
 
-      if (isRefreshed) {
-        const newAccessToken = await getAccessToken();
+      if (newAccessToken) {
         response = await fetchFromBackend(newAccessToken);
       }
     }
