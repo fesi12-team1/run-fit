@@ -1,15 +1,21 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import SessionDateFilter from '@/components/session/SessionDateFilter';
 import SessionLevelFilter from '@/components/session/SessionLevelFilter';
 import SessionRegionFilter from '@/components/session/SessionRegionFilter';
 import SessionTimeFilter from '@/components/session/SessionTimeFilter';
 import FilterButton from '@/components/ui/FilterButton';
 import OptionDropdown from '@/components/ui/OptionDropdown';
+import Spinner from '@/components/ui/Spinner';
 import { SESSION_SORT_OPTIONS } from '@/constants/session';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { SessionFilterState } from '@/types';
-import SessionFilterModal from './SessionFilterModal';
+
+const SessionFilterModal = dynamic(() => import('./SessionFilterModal'), {
+  ssr: false,
+  loading: () => <Spinner />,
+});
 
 interface SessionFiltersProps {
   filters: SessionFilterState;

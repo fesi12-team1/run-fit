@@ -1,6 +1,7 @@
 'use client';
 
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -10,11 +11,16 @@ import {
 } from '@/api/mutations/sessionMutations';
 import { sessionQueries } from '@/api/queries/sessionQueries';
 import { userQueries } from '@/api/queries/userQueries';
-import ReviewModal from '@/components/my/ReviewModal';
 import Button from '@/components/ui/Button';
 import Modal from '@/components/ui/Modal';
+import Spinner from '@/components/ui/Spinner';
 import { signInModal } from '@/store/signinModal';
 import { Session } from '@/types';
+
+const ReviewModal = dynamic(() => import('@/components/my/ReviewModal'), {
+  ssr: false,
+  loading: () => <Spinner />,
+});
 
 interface ParticipateButtonProps {
   className?: string;

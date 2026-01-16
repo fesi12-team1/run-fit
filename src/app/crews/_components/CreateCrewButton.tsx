@@ -1,11 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
 import { PlusIcon } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { userQueries } from '@/api/queries/userQueries';
-import CrewModal from '@/components/crew/CrewModal';
 import Button from '@/components/ui/Button';
 import Modal from '@/components/ui/Modal';
+import Spinner from '@/components/ui/Spinner';
+
+const CrewModal = dynamic(() => import('@/components/crew/CrewModal'), {
+  ssr: false,
+  loading: () => <Spinner />,
+});
 
 export default function CreateCrewButton() {
   const [currentModal, setCurrentModal] = useState<null | 'create' | 'login'>(

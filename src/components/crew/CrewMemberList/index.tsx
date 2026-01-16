@@ -1,3 +1,4 @@
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { toast } from 'sonner';
@@ -10,16 +11,21 @@ import {
 import ChevronLeft from '@/assets/icons/chevron-left.svg?react';
 import Settings from '@/assets/icons/settings.svg?react';
 import VerticalEllipsis from '@/assets/icons/vertical-ellipsis.svg?react';
-import CrewModal from '@/components/crew/CrewModal';
 import { RoleBadge } from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
 import Dropdown from '@/components/ui/Dropdown';
 import Modal from '@/components/ui/Modal';
+import Spinner from '@/components/ui/Spinner';
 import UserAvatar from '@/components/ui/UserAvatar';
 import ProfileDetail from '@/components/user/ProfileDetail';
 import { useCrewRole } from '@/context/CrewDetailContext';
 import { cn } from '@/lib/utils';
 import { Crew, CrewMember, ROLE_LABEL } from '@/types';
+
+const CrewModal = dynamic(() => import('@/components/crew/CrewModal'), {
+  ssr: false,
+  loading: () => <Spinner />,
+});
 
 interface CrewMemberListProps {
   crew: Crew;
