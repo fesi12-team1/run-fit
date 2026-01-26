@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import Share from '@/assets/icons/share.svg?react';
 import Button from '@/components/ui/Button';
-import FixedBottomBar from '.';
+import FixedBottomBar, { FIXED_BOTTOM_BAR_CONTAINER_ID } from '.';
 
 /**
  *
@@ -17,6 +17,17 @@ const meta: Meta<typeof FixedBottomBar> = {
     },
   },
   tags: ['autodocs'],
+  decorators: [
+    (Story) => {
+      // Storybook 환경에서 포탈 컨테이너가 없을 경우 생성
+      if (!document.getElementById(FIXED_BOTTOM_BAR_CONTAINER_ID)) {
+        const container = document.createElement('div');
+        container.id = FIXED_BOTTOM_BAR_CONTAINER_ID;
+        document.body.appendChild(container);
+      }
+      return <Story />;
+    },
+  ],
 };
 export default meta;
 
