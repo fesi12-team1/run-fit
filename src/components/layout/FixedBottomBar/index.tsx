@@ -1,7 +1,10 @@
 'use client';
 
 import { useLayoutEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { cn } from '@/lib/utils';
+
+export const FIXED_BOTTOM_BAR_CONTAINER_ID = 'fixed-bottom-bar-container';
 
 type FixedBottomBarProps = {
   children: React.ReactNode;
@@ -39,20 +42,22 @@ export default function FixedBottomBar({
         className="laptop:hidden"
         style={{ height: barHeight }}
       />
-
-      <nav
-        ref={barRef}
-        aria-label="하단 고정 메뉴"
-        className={cn(
-          'laptop:hidden fixed inset-x-0 bottom-0 z-10',
-          'bg-gray-750 p-6',
-          'pb-[calc(1.5rem+env(safe-area-inset-bottom))]',
-          className
-        )}
-        role="navigation"
-      >
-        {children}
-      </nav>
+      {createPortal(
+        <nav
+          ref={barRef}
+          aria-label="하단 고정 메뉴"
+          className={cn(
+            'laptop:hidden fixed inset-x-0 bottom-0 z-10',
+            'bg-gray-750 p-6',
+            'pb-[calc(1.5rem+env(safe-area-inset-bottom))]',
+            className
+          )}
+          role="navigation"
+        >
+          {children}
+        </nav>,
+        document.getElementById(FIXED_BOTTOM_BAR_CONTAINER_ID)!
+      )}
     </>
   );
 }

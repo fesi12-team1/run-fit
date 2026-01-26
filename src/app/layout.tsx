@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { QueryProvider } from '@/provider/QueryProvider';
 import './globals.css';
+import { FIXED_BOTTOM_BAR_CONTAINER_ID } from '@/components/layout/FixedBottomBar';
 import Header from '@/components/layout/Header';
 import MockProvider from '@/mocks/browser/Provider';
 import { ModalControllerProvider } from '@/provider/ModalProvider';
@@ -30,6 +31,7 @@ export default function RootLayout({
                 <SigninModalProvider />
                 <Header />
                 {children}
+                <div id={FIXED_BOTTOM_BAR_CONTAINER_ID}></div>
               </ModalControllerProvider>
             </QueryProvider>
           </SuspensiveDefaultPropsProvider>
