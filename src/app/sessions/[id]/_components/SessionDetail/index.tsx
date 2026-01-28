@@ -1,8 +1,6 @@
 'use client';
 
 import { ErrorBoundary, Suspense } from '@suspensive/react';
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { sessionQueries } from '@/api/queries/sessionQueries';
 import { cn } from '@/lib/utils';
 import { Session } from '@/types';
 import CrewShortInfo from '../CrewShortInfo';
@@ -13,14 +11,10 @@ import SessionShortInfo from '../SessionShortInfo';
 import SessionShortInfoSkeleton from '../SessionShortInfo/SessionShortInfoSkeleton';
 
 interface SessionDetailProps {
-  sessionId: Session['id'];
+  session: Session;
 }
 
-export default function SessionDetail({ sessionId }: SessionDetailProps) {
-  const sessionQuery = useSuspenseQuery(
-    sessionQueries.detail(Number(sessionId))
-  );
-  const session = sessionQuery.data;
+export default function SessionDetail({ session }: SessionDetailProps) {
   const crewId = session?.crewId;
 
   return (
