@@ -1,3 +1,4 @@
+import { buildQueryParams } from '@/lib/utils';
 import {
   Crew,
   PageData,
@@ -34,48 +35,21 @@ export async function getUserProfile(userId: number) {
 
 export type GetMyReviewsResponse = PageData<Review>;
 export async function getMyReviews(queryParams?: PaginationQueryParams) {
-  const searchParams = new URLSearchParams();
-
-  if (queryParams) {
-    Object.entries(queryParams).forEach(([key, value]) => {
-      if (value === undefined || value === null) return;
-      searchParams.append(key, String(value));
-    });
-  }
-
-  const query = searchParams.toString();
+  const query = buildQueryParams(queryParams);
   return request<GetMyReviewsResponse>(`/api/user/me/reviews?${query}`);
 }
 
 // 내가 찜한 세션 목록 조회
 export type GetMyLikedSessionsResponse = SliceData<Session>;
 export async function getMyLikedSessions(queryParams?: PaginationQueryParams) {
-  const searchParams = new URLSearchParams();
-
-  if (queryParams) {
-    Object.entries(queryParams).forEach(([key, value]) => {
-      if (value === undefined || value === null) return;
-      searchParams.append(key, String(value));
-    });
-  }
-
-  const query = searchParams.toString();
+  const query = buildQueryParams(queryParams);
   return request<GetMyLikedSessionsResponse>(`/api/user/me/likes?${query}`);
 }
 
 // 내가 만든 크루 목록 조회 (무한스크롤)
 export type GetMyOwnedCrewsResponse = SliceData<Crew>;
 export async function getMyOwnedCrews(queryParams?: PaginationQueryParams) {
-  const searchParams = new URLSearchParams();
-
-  if (queryParams) {
-    Object.entries(queryParams).forEach(([key, value]) => {
-      if (value === undefined || value === null) return;
-      searchParams.append(key, String(value));
-    });
-  }
-
-  const query = searchParams.toString();
+  const query = buildQueryParams(queryParams);
   return request<GetMyOwnedCrewsResponse>(`/api/user/me/crews/owned?${query}`);
 }
 
@@ -85,16 +59,7 @@ export type GetMyJoinedCrewsItem = Crew & {
 };
 export type GetMyJoinedCrewsResponse = SliceData<GetMyJoinedCrewsItem>;
 export async function getMyJoinedCrews(queryParams?: PaginationQueryParams) {
-  const searchParams = new URLSearchParams();
-
-  if (queryParams) {
-    Object.entries(queryParams).forEach(([key, value]) => {
-      if (value === undefined || value === null) return;
-      searchParams.append(key, String(value));
-    });
-  }
-
-  const query = searchParams.toString();
+  const query = buildQueryParams(queryParams);
   return request<GetMyJoinedCrewsResponse>(`/api/user/me/crews?${query}`);
 }
 
@@ -105,16 +70,7 @@ export type GetMyCreatedSessionsResponse = SliceData<
 export async function getMyCreatedSessions(
   queryParams?: PaginationQueryParams
 ) {
-  const searchParams = new URLSearchParams();
-
-  if (queryParams) {
-    Object.entries(queryParams).forEach(([key, value]) => {
-      if (value === undefined || value === null) return;
-      searchParams.append(key, String(value));
-    });
-  }
-
-  const query = searchParams.toString();
+  const query = buildQueryParams(queryParams);
   return request<GetMyCreatedSessionsResponse>(
     `/api/user/me/sessions?${query}`
   );
@@ -135,16 +91,7 @@ export type GetMyParticipatingSessionsResponse =
 export async function getMyParticipatingSessions(
   queryParams?: GetMyParticipatingSessionsQuery
 ) {
-  const searchParams = new URLSearchParams();
-
-  if (queryParams) {
-    Object.entries(queryParams).forEach(([key, value]) => {
-      if (value === undefined || value === null) return;
-      searchParams.append(key, String(value));
-    });
-  }
-
-  const query = searchParams.toString();
+  const query = buildQueryParams(queryParams);
   return request<GetMyParticipatingSessionsResponse>(
     `/api/user/me/sessions/participating?${query}`
   );

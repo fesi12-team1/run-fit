@@ -41,10 +41,8 @@ export async function joinCrew(crewId: number) {
 
 export type GetCrewsResponse = SliceData<Crew>;
 export async function getCrews(queryParams?: CrewListFilters) {
-  const searchParams = buildQueryParams<CrewListFilters>(queryParams);
-  const queryString = searchParams.toString();
-
-  return request<GetCrewsResponse>(`/api/crews?${queryString}`);
+  const query = buildQueryParams(queryParams);
+  return request<GetCrewsResponse>(`/api/crews?${query}`);
 }
 
 export type GetCrewDetailResponse = Crew;
@@ -57,9 +55,7 @@ export async function getCrewMembers(
   crewId: number,
   queryParams?: MemberRoleFilters
 ) {
-  const query = new URLSearchParams(
-    queryParams as Record<string, string>
-  ).toString();
+  const query = buildQueryParams(queryParams);
   return request<GetCrewMembersResponse>(
     `/api/crews/${crewId}/members?${query}`
   );
@@ -183,9 +179,7 @@ export async function getCrewReviews(
   crewId: number,
   queryParams?: PaginationQueryParams
 ) {
-  const query = new URLSearchParams(
-    queryParams as Record<string, string>
-  ).toString();
+  const query = buildQueryParams(queryParams);
 
   return request<GetCrewReviewsResponse>(
     `/api/crews/${crewId}/reviews?${query}`

@@ -1,3 +1,4 @@
+import { buildQueryParams } from '@/lib/utils';
 import { PageData, PaginationQueryParams, Review } from '@/types';
 import request from './request';
 
@@ -7,16 +8,7 @@ export async function getSessionReviews(
   sessionId: number,
   queryParams?: PaginationQueryParams
 ) {
-  const searchParams = new URLSearchParams();
-
-  if (queryParams) {
-    Object.entries(queryParams).forEach(([key, value]) => {
-      if (value === undefined || value === null) return;
-      searchParams.append(key, String(value));
-    });
-  }
-
-  const query = searchParams.toString();
+  const query = buildQueryParams(queryParams);
   return request<GetSessionReviewsResponse>(
     `/api/sessions/${sessionId}/reviews?${query}`
   );
