@@ -12,10 +12,7 @@ export type GetPresignedUrlResponse = {
 export async function getPresignedUrl(body: GetPresignedUrlRequest) {
   return request<GetPresignedUrlResponse>(`/api/images/presigned-url`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body),
+    body,
   });
 }
 

@@ -5,10 +5,7 @@ export type SignupRequestBody = UserCredentials & { name: string };
 export async function postSignup(body: SignupRequestBody) {
   return request<User>('/api/auth/signup', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body),
+    body,
   });
 }
 
@@ -16,10 +13,7 @@ export type SigninResponseData = { token: string };
 export async function postSignin(body: UserCredentials) {
   return request<SigninResponseData>('/api/auth/signin', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body),
+    body,
   });
 }
 

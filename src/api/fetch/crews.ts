@@ -21,8 +21,7 @@ export type CrewRequestBody = Pick<
 export async function createCrew(body: CrewRequestBody) {
   return request<Crew>('/api/crews', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
+    body,
   });
 }
 
@@ -35,7 +34,6 @@ type JoinCrewResponse = {
 export async function joinCrew(crewId: number) {
   return request<JoinCrewResponse>(`/api/crews/${crewId}/join`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
   });
 }
 
@@ -94,8 +92,7 @@ export async function delegateCrewLeader(
 ) {
   return request<DelegateCrewLeaderResponse>(`/api/crews/${crewId}/leader`, {
     method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
+    body,
   });
 }
 
@@ -126,8 +123,7 @@ export async function updateMemberRole(
     `/api/crews/${crewId}/members/${userId}/role`,
     {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
+      body,
     }
   );
 }
@@ -161,8 +157,7 @@ export async function updateCrewDetail(
 ) {
   return request<UpdateCrewDetailResponse>(`/api/crews/${crewId}`, {
     method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
+    body,
   });
 }
 
@@ -180,7 +175,6 @@ export async function getCrewReviews(
   queryParams?: PaginationQueryParams
 ) {
   const query = buildQueryParams(queryParams);
-
   return request<GetCrewReviewsResponse>(
     `/api/crews/${crewId}/reviews?${query}`
   );

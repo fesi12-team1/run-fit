@@ -34,10 +34,7 @@ export type CreateSessionResponse = Omit<Session, 'liked'>;
 export async function createSession(body: CreateSessionRequestBody) {
   return request<CreateSessionResponse>('/api/sessions', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body),
+    body,
   });
 }
 
@@ -98,10 +95,7 @@ export async function updateSessionDetail(
 ) {
   return request<UpdateSessionDetailResponse>(`/api/sessions/${sessionId}`, {
     method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body),
+    body,
   });
 }
 

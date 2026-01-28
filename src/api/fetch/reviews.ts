@@ -32,10 +32,7 @@ export async function createSessionReview(
     `/api/sessions/${sessionId}/reviews`,
     {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
+      body,
     }
   );
 }

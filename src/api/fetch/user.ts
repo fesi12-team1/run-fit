@@ -21,10 +21,7 @@ export type UpdateMyProfileRequestBody = Partial<
 export async function updateMyProfile(body: UpdateMyProfileRequestBody) {
   return request<Profile>('/api/user', {
     method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body),
+    body,
   });
 }
 
