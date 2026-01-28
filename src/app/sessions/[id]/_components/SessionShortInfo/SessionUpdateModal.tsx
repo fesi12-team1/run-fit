@@ -5,8 +5,9 @@ import z from 'zod';
 import { useUpdateSession } from '@/api/mutations/sessionMutations';
 import ChevronLeft from '@/assets/icons/chevron-left.svg?react';
 import Button from '@/components/ui/Button';
-import Modal from '@/components/ui/Modal';
+import ModalContent from '@/components/ui/ModalContent';
 import Spinner from '@/components/ui/Spinner';
+import { useModalController } from '@/provider/ModalProvider';
 import { Session } from '@/types';
 import SessionUpdateFields from './SessionUpdateForm';
 
@@ -22,15 +23,13 @@ const schema = z.object({
 });
 type values = z.infer<typeof schema>;
 
-export default function SessionUpdateModal({
-  isUpdateModalOpen,
-  setIsUpdateModalOpen,
-  session,
-}: {
-  isUpdateModalOpen: boolean;
-  setIsUpdateModalOpen: (open: boolean) => void;
+interface SessionUpdateModalProps {
   session: Session;
-}) {
+}
+
+export default function SessionUpdateModal({
+  session,
+}: SessionUpdateModalProps) {
   const form = useForm<values>({
     resolver: zodResolver(schema),
 
@@ -43,11 +42,13 @@ export default function SessionUpdateModal({
     mode: 'onSubmit',
   });
   const { mutate, isPending } = useUpdateSession(session.id);
+  const { close } = useModalController();
+
   const onSubmit = (data: values) => {
     mutate(data, {
       onSuccess: () => {
         toast.success('세션 정보가 수정되었습니다!');
-        setIsUpdateModalOpen(false);
+        close();
       },
       onError: (error) => {
         toast.error(error.message || '세션 정보 수정에 실패했습니다.');
@@ -56,40 +57,34 @@ export default function SessionUpdateModal({
   };
 
   return (
-    <Modal open={isUpdateModalOpen} onOpenChange={setIsUpdateModalOpen}>
-      <Modal.Content className="scrollbar-hidden laptop:max-w-[480px] laptop:rounded-xl laptop:h-auto laptop:max-h-[85dvh] h-dvh w-full bg-gray-900">
-        <FormProvider {...form}>
-          <Modal.CloseButton
-            onClick={() => setIsUpdateModalOpen(false)}
-            className="laptop:block top-[26px] right-6 hidden"
-          />
+    <ModalContent className="scrollbar-hidden laptop:max-w-[480px] laptop:rounded-xl laptop:h-auto laptop:max-h-[85dvh] h-dvh w-full bg-gray-900">
+      <FormProvider {...form}>
+        <ModalContent.CloseButton className="laptop:block top-[26px] right-6 hidden" />
 
-          <Modal.Header className="relative flex items-center justify-center">
-            <button
-              className="laptop:hidden absolute left-0"
-              onClick={() => setIsUpdateModalOpen(false)}
-            >
-              <ChevronLeft className="size-6 text-white" />
-            </button>
-            <Modal.Title className="laptop:m-0 ml-7">세션 수정하기</Modal.Title>
-          </Modal.Header>
+        <ModalContent.Header className="relative flex items-center justify-center">
+          <button className="laptop:hidden absolute left-0">
+            <ChevronLeft className="size-6 text-white" />
+          </button>
+          <ModalContent.Title className="laptop:m-0 ml-7">
+            세션 수정하기
+          </ModalContent.Title>
+        </ModalContent.Header>
 
-          <form
-            id="update-session-form"
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="w-full"
-          >
-            <SessionUpdateFields />
-          </form>
+        <form
+          id="update-session-form"
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="w-full"
+        >
+          <SessionUpdateFields />
+        </form>
 
-          <Modal.Footer className="w-full">
-            <Button type="submit" form="update-session-form" className="w-full">
-              완료
-              {isPending && <Spinner />}
-            </Button>
-          </Modal.Footer>
-        </FormProvider>
-      </Modal.Content>
-    </Modal>
+        <ModalContent.Footer className="w-full">
+          <Button type="submit" form="update-session-form" className="w-full">
+            완료
+            {isPending && <Spinner />}
+          </Button>
+        </ModalContent.Footer>
+      </FormProvider>
+    </ModalContent>
   );
 }

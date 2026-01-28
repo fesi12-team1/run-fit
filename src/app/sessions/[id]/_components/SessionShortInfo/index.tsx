@@ -2,7 +2,6 @@
 
 import { ErrorBoundary, Suspense } from '@suspensive/react';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
-import { useState } from 'react';
 import { crewQueries } from '@/api/queries/crewQueries';
 import { userQueries } from '@/api/queries/userQueries';
 import VerticalEllipsisIcon from '@/assets/icons/vertical-ellipsis.svg?react';
@@ -10,6 +9,7 @@ import { DdayBadge, LevelBadge, PaceBadge } from '@/components/ui/Badge';
 import Dropdown from '@/components/ui/Dropdown';
 import ProgressBar from '@/components/ui/ProgressBar';
 import { formatDDay, formatKoYYMDMeridiemTime } from '@/lib/time';
+import { useModalController } from '@/provider/ModalProvider';
 import { Session } from '@/types/session';
 import SessionActionGroup from '../SessionActionGroup';
 import SessionDeleteModal from './SessionDeleteModal';
@@ -32,9 +32,6 @@ export default function SessionShortInfo({
     maxParticipantCount,
   } = session;
 
-  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-
   return (
     <div className="laptop:bg-gray-750 laptop:rounded-b-[20px] laptop:px-6 laptop:pt-7 laptop:pb-6 laptop:mt-0 tablet:px-12 tablet:pt-10 laptop:gap-8 relative z-10 -mt-5 flex flex-col gap-6 rounded-t-[20px] bg-gray-800 px-7 pt-6">
       <div>
@@ -42,11 +39,7 @@ export default function SessionShortInfo({
           <DdayBadge dday={formatDDay(registerBy)} />
           <ErrorBoundary fallback={<div />}>
             <Suspense>
-              <SessionRoleDropdown
-                crewId={crewId}
-                setIsUpdateModalOpen={setIsUpdateModalOpen}
-                setIsDeleteModalOpen={setIsDeleteModalOpen}
-              />
+              <SessionActionMenu crewId={crewId} session={session} />
             </Suspense>
           </ErrorBoundary>
         </div>
@@ -64,30 +57,16 @@ export default function SessionShortInfo({
       <ProgressBar value={currentParticipantCount} max={maxParticipantCount} />
       <hr className="text-gray-500" />
       <SessionActionGroup className="laptop:flex hidden" session={session} />
-
-      <SessionUpdateModal
-        isUpdateModalOpen={isUpdateModalOpen}
-        setIsUpdateModalOpen={setIsUpdateModalOpen}
-        session={session}
-      />
-
-      <SessionDeleteModal
-        isDeleteModalOpen={isDeleteModalOpen}
-        setIsDeleteModalOpen={setIsDeleteModalOpen}
-        sessionId={session.id}
-      />
     </div>
   );
 }
 
-function SessionRoleDropdown({
+function SessionActionMenu({
   crewId,
-  setIsUpdateModalOpen,
-  setIsDeleteModalOpen,
+  session,
 }: {
   crewId: number;
-  setIsUpdateModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsDeleteModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  session: Session;
 }) {
   const { data: profile } = useSuspenseQuery(userQueries.me.info());
   const profileId = profile?.id;
@@ -100,6 +79,20 @@ function SessionRoleDropdown({
   const isManager =
     memberRole?.role === 'LEADER' || memberRole?.role === 'STAFF';
 
+  const { open } = useModalController();
+
+  const handleOpenUpdateModal = () => {
+    open('session-update-modal', () => (
+      <SessionUpdateModal session={session} />
+    ));
+  };
+
+  const handleOpenDeleteModal = () => {
+    open('session-delete-modal', () => (
+      <SessionDeleteModal session={session} />
+    ));
+  };
+
   return (
     <>
       {isManager && (
@@ -108,10 +101,10 @@ function SessionRoleDropdown({
             <VerticalEllipsisIcon className="size-6" />
           </Dropdown.TriggerNoArrow>
           <Dropdown.Content className="z-100">
-            <Dropdown.Item onClick={() => setIsUpdateModalOpen(true)}>
+            <Dropdown.Item onClick={handleOpenUpdateModal}>
               수정하기
             </Dropdown.Item>
-            <Dropdown.Item onClick={() => setIsDeleteModalOpen(true)}>
+            <Dropdown.Item onClick={handleOpenDeleteModal}>
               삭제하기
             </Dropdown.Item>
           </Dropdown.Content>
