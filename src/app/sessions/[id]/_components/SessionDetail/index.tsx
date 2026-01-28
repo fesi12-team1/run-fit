@@ -15,8 +15,6 @@ interface SessionDetailProps {
 }
 
 export default function SessionDetail({ session }: SessionDetailProps) {
-  const crewId = session?.crewId;
-
   return (
     <>
       {/* Mobile & Tablet Layout */}
@@ -24,12 +22,12 @@ export default function SessionDetail({ session }: SessionDetailProps) {
         <SessionImage image={session.image} name={session.name} />
         <ErrorBoundary fallback={<SessionShortInfoSkeleton />}>
           <Suspense fallback={<SessionShortInfoSkeleton />}>
-            <SessionShortInfo session={session} crewId={crewId} />
+            <SessionShortInfo session={session} />
           </Suspense>
         </ErrorBoundary>
         <SessionDetailInfo session={session} />
         <Suspense fallback={<CrewShortInfoSkeleton />}>
-          <CrewShortInfo crewId={crewId} />
+          <CrewShortInfo crewId={session.crewId} />
         </Suspense>
       </div>
 
@@ -47,11 +45,11 @@ export default function SessionDetail({ session }: SessionDetailProps) {
         <div className="laptop:w-[360px] flex flex-col gap-10">
           <ErrorBoundary fallback={<SessionShortInfoSkeleton />}>
             <Suspense fallback={<SessionShortInfoSkeleton />}>
-              <SessionShortInfo session={session} crewId={crewId} />
+              <SessionShortInfo session={session} />
             </Suspense>
           </ErrorBoundary>
           <Suspense fallback={<CrewShortInfoSkeleton />}>
-            <CrewShortInfo crewId={crewId} />
+            <CrewShortInfo crewId={session.crewId} />
           </Suspense>
         </div>
       </div>

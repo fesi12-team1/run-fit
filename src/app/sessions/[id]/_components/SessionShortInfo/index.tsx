@@ -15,13 +15,7 @@ import SessionActionGroup from '../SessionActionGroup';
 import SessionDeleteModal from './SessionDeleteModal';
 import SessionUpdateModal from './SessionUpdateModal';
 
-export default function SessionShortInfo({
-  session,
-  crewId,
-}: {
-  session: Session;
-  crewId: number;
-}) {
+export default function SessionShortInfo({ session }: { session: Session }) {
   const {
     registerBy,
     name,
@@ -39,7 +33,7 @@ export default function SessionShortInfo({
           <DdayBadge dday={formatDDay(registerBy)} />
           <ErrorBoundary fallback={<div />}>
             <Suspense>
-              <SessionActionMenu crewId={crewId} session={session} />
+              <SessionActionMenu session={session} />
             </Suspense>
           </ErrorBoundary>
         </div>
@@ -61,18 +55,12 @@ export default function SessionShortInfo({
   );
 }
 
-function SessionActionMenu({
-  crewId,
-  session,
-}: {
-  crewId: number;
-  session: Session;
-}) {
+function SessionActionMenu({ session }: { session: Session }) {
   const { data: profile } = useSuspenseQuery(userQueries.me.info());
   const profileId = profile?.id;
 
   const { data: memberRole } = useQuery({
-    ...crewQueries.members(crewId).detail(profileId!),
+    ...crewQueries.members(session.crewId).detail(profileId!),
     enabled: !!profileId,
   });
 
