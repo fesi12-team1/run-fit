@@ -3,8 +3,11 @@ import FixedBottomBar, { FIXED_BOTTOM_BAR_CONTAINER_ID } from './index';
 
 describe('FixedBottomBar', () => {
   let container: HTMLDivElement;
+  let originalResizeObserver: typeof ResizeObserver | undefined;
 
   beforeEach(() => {
+    originalResizeObserver = global.ResizeObserver;
+
     // 1. 포탈을 위한 컨테이너 생성
     container = document.createElement('div');
     container.id = FIXED_BOTTOM_BAR_CONTAINER_ID;
@@ -34,6 +37,11 @@ describe('FixedBottomBar', () => {
   afterEach(() => {
     document.body.removeChild(container);
     jest.restoreAllMocks();
+    if (originalResizeObserver) {
+      global.ResizeObserver = originalResizeObserver;
+    } else {
+      delete (global as { ResizeObserver: unknown }).ResizeObserver;
+    }
   });
 
   it('올바르게 마운트되고 children을 렌더링한다.', () => {

@@ -17,6 +17,10 @@ export default function FixedBottomBar({
 }: FixedBottomBarProps) {
   const barRef = useRef<HTMLDivElement>(null);
   const [barHeight, setBarHeight] = useState(0);
+  const portalTarget =
+    typeof document !== 'undefined'
+      ? document.getElementById(FIXED_BOTTOM_BAR_CONTAINER_ID)
+      : null;
 
   useLayoutEffect(() => {
     const bar = barRef.current;
@@ -42,21 +46,24 @@ export default function FixedBottomBar({
         className="laptop:hidden"
         style={{ height: barHeight }}
       />
-      {createPortal(
-        <div
-          ref={barRef}
-          aria-label="하단 액션 바"
-          className={cn(
-            'laptop:hidden fixed inset-x-0 bottom-0 z-10',
-            'bg-gray-750 p-6',
-            'pb-[calc(1.5rem+env(safe-area-inset-bottom))]',
-            className
-          )}
-        >
-          {children}
-        </div>,
-        document.getElementById(FIXED_BOTTOM_BAR_CONTAINER_ID)!
-      )}
+      {portalTarget
+        ? createPortal(
+            <div
+              ref={barRef}
+              aria-label="하단 액션 바"
+              className={cn(
+                'laptop:hidden fixed inset-x-0 bottom-0 z-10',
+                'bg-gray-750 p-6',
+                'pb-[calc(1.5rem+env(safe-area-inset-bottom))]',
+                className
+              )}
+            >
+              {children}
+            </div>,
+
+            portalTarget
+          )
+        : null}
     </>
   );
 }
